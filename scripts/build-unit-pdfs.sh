@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # ══════════════════════════════════════════════════════════════
-# Genera un PDF independiente por unidad (dwes-udX.pdf).
-# Para cada carpeta ud1..ud9 con ficheros .qmd, crea un proyecto
+# Genera un PDF independiente por unidad (DWES-UDX.pdf).
+# Para cada carpeta UD1..UD9 con ficheros .qmd, crea un proyecto
 # Quarto temporal con solo esa unidad y lo renderiza a PDF.
-# Salida: _unit-pdfs/dwes-udX.pdf
+# Salida: _UD-PDF/DWES-UDX.pdf
 # ══════════════════════════════════════════════════════════════
 set -euo pipefail
 
@@ -12,18 +12,18 @@ OUT="$ROOT/_unit-pdfs"
 mkdir -p "$OUT"
 
 declare -A TITULOS=(
-  [ud1]="UD1 · Arquitecturas y tecnologías web en servidor"
-  [ud2]="UD2 · Inserción de código PHP en páginas web"
-  [ud3]="UD3 · Estructuras de programación, funciones y formularios"
-  [ud4]="UD4 · POO en PHP: autenticación, sesiones y cookies"
-  [ud5]="UD5 · Separación de la lógica de negocio: MVC con Laravel"
-  [ud6]="UD6 · Acceso a almacenes de datos con PDO"
-  [ud7]="UD7 · Servicios web REST"
-  [ud8]="UD8 · Páginas web dinámicas e interactivas"
-  [ud9]="UD9 · Aplicaciones web híbridas: Composer y repositorios heterogéneos"
+  [UD1]="UD1 · Arquitecturas y tecnologías web en servidor"
+  [UD2]="UD2 · Inserción de código PHP en páginas web"
+  [UD3]="UD3 · Estructuras de programación, funciones y formularios"
+  [UD4]="UD4 · POO en PHP: autenticación, sesiones y cookies"
+  [UD5]="UD5 · Separación de la lógica de negocio: MVC con Laravel"
+  [UD6]="UD6 · Acceso a almacenes de datos con PDO"
+  [UD7]="UD7 · Servicios web REST"
+  [UD8]="UD8 · Páginas web dinámicas e interactivas"
+  [UD9]="UD9 · Aplicaciones web híbridas: Composer y repositorios heterogéneos"
 )
 
-for dir in ud1 ud2 ud3 ud4 ud5 ud6 ud7 ud8 ud9; do
+for dir in UD1 UD2 UD3 UD4 UD5 UD6 UD7 UD8 UD9; do
   [ -d "$ROOT/$dir" ] || continue
   mapfile -t qmds < <(find "$ROOT/$dir" -maxdepth 1 -name '*.qmd' | sort)
   [ ${#qmds[@]} -gt 0 ] || continue
