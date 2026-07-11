@@ -1,0 +1,186 @@
+---
+title: "Bucles"
+---
+
+# Bloque 2 · Bucles
+
+::: {.callout-important title="Normativa · RA-CE"}
+**CE3.b** — Se han utilizado bucles y se ha verificado su funcionamiento.  
+*RD 686/2010, Anexo II.*
+:::
+
+---
+
+## `while` y `do-while`
+
+La lógica es idéntica a la de Java: `while` evalúa la condición **antes** de cada iteración, mientras que `do-while` la evalúa **después**, garantizando al menos una ejecución del bloque.
+
+```php
+<?php
+// while: puede no ejecutarse ninguna vez
+$contador = 1;
+while ($contador <= 5) {
+    echo $contador . " ";
+    $contador++;
+}
+// Salida: 1 2 3 4 5
+
+// do-while: se ejecuta al menos una vez
+$intento = 0;
+do {
+    echo "Intento " . $intento . "\n";
+    $intento++;
+} while ($intento < 3);
+// Salida: Intento 0 / Intento 1 / Intento 2
+?>
+```
+
+::: {.callout-tip title="Analogía Java"}
+La sintaxis de `while` y `do-while` en PHP es idéntica a la de Java. La única diferencia práctica es que la condición de PHP puede ser cualquier expresión que PHP convierta a booleano (ver Bloque 1), no solo una expresión estrictamente `boolean` como exige Java.
+:::
+
+---
+
+## `for`
+
+La cabecera del `for` es idéntica a la de Java: inicialización, condición e incremento separados por punto y coma.
+
+```php
+<?php
+for ($i = 1; $i <= 10; $i++) {
+    echo $i * 2 . "<br>";
+}
+?>
+```
+
+---
+
+## `foreach`
+
+`foreach` no tiene una traducción literal en Java básico (es conceptualmente similar al `for-each` de colecciones). En PHP se utiliza de forma habitual para recorrer arrays, incluyendo el acceso simultáneo a **clave** y **valor** en arrays asociativos.
+
+```php
+<?php
+$precios = ["pan" => 1.20, "leche" => 0.95, "huevos" => 2.50];
+
+foreach ($precios as $producto => $precio) {
+    echo "$producto cuesta $precio €<br>";
+}
+// Salida:
+// pan cuesta 1.2 €
+// leche cuesta 0.95 €
+// huevos cuesta 2.5 €
+?>
+```
+
+::: {.callout-note title="Concepto clave"}
+La sintaxis `foreach ($array as $clave => $valor)` desempaqueta cada elemento del array en dos variables locales al bloque. Si solo necesitas el valor, puedes omitir la clave: `foreach ($array as $valor)`.
+:::
+
+::: {.callout-tip title="Analogía Java"}
+```java
+// Java — for-each sobre un Map
+for (Map.Entry<String, Double> entry : precios.entrySet()) {
+    System.out.println(entry.getKey() + " cuesta " + entry.getValue());
+}
+```
+
+```php
+<?php
+// PHP — foreach equivalente, más conciso
+foreach ($precios as $producto => $precio) {
+    echo "$producto cuesta $precio\n";
+}
+?>
+```
+
+PHP no necesita `entrySet()`, `getKey()` ni `getValue()`; la desestructuración es directa.
+:::
+
+---
+
+## `break` y `continue` con niveles
+
+PHP permite indicar **cuántos niveles** de bucle romper o saltar mediante `break N` / `continue N`. En Java el mismo control sobre bucles anidados requiere etiquetas (`label:`).
+
+```php
+<?php
+for ($i = 1; $i <= 3; $i++) {
+    for ($j = 1; $j <= 3; $j++) {
+        if ($j == 2) continue 2; // salta a la siguiente iteración del bucle EXTERNO
+        echo "i=$i j=$j  ";
+    }
+}
+// Salida: i=1 j=1  i=2 j=1  i=3 j=1
+?>
+```
+
+```php
+<?php
+for ($i = 1; $i <= 5; $i++) {
+    for ($j = 1; $j <= 5; $j++) {
+        if ($i * $j > 6) break 2; // sale de AMBOS bucles
+        echo "$i×$j=" . ($i * $j) . "  ";
+    }
+}
+?>
+```
+
+::: {.callout-tip title="Analogía Java"}
+```java
+// Java necesita una etiqueta para romper un bucle externo
+externo:
+for (int i = 1; i <= 3; i++) {
+    for (int j = 1; j <= 3; j++) {
+        if (j == 2) continue externo;
+        System.out.print("i=" + i + " j=" + j + "  ");
+    }
+}
+```
+
+PHP logra lo mismo con `continue 2` sin necesidad de etiquetar el bucle.
+:::
+
+::: {.callout-warning title="Errores frecuentes"}
+`break` / `continue` sin número actúan sobre el bucle más interno, igual que en Java. Usar `break 2` cuando solo hay un nivel de bucle activo genera un error en tiempo de ejecución (`Cannot break/continue 2 levels`). Cuenta los niveles de anidamiento antes de usar el modificador numérico.
+:::
+
+---
+
+## Actividades
+
+::: {#exr-UD3-3}
+**E3.3 — Generador de tablas de multiplicar** `CE3.b · CE3.g · Sesión 3`
+
+Crea un script PHP que genere dinámicamente una tabla de multiplicar embebida en HTML:
+
+a) **Versión con `for`:** genera la tabla del número `5` (o el que prefieras) del 1 al 10, mostrando cada resultado en un `<li>` dentro de una `<ul>`.
+b) **Versión con `while`:** genera la misma tabla pero usando `while`.
+c) **Versión con `do-while` y centinela:** dado el array `$numeros = [3, 7, 9, -1, 4]`, recorre el array con `do-while` y genera la tabla de cada número hasta encontrar el valor `-1` (centinela), que debe detener el proceso sin generar tabla para él ni para los valores posteriores.
+
+Documenta cada función con PHPDoc.
+:::
+
+::: {#exr-UD3-4}
+**E3.4 — Filtro de inventario** `CE3.b · CE3.g · Sesión 4`
+
+Dado el siguiente array de productos:
+
+```php
+<?php
+$inventario = [
+    ["nombre" => "Teclado",   "precio" => 25.0,  "stock" => 12],
+    ["nombre" => "Ratón",     "precio" => 15.0,  "stock" => 0],
+    ["nombre" => "Monitor",   "precio" => 180.0, "stock" => 5],
+    ["nombre" => "Cable USB", "precio" => 5.0,   "stock" => 30],
+];
+?>
+```
+
+Implementa dos recorridos independientes con `foreach`:
+
+a) **Recorrido con `break`:** muestra el nombre y el stock de cada producto. En cuanto encuentres el primer producto con `stock === 0`, muestra el mensaje `"Producto agotado: {nombre}. Deteniendo recorrido."` y para el bucle.
+b) **Recorrido con `continue`:** define un umbral de precio de 50 €. Omite con `continue` los productos cuyo precio supere el umbral y muestra el nombre y precio de los que sí lo cumplen.
+
+Añade comentarios que expliquen la lógica de cada bloque.
+:::

@@ -1,0 +1,44 @@
+---
+title: "Lenguajes y tecnologías en entorno servidor"
+---
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque desarrolla **CE1.e** («se han identificado y caracterizado los principales lenguajes y tecnologías relacionados con la programación Web en entorno servidor»), según RD 686/2010, Anexo II.
+:::
+
+Existen múltiples lenguajes y plataformas para programar en el servidor. Ninguno es objetivamente «mejor» en abstracto: la elección depende del contexto del proyecto (rendimiento necesario, equipo disponible, ecosistema de librerías, coste de las licencias, integración con sistemas existentes). El módulo emplea PHP como lenguaje vehicular para el resto de unidades, pero este criterio de evaluación exige conocer el panorama completo, no solo la tecnología elegida.
+
+## Comparativa de las principales tecnologías
+
+| Tecnología | Tipo / origen | Características destacadas |
+|---|---|---|
+| PHP | Lenguaje de scripting de propósito específico Web, código abierto | Sintaxis sencilla de aprender, enorme cuota de mercado en CMS y comercio electrónico, débilmente tipado, ecosistema de frameworks (Laravel, Symfony). |
+| Java EE / JSP / Servlets | Plataforma empresarial, fuertemente tipada | Robustez y escalabilidad para sistemas de gran tamaño, curva de aprendizaje más exigente, fuerte presencia en banca y administración pública. |
+| ASP.NET (C# / VB.NET) | Plataforma de Microsoft | Integración nativa con el ecosistema Microsoft (IIS, SQL Server, Azure), buen rendimiento, tradicionalmente vinculada a licencias propietarias (aunque .NET Core es ahora multiplataforma y de código abierto). |
+| Python (Django / Flask) | Lenguaje de propósito general, tipado dinámico | Sintaxis muy legible, fuerte presencia en ciencia de datos e inteligencia artificial además de Web, Django ofrece un framework «todo incluido». |
+| Node.js (JavaScript en servidor) | Entorno de ejecución de JavaScript fuera del navegador | Permite usar el mismo lenguaje en cliente y servidor, modelo de E/S no bloqueante orientado a alta concurrencia, ecosistema npm muy extenso. |
+
+: Comparativa de tecnologías de programación en entorno servidor {.striped}
+
+::: {.callout-note title="Concepto clave"}
+**¿Por qué PHP en este módulo?** La elección de PHP como lenguaje vehicular es una decisión metodológica del docente, no una imposición normativa: el currículo no fija un lenguaje concreto. Los motivos de esta elección son:
+
+- Sigue siendo la tecnología de programación en servidor más extendida en el sector del desarrollo Web en España, especialmente en pequeña y mediana empresa.
+- Su modelo de código embebido facilita la transición conceptual desde HTML hacia la programación en servidor.
+- Permite alcanzar, dentro de las 200 horas del módulo, contenidos avanzados (MVC con Laravel, servicios REST) sin la sobrecarga de configuración de otras plataformas.
+:::
+
+## Ejercicio E1.4 {#exr-UD1-4}
+
+::: {#exr-UD1-4}
+**Estudio comparativo razonado**
+
+En grupos de tres, cada grupo recibe uno de los siguientes escenarios:
+
+- **Escenario A:** una tienda online de pequeño volumen.
+- **Escenario B:** una intranet corporativa de una gran empresa con equipo de desarrollo Java.
+- **Escenario C:** una API de altísima concurrencia para una aplicación de mensajería.
+- **Escenario D:** un proyecto académico de aprendizaje personal.
+
+**Tarea:** el grupo debe recomendar una tecnología de servidor para su escenario, justificando la elección con al menos **tres argumentos técnicos** (no de gusto personal) y citando explícitamente qué alternativa han descartado y por qué. Se expone en clase en formato de defensa breve (3 minutos por grupo).
+:::

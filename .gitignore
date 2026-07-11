@@ -1,6 +1,6 @@
 # Salidas de Quarto
 _book/
-_unit-pdfs/
+_ud-pdfs/
 /.quarto/
 
 # Intermedios de LaTeX

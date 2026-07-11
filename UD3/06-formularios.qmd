@@ -1,0 +1,101 @@
+---
+title: "Formularios HTML"
+---
+
+# Bloque 5 · Formularios HTML
+
+::: {.callout-important title="Normativa · RA-CE"}
+**CE3.e** — Se han utilizado formularios web para interactuar con el usuario del navegador web.  
+*RD 686/2010, Anexo II.*
+:::
+
+---
+
+## El elemento `<form>`
+
+Un formulario HTML agrupa controles de entrada y define, mediante sus atributos `action` y `method`, a qué script se envían los datos y de qué forma.
+
+```php
+<form action="procesar.php" method="post">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" required>
+
+    <label for="curso">Curso:</label>
+    <select id="curso" name="curso">
+        <option value="daw">2º DAW</option>
+        <option value="dam">2º DAM</option>
+    </select>
+
+    <button type="submit">Enviar</button>
+</form>
+```
+
+::: {.callout-note title="Concepto clave"}
+El atributo `name` de cada control (no `id`) es la clave bajo la que PHP recibirá el dato en `$_GET` o `$_POST`. Si un control no tiene atributo `name`, su valor no se envía al servidor.
+:::
+
+Los controles más habituales son:
+
+| Control HTML | Tipo de entrada | Valor enviado |
+|---|---|---|
+| `<input type="text">` | Texto libre de una línea | La cadena introducida |
+| `<input type="email">` | Correo electrónico (validado por el navegador) | La cadena introducida |
+| `<input type="number">` | Número (con validación básica del navegador) | La cadena del número |
+| `<input type="checkbox" name="x" value="1">` | Casilla de verificación | `"1"` si marcada; no se envía si desmarcada |
+| `<input type="radio" name="g" value="a">` | Botón de opción (un valor por grupo) | El `value` del botón seleccionado |
+| `<select name="curso">` | Lista desplegable | El `value` de la opción seleccionada |
+| `<textarea name="texto">` | Texto libre multilínea | La cadena introducida |
+
+---
+
+## GET frente a POST
+
+La elección del método de envío no es indiferente: condiciona la visibilidad de los datos, su capacidad y el uso que se puede hacer de la petición resultante.
+
+| Aspecto | GET | POST |
+|---|---|---|
+| Visibilidad de los datos | Visibles en la URL (`?campo=valor&...`) | Ocultos en el cuerpo de la petición HTTP |
+| Límite de tamaño | Limitado (depende del navegador y del servidor; aprox. 2–8 KB) | Sin límite práctico relevante |
+| Cacheable / marcable | Sí — la URL se puede guardar en favoritos y compartir | No, por defecto |
+| Idempotente | Sí — repetir la petición no debe cambiar el estado del servidor | No necesariamente |
+| Uso recomendado | Búsquedas, filtros, navegación, paginación | Envío de datos sensibles, creación o modificación de recursos |
+
+::: {.callout-note title="Concepto clave"}
+**GET** para consultar sin efectos secundarios; **POST** para enviar datos que crean, modifican o eliminan algo. Esta distinción es la base del diseño REST que se estudiará en la UD7.
+:::
+
+::: {.callout-warning title="Errores frecuentes"}
+Usar **GET para enviar contraseñas u otros datos sensibles** expone esos datos en la URL, en el historial del navegador, en los registros del servidor (*access log*) y en la cabecera `Referer`. Siempre usa POST para credenciales y datos personales.
+:::
+
+::: {.callout-tip title="Analogía Java"}
+En Servlets Java la distinción es exactamente la misma: `doGet()` atiende peticiones GET (solo lectura), `doPost()` atiende peticiones POST (escritura o envío de datos). El principio de diseño es idéntico; solo cambia el mecanismo de despacho.
+:::
+
+---
+
+## Actividades
+
+::: {#exr-UD3-8}
+**E3.8 — Formulario de inscripción a curso** `CE3.e · CE3.g · Sesión 8`
+
+Diseña en un fichero `inscripcion.html` (o `inscripcion.php` si prefieres incluir PHP) un formulario de inscripción a un curso con los siguientes campos:
+
+| Campo | Control HTML | Restricciones |
+|---|---|---|
+| Nombre completo | `<input type="text">` | Obligatorio (`required`) |
+| Correo electrónico | `<input type="email">` | Obligatorio |
+| Curso | `<select>` | Al menos tres opciones con valores distintos |
+| Modalidad | `<input type="radio">` | Al menos dos opciones: `"presencial"` y `"semipresencial"` |
+| Acepto las condiciones | `<input type="checkbox">` | Obligatorio |
+
+El formulario debe:
+
+- Enviar los datos por **POST** al script `procesar_inscripcion.php`.
+- Tener un botón de envío con el texto `"Enviar inscripción"`.
+- Usar `<label>` correctamente asociado a cada control (atributo `for` = `id` del control).
+
+En esta actividad se construye **solo el formulario**; el procesamiento en PHP se implementará en la actividad E3.9.
+
+Añade un comentario HTML (`<!-- -->`) al inicio del fichero que explique por qué se usa POST en lugar de GET para este formulario.
+:::

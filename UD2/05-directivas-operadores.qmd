@@ -1,0 +1,122 @@
+---
+title: "Bloque 3 · Directivas y operadores"
+---
+
+## Directivas: modificando el comportamiento predeterminado
+
+::: {.callout-note title="Concepto clave"}
+Una **directiva** no forma parte de la lógica de negocio del programa: configura cómo se comporta el propio intérprete de PHP. No generan salida HTML; actúan sobre el motor antes de que empiece la ejecución del resto del script.
+:::
+
+### Directivas de notificación de errores
+
+Las más relevantes al iniciarse son las que controlan qué errores se muestran y dónde:
+
+```php
+<?php
+error_reporting(E_ALL);            // notificar todos los tipos de error
+ini_set('display_errors', '1');    // mostrar errores en pantalla (desarrollo)
+ini_set('display_errors', '0');    // ocultarlos al usuario (producción)
+ini_set('log_errors',     '1');    // guardarlos en el log del servidor (producción)
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+Mostrar errores detallados en producción puede revelar rutas del servidor, nombres de tablas de la base de datos o credenciales. La regla es: **`display_errors = 1` solo en desarrollo local; siempre `0` en el servidor de producción**. Activar `log_errors` en producción para no perder la información.
+:::
+
+### `declare(strict_types=1)`
+
+Esta directiva obliga a que los tipos de los parámetros de las funciones tipadas coincidan exactamente, desactivando la conversión automática. Debe ser la **primera sentencia ejecutable** del archivo:
+
+```php
+<?php
+declare(strict_types=1);
+
+// A partir de aquí, las funciones tipadas exigen el tipo exacto,
+// igual que en Java con tipos primitivos.
+
+function sumar(int $a, int $b): int {
+    return $a + $b;
+}
+
+sumar(3, 5);     // OK
+sumar("3", 5);   // TypeError: sin strict_types PHP convertiría "3" a 3;
+                 // con strict_types lanza excepción.
+```
+
+::: {.callout-tip title="Analogía Java"}
+`declare(strict_types=1)` aproxima PHP al comportamiento por defecto de Java con tipos primitivos: una función que espera un `int` rechaza un `String` sin conversión explícita. Sin esta directiva, PHP convierte silenciosamente, lo que puede enmascarar errores de tipo.
+:::
+
+::: {#exr-UD2-7}
+### E2.7 — Comparativa de entornos: desarrollo vs. producción
+
+1. Crea un script que contenga, a propósito, dos errores: una variable no definida usada en un `echo`, y una división entre cero.
+2. Configura las directivas para mostrar todos los errores y ejecuta el script, anotando exactamente qué avisos/errores aparecen en pantalla.
+3. Cambia las directivas al modo «producción» (sin mostrar errores al usuario) y comprueba que la página ya no muestra los avisos, aunque los errores sigan ocurriendo internamente.
+4. Añade `declare(strict_types=1)` al principio del archivo y explica, en un comentario, qué cambiaría si este script tuviera una función con un parámetro tipado como `int` y se le pasara un string numérico.
+
+**Resultado esperado:** en modo desarrollo deben verse claramente los 2 problemas; en modo producción la página no debe mostrar ningún error visible al usuario, aunque el comportamiento interno siga siendo incorrecto.
+:::
+
+## Operadores
+
+PHP dispone de las categorías de operadores habituales en cualquier lenguaje imperativo, con una sintaxis casi idéntica a Java:
+
+| Categoría | Operadores | Ejemplo |
+|---|---|---|
+| **Aritméticos** | `+` `-` `*` `/` `%` `**` | `$a % $b` (resto) · `$a ** 2` (potencia — no existe en Java) |
+| **Asignación** | `=` `+=` `-=` `*=` `/=` `.=` | `$total += 10;` |
+| **Comparación** | `==` `===` `!=` `!==` `<` `>` `<=` `>=` | `$a === $b` |
+| **Lógicos** | `&&` `\|\|` `!` `and` `or` | `($edad >= 18) && $tiene_carnet` |
+| **Concatenación** | `.` `.=` | `"Hola " . $nombre` *(en Java sería `+`)* |
+
+: {.striped}
+
+### Precedencia de operadores
+
+Cuando una expresión combina varios operadores, PHP los resuelve por precedencia, igual que Java. Ante cualquier duda, conviene usar paréntesis explícitos:
+
+```php
+$resultado  = 2 + 3 * 4;      // 14 — la multiplicación va primero
+$resultado2 = (2 + 3) * 4;    // 20 — el paréntesis fuerza el orden
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+**Trampa de precedencia: `and`/`or` vs `&&`/`||`**
+
+PHP tiene **dos formas** de escribir los operadores lógicos:
+
+- `&&` y `||` tienen **precedencia alta** (igual que en Java).
+- `and` y `or` tienen **precedencia muy baja**, por debajo incluso de la asignación `=`.
+
+```php
+$a = true || false;   // $a = true  (|| evalúa antes que =)
+$b = true or false;   // $b = true  (parece igual, pero...)
+
+$c = false || true;   // $c = true  (|| evalúa antes que =)
+$d = false or true;   // $d = false (!!) porque = asigna false ANTES de que or actúe
+```
+
+La última línea es la trampa: `$d = false or true` se parsea como `($d = false) or true`. La variable `$d` recibe `false`, y luego se evalúa `false or true` (resultado `true`) que se descarta.
+
+**Regla práctica:** usar siempre `&&` y `||` en expresiones condicionales. Reservar `and`/`or` solo como «control flow» (`file_exists(...) or die(...)`) donde la baja precedencia es intencionada.
+:::
+
+::: {#exr-UD2-8}
+### E2.8 — Motor de descuentos con operadores combinados
+
+```php
+$precio_base  = 120.0;
+$es_socio     = true;
+$unidades     = 5;
+$codigo_promo = "VERANO10";
+```
+
+1. Calcula un descuento del 15% si `$es_socio` es `true`, combinándolo con un descuento adicional del 10% si `$codigo_promo` es exactamente `"VERANO10"`. Los descuentos no se aplican sumándolos: aplica primero el 15% y luego el 10% sobre el resultado.
+2. Calcula el precio final multiplicando por `$unidades` y redondea a 2 decimales con `round()`.
+3. Construye una expresión lógica única (combinando `&&` y `||`, con paréntesis) que determine si el pedido merece «envío prioritario gratuito»: socio **Y** más de 3 unidades, **O bien** precio final superior a 400 €.
+4. Muestra todos los resultados intermedios (cada descuento aplicado por separado) además del resultado final, para poder verificar el cálculo paso a paso.
+
+**Resultado esperado:** con los valores dados, tras el 15% el precio queda en 102 €; tras el 10% adicional, en 91,80 €; multiplicado por 5 unidades, 459 €. La condición de envío prioritario debe evaluarse a `true` por el segundo criterio (459 > 400).
+:::

@@ -1,0 +1,231 @@
+---
+title: "Arrays"
+---
+
+# Bloque 3 · Arrays
+
+::: {.callout-important title="Normativa · RA-CE"}
+**CE3.c** — Se han utilizado matrices (arrays) para almacenar y recuperar conjuntos de datos.  
+*RD 686/2010, Anexo II.*
+:::
+
+---
+
+## Arrays indexados
+
+A diferencia del array de Java, que es de tamaño y tipo fijo, el array de PHP es una **estructura dinámica** que puede crecer, reducirse y mezclar tipos de datos.
+
+```php
+<?php
+$colores = ["rojo", "verde", "azul"];
+$colores[] = "amarillo"; // se añade al final automáticamente
+
+echo count($colores);    // 4
+echo $colores[0];        // rojo
+echo $colores[3];        // amarillo
+
+// Funciones de ordenación y manipulación
+sort($colores);           // ordena por valor, reindexando desde 0
+array_push($colores, "negro");  // añade al final (equivalente a $colores[])
+$ultimo = array_pop($colores);  // extrae el último elemento
+?>
+```
+
+::: {.callout-tip title="Analogía Java"}
+| PHP | Java (equivalente aproximado) |
+|---|---|
+| `$a = [1, 2, 3]` | `int[] a = {1, 2, 3}` o `new ArrayList<>(List.of(1,2,3))` |
+| `$a[] = 4` | `a.add(4)` (ArrayList) |
+| `count($a)` | `a.size()` (ArrayList) / `a.length` (array) |
+| `sort($a)` | `Collections.sort(a)` |
+| `array_pop($a)` | `a.remove(a.size()-1)` |
+
+PHP no distingue entre arrays de tamaño fijo y listas dinámicas: el mismo tipo sirve para ambos casos.
+:::
+
+---
+
+## Arrays asociativos
+
+Equivalen conceptualmente a un `HashMap<K,V>` de Java (escrito así en código), pero forman parte del mismo tipo `array` nativo de PHP, sin necesidad de una clase contenedora distinta.
+
+```php
+<?php
+$alumno = [
+    "nombre" => "Laura",
+    "curso"  => "2º DAW",
+    "nota"   => 8.5,
+];
+
+echo $alumno["nombre"];  // Laura
+echo $alumno["nota"];    // 8.5
+
+// Añadir o modificar una clave
+$alumno["email"] = "laura@example.com";
+
+// Comprobar si una clave existe
+if (array_key_exists("email", $alumno)) {
+    echo "Tiene email";
+}
+
+// Recorrer con foreach (clave => valor)
+foreach ($alumno as $clave => $valor) {
+    echo "$clave: $valor<br>";
+}
+?>
+```
+
+::: {.callout-tip title="Analogía Java"}
+```java
+// Java
+Map<String, Object> alumno = new HashMap<>();
+alumno.put("nombre", "Laura");
+alumno.put("nota", 8.5);
+System.out.println(alumno.get("nombre"));
+```
+
+```php
+<?php
+// PHP — sintaxis nativa, sin importar clases
+$alumno = ["nombre" => "Laura", "nota" => 8.5];
+echo $alumno["nombre"];
+?>
+```
+
+En PHP no hay distinción entre `HashMap` y `LinkedHashMap`: el array asociativo **mantiene el orden de inserción** por definición (desde PHP 5).
+:::
+
+::: {.callout-warning title="Errores frecuentes"}
+Acceder a una clave que no existe genera un aviso (`Warning: Undefined array key`) en PHP 8. Usa siempre `array_key_exists()` o el operador `??` antes de leer una clave cuya existencia no estés seguro:
+
+```php
+<?php
+$valor = $alumno["telefono"] ?? "sin teléfono";  // seguro
+$valor = $alumno["telefono"];                     // Warning en PHP 8 si no existe
+?>
+```
+:::
+
+---
+
+## Arrays multidimensionales
+
+Un array de arrays asociativos permite representar conjuntos de "registros" sin necesidad de definir una clase. Este patrón anticipa la motivación de la POO que se introducirá en la UD4.
+
+```php
+<?php
+$alumnos = [
+    ["nombre" => "Laura", "nota" => 8.5],
+    ["nombre" => "Marc",  "nota" => 6.0],
+    ["nombre" => "Aisha", "nota" => 9.2],
+];
+
+// Acceso por índice numérico y luego por clave
+echo $alumnos[0]["nombre"];  // Laura
+echo $alumnos[2]["nota"];    // 9.2
+
+// Recorrido con foreach anidado
+foreach ($alumnos as $alumno) {
+    echo "{$alumno['nombre']}: {$alumno['nota']}<br>";
+}
+?>
+```
+
+::: {.callout-note title="Concepto clave"}
+PHP no tiene una clase `Record`, `Struct` ni `Bean` para agrupar campos relacionados sin comportamiento. El array multidimensional cubre ese hueco en PHP procedimental. Cuando los datos necesiten comportamiento (métodos), la solución correcta es definir una clase, como veremos en UD4.
+:::
+
+---
+
+## Funciones de orden superior sobre arrays
+
+`array_map()`, `array_filter()` y `array_reduce()` permiten transformar, filtrar y agregar arrays **sin bucles explícitos**, pasando una función anónima (*closure*) como argumento.
+
+```php
+<?php
+$precios = [10, 25, 8, 40];
+
+// array_map: transforma cada elemento y devuelve un nuevo array
+$conIva = array_map(fn($p) => $p * 1.21, $precios);
+// [12.1, 30.25, 9.68, 48.4]
+
+// array_filter: filtra elementos según una condición (preserva claves)
+$caros = array_filter($precios, fn($p) => $p > 15);
+// [1 => 25, 3 => 40]   ← las claves originales se conservan
+
+// array_reduce: agrega a un único valor acumulado
+$total = array_reduce($precios, fn($acc, $p) => $acc + $p, 0);
+// 83
+?>
+```
+
+::: {.callout-tip title="Analogía Java"}
+```java
+// Java — Stream API
+List<Double> conIva = precios.stream()
+    .map(p -> p * 1.21)
+    .collect(Collectors.toList());
+
+List<Integer> caros = precios.stream()
+    .filter(p -> p > 15)
+    .collect(Collectors.toList());
+
+int total = precios.stream()
+    .reduce(0, Integer::sum);
+```
+
+La diferencia clave: la Stream API de Java es **perezosa** (lazy) y no materializa resultados intermedios. PHP devuelve un nuevo array inmediatamente en cada operación. Para listas pequeñas o medianas la diferencia de rendimiento es despreciable.
+:::
+
+::: {.callout-warning title="Errores frecuentes"}
+`array_filter()` **preserva las claves** del array original. Si después necesitas un array reindexado desde 0, aplica `array_values()`:
+
+```php
+<?php
+$caros = array_filter($precios, fn($p) => $p > 15);
+// [1 => 25, 3 => 40]  ← claves no consecutivas
+
+$carosReindexados = array_values($caros);
+// [0 => 25, 1 => 40]  ← reindexado
+?>
+```
+:::
+
+Otras funciones útiles de array:
+
+| Función | Efecto |
+|---|---|
+| `array_search($valor, $array)` | Devuelve la clave del primer elemento igual a `$valor`, o `false` |
+| `in_array($valor, $array)` | `true` si `$valor` existe en el array |
+| `ksort($array)` | Ordena por clave, manteniendo la asociación clave-valor |
+| `asort($array)` | Ordena por valor, manteniendo la asociación clave-valor |
+| `array_keys($array)` | Devuelve un array indexado con todas las claves |
+| `array_values($array)` | Devuelve un array indexado con todos los valores |
+
+---
+
+## Actividades
+
+::: {#exr-UD3-5}
+**E3.5 — Catálogo de cursos** `CE3.c · CE3.g · Sesión 5`
+
+Crea un array asociativo `$catalogo` donde cada clave sea el código de un curso (p. ej. `"DAW2"`) y el valor sea su nombre completo (p. ej. `"Desarrollo de Aplicaciones Web"`). Incluye al menos cuatro cursos.
+
+Implementa las siguientes funciones auxiliares con documentación PHPDoc:
+
+a) `buscarCurso(array $catalogo, string $codigo): ?string` — devuelve el nombre del curso si existe, o `null` si no.
+b) `existeCurso(array $catalogo, string $nombre): bool` — devuelve `true` si el nombre del curso existe en el catálogo (usa `in_array` con comparación estricta).
+c) Muestra el catálogo ordenado por código (`ksort`) y ordenado por nombre (`asort`), imprimiendo ambas versiones.
+:::
+
+::: {#exr-UD3-6}
+**E3.6 — Inventario multinivel de almacén** `CE3.c · CE3.g · Sesión 6`
+
+Define un array multidimensional `$almacenes` con al menos dos almacenes (claves `"Madrid"` y `"Valencia"`), cada uno con un array de productos. Cada producto debe tener las claves `"producto"`, `"precio"` y `"stock"`. Incluye al menos dos productos por almacén.
+
+Implementa las siguientes operaciones **sin bucles explícitos** (usa `array_map` y `array_filter`):
+
+a) Genera `$almacenesActualizados` aplicando un **incremento del 10 %** al precio de todos los productos, sin modificar `$almacenes` original. Usa `array_map` anidado (uno por almacén, otro por producto dentro de cada almacén).
+b) Genera `$stockBajo` con solo los productos cuyo `stock` sea **menor o igual a 2**, manteniendo la estructura por almacén. Usa `array_map` + `array_filter`.
+c) Imprime ambos resultados con `print_r`.
+:::

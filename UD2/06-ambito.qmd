@@ -1,0 +1,101 @@
+---
+title: "Bloque 4 · Ámbito de las variables"
+---
+
+## Ámbito de las variables
+
+::: {.callout-note title="Concepto clave"}
+El **ámbito** (*scope*) determina en qué parte del programa es accesible una variable. En PHP:
+
+- Una variable declarada en el cuerpo principal tiene **ámbito global**.
+- Una variable declarada dentro de una función tiene **ámbito local**: no es visible desde fuera de la función, ni la función puede ver las variables globales de forma automática.
+:::
+
+::: {.callout-tip title="Analogía Java"}
+En Java, un método de una clase sí puede acceder directamente a los atributos de instancia (`this.contador`) sin declaración extra. En PHP esto **no ocurre**: una función no puede leer una variable global a menos que se lo indiquemos explícitamente. Este es el punto de diferencia más sorprendente para quien viene de Java.
+:::
+
+## La palabra clave `global`
+
+Para que una función acceda o modifique una variable global, debe declararla dentro de la función con `global`:
+
+```php
+$contador = 0;
+
+function incrementar(): int {
+    global $contador;   // "quiero trabajar con la variable global $contador"
+    $contador++;
+    return $contador;
+}
+
+echo incrementar();  // 1
+echo incrementar();  // 2
+echo $contador;      // 2 — la función sí modificó la variable global
+```
+
+Sin `global`, PHP crearía una **variable local nueva** con el mismo nombre, independiente de la global:
+
+```php
+$contador = 0;
+
+function incrementarRoto(): int {
+    $contador++;         // crea una variable LOCAL $contador, comienza en 0
+    return $contador;    // siempre devuelve 1
+}
+
+echo incrementarRoto();  // 1
+echo incrementarRoto();  // 1  ← siempre 1: la variable local no persiste entre llamadas
+echo $contador;          // 0  ← la global no fue tocada
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+Olvidar `global` es el error más frecuente con el ámbito en PHP. Los síntomas: la función siempre devuelve el mismo valor (porque la variable local se reinicia a `0` o `null` en cada llamada) y la variable global no cambia nunca aunque la función parezca modificarla.
+:::
+
+## La palabra clave `static`
+
+`static` permite que una variable **local** conserve su valor entre llamadas, sin necesidad de recurrir al ámbito global:
+
+```php
+function contadorStatic(): int {
+    static $veces = 0;  // se inicializa solo en la primera llamada
+    $veces++;
+    return $veces;
+}
+
+echo contadorStatic();  // 1
+echo contadorStatic();  // 2
+echo contadorStatic();  // 3
+```
+
+::: {.callout-tip title="Analogía Java"}
+`static` en PHP es conceptualmente similar a una variable de clase (`static`) en Java que se usa como contador de instancias: conserva su valor entre llamadas al método, sin estar expuesta al exterior. La diferencia es que en PHP la variable `static` es local a la función, invisible desde fuera, mientras que en Java un campo `static` es accesible a través de la clase.
+:::
+
+### Comparativa de las tres estrategias
+
+| Estrategia | Persiste entre llamadas | Accesible desde fuera | Riesgo |
+|---|:---:|:---:|---|
+| Variable local normal | No | No | Siempre empieza en cero/null |
+| `global` | Sí (variable externa) | Sí | Cualquier código puede modificarla |
+| `static` | Sí (variable local) | No | Mínimo: encapsulada en la función |
+
+: {.striped}
+
+::: {#exr-UD2-9}
+### E2.9 — Sistema de tickets con tres estrategias de ámbito
+
+Implementa tres funciones independientes que numeren tickets de soporte, cada una con una estrategia distinta:
+
+1. `generarTicketGlobal()`: usa una variable global `$ultimo_ticket`, accedida con `global`.
+2. `generarTicketStatic()`: usa una variable local `static`, sin tocar nada externo a la función.
+3. `generarTicketRoto()`: declara una variable local **sin** `static` y **sin** `global`, e incrementa esa variable local en cada llamada (a propósito, para observar que no conserva el valor).
+
+Pasos:
+
+- Llama a cada una de las tres funciones **4 veces** seguidas.
+- Muestra los resultados de las 12 llamadas en una tabla HTML comparativa con una columna por función.
+- Añade un párrafo explicando por qué `generarTicketRoto()` siempre devuelve el mismo número, y cuál de las otras dos estrategias recomendarías para un sistema real de numeración de tickets, justificando la respuesta en términos de seguridad y mantenibilidad del código.
+
+**Resultado esperado:** `generarTicketGlobal()` y `generarTicketStatic()` deben producir la serie 1, 2, 3, 4. `generarTicketRoto()` debe devolver siempre 1, porque la variable local se reinicia en cada llamada.
+:::

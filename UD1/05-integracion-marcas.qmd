@@ -1,0 +1,42 @@
+---
+title: "Integración con lenguajes de marcas"
+---
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque desarrolla **CE1.f** («se han verificado los mecanismos de integración de los lenguajes de marcas con los lenguajes de programación en entorno servidor»), según RD 686/2010, Anexo II. La sintaxis concreta de PHP (variables, operadores, tipos de datos) se desarrolla en profundidad en la UD2.
+:::
+
+Cuando un lenguaje de servidor utiliza el modelo de código embebido (estudiado en el bloque anterior), necesita un mecanismo claro para que el intérprete distinga qué partes del documento son lenguaje de marcas —HTML, que debe enviarse tal cual al cliente— y qué partes son código de programación —que debe ejecutarse antes de generar la respuesta—.
+
+## Delimitadores de código
+
+Cada tecnología de código embebido define sus propias etiquetas de apertura y cierre:
+
+| Tecnología | Delimitador de apertura | Delimitador de cierre |
+|---|---|---|
+| PHP (forma estándar) | `<?php` | `?>` |
+| PHP (forma corta, eco) | `<?=` | `?>` |
+| ASP clásico | `<%` | `%>` |
+| JSP (JavaServer Pages) | `<%` o `<%=` | `%>` |
+
+: Delimitadores de código por tecnología {.striped}
+
+El proceso, en términos generales, es el siguiente: el servidor recibe la petición de un fichero con código embebido; el intérprete recorre el documento de principio a fin; todo lo que está **fuera** de los delimitadores se envía sin modificar; todo lo que está **dentro** de los delimitadores se ejecuta como código, y su resultado (normalmente mediante una instrucción de salida como `echo`) se inserta en el lugar correspondiente del documento final.
+
+::: {.callout-warning title="Errores frecuentes"}
+**El documento final nunca contiene código.** Un error conceptual frecuente es pensar que el navegador «ve» el código PHP. En realidad, el servidor sustituye todo el bloque embebido (delimitadores incluidos) por el resultado de su ejecución antes de enviar la respuesta. El cliente jamás recibe el código fuente del lenguaje de servidor, solo el HTML resultante.
+:::
+
+## Ejercicio E1.5 {#exr-UD1-5}
+
+::: {#exr-UD1-5}
+**Trazado manual de la salida generada**
+
+Se entrega un documento HTML con tres bloques de código embebido en pseudocódigo (no es necesario conocer la sintaxis PHP todavía, ya que se trabajará en UD2):
+
+- Bloque 1: imprime un valor fijo.
+- Bloque 2: imprime el resultado de una operación aritmética sencilla.
+- Bloque 3: imprime un texto condicionado a un valor variable.
+
+**Tarea:** «ejecuta mentalmente» el documento y escribe el HTML exacto que el navegador recibiría, eliminando todo rastro de los delimitadores y del código original. El objetivo es consolidar la idea de que el resultado final es HTML puro, no una mezcla de HTML y código.
+:::

@@ -1,0 +1,43 @@
+---
+title: "Páginas estáticas y dinámicas"
+---
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque desarrolla **CE1.b** («se han reconocido las ventajas que proporciona la generación dinámica de páginas Web y sus diferencias con la inclusión de sentencias de guiones en el interior de las páginas Web»), según RD 686/2010, Anexo II.
+:::
+
+Una página Web **estática** es un fichero HTML cuyo contenido es idéntico para todos los usuarios y en todo momento: el servidor se limita a leerlo del disco y enviarlo tal cual. Una página **dinámica**, en cambio, se genera o modifica en el momento de la petición, normalmente a partir de datos variables (una base de datos, parámetros de la URL, la hora del sistema, el usuario autenticado, etc.).
+
+## Dos estrategias para generar contenido dinámico
+
+El RD 686/2010 distingue explícitamente dos enfoques para lograr la generación dinámica, que conviene diferenciar con precisión:
+
+| Estrategia | Descripción | Ejemplo |
+|---|---|---|
+| Código embebido en el lenguaje de marcas | El código de programación se inserta directamente dentro del documento HTML, delimitado por etiquetas especiales que el servidor reconoce y procesa antes de enviar la respuesta. El documento es, a la vez, plantilla de presentación y contenedor del código. | PHP embebido en HTML mediante `<?php ... ?>`; ASP clásico mediante `<% ... %>` |
+| Guion o script independiente | El código de programación es el punto de entrada de la petición y genera él mismo, mediante instrucciones explícitas, todo el documento de salida (incluidas las etiquetas HTML), normalmente concatenando cadenas de texto o usando motores de plantillas. | Un script CGI en Perl o Python que construye el HTML completo mediante instrucciones `print` |
+
+: Estrategias para generar contenido dinámico {.striped}
+
+Esta distinción es importante porque condiciona el resto del módulo: el lenguaje que vamos a utilizar (PHP) admite ambos estilos, pero el currículo de esta unidad y el de las siguientes (UD2 y UD3) se centra en el primero —el código embebido—, dejando los motores de plantillas y los frameworks MVC para unidades posteriores (UD5).
+
+::: {.callout-note title="Concepto clave"}
+**Ventajas de la generación dinámica frente al contenido estático.** Permite personalizar el contenido según el usuario, mostrar datos actualizados sin modificar el código fuente cada vez, separar (parcialmente) la información de su presentación, y reaccionar a la interacción del usuario (formularios, parámetros) de forma automática.
+:::
+
+## Ejercicio E1.2 {#exr-UD1-2}
+
+::: {#exr-UD1-2}
+**Estático, dinámico embebido o script independiente**
+
+Se entregan seis fragmentos de código de distinta naturaleza:
+
+1. Una página HTML pura.
+2. Un fragmento PHP embebido en HTML.
+3. Un script Python que construye HTML mediante concatenación de cadenas.
+4. Una página HTML con JavaScript que modifica el DOM tras la carga.
+5. Una plantilla con marcadores tipo `{{variable}}` (sin resolver aún).
+6. Un fragmento ASP clásico.
+
+**Tarea:** clasifica cada fragmento como **estático**, **dinámico con código embebido** o **dinámico con guion independiente**, justificando la respuesta señalando la pista textual que ha permitido identificarlo (presencia de etiquetas de apertura/cierre de código, ausencia total de marcado, etc.).
+:::

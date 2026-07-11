@@ -1,0 +1,12 @@
+% Portada gráfica a página completa (solo libro completo)
+\usepackage{afterpage}
+\definecolor{CoverBg}{HTML}{10142B}
+\AtBeginDocument{%
+  \begin{titlepage}%
+    \pagecolor{CoverBg}\afterpage{\nopagecolor}%
+    \newgeometry{margin=0cm}%
+    \noindent
+    \includegraphics[width=\paperwidth,height=\paperheight]{theme/cover.png}%
+    \restoregeometry
+  \end{titlepage}%
+}

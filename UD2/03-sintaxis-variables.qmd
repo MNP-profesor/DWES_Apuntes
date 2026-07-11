@@ -1,0 +1,120 @@
+---
+title: "Bloque 2 · Sintaxis, variables y constantes"
+---
+
+## Sintaxis del lenguaje: sentencias y comentarios
+
+::: {.callout-note title="Concepto clave"}
+Cada sentencia PHP debe finalizar con **punto y coma** (`;`). Omitirlo provoca un `Parse error` y el servidor no ejecuta la página. Es el error de sintaxis más frecuente al iniciarse en el lenguaje.
+:::
+
+```php
+<?php
+    $mensaje = "Hola mundo"   // Error: falta el ; al final
+    echo $mensaje;
+?>
+```
+
+Los comentarios documentan el código sin ejecutarse ni enviarse al cliente. La sintaxis es prácticamente idéntica a Java:
+
+```php
+// Comentario de una línea (igual que en Java)
+# Comentario de una línea (estilo shell, alternativa)
+/* Comentario de bloque,
+   puede ocupar varias líneas (igual que en Java) */
+```
+
+::: {.callout-tip title="Analogía Java"}
+En Java toda variable y todo método se declaran dentro de una clase. En PHP «clásico» no existe esa obligación: una sentencia suelta en mitad de un archivo `.php` es perfectamente válida y se ejecuta en cuanto el flujo del programa llega a ella, de arriba a abajo. No hay `main`, no hay clase contenedora.
+:::
+
+::: {#exr-UD2-3}
+### E2.3 — Depurador humano: caza de errores en cadena
+
+Se entregan 4 fragmentos de código con errores de sintaxis encadenados (cada fragmento tiene entre 1 y 2 errores).
+
+1. **Fragmento A**: 2 errores relacionados con el punto y coma y un delimitador de cierre.
+2. **Fragmento B**: error en el anidamiento de comillas dentro de una cadena.
+3. **Fragmento C**: error de un comentario de bloque `/* */` que no se cierra y «engulle» código posterior.
+4. **Fragmento D** *(el más difícil)*: combina un error de sintaxis con un error lógico que no provoca `Parse error` pero da un resultado incorrecto; debes encontrarlo ejecutando el código y comparando con el resultado esperado que se indica.
+
+Para cada fragmento, anota en un comentario la línea exacta del error y por qué se produce.
+
+**Resultado esperado:** los fragmentos A, B y C deben dejar de producir errores en el navegador o en el log de PHP. El fragmento D debe producir el resultado numérico exacto indicado en el enunciado entregado.
+:::
+
+## Variables
+
+::: {.callout-note title="Concepto clave"}
+Una **variable** en PHP se identifica con el símbolo `$` seguido de un nombre. No se declara su tipo de antemano: PHP infiere el tipo del valor asignado en cada momento (**tipado dinámico**).
+:::
+
+```php
+$nombre = "Carlos";   // en Java: String nombre = "Carlos";
+$edad   = 19;         // en Java: int edad = 19;
+```
+
+Reglas de nomenclatura:
+
+- Debe comenzar por letra o `_`, nunca por un número.
+- Es **sensible a mayúsculas**: `$Total` y `$total` son variables distintas.
+- Convención de estilo: **snake_case** (`$precio_total`), a diferencia del camelCase habitual en Java.
+
+## Constantes
+
+Una constante no puede modificarse una vez definida, de forma similar a `final` en Java. En PHP hay dos formas de definirla:
+
+```php
+define("IVA", 0.21);       // similar a: final double IVA = 0.21;
+const IVA_REDUCIDO = 0.10; // sintaxis alternativa, disponible desde PHP 5.3
+
+echo IVA;          // 0.21  — sin símbolo $
+echo IVA_REDUCIDO; // 0.10
+```
+
+Por convención, los nombres de constantes se escriben en **MAYÚSCULAS**.
+
+::: {.callout-warning title="Errores frecuentes"}
+- Intentar usar `$` con una constante: `echo $IVA` → PHP buscará una variable, no la constante, y probablemente producirá un `Warning: Undefined variable`.
+- Reasignar una constante: en PHP 8+ produce un `Fatal error: Cannot redefine constant`. Comprobar siempre que no se reutiliza el nombre de una constante como variable.
+:::
+
+## Estado de las variables: `isset()`, `empty()` y `unset()`
+
+PHP dispone de tres funciones para inspeccionar y manipular el estado de una variable, especialmente útiles antes de acceder a datos de formularios o de parámetros externos:
+
+| Función | Devuelve `true` si… |
+|---|---|
+| `isset($var)` | La variable existe **y** su valor no es `null`. Evita el `Warning: Undefined variable`. |
+| `empty($var)` | La variable no existe, vale `null`, `false`, `""`, `0` o `[]`. Más permisiva que `isset`. |
+| `unset($var)` | *(no devuelve bool)* Destruye la variable: deja de existir en el scope actual. |
+
+: {.striped}
+
+```php
+$dato = "Hola";
+var_dump(isset($dato));  // bool(true)  — existe y no es null
+var_dump(empty($dato));  // bool(false) — tiene contenido
+
+unset($dato);            // $dato deja de existir
+
+var_dump(isset($dato));  // bool(false) — ya no existe
+```
+
+::: {.callout-tip title="Analogía Java"}
+`unset()` no tiene equivalente directo en Java: las variables locales de Java simplemente salen de ámbito al terminar el bloque que las contiene. En PHP, `unset()` permite destruir una variable explícitamente en cualquier momento, lo que puede ser útil para liberar memoria en scripts que manejan datos grandes.
+:::
+
+::: {#exr-UD2-4}
+### E2.4 — Panel de configuración con variables y constantes
+
+Diseña un pequeño «panel de configuración» de una tienda online.
+
+1. Declara al menos **6 variables** (nombre de la tienda, moneda, descuento activo, número de productos, email de contacto, modo mantenimiento) y **2 constantes** (`IVA_GENERAL` e `IVA_REDUCIDO`).
+2. Cada variable debe nombrarse siguiendo la convención snake_case y declararse con el tipo más adecuado a su contenido.
+3. Muestra el panel completo en HTML con un diseño tabular simple, mostrando para cada variable su nombre, valor y tipo (`gettype()`).
+4. Intenta reasignar una de las constantes y documenta en un comentario el mensaje de error exacto que obtienes.
+5. Añade un comentario final comparando qué tendrías que cambiar en este código si lo escribieras en Java en lugar de PHP (al menos 3 diferencias).
+
+**Resultado esperado:** el panel debe mostrar las 6 variables con su tipo correcto. Reasignar una constante debe producir un error; en PHP 8+ suele ser un `Fatal error: Cannot redefine constant`.
+:::

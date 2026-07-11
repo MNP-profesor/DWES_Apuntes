@@ -1,0 +1,115 @@
+---
+title: "Bloque 1 · Generación embebida, tecnologías y delimitadores"
+---
+
+## Mecanismos de generación de páginas Web con código embebido
+
+::: {.callout-note title="Concepto clave"}
+PHP nace para **mezclarse directamente con el HTML** que se envía al navegador. El servidor recorre el archivo de arriba a abajo: cuando encuentra HTML normal lo copia tal cual a la salida; cuando encuentra un bloque PHP lo ejecuta y sustituye ese bloque por el resultado de la ejecución.
+
+El resultado final que llega al navegador es **HTML puro**, sin rastro del código PHP que lo generó.
+:::
+
+Este mecanismo —código embebido en un lenguaje de marcas— es el rasgo que define a PHP frente a un lenguaje de propósito general:
+
+- El documento es, ante todo, HTML: una secuencia de caracteres que el navegador interpreta visualmente.
+- El código PHP se inserta en puntos concretos, marcados por delimitadores.
+- El servidor ejecuta esos fragmentos **antes** de enviar nada al cliente.
+
+::: {.callout-tip title="Analogía Java"}
+En Java, la lógica del programa y la interfaz están separadas en clases distintas. En PHP «clásico» (el que se estudia en esta unidad), la lógica y la interfaz pueden convivir en el mismo archivo `.php`, intercalando HTML y código. Esta libertad es cómoda para programas pequeños, pero exige disciplina para no acabar con archivos difíciles de mantener.
+
+En la **UD5** (MVC con Laravel) se recuperará la separación de responsabilidades, de forma análoga a como Spring Boot separa controladores, servicios y vistas en Java.
+:::
+
+## Tecnologías de programación en entorno servidor
+
+Una página web dinámica necesita generar parte de su contenido en el momento de la petición. Esa generación puede producirse en el **cliente** (JavaScript) o en el **servidor**, antes de enviar la respuesta. Esta unidad se centra en la programación en entorno servidor, usando PHP.
+
+| Tecnología | Características |
+|---|---|
+| **PHP** | Lenguaje libre y específico para web; el más extendido en hosting compartido y CMS. |
+| **ASP / ASP.NET** | Tecnología Microsoft, ligada a IIS y al ecosistema .NET. |
+| **JSP / Servlets** | Tecnología Java; se ejecuta en un contenedor de servlets (Tomcat). El alumnado ya conoce Java como lenguaje, aunque no este uso concreto en el servidor. |
+| **Node.js** | JavaScript en el servidor; mismo lenguaje en cliente y servidor. |
+
+: {.striped}
+
+PHP se elige como lenguaje de trabajo del módulo por ser software libre, estar disponible en cualquier hosting, tener una curva de aprendizaje inicial baja y sustentar una parte muy significativa de la web actual.
+
+::: {#exr-UD2-1}
+### E2.1 — De Java a PHP: observando el cambio de paradigma
+
+Se entrega un archivo HTML estático (sin PHP) con una ficha de un producto escrita a mano.
+
+1. Reescribe la ficha para que el nombre, precio y stock del producto se generen desde tres variables PHP embebidas en el HTML.
+2. Añade un comentario al principio del archivo explicando, en 2-3 líneas, en qué se diferencia este modelo del modelo de clases y objetos de Java visto en 1º curso.
+3. Comprueba con «ver código fuente» del navegador que el resultado final es HTML puro.
+4. Identifica en tu propio código qué tecnología de servidor estás usando (CE2.b) y qué mecanismo de generación embebida se aplica (CE2.a).
+
+**Resultado esperado:** el código fuente recibido por el navegador es HTML idéntico al de una página estática; no contiene la palabra `php` ni los símbolos `<?`.
+:::
+
+## Delimitadores: integrando PHP en HTML
+
+El servidor necesita distinguir qué fragmentos de un documento debe interpretar como código y cuáles debe enviar como texto literal. PHP usa **delimitadores de apertura y cierre**: todo lo que está entre ellos se ejecuta; todo lo que queda fuera se envía tal cual.
+
+```php
+<!DOCTYPE html>
+<html>
+<body>
+  <h1>Bienvenido</h1>
+  <?php
+      $nombre = "Laura";
+      echo "Hola, " . $nombre;
+  ?>
+</body>
+</html>
+```
+
+El servidor ejecuta el bloque `<?php ... ?>` y envía al cliente:
+
+```html
+<!DOCTYPE html>
+<html>
+<body>
+  <h1>Bienvenido</h1>
+  Hola, Laura
+</body>
+</html>
+```
+
+El código PHP **nunca llega al navegador**: solo se transmite el resultado de su ejecución.
+
+### Forma corta `<?= ?>`
+
+Existe una forma corta, muy usada en plantillas, que equivale exactamente a un `echo`:
+
+```php
+<p>El precio es <?= $precio ?> €</p>
+
+<!-- Equivale a: -->
+<p>El precio es <?php echo $precio; ?> €</p>
+```
+
+### Variantes obsoletas
+
+PHP admite variantes de delimitador menos frecuentes (`<% %>` estilo ASP, `<script language="php">`), hoy en día obsoletas y deshabilitadas por defecto. Conviene conocer que existieron históricamente, pero se usa siempre `<?php ?>` y `<?= ?>`.
+
+::: {.callout-warning title="Errores frecuentes"}
+- **Olvidar el cierre `?>`**: PHP interpreta todo el HTML siguiente como parte del bloque de código, generando errores o una página en blanco.
+- **Usar `<?` sin la `p`**: el delimitador corto `<?` (sin `=`) solo funciona si `short_open_tag` está habilitado en `php.ini`. En instalaciones modernas puede estar desactivado. Usar siempre `<?php`.
+- **Guardar el archivo como `.html`**: el servidor Apache no procesará el código PHP en archivos `.html` a menos que se configure explícitamente. Los archivos deben tener extensión **`.php`**.
+:::
+
+::: {#exr-UD2-2}
+### E2.2 — Mapa de delimitadores en una plantilla compleja
+
+Se entrega una plantilla HTML de una tienda online con 4 zonas distintas: cabecera, listado de 3 productos, barra lateral de filtros y pie de página.
+
+1. Inserta al menos un bloque `<?php ?>` y un bloque `<?= ?>` en cada una de las 4 zonas, generando contenido distinto en cada una (nombre del usuario en la cabecera, precios en el listado, contador de filtros activos en la barra lateral, año actual en el pie).
+2. Numera cada bloque con un comentario (`// bloque 1`, `// bloque 2`…) y elabora una tabla aparte que indique, para cada bloque, qué CE de los estudiados se está aplicando.
+3. Verifica que, si comentas accidentalmente el cierre `?>` de un bloque, el resto de la página deja de renderizarse correctamente, y explica por qué.
+
+**Resultado esperado:** cada zona del HTML final debe mostrar contenido dinámico correcto; comentar un cierre `?>` debe romper visualmente el resto del documento, demostrando el alcance de cada bloque.
+:::

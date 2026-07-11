@@ -30,14 +30,14 @@ jobs:
         run: quarto render
 
       - name: Generar PDF por unidad
-        run: bash scripts/build-unit-pdfs.sh
+        run: bash scripts/build-ud-pdfs.sh
 
       - name: Organizar carpeta de descargas
         run: |
           mkdir -p _book/download
           mv _book/DWES-2DAW.pdf  _book/download/ 2>/dev/null || true
           mv _book/DWES-2DAW.epub _book/download/ 2>/dev/null || true
-          cp _unit-pdfs/*.pdf _book/download/ 2>/dev/null || true
+          cp _ud-pdfs/*.pdf _book/download/ 2>/dev/null || true
           echo "Contenido de descargas:"
           ls -1 _book/download
 

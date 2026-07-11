@@ -8,19 +8,19 @@
 set -euo pipefail
 
 ROOT="$(pwd)"
-OUT="$ROOT/_unit-pdfs"
+OUT="$ROOT/_ud-pdfs"
 mkdir -p "$OUT"
 
 declare -A TITULOS=(
-  [UD1]="UD1 · Arquitecturas y tecnologías web en servidor"
-  [UD2]="UD2 · Inserción de código PHP en páginas web"
-  [UD3]="UD3 · Estructuras de programación, funciones y formularios"
-  [UD4]="UD4 · POO en PHP: autenticación, sesiones y cookies"
-  [UD5]="UD5 · Separación de la lógica de negocio: MVC con Laravel"
-  [UD6]="UD6 · Acceso a almacenes de datos con PDO"
-  [UD7]="UD7 · Servicios web REST"
-  [UD8]="UD8 · Páginas web dinámicas e interactivas"
-  [UD9]="UD9 · Aplicaciones web híbridas: Composer y repositorios heterogéneos"
+  [UD1]="UD1 - Arquitecturas y tecnologías de programación web en servidor"
+  [UD2]="UD2 - Fundamentos de PHP"
+  [UD3]="UD3 - Estructuras de control, funciones y formularios en PHP"
+  [UD4]="UD4 - POO en PHP: autenticación, sesiones y cookies"
+  [UD5]="UD5 - Separación de la lógica de negocio: MVC con Laravel"
+  [UD6]="UD6 - Acceso a almacenes de datos con PDO: seguridad e integridad"
+  [UD7]="UD7 - Servicios Web: API REST con Laravel (Resources y Sanctum)"
+  [UD8]="UD8 - Generación dinámica de páginas Web
+  [UD9]="UD9 - Aplicaciones web híbridas: librerías y repositorios heterogéneos (Composer)"
 )
 
 for dir in UD1 UD2 UD3 UD4 UD5 UD6 UD7 UD8 UD9; do
@@ -46,10 +46,9 @@ IDX
     echo "lang: es"
     echo "book:"
     echo "  title: \"${TITULOS[$dir]:-$dir}\""
-    echo "  subtitle: \"DWES · Módulo 0613 · 2º DAW\""
+    echo "  subtitle: \"DWES | Módulo 0613 | 2º DAW\""
     echo "  author: \"Manel Navarro Pérez\""
-    echo "  date: today"
-    echo "  output-file: \"dwes-$dir\""
+    echo "  output-file: \"DWES-$dir\""
     echo "  chapters:"
     echo "    - index.qmd"
     for f in "${qmds[@]}"; do
@@ -78,7 +77,7 @@ FMT
   } > "$tmp/_quarto.yml"
 
   (cd "$tmp" && quarto render --to pdf)
-  cp "$tmp/_book/dwes-$dir.pdf" "$OUT/"
+  cp "$tmp/_book/DWES-$dir.pdf" "$OUT/"
   rm -rf "$tmp"
 done
 

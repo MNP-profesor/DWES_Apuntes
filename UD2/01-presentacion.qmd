@@ -1,0 +1,73 @@
+---
+title: "Presentación de la unidad"
+---
+
+## Identificación
+
+| Campo | Valor |
+|---|---|
+| **Docente** | Manel Navarro Pérez |
+| **Ciclo** | Técnico Superior en DAW |
+| **Módulo** | Desarrollo Web en Entorno Servidor (0613) |
+| **Curso** | 2º curso |
+| **Unidad didáctica** | UD2 |
+| **Horas asignadas** | 17 horas lectivas |
+| **Resultado de Aprendizaje** | RA2 |
+| **Lenguaje de trabajo** | PHP embebido en HTML |
+
+: {.striped}
+
+## Título
+
+**Fundamentos de PHP: variables, operadores y sintaxis embebida**
+
+## Resultado de Aprendizaje y Criterios de Evaluación
+
+::: {.callout-important title="Normativa · RA-CE"}
+**RA2** — Escribe sentencias ejecutables por un servidor Web reconociendo y aplicando procedimientos de integración del código en lenguajes de marcas.
+
+*(RD 686/2010, Anexo II, módulo 0613 — verificado contra Decreto 114/2025 del Consell)*
+
+| CE | Enunciado oficial |
+|---|---|
+| **CE2.a** | Se han reconocido los mecanismos de generación de páginas Web a partir de lenguajes de marcas con código embebido. |
+| **CE2.b** | Se han identificado las principales tecnologías asociadas. |
+| **CE2.c** | Se han utilizado etiquetas para la inclusión de código en el lenguaje de marcas. |
+| **CE2.d** | Se ha reconocido la sintaxis del lenguaje de programación que se ha de utilizar. |
+| **CE2.e** | Se han escrito sentencias simples y se han comprobado sus efectos en el documento resultante. |
+| **CE2.f** | Se han utilizado directivas para modificar el comportamiento predeterminado. |
+| **CE2.g** | Se han utilizado los distintos tipos de variables y operadores disponibles en el lenguaje. |
+| **CE2.h** | Se han identificado los ámbitos de utilización de las variables. |
+
+: {.striped}
+:::
+
+## Objetivos de la unidad
+
+Al finalizar la unidad didáctica, el alumnado será capaz de:
+
+1. Identificar las principales tecnologías de programación en entorno servidor y justificar la elección de PHP.
+2. Aplicar correctamente los delimitadores de PHP para integrar código ejecutable dentro de un documento HTML.
+3. Reconocer y aplicar la sintaxis básica del lenguaje: sentencias, comentarios y reglas de escritura.
+4. Declarar y utilizar variables y constantes, identificando los tipos de datos simples y compuestos del lenguaje.
+5. Aplicar conversiones de tipo, implícitas y explícitas, valorando el efecto del tipado dinámico débil de PHP.
+6. Utilizar operadores aritméticos, de asignación, de comparación, lógicos y de concatenación.
+7. Distinguir el ámbito global y local de una variable, y aplicar el mecanismo para acceder a una variable global desde una función.
+8. Comprobar, depurar y documentar el código PHP elaborado, verificando que el resultado mostrado al cliente es el esperado.
+
+## Mapa de contenidos
+
+La unidad se organiza en cuatro bloques temáticos con 9 ejercicios intercalados:
+
+| Bloque | Título | CE cubiertos |
+|---|---|---|
+| **1** | Generación embebida, tecnologías y delimitadores | CE2.a · CE2.b · CE2.c |
+| **2** | Sintaxis, variables, constantes y tipos de datos | CE2.d · CE2.e · CE2.g |
+| **3** | Directivas y operadores | CE2.f · CE2.g |
+| **4** | Ámbito de las variables | CE2.h |
+
+: {.striped}
+
+## Relación con el módulo
+
+Esta unidad parte de la **UD1** (RA1), donde el alumnado instaló el entorno de desarrollo y ejecutó un primer script PHP embebido. La UD2 desarrolla en profundidad la sintaxis básica del lenguaje —variables, tipos de datos, operadores y ámbito— sin entrar todavía en estructuras de control, funciones ni formularios, contenidos que se reservan para la **UD3** (RA3).

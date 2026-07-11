@@ -1,0 +1,59 @@
+---
+title: "Herramientas de programación en servidor"
+---
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque desarrolla **CE1.g** («se han reconocido y evaluado las herramientas de programación en entorno servidor»), según RD 686/2010, Anexo II.
+:::
+
+Antes de empezar a programar en PHP en la UD2, es necesario disponer de un entorno de trabajo funcional. Este bloque presenta y compara las herramientas más habituales para preparar dicho entorno, sin entrar todavía en la programación propiamente dicha.
+
+## Distribuciones empaquetadas (stack tradicional)
+
+Una distribución empaquetada agrupa en un único instalador el servidor Web, el intérprete del lenguaje y el sistema gestor de bases de datos, evitando configurar cada componente por separado.
+
+- **XAMPP:** incluye Apache, MySQL/MariaDB, PHP y Perl. Multiplataforma (Windows, Linux, macOS). Es la opción más sencilla para empezar.
+- **WAMP / MAMP:** variantes equivalentes orientadas específicamente a Windows y macOS respectivamente.
+- **phpMyAdmin:** herramienta Web de administración de bases de datos MySQL/MariaDB, habitualmente incluida en estas distribuciones.
+
+## Contenedores (Docker)
+
+Docker permite empaquetar cada servicio (servidor Web, intérprete PHP, base de datos) en contenedores aislados, definidos mediante ficheros de configuración (`docker-compose.yml`) que se pueden versionar y compartir con el resto del equipo de desarrollo.
+
+- **Ventaja principal:** el entorno es reproducible exactamente igual en cualquier máquina, eliminando el clásico problema de «en mi equipo funciona».
+- Requiere mayor familiaridad con la línea de comandos que una distribución empaquetada tradicional.
+- Es el enfoque que se utilizará de forma preferente a lo largo del módulo, por su cercanía a las prácticas profesionales actuales.
+
+## Entornos de desarrollo (IDE) y editores
+
+| Herramienta | Tipo | Características |
+|---|---|---|
+| Visual Studio Code | Editor extensible | Gratuito, ligero, gran ecosistema de extensiones (PHP Intelephense, Docker); es el recomendado para este módulo. |
+| PhpStorm | IDE específico para PHP | Muy completo (depurador integrado, refactorización avanzada), de pago, recomendado en entornos profesionales con proyectos grandes. |
+| Eclipse PDT | IDE genérico con plugin PHP | Gratuito, basado en la plataforma Eclipse; entorno más pesado que VS Code. |
+
+: Herramientas de desarrollo para PHP {.striped}
+
+::: {.callout-note title="Concepto clave"}
+**Criterio de selección de herramientas.** No existe una combinación de herramientas universalmente correcta. La elección depende del tamaño del proyecto, de si se trabaja en equipo (Docker favorece la reproducibilidad), del presupuesto disponible (licencias de PhpStorm frente a alternativas gratuitas) y de la familiaridad previa del equipo de desarrollo con cada herramienta.
+:::
+
+## Ejercicio E1.6 {#exr-UD1-6}
+
+::: {#exr-UD1-6}
+**Puesta en marcha del entorno de trabajo**
+
+Instala, a tu elección, XAMPP o un entorno Docker con Apache/Nginx + PHP, siguiendo la documentación oficial correspondiente. A continuación, crea un fichero `info.php` con el siguiente contenido y comprueba que el servidor lo ejecuta correctamente:
+
+```php
+<?php phpinfo(); ?>
+```
+
+**Tarea:** localiza y anota en una breve memoria los siguientes datos obtenidos a través de `phpinfo()`:
+
+1. Versión de PHP instalada.
+2. Ruta del fichero de configuración cargado (*Loaded Configuration File*).
+3. Valor de la directiva `memory_limit`.
+
+Esta actividad deja preparado el entorno de trabajo que se usará desde la UD2.
+:::
