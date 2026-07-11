@@ -8,6 +8,7 @@ _unit-pdfs/
 *.log
 *.toc
 *.tex
+!theme/*.tex
 
 # Sistema
 .DS_Store

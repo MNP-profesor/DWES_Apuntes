@@ -1,0 +1,20 @@
+% Midnight Executive — cabecera PDF
+\usepackage{xcolor}
+\definecolor{MidnightNavy}{HTML}{1E2761}
+\definecolor{MidnightCoral}{HTML}{C0561F}
+\definecolor{MidnightIce}{HTML}{CADCFC}
+
+% Titulares en navy (clase KOMA scrreprt)
+\addtokomafont{chapter}{\color{MidnightNavy}}
+\addtokomafont{section}{\color{MidnightNavy}}
+\addtokomafont{subsection}{\color{MidnightNavy}}
+\addtokomafont{subsubsection}{\color{MidnightNavy}}
+
+% Numeración de capítulo en coral
+\renewcommand*{\chapterformat}{%
+  {\color{MidnightCoral}\thechapter}\enskip
+}
+
+% Evitar líneas viudas/huérfanas en lo posible
+\widowpenalty=9000
+\clubpenalty=9000
