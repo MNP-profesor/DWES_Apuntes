@@ -1,0 +1,87 @@
+/*
+  Midnight Executive — tema oscuro
+  Fondo azul noche profundo, texto ICE, acento coral iluminado.
+*/
+
+/*-- scss:defaults --*/
+
+$navy-deep: #10142B;
+$navy-card: #181E3C;
+$ice:       #CADCFC;
+$ice-dim:   #9FB3DC;
+$coral-lit: #E8874A;
+
+$primary:       $ice;
+$body-bg:       $navy-deep;
+$body-color:    $ice;
+$link-color:    $coral-lit;
+$link-decoration: none;
+
+$font-family-sans-serif: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+$headings-font-family:   "Space Grotesk", $font-family-sans-serif;
+$font-family-monospace:  "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+
+$headings-font-weight: 600;
+$headings-color: $ice;
+
+$code-color:     #AFC6F5;
+$code-bg:        $navy-card;
+$code-block-bg:  #141A38;
+
+$navbar-bg: $navy-deep;
+$sidebar-bg: #131834;
+
+/*-- scss:rules --*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+h1, h2 {
+  letter-spacing: -0.015em;
+}
+.chapter-number::after {
+  color: $coral-lit;
+}
+
+.sidebar-title {
+  font-family: $headings-font-family;
+  color: $ice;
+}
+.sidebar nav[role="doc-toc"] a.active,
+.sidebar .sidebar-item .sidebar-link.active {
+  color: $coral-lit;
+  font-weight: 600;
+}
+
+div.sourceCode {
+  border: 1px solid #262E58;
+  border-left: 4px solid $coral-lit;
+  border-radius: .4rem;
+}
+code {
+  font-size: 0.925em;
+}
+
+.callout.callout-style-default {
+  border-radius: .4rem;
+  background-color: $navy-card;
+}
+.callout-note {
+  border-left-color: $ice !important;
+  .callout-title-container { color: $ice; }
+}
+.callout-tip {
+  border-left-color: $coral-lit !important;
+  .callout-title-container { color: $coral-lit; }
+}
+
+table.table {
+  font-size: 0.95em;
+  thead {
+    background: #1E2761;
+    color: $ice;
+  }
+}
+
+a:hover {
+  text-decoration: underline;
+}

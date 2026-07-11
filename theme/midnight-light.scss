@@ -1,0 +1,102 @@
+/*
+  Midnight Executive — tema claro
+  Paleta: NAVY #1E2761 · ICE #CADCFC · LIGHTBG #F4F7FC · CORAL #C0561F
+*/
+
+/*-- scss:defaults --*/
+
+$navy:    #1E2761;
+$navy-2:  #2B3780;
+$ice:     #CADCFC;
+$lightbg: #F4F7FC;
+$coral:   #C0561F;
+$ink:     #1B2140;
+
+$primary:       $navy;
+$body-bg:       $lightbg;
+$body-color:    $ink;
+$link-color:    $coral;
+$link-decoration: none;
+
+$font-family-sans-serif: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+$headings-font-family:   "Space Grotesk", $font-family-sans-serif;
+$font-family-monospace:  "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+
+$headings-font-weight: 600;
+$headings-color: $navy;
+
+$code-color:     $navy-2;
+$code-bg:        #E9EEF9;
+$code-block-bg:  #EDF1FA;
+$btn-border-radius: .5rem;
+
+$navbar-bg: $navy;
+$sidebar-bg: #EDF1FA;
+
+/*-- scss:rules --*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+// ── Titulares ──────────────────────────────────────────────
+h1, h2 {
+  letter-spacing: -0.015em;
+}
+h1.title {
+  color: $navy;
+}
+.chapter-number::after {
+  color: $coral;
+}
+
+// ── Barra lateral ──────────────────────────────────────────
+.sidebar-title {
+  font-family: $headings-font-family;
+  color: $navy;
+}
+.sidebar nav[role="doc-toc"] a.active,
+.sidebar .sidebar-item .sidebar-link.active {
+  color: $coral;
+  font-weight: 600;
+}
+
+// ── Código ─────────────────────────────────────────────────
+div.sourceCode {
+  border: 1px solid #D7E0F2;
+  border-left: 4px solid $navy;
+  border-radius: .4rem;
+}
+code {
+  font-size: 0.925em;
+}
+
+// ── Callouts (semántica del módulo) ────────────────────────
+// note      → concepto clave        (navy)
+// tip       → analogía Java         (coral)
+// warning   → errores frecuentes    (por defecto)
+// important → normativa / RA-CE     (por defecto)
+.callout.callout-style-default {
+  border-radius: .4rem;
+}
+.callout-note {
+  border-left-color: $navy !important;
+  .callout-title-container { color: $navy; }
+}
+.callout-tip {
+  border-left-color: $coral !important;
+  .callout-icon::before { filter: hue-rotate(255deg) saturate(2); }
+  .callout-title-container { color: darken($coral, 5%); }
+}
+
+// ── Tablas ─────────────────────────────────────────────────
+table.table {
+  font-size: 0.95em;
+  thead {
+    background: $navy;
+    color: $ice;
+  }
+}
+
+// ── Enlaces ────────────────────────────────────────────────
+a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,107 @@
+project:
+  type: book
+  output-dir: _book
+
+lang: es
+
+book:
+  title: "Desarrollo Web en Entorno Servidor"
+  subtitle: "2º DAW · Módulo 0613 · 200 horas"
+  author: "Manel Navarro Pérez"
+  date: today
+  date-format: "MMMM YYYY"
+  output-file: "DWES-2DAW"
+  # ── Cambia USUARIO por tu usuario de GitHub ──
+  repo-url: https://github.com/MNP-profesor/DWES_Apuntes
+  repo-actions: [edit, issue]
+  search: true
+  sidebar:
+    style: docked
+    collapse-level: 1
+  page-footer:
+    left: "© Manel Navarro Pérez · CC BY-NC-SA 4.0"
+    right: "DWES · 2º DAW · Módulo 0613"
+
+  chapters:
+    - index.qmd
+    - descargas.qmd
+
+    # ══════════════════════════════════════════════════════════
+    # UNIDADES: al migrar cada UD, descomenta su bloque y
+    # sustituye los ficheros por los reales de la unidad.
+    # El capítulo de demostración (UD1/00-demo.qmd) se elimina
+    # cuando llegue la UD1 real.
+    # ══════════════════════════════════════════════════════════
+
+    - part: "UD1 · Arquitecturas y tecnologías web en servidor"
+      chapters:
+        - UD1/00-demo.qmd
+
+    # - part: "UD2 · Inserción de código PHP en páginas web"
+    #   chapters:
+    #     - UD2/01-tema.qmd
+
+    # - part: "UD3 · Estructuras de programación, funciones y formularios"
+    #   chapters:
+    #     - UD3/01-tema.qmd
+
+    # - part: "UD4 · POO en PHP: autenticación, sesiones y cookies"
+    #   chapters:
+    #     - UD4/01-tema.qmd
+
+    # - part: "UD5 · Separación de la lógica de negocio: MVC con Laravel"
+    #   chapters:
+    #     - UD5/01-tema.qmd
+
+    # - part: "UD6 · Acceso a almacenes de datos con PDO"
+    #   chapters:
+    #     - UD6/01-tema.qmd
+
+    # - part: "UD7 · Servicios web REST"
+    #   chapters:
+    #     - UD7/01-tema.qmd
+
+    # - part: "UD8 · Páginas web dinámicas e interactivas"
+    #   chapters:
+    #     - UD8/01-tema.qmd
+
+    # - part: "UD9 · Aplicaciones web híbridas: Composer y repositorios heterogéneos"
+    #   chapters:
+    #     - UD9/01-tema.qmd
+
+format:
+  html:
+    theme:
+      light: [flatly, theme/midnight-light.scss]
+      dark: [darkly, theme/midnight-dark.scss]
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    number-depth: 2
+    code-copy: true
+    code-overflow: wrap
+    smooth-scroll: true
+    link-external-newwindow: true
+
+  pdf:
+    documentclass: scrreprt
+    papersize: a4
+    geometry:
+      - top=2.5cm
+      - bottom=2.5cm
+      - left=2.5cm
+      - right=2.2cm
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    colorlinks: true
+    linkcolor: MidnightCoral
+    urlcolor: MidnightCoral
+    highlight-style: tango
+    code-block-bg: "#EFF3FB"
+    include-in-header: theme/pdf-header.tex
+
+  epub:
+    toc: true
+    number-sections: true
+    epub-cover-image: theme/cover.png

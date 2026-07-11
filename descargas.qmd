@@ -1,0 +1,33 @@
+# Descargas {.unnumbered}
+
+Todos los materiales se regeneran automáticamente con cada actualización de los apuntes.
+
+## Módulo completo {.unnumbered}
+
+| Formato | Descripción | Enlace |
+|---------|-------------|:------:|
+| 📄 PDF | Libro completo maquetado para impresión (A4) | [Descargar](download/DWES-2DAW.pdf) |
+| 📚 EPUB | Libro completo para lectores electrónicos | [Descargar](download/DWES-2DAW.epub) |
+
+## Por unidad didáctica {.unnumbered}
+
+<!--
+  Al migrar cada unidad, descomenta su fila.
+  Los ficheros DWES-UDX.pdf los genera automáticamente
+  el script scripts/build-unit-pdfs.sh en cada publicación.
+-->
+
+| UD | Título | PDF |
+|:--:|--------|:---:|
+| 1 | Arquitecturas y tecnologías web en servidor | [Descargar](download/DWES-UD1.pdf) |
+
+<!--
+| 2 | Inserción de código PHP en páginas web | [Descargar](download/dwes-UD2.pdf) |
+| 3 | Estructuras de programación, funciones y formularios | [Descargar](download/dwes-UD3.pdf) |
+| 4 | POO en PHP: autenticación, sesiones y cookies | [Descargar](download/dwes-UD4.pdf) |
+| 5 | Separación de la lógica de negocio: MVC con Laravel | [Descargar](download/dwes-UD5.pdf) |
+| 6 | Acceso a almacenes de datos con PDO | [Descargar](download/dwes-UD6.pdf) |
+| 7 | Servicios web REST | [Descargar](download/dwes-UD7.pdf) |
+| 8 | Páginas web dinámicas e interactivas | [Descargar](download/dwes-UD8.pdf) |
+| 9 | Aplicaciones web híbridas: Composer y repositorios heterogéneos | [Descargar](download/dwes-UD9.pdf) |
+-->

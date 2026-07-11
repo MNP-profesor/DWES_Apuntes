@@ -1,0 +1,76 @@
+# Capítulo de demostración {#sec-demo}
+
+::: {.callout-caution title="⚠ CAPÍTULO DE DEMOSTRACIÓN — eliminar"}
+Este capítulo existe solo para validar visualmente el tema (web, PDF y EPUB) con contenido representativo. Se elimina al migrar la UD1 real: borra este fichero y sustituye su entrada en `_quarto.yml`.
+:::
+
+## Identificación de la unidad
+
+::: {.callout-important title="Normativa · RA-CE"}
+Esta unidad desarrolla el **RA1**: *Selecciona las arquitecturas y tecnologías de programación web en entorno servidor, analizando sus capacidades y características propias.* Cubre los criterios **CE1.a** a **CE1.g** del RD 686/2010.
+:::
+
+**Objetivos.** Al finalizar la unidad, el alumnado será capaz de:
+
+- Diferenciar los modelos de ejecución de código en cliente y en servidor.
+- Justificar las ventajas de la generación dinámica de páginas web.
+- Evaluar lenguajes, tecnologías y frameworks de programación en entorno servidor.
+
+## Ejecución en cliente y en servidor
+
+::: {.callout-note title="Concepto clave"}
+En el **modelo de ejecución en servidor**, el código se ejecuta en la máquina remota y el navegador recibe únicamente el **HTML resultante**. El cliente nunca ve el código fuente PHP.
+:::
+
+Cuando el navegador solicita `productos.php`, el servidor web delega en el intérprete de PHP, que ejecuta el script y devuelve HTML puro:
+
+```php
+<?php
+declare(strict_types=1);
+
+$productos = ["Teclado mecánico", "Monitor 27\"", "SSD NVMe 2 TB"];
+$fecha = date("d/m/Y");
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo</title>
+</head>
+<body>
+    <h1>Catálogo — <?= $fecha ?></h1>
+    <ul>
+    <?php foreach ($productos as $p): ?>
+        <li><?= htmlspecialchars($p) ?></li>
+    <?php endforeach; ?>
+    </ul>
+</body>
+</html>
+```
+
+::: {.callout-tip title="Analogía Java"}
+Este mecanismo es equivalente a un **JSP** ejecutándose en Tomcat: el contenedor procesa el `.jsp`, ejecuta el código Java embebido y envía al cliente solo el HTML generado. PHP embebido es a Apache+PHP lo que JSP es a Tomcat.
+:::
+
+::: {.callout-warning title="Errores frecuentes"}
+Imprimir datos del usuario sin pasar por `htmlspecialchars()` abre la puerta a ataques **XSS**. En estos apuntes, toda salida de datos externos se escapa siempre.
+:::
+
+### Ejercicio resuelto en clase
+
+::: {#exr-demo-1}
+**E1.1 — Estático frente a dinámico.** Dada la página estática `tarifa.html` de una empresa de hosting, razona qué partes deberían generarse dinámicamente y reescríbela como `tarifa.php` usando un array asociativo de planes y precios.
+:::
+
+## Comparativa de tecnologías
+
+| Tecnología | Lenguaje | Modelo | Uso típico |
+|------------|----------|--------|------------|
+| PHP | PHP | Interpretado en servidor | Web general, CMS |
+| Jakarta EE | Java | Servidor de aplicaciones | Entornos corporativos |
+| Node.js | JavaScript | Servidor de eventos | APIs, tiempo real |
+| ASP.NET Core | C# | Servidor de aplicaciones | Ecosistema Microsoft |
+
+: Panorama de tecnologías en entorno servidor {#tbl-demo}
+
+Como muestra la @tbl-demo, la elección de tecnología condiciona la arquitectura de despliegue. En @sec-demo hemos visto el fundamento común a todas: el cliente recibe el resultado, no el programa.
