@@ -19,7 +19,7 @@ declare -A TITULOS=(
   [UD5]="UD5 - Separación de la lógica de negocio: MVC con Laravel"
   [UD6]="UD6 - Acceso a almacenes de datos con PDO: seguridad e integridad"
   [UD7]="UD7 - Servicios Web: API REST con Laravel (Resources y Sanctum)"
-  [UD8]="UD8 - Generación dinámica de páginas Web
+  [UD8]="UD8 - Generación dinámica de páginas Web"
   [UD9]="UD9 - Aplicaciones web híbridas: librerías y repositorios heterogéneos (Composer)"
 )
 
