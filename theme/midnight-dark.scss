@@ -42,6 +42,11 @@ h1, h2 {
   color: $coral-lit;
 }
 
+/* MANEL: Oculta el número autoincremental en el menú lateral de Quarto */
+.chapter-number {
+    display: none;
+}
+
 .sidebar-title {
   font-family: $headings-font-family;
   color: $ice;

@@ -22,15 +22,15 @@ book:
     right: "DWES | 2º DAW | Módulo 0613"
 
   chapters:
-    - index.qmd
-    - descargas.qmd
+    - 📋 index.qmd
+    - 💾 descargas.qmd
 
     # ══════════════════════════════════════════════════════════
     # UNIDADES: al migrar cada UD, descomenta su bloque y
     # sustituye los ficheros por los reales de la unidad.
     # ══════════════════════════════════════════════════════════
 
-    - part: "📌 UD1. Arquitecturas y tecnologías Web en entorno servidor"
+    - part: "🗂️ UD1. Arquitecturas y tecnologías Web en entorno servidor"
       chapters:
         - UD1/00-presentacion.qmd
         - UD1/01-modelo-ejecucion.qmd
@@ -40,7 +40,7 @@ book:
         - UD1/05-integracion-marcas.qmd
         - UD1/06-herramientas.qmd        
 
-    - part: "📌 UD2. Fundamentos de PHP"
+    - part: "🗂️ UD2. Fundamentos de PHP"
       chapters:
         - UD2/01-presentacion.qmd
         - UD2/02-generacion-embebida.qmd
@@ -49,7 +49,7 @@ book:
         - UD2/05-directivas-operadores.qmd
         - UD2/06-ambito.qmd
 
-    - part: "📌 UD3. Estruct. Control, funciones y forms en PHP"
+    - part: "🗂️ UD3. Estruct. Control, funciones y forms en PHP"
       chapters:
         - UD3/01-presentacion.qmd
         - UD3/02-condicionales.qmd
@@ -59,7 +59,7 @@ book:
         - UD3/06-formularios.qmd
         - UD3/07-recogida-datos.qmd
 
-    - part: "UD4. POO en PHP, autenticación, sesiones y cookies"
+    - part: "🗂️ UD4. POO en PHP, autenticación, sesiones y cookies"
       chapters:
         - UD4/00-presentacion.qmd
         - UD4/01-ambito-y-clases.qmd
@@ -72,7 +72,7 @@ book:
         - UD4/08-recordarme-y-roles.qmd
         - UD4/09-depuracion-y-cierre.qmd
 
-    - part: "UD5. MVC con Laravel"
+    - part: "🗂️ UD5. MVC con Laravel"
       chapters:
         - UD5/00-presentacion.qmd
         - UD5/01-mvc.qmd
@@ -86,7 +86,7 @@ book:
         - UD5/09-poo-servicios.qmd
         - UD5/10-pruebas-proyecto.qmd
 
-    - part: "UD6. BBDD con PDO: seguridad e integridad"
+    - part: "🗂️ UD6. BBDD con PDO: seguridad e integridad"
       chapters:
         - UD6/00-presentacion.qmd
         - UD6/01-tecnologias-acceso.qmd
@@ -97,7 +97,7 @@ book:
         - UD6/06-crud-transacciones.qmd
         - UD6/07-proyecto.qmd
 
-    - part: "UD7. Servicios web: API REST"
+    - part: "🗂️ UD7. Servicios web: API REST"
       chapters:
         - UD7/00-presentacion.qmd
         - UD7/01-fundamentos.qmd

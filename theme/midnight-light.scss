@@ -48,6 +48,11 @@ h1.title {
   color: $coral;
 }
 
+/* MANEL: Oculta el número autoincremental en el menú lateral de Quarto */
+.chapter-number {
+    display: none;
+}
+
 // ── Barra lateral ──────────────────────────────────────────
 .sidebar-title {
   font-family: $headings-font-family;
@@ -58,6 +63,11 @@ h1.title {
   color: $coral;
   font-weight: 600;
 }
+
+/* MANEL: Oculta el número autoincremental en el menú lateral de Quarto */
+/*.sidebar-navigation {
+    display: none;
+}*/
 
 // ── Código ─────────────────────────────────────────────────
 div.sourceCode {
