@@ -22,10 +22,10 @@ book:
     right: "DWES | 2º DAW | Módulo 0613"
 
   chapters:
-      - text: "📋 Presentación del módulo"
-        file: index.qmd
-      - text: "💾 Descargas"
-        file: descargas.qmd    
+    - text: "📋 Presentación del módulo"
+      file: index.qmd
+    - text: "💾 Descargas"
+      file: descargas.qmd    
 
     # ══════════════════════════════════════════════════════════
     # UNIDADES: al migrar cada UD, descomenta su bloque y
