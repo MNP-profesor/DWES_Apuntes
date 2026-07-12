@@ -15,7 +15,8 @@ Bienvenido/a a los apuntes del módulo **Desarrollo Web en Entorno Servidor** (D
 : Ficha del módulo {tbl-colwidths="[30,70]"}
 
 ::: {.callout-important title="Marco normativo"}
-Los Resultados de Aprendizaje (RA) y Criterios de Evaluación (CE) del módulo están fijados por el **RD 686/2010** (Anexo II, módulo 0613). El currículo vigente en la Comunitat Valenciana se establece en el **Decreto 114/2025** (DOGV).
+- Los Resultados de Aprendizaje (RA) y Criterios de Evaluación (CE) del módulo están fijados por el [**RD 405/2023**](https://www.boe.es/eli/es/rd/2023/05/29/405). 
+- El currículo vigente en la Comunitat Valenciana se establece en el [**Decreto 114/2025** (DOGV)](https://dogv.gva.es/es/eli/es-vc/d/2025/07/29/114/dof/spa/html).
 :::
 
 ## Estructura del módulo {.unnumbered}
@@ -24,37 +25,37 @@ El módulo se organiza en **9 unidades didácticas**, cada una asociada a un Res
 
 | UD | Título | RA | Horas |
 |:--:|--------|:--:|:-----:|
-| 1 | Arquitecturas y tecnologías web en servidor | RA1 | 14 |
-| 2 | Inserción de código PHP en páginas web | RA2 | 17 |
-| 3 | Estructuras de programación, funciones y formularios | RA3 | 19 |
-| 4 | POO en PHP: autenticación, sesiones y cookies | RA4 | 36 |
-| 5 | Separación de la lógica de negocio: MVC con Laravel | RA5 | 30 |
-| 6 | Acceso a almacenes de datos con PDO | RA6 | 32 |
-| 7 | Servicios web REST | RA7 | 22 |
-| 8 | Páginas web dinámicas e interactivas | RA8 | 18 |
-| 9 | Aplicaciones web híbridas: Composer y repositorios heterogéneos | RA9 | 12 |
+| 1 | Arquitecturas y tecnologías de programación Web en entorno servidor | RA1 | 8 |
+| 2 | Fundamentos de PHP: variables, operadores y sintaxis embebida | RA2 | 16 |
+| 3 | Estructuras de control, funciones y formularios en PHP | RA3 | 18 |
+| 4 | POO en PHP y Desarrollo de funcionalidades Web: autenticación, sesiones y cookies | RA4 | 36 |
+| 5 | Separación de la lógica de negocio: MVC con Laravel | RA5 | 32 |
+| 6 | Acceso a BBDD con PDO: seguridad e integridad | RA6 | 34 |
+| 7 | Servicios Web: API REST con Laravel (Resources y Sanctum) | RA7 | 26 |
+| 8 | Generación dinámica de páginas Web | RA8 | 18 |
+| 9 | Aplicaciones Web híbridas: librerías y repositorios heterogéneos (Composer) | RA9 | 12 |
 
-: Distribución de unidades (200 h totales)
+: Distribución de unidades (200 horas totales)
 
 ## Cómo usar estos apuntes {.unnumbered}
 
 - La **teoría y los ejercicios** están intercalados: practica cada concepto justo después de estudiarlo.
-- Los bloques de código PHP son **completos y ejecutables**: cópialos y pruébalos en tu entorno.
-- Las cajas de color tienen un significado fijo en todo el libro:
+- Los bloques de código PHP son **completos y ejecutables**: pruébalos en tu entorno.
+- Las cajas de color tienen un significado fijo en los apuntes:
 
 ::: {.callout-note title="Concepto clave"}
 Definiciones y fundamentos que debes dominar.
 :::
 
 ::: {.callout-tip title="Analogía Java"}
-Puentes con lo que ya conoces de la programación Java de 1º curso.
+Comparativa con lo que ya conoces de la programación Java de 1º curso.
 :::
 
 ::: {.callout-warning title="Errores frecuentes"}
-Trampas habituales y cómo evitarlas.
+Consejos para saber cómo evitarlos.
 :::
 
-::: {.callout-important title="Normativa · RA-CE"}
+::: {.callout-important title="Normativa | RA-CE"}
 Vinculación del contenido con los Criterios de Evaluación oficiales.
 :::
 

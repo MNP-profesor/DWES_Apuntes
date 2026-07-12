@@ -1,0 +1,141 @@
+# POO aplicada: servicios e inyección de dependencias {#sec-ud5-poo}
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque trabaja **CE5.g**: aplicar los principios y patrones de diseño de la programación orientada a objetos.
+:::
+
+La POO de la UD4 fue la preparación; aquí se recoge la cosecha. Laravel es un catálogo vivo de patrones: vamos a usarlos, con nombre y apellidos, para arreglar un problema real.
+
+## El problema: el controlador gordo
+
+Tu `index()` ha ido engordando. Ahora valida, busca, ordena y hasta detecta duplicados:
+
+```php
+// ANTES — un controlador que hace demasiado
+public function index(Request $request)
+{
+    $q = $request->query('q', '');
+
+    // búsqueda
+    $contactos = Contacto::when($q !== '', fn ($query) =>
+            $query->where('nombre', 'like', "%$q%"))
+        ->orderBy('nombre')->get();
+
+    // detección de teléfonos duplicados (¿esto qué hace aquí?)
+    $duplicados = Contacto::select('tlf')
+        ->groupBy('tlf')->havingRaw('COUNT(*) > 1')
+        ->pluck('tlf')->all();
+
+    return view('contactos.index', compact('contactos', 'q', 'duplicados'));
+}
+```
+
+Funciona, pero incumple el principio de **responsabilidad única** (la S de SOLID): el controlador debería *coordinar*, no *decidir*. Cada regla de negocio nueva lo hincha más, y nada de esto se puede probar sin simular una petición HTTP entera.
+
+## La solución: clases de servicio
+
+La lógica de negocio se extrae a una clase propia en `app/Services/`:
+
+```php
+<?php // app/Services/AgendaService.php
+
+namespace App\Services;
+
+use App\Models\Contacto;
+use Illuminate\Support\Collection;
+
+class AgendaService
+{
+    /**
+     * Busca contactos por nombre, ordenados alfabéticamente.
+     */
+    public function buscar(string $q): Collection
+    {
+        return Contacto::when($q !== '', fn ($query) =>
+                $query->where('nombre', 'like', "%$q%"))
+            ->orderBy('nombre')->get();
+    }
+
+    /**
+     * Teléfonos que aparecen en más de un contacto.
+     *
+     * @return string[]
+     */
+    public function duplicados(): array
+    {
+        return Contacto::select('tlf')
+            ->groupBy('tlf')->havingRaw('COUNT(*) > 1')
+            ->pluck('tlf')->all();
+    }
+}
+```
+
+## Inyección de dependencias: el controlador no hace `new`
+
+Aquí está la pieza clave. El controlador **declara** que necesita un `AgendaService` y Laravel se lo entrega:
+
+```php
+// DESPUÉS — el controlador solo coordina
+use App\Services\AgendaService;
+
+public function index(Request $request, AgendaService $servicio)
+{
+    $q = $request->query('q', '');
+
+    return view('contactos.index', [
+        'contactos'  => $servicio->buscar($q),
+        'q'          => $q,
+        'duplicados' => $servicio->duplicados(),
+    ]);
+}
+```
+
+Fíjate en que **nadie escribe `new AgendaService()`**. Al ver el tipo en la firma del método, el **contenedor de servicios** de Laravel crea la instancia y la inyecta. Eso se llama **inyección de dependencias**, y su ventaja es el desacoplamiento: el controlador no sabe (ni le importa) cómo se construye el servicio.
+
+::: {.callout-tip title="Analogía Java"}
+Es el contenedor IoC de Spring… sin anotaciones. Donde en Java escribes `@Service` y `@Autowired`, en Laravel basta el *type-hint* en el constructor o en el método: el contenedor resuelve la clase por reflexión, con **cero configuración**. Si vienes de Spring, la pregunta "¿dónde registro el bean?" tiene respuesta: para clases normales, en ningún sitio.
+:::
+
+## La ventaja práctica: cambiar la implementación sin tocar el controlador
+
+Supón que quieres una versión alternativa del servicio (p. ej., que ordene por fecha de alta). Creas la clase hija o una implementación paralela y la enchufas en un *service provider*:
+
+```php
+// app/Providers/AppServiceProvider.php — método register()
+use App\Services\AgendaService;
+use App\Services\AgendaPorFechaService;
+
+$this->app->bind(AgendaService::class, AgendaPorFechaService::class);
+```
+
+Resultado: todos los controladores que pedían `AgendaService` reciben ahora `AgendaPorFechaService`, **sin modificar ni una línea de ellos**. Ese es el poder del desacoplamiento — y la base de los dobles de prueba que verás en @sec-ud5-pruebas.
+
+## Los patrones de la unidad, con nombre
+
+Ya has usado todos estos; ahora sabes cómo se llaman:
+
+| Patrón / principio | Dónde lo has usado |
+|---|---|
+| **MVC** | La arquitectura de toda la unidad |
+| **Responsabilidad única (SOLID·S)** | Controlador delgado + `AgendaService` |
+| **Inyección de dependencias** | El type-hint del método `index()` |
+| **Active Record** | Eloquent: `Contacto::create()`, `$c->delete()` |
+| **Front controller** | `public/index.php` recibe todas las peticiones |
+| **Singleton** | El contenedor y las conexiones compartidas que Laravel gestiona por dentro |
+
+::: {.callout-warning title="Errores frecuentes"}
+- Crear el servicio con `new AgendaService()` dentro del controlador: funciona, pero pierdes el desacoplamiento y la posibilidad de sustituirlo en pruebas.
+- Mover al servicio **también** la presentación (que devuelva HTML): un servicio devuelve datos; la vista es cosa del controlador y de Blade.
+- Un servicio-cajón (`UtilsService`) donde cae todo: la responsabilidad única también aplica a los servicios.
+:::
+
+::: {#exr-UD5-8}
+
+### E5.8 · Refactorización a servicios
+
+1. Extrae de tus controladores toda la lógica de negocio no trivial (búsqueda con filtros, gestión de favoritos, detección de duplicados) a una clase `AgendaService` inyectada por el contenedor.
+2. Justifica por escrito qué principio mejora cada extracción y qué patrón interviene en cada pieza (MVC, inyección de dependencias, Active Record).
+3. Demuestra la ventaja de la inyección: crea una implementación alternativa del servicio (p. ej., que ordene los resultados de otra forma) y actívala mediante un binding en el contenedor **sin tocar el controlador**. Documenta el antes/después con capturas.
+
+*Entrega apto/no apto: controladores sin lógica de negocio, servicio inyectado (no instanciado con `new`) y demostración del binding alternativo.*
+:::

@@ -2,161 +2,290 @@
 title: "Recogida y validación de datos"
 ---
 
-# Bloque 6 · Recogida y validación de datos del formulario
 
 ::: {.callout-important title="Normativa · RA-CE"}
 **CE3.f** — Se han empleado métodos para recuperar la información introducida en el formulario.  
-**CE3.g** — Se han añadido comentarios al código. *(transversal)*  
-*RD 686/2010, Anexo II.*
+**CE3.g** — Se han añadido comentarios al código. *(transversal)*
 :::
 
 ---
 
-## Las superglobales `$_GET`, `$_POST` y `$_REQUEST`
+## `$_GET` y `$_POST`
 
-PHP rellena automáticamente estos arrays asociativos con los datos enviados por el cliente, según el método utilizado en el formulario:
-
-- **`$_GET`** — datos enviados en la cadena de consulta de la URL (`?campo=valor&...`).
-- **`$_POST`** — datos enviados en el cuerpo de la petición HTTP (formulario con `method="post"`).
-- **`$_REQUEST`** — combina `$_GET`, `$_POST` y `$_COOKIE` en un único array.
+PHP rellena automáticamente estos arrays con los datos enviados:
 
 ```php
 <?php
-// procesar.php — recibe un formulario con method="post"
+// procesar.php — formulario con method="get"
+// URL: procesar.php?nombre=Laura&edad=22
+
+$nombre = $_GET['nombre']; // "Laura"
+$edad   = $_GET['edad'];   // "22"  (siempre string)
+
+echo "Hola, $nombre. Tienes $edad años.";
+// Hola, Laura. Tienes 22 años.
+?>
+```
+
+```php
+<?php
+// procesar.php — formulario con method="post"
 $nombre = $_POST['nombre'];
 $curso  = $_POST['curso'];
 
-echo "Bienvenido, $nombre. Curso: $curso";
+echo "Inscrito: $nombre en $curso";
 ?>
 ```
 
 ::: {.callout-warning title="Errores frecuentes"}
-**No uses `$_REQUEST` en producción.** Combina GET, POST y COOKIE sin distinguir el origen del dato, lo que puede abrir vectores de manipulación: un atacante podría inyectar un campo en la URL que sobreescriba el dato esperado del cuerpo del formulario. Usa siempre `$_GET` o `$_POST` de forma explícita según el método del formulario.
+**No uses `$_REQUEST`** en producción: mezcla GET, POST y cookies sin distinguir el origen, lo que puede permitir que un atacante inyecte un valor GET que sobreescriba lo que esperas del formulario POST.
 :::
 
 ---
 
-## Verificación de existencia y validación básica
+## Leer con seguridad: el operador `??`
 
-Antes de utilizar un dato recibido conviene comprobar que **existe** y que **no está vacío**, para evitar avisos en tiempo de ejecución cuando el índice no se ha enviado. `filter_var()` permite además validar formatos concretos.
+Si un campo no llega (porque el usuario manipuló el formulario o por un error), acceder directamente lanza un aviso:
 
 ```php
 <?php
-if (isset($_POST['email']) && !empty($_POST['email'])) {
-    if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        $email = $_POST['email'];
-    } else {
-        $errores[] = "El correo electrónico no es válido";
-    }
+// Peligroso si 'nombre' no llega:
+$nombre = $_POST['nombre'];  // Warning: Undefined array key
+
+// Seguro:
+$nombre = $_POST['nombre'] ?? '';
+$edad   = $_POST['edad']   ?? null;
+?>
+```
+
+---
+
+## Validación básica
+
+Siempre valida en el servidor — la validación del navegador (`required`, `type="email"`) se puede eludir:
+
+```php
+<?php
+$nombre = trim($_POST['nombre'] ?? '');
+$email  = trim($_POST['email']  ?? '');
+$edad   = $_POST['edad'] ?? null;
+
+$errores = [];
+
+// Campo obligatorio no vacío
+if ($nombre === '') {
+    $errores[] = "El nombre es obligatorio.";
+}
+
+// Formato de email
+if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errores[] = "El email no es válido.";
+}
+
+// Número entero en rango
+if ($edad === null || !is_numeric($edad) || (int)$edad < 0 || (int)$edad > 120) {
+    $errores[] = "La edad debe ser un número entre 0 y 120.";
+}
+
+if (empty($errores)) {
+    echo "Datos válidos ✅";
 } else {
-    $errores[] = "El campo correo electrónico es obligatorio";
+    foreach ($errores as $e) {
+        echo "❌ $e\n";
+    }
 }
 ?>
 ```
 
-::: {.callout-note title="Concepto clave"}
-**Patrón defensivo de recogida:**
-
-1. `isset($_POST['campo'])` — comprueba que la clave existe en el array (el campo se envió).
-2. `!empty(trim($_POST['campo']))` — comprueba que no está vacío ni es solo espacios.
-3. Validación de formato — `filter_var()`, `is_numeric()`, `preg_match()`, etc.
-4. Saneamiento — `htmlspecialchars()` antes de mostrar en HTML.
-
-Nunca confíes en la validación del lado del navegador (`required`, `type="email"`): siempre se puede eludir enviando la petición directamente con herramientas como Postman o `curl`.
-:::
-
-### Filtros disponibles en `filter_var()`
-
-| Constante | Valida |
-|---|---|
-| `FILTER_VALIDATE_EMAIL` | Formato de dirección de correo electrónico |
-| `FILTER_VALIDATE_INT` | Número entero (con opciones de rango `min_range`, `max_range`) |
-| `FILTER_VALIDATE_FLOAT` | Número de coma flotante |
-| `FILTER_VALIDATE_URL` | URL con esquema válido |
-| `FILTER_VALIDATE_IP` | Dirección IP (v4 o v6) |
-| `FILTER_VALIDATE_BOOLEAN` | Valores booleanos (`"true"`, `"1"`, `"yes"`, `"on"`, etc.) |
-
 ---
 
-## Saneamiento de la salida: `htmlspecialchars()`
-
-Antes de mostrar en HTML **cualquier dato recibido del usuario** debe procesarse con `htmlspecialchars()` para evitar la inyección de código (*XSS — Cross-Site Scripting*):
+## `filter_var()` — validar y limpiar
 
 ```php
 <?php
-// MAL: muestra el dato sin sanear — un atacante podría enviar <script>...
-echo $_POST['nombre'];
+// Validar email
+var_dump(filter_var("hola@example.com", FILTER_VALIDATE_EMAIL)); // string
+var_dump(filter_var("no-es-email",      FILTER_VALIDATE_EMAIL)); // false
 
-// BIEN: convierte < > & " ' en entidades HTML seguras
-echo htmlspecialchars($_POST['nombre'], ENT_QUOTES, 'UTF-8');
+// Validar entero con rango
+$opciones = ['options' => ['min_range' => 1, 'max_range' => 10]];
+var_dump(filter_var(5,  FILTER_VALIDATE_INT, $opciones)); // int 5
+var_dump(filter_var(15, FILTER_VALIDATE_INT, $opciones)); // false
 
-// Patrón habitual con operador ??
-$nombre = htmlspecialchars($_POST['nombre'] ?? '', ENT_QUOTES, 'UTF-8');
+// Validar URL
+var_dump(filter_var("https://php.net", FILTER_VALIDATE_URL)); // string
+var_dump(filter_var("php.net",         FILTER_VALIDATE_URL)); // false
+
+// Validar IP
+var_dump(filter_var("192.168.1.1", FILTER_VALIDATE_IP)); // string
+var_dump(filter_var("999.0.0.1",   FILTER_VALIDATE_IP)); // false
+
+// Limpiar una cadena de HTML peligroso
+$entrada  = "<script>alert('xss')</script> Hola";
+$limpia   = filter_var($entrada, FILTER_SANITIZE_SPECIAL_CHARS);
+echo $limpia; // &#60;script&#62;alert(&#39;xss&#39;)&#60;/script&#62; Hola
 ?>
 ```
 
-::: {.callout-warning title="Errores frecuentes"}
-`htmlspecialchars()` protege contra XSS **solo en contexto HTML**. Si insertas el dato en un atributo, en JavaScript o en una consulta SQL, necesitas un saneamiento diferente:
+---
 
-- En SQL: usa **PDO con sentencias preparadas** (se estudia en UD6), nunca concatenes directamente.
-- En atributos HTML: la misma función con `ENT_QUOTES` es suficiente.
-- En bloques JavaScript: es un caso especial; lo mejor es pasar los datos como JSON usando `json_encode`.
+## `htmlspecialchars()` — proteger la salida
 
-Este principio de seguridad se ampliará en el bloque de RA4.
-:::
+Antes de mostrar en HTML cualquier dato del usuario, conviértelo para evitar XSS:
+
+```php
+<?php
+$nombre = $_POST['nombre'] ?? '';
+
+// Sin protección: si el usuario envía <script>..., se ejecuta en el navegador
+echo $nombre;
+
+// Con protección: < > & " ' se convierten en entidades HTML
+echo htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8');
+?>
+```
+
+```php
+<?php
+// Ejemplo con entrada maliciosa
+$entrada = '<script>alert("hackeado")</script>';
+
+echo htmlspecialchars($entrada, ENT_QUOTES, 'UTF-8');
+// &lt;script&gt;alert(&quot;hackeado&quot;)&lt;/script&gt;
+// Se muestra como texto, no se ejecuta
+?>
+```
 
 ---
 
-## Comentarios al código (CE3.g)
+## Patrón completo de procesamiento
 
-El estilo **PHPDoc**, análogo al Javadoc que ya conoce el alumnado, permite documentar el propósito, los parámetros y el valor de retorno de una función. Es el estándar reconocido por IDEs como VS Code y PhpStorm y por generadores de documentación como phpDocumentor.
+```php
+<?php
+// procesar_contacto.php
+
+// 1. Recoger
+$nombre  = trim($_POST['nombre']  ?? '');
+$email   = trim($_POST['email']   ?? '');
+$mensaje = trim($_POST['mensaje'] ?? '');
+
+// 2. Validar
+$errores = [];
+
+if (mb_strlen($nombre) < 2) {
+    $errores[] = "El nombre debe tener al menos 2 caracteres.";
+}
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errores[] = "El email no tiene un formato válido.";
+}
+
+if (mb_strlen($mensaje) < 10) {
+    $errores[] = "El mensaje debe tener al menos 10 caracteres.";
+}
+
+// 3. Mostrar resultado
+if (empty($errores)) {
+    // 4. Sanear antes de mostrar
+    $nombreSeguro  = htmlspecialchars($nombre,  ENT_QUOTES, 'UTF-8');
+    $emailSeguro   = htmlspecialchars($email,   ENT_QUOTES, 'UTF-8');
+    $mensajeSeguro = htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8');
+
+    echo "<h2>Mensaje recibido de $nombreSeguro ($emailSeguro)</h2>";
+    echo "<p>$mensajeSeguro</p>";
+} else {
+    echo "<ul>";
+    foreach ($errores as $e) {
+        echo "<li>" . htmlspecialchars($e, ENT_QUOTES, 'UTF-8') . "</li>";
+    }
+    echo "</ul>";
+}
+?>
+```
+
+---
+
+## PHPDoc (CE3.g)
+
+Documenta tus funciones con bloques PHPDoc. Los IDEs leen estos bloques y ofrecen autocompletado:
 
 ```php
 <?php
 /**
- * Valida el formato de un DNI español.
+ * Valida y limpia los datos de un formulario de contacto.
  *
- * @param string $dni Cadena con el DNI a validar (p. ej. "12345678Z").
- * @return bool true si el formato es correcto (8 dígitos + letra mayúscula).
+ * @param array $post  Datos de $_POST.
+ * @return array       Array con 'datos' (limpios) y 'errores' (lista de mensajes).
  */
-function validarDNI(string $dni): bool {
-    return preg_match('/^[0-9]{8}[A-Z]$/', $dni) === 1;
+function procesarContacto(array $post): array {
+    $nombre  = trim($post['nombre']  ?? '');
+    $email   = trim($post['email']   ?? '');
+    $errores = [];
+
+    if (mb_strlen($nombre) < 2) {
+        $errores[] = "Nombre demasiado corto.";
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errores[] = "Email no válido.";
+    }
+
+    return [
+        'datos'   => ['nombre' => $nombre, 'email' => $email],
+        'errores' => $errores,
+    ];
+}
+
+// Uso
+$resultado = procesarContacto($_POST);
+if (empty($resultado['errores'])) {
+    echo "OK: " . htmlspecialchars($resultado['datos']['nombre'], ENT_QUOTES, 'UTF-8');
+} else {
+    print_r($resultado['errores']);
 }
 ?>
 ```
-
-::: {.callout-tip title="Analogía Java"}
-PHPDoc y Javadoc comparten la misma estructura de etiquetas: `@param`, `@return`, `@throws`, `@var`. Si ya has escrito Javadoc, PHPDoc no te resultará extraño; la única diferencia práctica es que en PHP los tipos se especifican como `string`, `int`, `array`, etc. en lugar de las clases Java.
-:::
-
-Requisito mínimo de documentación para todas las actividades de esta unidad:
-
-- Bloque PHPDoc de cabecera en cada función (`@param` y `@return`).
-- Comentarios de línea (`//`) en los bloques de lógica más compleja.
-- Comentario de sección cuando el script tiene partes diferenciadas (p. ej. `// --- Validación ---`).
 
 ---
 
 ## Actividades
 
 ::: {#exr-UD3-9}
-**E3.9 — Procesador de inscripción con validación** `CE3.f · CE3.g · Sesión 9`
+**E3.9 — Procesador de inscripción con validación**
 
-Crea el fichero `procesar_inscripcion.php` que reciba y valide los datos del formulario de la actividad E3.8. El script debe:
+Crea `procesar_inscripcion.php` que procese el formulario de E3.8. El script debe:
 
-a) **Recoger** todos los campos del formulario con `$_POST` usando el operador `??` para evitar avisos si un campo no llega.
+**Recoger** (todos con `??` para evitar avisos):
+```php
+<?php
+$nombre      = trim($_POST['nombre']      ?? '');
+$email       = trim($_POST['email']       ?? '');
+$curso       = trim($_POST['curso']       ?? '');
+$condiciones = $_POST['condiciones']      ?? null;
+?>
+```
 
-b) **Validar** cada campo aplicando el patrón defensivo completo:
-   - `nombre`: obligatorio, no vacío tras `trim()`.
-   - `email`: obligatorio y con formato válido (`filter_var` + `FILTER_VALIDATE_EMAIL`).
-   - `curso`: obligatorio, debe ser uno de los valores permitidos (usa `in_array` con los valores de tu `<select>`).
-   - `condiciones`: debe estar presente y valer `"1"` (checkbox marcado).
+**Validar:**
+- `nombre`: no vacío.
+- `email`: formato válido con `filter_var`.
+- `curso`: debe ser uno de `['daw2', 'dam2', 'asir2']` (usa `in_array` estricto).
+- `condiciones`: debe valer `"1"`.
 
-c) **Reutilizar** al menos una función de la librería de E3.7. Por ejemplo, puedes usar `formatearPrecio()` para mostrar el importe de matrícula en el resumen.
+**Mostrar:**
+- Sin errores → resumen con los datos saneados con `htmlspecialchars` y el importe de matrícula formateado con `formatearPrecio()` de la librería de E3.7 (45 €).
+- Con errores → lista `<ul>` con los mensajes.
 
-d) **Mostrar el resultado:**
-   - Si no hay errores: muestra un resumen de la inscripción con los datos **saneados con `htmlspecialchars()`**.
-   - Si hay errores: muestra la lista de errores en un `<ul>`.
+Resultado si todos los datos son correctos:
+```
+Inscripción registrada ✅
+Nombre: Laura García
+Email: laura@example.com
+Curso: daw2
+Importe de matrícula: 45,00 €
+```
 
-e) **Documentar** el código con comentarios de sección y PHPDoc en cualquier función auxiliar que definas.
+Resultado si email y curso son incorrectos:
+```
+❌ El email no tiene un formato válido.
+❌ Debe seleccionar un curso válido.
+```
 :::

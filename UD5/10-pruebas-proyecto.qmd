@@ -1,0 +1,134 @@
+# Pruebas, documentación y proyecto integrador {#sec-ud5-pruebas}
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque trabaja **CE5.h** (probar y documentar el código) y cierra **CE5.f** con el proyecto integrador.
+:::
+
+## Pruebas con `artisan test`
+
+Laravel trae PHPUnit integrado y una capa de pruebas HTTP: puedes **simular peticiones sin navegador** y comprobar la respuesta. Las pruebas viven en `tests/Feature/`.
+
+```bash
+php artisan make:test AgendaTest
+```
+
+```
+   INFO  Test [tests/Feature/AgendaTest.php] created successfully.
+```
+
+```php
+<?php // tests/Feature/AgendaTest.php
+
+namespace Tests\Feature;
+
+use Tests\TestCase;
+
+class AgendaTest extends TestCase
+{
+    public function test_el_listado_responde(): void
+    {
+        $this->get('/contactos')
+             ->assertStatus(200)
+             ->assertSee('Agenda');
+    }
+
+    public function test_la_ficha_inexistente_avisa(): void
+    {
+        $this->get('/contactos/999')
+             ->assertSee('Contacto no encontrado');
+    }
+
+    public function test_el_alta_valida_el_nombre(): void
+    {
+        $this->post('/contactos', ['nombre' => ''])
+             ->assertSessionHasErrors('nombre');
+    }
+
+    public function test_el_alta_valida_el_telefono(): void
+    {
+        $this->post('/contactos', ['nombre' => 'Prueba', 'tlf' => '12345'])
+             ->assertSessionHasErrors('tlf');
+    }
+}
+```
+
+Ejecución:
+
+```bash
+php artisan test
+```
+
+```
+   PASS  Tests\Feature\AgendaTest
+  ✓ el listado responde                                          0.15s
+  ✓ la ficha inexistente avisa                                   0.03s
+  ✓ el alta valida el nombre                                     0.04s
+  ✓ el alta valida el telefono                                   0.03s
+
+  Tests:    4 passed (7 assertions)
+  Duration: 0.31s
+```
+
+Y así se ve un fallo. Si rompes la regla del teléfono en el controlador:
+
+```
+   FAIL  Tests\Feature\AgendaTest
+  ✓ el listado responde
+  ⨯ el alta valida el telefono                                   0.05s
+  ──────────────────────────────────────────────────────────────
+   FAILED  Tests\Feature\AgendaTest > el alta valida el telefono
+  Session is missing expected key [errors].
+```
+
+La prueba te avisa del error **antes** que el usuario. Ese es el trato.
+
+Las aserciones que más usarás:
+
+| Aserción | Comprueba |
+|---|---|
+| `assertStatus(200)` | Código de respuesta HTTP |
+| `assertSee('texto')` | Que el HTML contiene el texto (escapado) |
+| `assertDontSee('texto')` | Que no lo contiene |
+| `assertRedirect('/ruta')` | Que la respuesta redirige a esa URL |
+| `assertSessionHasErrors('campo')` | Que la validación falló en ese campo |
+| `assertSessionHas('clave')` | Que la sesión contiene esa clave (p. ej. el flash) |
+
+## Documentación con PHPDoc
+
+Todo el código que entregues en esta unidad va documentado con bloques `/** ... */` sobre clases y métodos:
+
+```php
+/**
+ * Busca contactos por nombre, ordenados alfabéticamente.
+ *
+ * @param  string  $q  Término de búsqueda; vacío devuelve todos.
+ * @return \Illuminate\Support\Collection<int, \App\Models\Contacto>
+ */
+public function buscar(string $q): Collection
+{
+    // ...
+}
+```
+
+No es burocracia: tu editor usa estos bloques para autocompletar, y quien herede tu código (tu yo de dentro de tres meses) sabrá qué hace cada método sin leerlo entero.
+
+::: {.callout-warning title="Errores frecuentes"}
+- PHPDoc que repite el nombre del método ("buscar: busca") sin aportar nada: documenta el **contrato** (qué recibe, qué devuelve, casos límite), no lo obvio.
+- Pruebas que solo cubren el camino feliz. Las valiosas son las que atacan los bordes: campo vacío, id inexistente, teléfono inválido.
+- Escribir las pruebas al final "si da tiempo". Escríbelas al terminar cada funcionalidad, cuando aún recuerdas los casos raros.
+:::
+
+::: {#exr-UD5-9}
+
+### E5.9 · Proyecto integrador: la agenda completa
+
+Entrega final de la unidad. La agenda, completa y funcional:
+
+1. **Arquitectura MVC estricta**: controladores delgados, lógica en servicios inyectados, vistas Blade con layout y componentes, rutas con nombre en el 100% de los enlaces.
+2. **Funcionalidad completa**: formulario de alta con validación y mensajes flash, búsqueda, favoritos en sesión con contador global y configuración propia por entornos consumida con `config()`.
+3. **Pruebas**: al menos **cuatro** pruebas automatizadas significativas (dos de respuesta de página y dos de validación) que pasen con `php artisan test`. Adjunta captura del resultado en verde.
+4. **Documentación**: PHPDoc en todas las clases y métodos de `app/`, más un `README.md` con las instrucciones de instalación (`composer install`, `.env`, `key:generate`, `migrate`, `serve`) y un diagrama del flujo MVC de tu aplicación.
+5. **Defensa breve**: explicarás en 5 minutos qué capa (o capas) habría que tocar para una modificación que se sorteará en el momento.
+
+*Entrega apto/no apto: los cuatro primeros puntos completos y defensa superada. Este proyecto es la mejor preparación posible para el examen: todo lo que contiene es materia de examen.*
+:::

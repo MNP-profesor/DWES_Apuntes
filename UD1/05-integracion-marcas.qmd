@@ -2,41 +2,149 @@
 title: "Integración con lenguajes de marcas"
 ---
 
-::: {.callout-important title="Normativa · RA-CE"}
-Este bloque desarrolla **CE1.f** («se han verificado los mecanismos de integración de los lenguajes de marcas con los lenguajes de programación en entorno servidor»), según RD 686/2010, Anexo II. La sintaxis concreta de PHP (variables, operadores, tipos de datos) se desarrolla en profundidad en la UD2.
-:::
-
-Cuando un lenguaje de servidor utiliza el modelo de código embebido (estudiado en el bloque anterior), necesita un mecanismo claro para que el intérprete distinga qué partes del documento son lenguaje de marcas —HTML, que debe enviarse tal cual al cliente— y qué partes son código de programación —que debe ejecutarse antes de generar la respuesta—.
+Cuando PHP procesa un fichero `.php`, recorre el documento línea a línea. Todo lo que está **fuera** de los delimitadores `<?php ... ?>` se envía al cliente sin modificar. Todo lo que está **dentro** se ejecuta, y solo el resultado de esa ejecución se inserta en la respuesta.
 
 ## Delimitadores de código
 
-Cada tecnología de código embebido define sus propias etiquetas de apertura y cierre:
+Cada tecnología de código embebido usa sus propias etiquetas:
 
-| Tecnología | Delimitador de apertura | Delimitador de cierre |
+| Tecnología | Abre | Cierra |
 |---|---|---|
-| PHP (forma estándar) | `<?php` | `?>` |
-| PHP (forma corta, eco) | `<?=` | `?>` |
+| PHP (estándar) | `<?php` | `?>` |
+| PHP (eco directo) | `<?=` | `?>` |
 | ASP clásico | `<%` | `%>` |
-| JSP (JavaServer Pages) | `<%` o `<%=` | `%>` |
+| JSP | `<%` o `<%=` | `%>` |
 
-: Delimitadores de código por tecnología {.striped}
+: {.striped}
 
-El proceso, en términos generales, es el siguiente: el servidor recibe la petición de un fichero con código embebido; el intérprete recorre el documento de principio a fin; todo lo que está **fuera** de los delimitadores se envía sin modificar; todo lo que está **dentro** de los delimitadores se ejecuta como código, y su resultado (normalmente mediante una instrucción de salida como `echo`) se inserta en el lugar correspondiente del documento final.
+## Ejemplos paso a paso
+
+### Ejemplo 1 — Valor fijo
+
+Fichero fuente (`saludo.php`):
+
+```php
+<html>
+<body>
+  <p><?php echo "Buenos días"; ?></p>
+</body>
+</html>
+```
+
+HTML que recibe el navegador:
+
+```html
+<html>
+<body>
+  <p>Buenos días</p>
+</body>
+</html>
+```
+
+### Ejemplo 2 — Expresión calculada
+
+```php
+<html>
+<body>
+  <p>El doble de 21 es <?php echo 21 * 2; ?></p>
+  <p>Hoy es <?php echo date('d/m/Y'); ?></p>
+</body>
+</html>
+```
+
+HTML resultante:
+
+```html
+<html>
+<body>
+  <p>El doble de 21 es 42</p>
+  <p>Hoy es 11/07/2026</p>
+</body>
+</html>
+```
+
+### Ejemplo 3 — Forma corta `<?=`
+
+`<?= expresión ?>` es equivalente a `<?php echo expresión ?>`:
+
+```php
+<title><?= "Mi tienda" ?></title>
+```
+
+Resultado:
+
+```html
+<title>Mi tienda</title>
+```
+
+### Ejemplo 4 — Varios bloques en un mismo documento
+
+```php
+<!DOCTYPE html>
+<html>
+<head>
+  <title><?= "Panel de usuario" ?></title>
+</head>
+<body>
+  <h1>Bienvenido</h1>
+  <p>Servidor: <?php echo $_SERVER['SERVER_NAME']; ?></p>
+  <p>Protocolo: <?php echo $_SERVER['SERVER_PROTOCOL']; ?></p>
+</body>
+</html>
+```
+
+Resultado (en un servidor local):
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Panel de usuario</title>
+</head>
+<body>
+  <h1>Bienvenido</h1>
+  <p>Servidor: localhost</p>
+  <p>Protocolo: HTTP/1.1</p>
+</body>
+</html>
+```
 
 ::: {.callout-warning title="Errores frecuentes"}
-**El documento final nunca contiene código.** Un error conceptual frecuente es pensar que el navegador «ve» el código PHP. En realidad, el servidor sustituye todo el bloque embebido (delimitadores incluidos) por el resultado de su ejecución antes de enviar la respuesta. El cliente jamás recibe el código fuente del lenguaje de servidor, solo el HTML resultante.
+**El navegador nunca recibe código PHP.** Si ves el código `<?php ... ?>` en el código fuente de la página (menú Ver código fuente), el servidor no está procesando el fichero — probablemente el fichero tiene extensión `.html` en lugar de `.php`, o el intérprete PHP no está activo.
 :::
 
 ## Ejercicio E1.5 {#exr-UD1-5}
 
 ::: {#exr-UD1-5}
-**Trazado manual de la salida generada**
+**Trazado manual de la salida**
 
-Se entrega un documento HTML con tres bloques de código embebido en pseudocódigo (no es necesario conocer la sintaxis PHP todavía, ya que se trabajará en UD2):
+Dado el siguiente documento, escribe el HTML exacto que el navegador recibiría cuando `$usuario = "Ana"` y `$rol = "admin"`.
 
-- Bloque 1: imprime un valor fijo.
-- Bloque 2: imprime el resultado de una operación aritmética sencilla.
-- Bloque 3: imprime un texto condicionado a un valor variable.
+```php
+<!DOCTYPE html>
+<html>
+<body>
+  <h1>Hola, <?= $usuario ?></h1>
+  <p><?php echo 5 * 4; ?> artículos en el catálogo.</p>
+  <?php if ($rol === 'admin'): ?>
+    <a href="/panel">Acceder al panel</a>
+  <?php endif; ?>
+</body>
+</html>
+```
 
-**Tarea:** «ejecuta mentalmente» el documento y escribe el HTML exacto que el navegador recibiría, eliminando todo rastro de los delimitadores y del código original. El objetivo es consolidar la idea de que el resultado final es HTML puro, no una mezcla de HTML y código.
+Resultado esperado (para `$usuario = "Ana"`, `$rol = "admin"`):
+
+```html
+<!DOCTYPE html>
+<html>
+<body>
+  <h1>Hola, Ana</h1>
+  <p>20 artículos en el catálogo.</p>
+    <a href="/panel">Acceder al panel</a>
+</body>
+</html>
+```
+
+Ahora repite el ejercicio con `$rol = "cliente"`. ¿Qué cambia en el HTML resultante?
 :::

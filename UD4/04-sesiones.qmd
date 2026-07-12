@@ -1,0 +1,110 @@
+# Sesiones
+
+## Mecanismos de mantenimiento de información de cliente
+
+HTTP no tiene memoria: cada petición es independiente. Tres familias de mecanismos simulan ese "recordar":
+
+| Mecanismo | ¿Dónde vive? | Persistencia | Uso típico |
+|---|---|---|---|
+| Cookies | Navegador | Configurable (hasta años) | Preferencias, «recordarme» |
+| Sesiones | Servidor (cliente solo guarda el ID) | Duración de la sesión | Carrito, login activo |
+| URL / campos ocultos | Se repite en cada petición | Ninguna | Desaconsejado hoy |
+
+## Sesiones
+
+`session_start()` inicia la sesión (debe ir antes de cualquier salida). `$_SESSION` guarda y lee datos que persisten entre peticiones.
+
+::: {.callout-note title="Concepto clave"}
+`session_start()` genera un ID único, lo envía al navegador como cookie (`PHPSESSID`) y guarda los datos en el servidor. El navegador solo conoce el ID, nunca los datos.
+:::
+
+```php
+// pagina1.php
+session_start();
+$_SESSION['nombre'] = 'Ana';
+```
+
+```php
+// pagina2.php (petición siguiente, mismo navegador)
+session_start();
+echo $_SESSION['nombre']; // Ana
+```
+
+Contador de visitas con sesión:
+
+```php
+session_start();
+$_SESSION['visitas'] = ($_SESSION['visitas'] ?? 0) + 1;
+echo "Visitas: " . $_SESSION['visitas'];
+// 1ª carga → Visitas: 1
+// 2ª carga → Visitas: 2
+// 3ª carga → Visitas: 3
+```
+
+Cerrar sesión (logout):
+
+```php
+session_start();
+session_unset();   // borra todas las variables de sesión
+session_destroy(); // destruye la sesión en el servidor
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+`session_start()` debe ser la primera instrucción del script, antes de cualquier `echo`, espacio en blanco o salida HTML. Si ves el error "headers already sent", casi siempre hay algo (aunque sea una línea en blanco) antes de `<?php`.
+:::
+
+Por seguridad, tras un login conviene regenerar el ID de sesión:
+
+```php
+session_start();
+// ... validar credenciales ...
+session_regenerate_id(true); // evita fijación de sesión (session fixation)
+```
+
+::: {#exr-UD4-2}
+## E4.2 — Carrito de la compra con sesión
+
+Implementa un carrito de la compra: un formulario que añade un producto a `$_SESSION['carrito']` y muestra el número total de artículos añadidos hasta el momento.
+
+Código de partida:
+
+```php
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto'])) {
+    // añade $_POST['producto'] a $_SESSION['carrito']
+}
+
+$total = count($_SESSION['carrito'] ?? []);
+echo "Artículos en el carrito: $total";
+```
+
+Resultado esperado tras añadir "Teclado" y "Ratón" en dos envíos sucesivos:
+
+```
+Artículos en el carrito: 2
+```
+:::
+
+::: {#exr-UD4-3}
+## E4.3 — Expiración y regeneración de sesión
+
+Modifica el carrito anterior para que la sesión expire tras 10 minutos de inactividad, regenerando el ID de sesión al iniciarse.
+
+Código de partida:
+
+```php
+session_start();
+session_regenerate_id(true);
+
+$limite = 600; // 10 minutos en segundos
+if (isset($_SESSION['ultimo_acceso']) && (time() - $_SESSION['ultimo_acceso']) > $limite) {
+    session_unset();
+    session_destroy();
+    session_start();
+}
+$_SESSION['ultimo_acceso'] = time();
+```
+
+Resultado esperado si accedes tras 11 minutos de inactividad: el carrito guardado en el ejercicio anterior aparece vacío (la sesión se ha reiniciado).
+:::

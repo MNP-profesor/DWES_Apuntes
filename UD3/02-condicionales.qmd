@@ -2,20 +2,14 @@
 title: "Estructuras condicionales"
 ---
 
-# Bloque 1 · Estructuras condicionales
 
 ::: {.callout-important title="Normativa · RA-CE"}
-**CE3.a** — Se han utilizado mecanismos de decisión en la creación de bloques de sentencias.  
-*RD 686/2010, Anexo II.*
+**CE3.a** — Se han utilizado mecanismos de decisión en la creación de bloques de sentencias.
 :::
-
-El desarrollo teórico de cada bloque se acompaña de ejemplos con código y se cierra con la actividad práctica correspondiente, para que el alumnado aplique cada concepto inmediatamente después de presentarlo.
 
 ---
 
 ## `if` / `elseif` / `else`
-
-La sintaxis del condicional en PHP es muy similar a la de Java, con la diferencia de que PHP permite una **conversión implícita de tipos** al evaluar la condición como booleana: una cadena vacía, el número `0` o el valor `null` se evalúan como `false`.
 
 ```php
 <?php
@@ -28,139 +22,323 @@ if ($edad < 18) {
 } else {
     echo "Tarifa senior";
 }
+// Tarifa juvenil
 ?>
 ```
 
-::: {.callout-tip title="Analogía Java"}
-En Java la condición de un `if` debe ser estrictamente `boolean`; el compilador rechaza un entero o una referencia a objeto. En PHP la coerción es automática: `if (0)` es `false`, `if ("")` es `false`, `if ([])` es `false`. Por eso en PHP conviene usar **`===`** (comparación estricta de tipo y valor) siempre que se compare con `0`, `""` o `null`, para evitar comportamientos inesperados.
-:::
+Varios casos encadenados:
+
+```php
+<?php
+$nota = 6.5;
+
+if ($nota < 5) {
+    $calificacion = "Insuficiente";
+} elseif ($nota < 6) {
+    $calificacion = "Suficiente";
+} elseif ($nota < 7) {
+    $calificacion = "Bien";
+} elseif ($nota < 9) {
+    $calificacion = "Notable";
+} else {
+    $calificacion = "Sobresaliente";
+}
+
+echo $calificacion;
+// Bien
+?>
+```
 
 ::: {.callout-warning title="Errores frecuentes"}
-Usar `==` en lugar de `===` al comparar con `0` o `""` puede producir resultados sorprendentes:
+PHP convierte cualquier valor a booleano al evaluarlo en un `if`. Son **`false`**: `0`, `""`, `"0"`, `[]`, `null`. Todo lo demás es `true`.
 
 ```php
 <?php
-var_dump(0 == "a");   // true  (PHP convierte "a" a 0)
-var_dump(0 === "a");  // false (tipo distinto: int vs string)
+var_dump((bool) 0);    // false
+var_dump((bool) "");   // false
+var_dump((bool) "0");  // false
+var_dump((bool) []);   // false
+var_dump((bool) null); // false
+
+var_dump((bool) 1);    // true
+var_dump((bool) "ho"); // true
+var_dump((bool) [0]);  // true  (array no vacío)
 ?>
 ```
 
-Por defecto, usa siempre `===` / `!==` salvo que necesites explícitamente la comparación débil.
+Al comparar con `0`, `""` o `null`, usa siempre **`===`**:
+
+```php
+<?php
+var_dump(0 == false);   // true  — sorpresa
+var_dump(0 === false);  // false — correcto
+
+var_dump("" == false);  // true
+var_dump("" === false); // false
+?>
+```
 :::
 
 ---
 
-## Operador ternario y `null` coalescing
-
-El **operador ternario** `? :` permite asignar un valor en función de una condición en una sola línea. El **operador `??`** (null coalescing) devuelve el operando izquierdo si existe y no es `null`; en caso contrario devuelve el operando derecho.
+## Operador ternario `? :`
 
 ```php
 <?php
-// Ternario
+$edad = 20;
 $tarifa = ($edad < 18) ? "juvenil" : "general";
-
-// Null coalescing: usa el valor por defecto si la variable no existe o es null
-$nombre = $_GET['nombre'] ?? "Invitado";
-
-// Null coalescing de asignación (PHP 7.4+)
-$config['timeout'] ??= 30;  // asigna 30 solo si no existe o es null
+echo $tarifa;
+// general
 ?>
 ```
 
-::: {.callout-tip title="Analogía Java"}
-El operador `??` no tiene equivalente directo en Java clásico. Es comparable a `Optional.orElse()` pero con sintaxis mucho más ligera, y resulta especialmente útil para leer parámetros de formularios o URLs sin comprobar previamente con `isset()`.
+Ternarios encadenados:
+
+```php
+<?php
+$puntos = 85;
+$nivel = $puntos >= 90 ? "oro"
+       : ($puntos >= 70 ? "plata"
+       : "bronce");
+echo $nivel;
+// plata
+?>
+```
+
+---
+
+## Operador `??` (null coalescing)
+
+Devuelve el valor de la izquierda si existe y no es `null`; si no, el de la derecha:
+
+```php
+<?php
+$nombre = $_GET['nombre'] ?? "Invitado";
+echo $nombre;
+// Invitado   (si no viene el parámetro en la URL)
+?>
+```
+
+```php
+<?php
+$config = ['timeout' => null, 'reintentos' => 3];
+
+echo $config['timeout']    ?? 30;           // 30  (era null)
+echo "\n";
+echo $config['reintentos'] ?? 5;            // 3   (existía y no era null)
+echo "\n";
+echo $config['host']       ?? "localhost";  // localhost (clave no existía)
+echo "\n";
+?>
+```
+
+Asignación `??=` — asigna solo si la variable no existe o es `null`:
+
+```php
+<?php
+$opciones = [];
+$opciones['color'] ??= "azul";
+echo $opciones['color'];  // azul
+
+$opciones['color'] ??= "rojo";  // ya tiene valor, no cambia
+echo $opciones['color'];  // azul
+?>
+```
+
+---
+
+## `switch`
+
+```php
+<?php
+$dia = "lunes";
+
+switch ($dia) {
+    case "lunes":
+    case "martes":
+    case "miércoles":
+    case "jueves":
+    case "viernes":
+        echo "Día laborable";
+        break;
+    case "sábado":
+    case "domingo":
+        echo "Fin de semana";
+        break;
+    default:
+        echo "Día desconocido";
+}
+// Día laborable
+?>
+```
+
+```php
+<?php
+$codigo = "ES";
+
+switch ($codigo) {
+    case "ES": $moneda = "EUR"; break;
+    case "US": $moneda = "USD"; break;
+    case "GB": $moneda = "GBP"; break;
+    default:   $moneda = "desconocida";
+}
+
+echo "Moneda: $moneda";
+// Moneda: EUR
+?>
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+`switch` usa comparación **débil** (`==`). Con el valor `0` puede haber sorpresas:
+
+```php
+<?php
+$valor = 0;
+switch ($valor) {
+    case "hola": echo "Caso hola"; break;  // true: 0 == "hola"
+    case 0:      echo "Caso cero"; break;
+}
+// Caso hola   ← inesperado
+?>
+```
+
+Si el valor puede ser `0` o cadenas, usa `match`.
 :::
 
 ---
 
-## `switch` y `match`
+## `match` (PHP 8+)
 
-El **`switch`** de PHP funciona igual que el de Java: requiere `break` explícito para evitar el *fallthrough* entre casos y usa comparación débil (`==`).
-
-PHP 8 introduce **`match`**: una *expresión* (no una sentencia) que devuelve un valor directamente, usa comparación estricta (`===`) de forma implícita y no presenta *fallthrough*.
+`match` es una expresión que devuelve un valor, usa comparación estricta (`===`) y no tiene *fallthrough*:
 
 ```php
 <?php
 $plan = 'B';
 
-// switch clásico: necesita break, comparación débil
-switch ($plan) {
-    case 'A':
-        $precio = 9.99;
-        break;
-    case 'B':
-        $precio = 19.99;
-        break;
-    default:
-        $precio = 0;
-}
-
-// match (PHP 8): expresión, comparación estricta, sin break
 $precio = match($plan) {
     'A'      => 9.99,
     'B'      => 19.99,
     'C', 'D' => 29.99,
     default  => 0,
 };
+
+echo $precio;
+// 19.99
 ?>
 ```
-
-::: {.callout-note title="Concepto clave"}
-`match` es una **expresión**: devuelve un valor y puede usarse en el lado derecho de una asignación, como argumento de una función o en cualquier lugar donde se espere un valor. `switch` es una **sentencia**: ejecuta bloques de código pero no devuelve nada directamente.
-:::
-
-::: {.callout-warning title="Errores frecuentes"}
-`switch` usa `==` (comparación débil), lo que puede provocar coincidencias inesperadas:
 
 ```php
 <?php
-$valor = 0;
-switch ($valor) {
-    case "a": echo "¡Coincide!"; break;  // true: 0 == "a" en comparación débil
-}
+$estado = "pendiente";
 
-// match no tiene este problema:
-$resultado = match($valor) {
-    "a" => "coincide",   // nunca se ejecuta: 0 !== "a"
-    0   => "cero",       // sí se ejecuta
-    default => "otro",
+$etiqueta = match($estado) {
+    "pendiente"  => "⏳ Pendiente",
+    "pagado"     => "✅ Pagado",
+    "cancelado"  => "❌ Cancelado",
+    default      => "❓ Desconocido",
 };
+
+echo $etiqueta;
+// ⏳ Pendiente
 ?>
 ```
-:::
 
-::: {.callout-tip title="Analogía Java"}
-`match` en PHP es conceptualmente equivalente al `switch` *expression* introducido en Java 14 (`switch (x) { case A -> valor; }`): ambos devuelven un valor, eliminan el *fallthrough* y usan comparación estricta. La sintaxis de *arrow* (`=>`) es la misma en ambos lenguajes para este propósito.
-:::
+`match(true)` para evaluar rangos, equivale a una cadena de `elseif`:
+
+```php
+<?php
+$temperatura = 28;
+
+$descripcion = match(true) {
+    $temperatura < 0  => "Bajo cero",
+    $temperatura < 15 => "Frío",
+    $temperatura < 25 => "Templado",
+    $temperatura < 35 => "Caluroso",
+    default           => "Muy caluroso",
+};
+
+echo $descripcion;
+// Caluroso
+?>
+```
+
+Si ningún caso coincide y no hay `default`, `match` lanza `UnhandledMatchError`:
+
+```php
+<?php
+$color = "verde";
+
+try {
+    $hex = match($color) {
+        "rojo"  => "#FF0000",
+        "azul"  => "#0000FF",
+    };
+} catch (\UnhandledMatchError $e) {
+    echo "Color no reconocido: $color";
+}
+// Color no reconocido: verde
+?>
+```
 
 ---
 
 ## Actividades
 
 ::: {#exr-UD3-1}
-**E3.1 — Motor de tarifas** `CE3.a · CE3.g · Sesión 1`
+**E3.1 — Clasificador de tarifas**
 
-Crea un script PHP que, dado un array asociativo con los datos de un cliente (`edad` y `abono`), determine mediante `if/elseif/else` y operador ternario la tarifa aplicable según los siguientes tramos:
+Completa la función para que produzca el resultado indicado:
 
-- Menor de 18 años → tarifa `"juvenil"`
-- De 18 a 64 años → tarifa `"general"`
-- 65 años o más → tarifa `"senior"`
+```php
+<?php
+function calcularTarifa(int $edad, bool $tieneAbono): string {
+    // Tu código aquí
+    // Tramos: < 18 → "juvenil", 18-64 → "general", >= 65 → "senior"
+    // Si tiene abono, añade " (con descuento)"
+}
 
-Si el cliente tiene abono (`abono === true`), añade el sufijo `" con descuento de abono"` a la tarifa mediante operador ternario.
+echo calcularTarifa(15, false) . "\n";
+echo calcularTarifa(30, true)  . "\n";
+echo calcularTarifa(70, false) . "\n";
+echo calcularTarifa(17, true)  . "\n";
+?>
+```
 
-Incluye al menos cuatro casos de prueba con valores distintos (distintas edades y combinaciones de abono). Documenta la función con un comentario de cabecera en estilo PHPDoc.
+Resultado esperado:
+```
+juvenil
+general (con descuento)
+senior
+juvenil (con descuento)
+```
 :::
 
 ::: {#exr-UD3-2}
-**E3.2 — Selector de plan de hosting** `CE3.a · CE3.g · Sesión 2`
+**E3.2 — Selector de plan de hosting**
 
-Implementa con `match` un selector que, según un código de plan (`'A'`, `'B'`, `'C'`, `'D'`), devuelva un array asociativo con el nombre, precio y características del plan:
+Implementa `obtenerPlan()` usando `match`. Añade un comentario de una línea explicando por qué `match` es más adecuado que `switch` aquí:
 
-| Código | Nombre | Precio | Características |
-|---|---|---|---|
-| `'A'` | Básico | 9,99 € | 1 dominio, 10 GB |
-| `'B'` | Estándar | 19,99 € | 5 dominios, 50 GB |
-| `'C'` o `'D'` | Premium | 29,99 € | Dominios ilimitados, 200 GB |
+```php
+<?php
+function obtenerPlan(string $codigo): array {
+    // Tu código aquí
+    // 'A'      → ["nombre" => "Básico",    "precio" => 9.99,  "gb" => 10]
+    // 'B'      → ["nombre" => "Estándar",  "precio" => 19.99, "gb" => 50]
+    // 'C', 'D' → ["nombre" => "Premium",   "precio" => 29.99, "gb" => 200]
+    // otro     → lanza UnhandledMatchError (sin default)
+}
 
-Incluye un comentario en el código que compare el comportamiento de `switch` y `match` para este caso concreto, indicando al menos dos diferencias.
+$plan = obtenerPlan('B');
+echo "{$plan['nombre']}: {$plan['precio']} € — {$plan['gb']} GB\n";
+
+$plan = obtenerPlan('C');
+echo "{$plan['nombre']}: {$plan['precio']} € — {$plan['gb']} GB\n";
+?>
+```
+
+Resultado esperado:
+```
+Estándar: 19.99 € — 50 GB
+Premium: 29.99 € — 200 GB
+```
 :::

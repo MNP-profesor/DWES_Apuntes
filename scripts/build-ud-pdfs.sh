@@ -12,12 +12,12 @@ OUT="$ROOT/_ud-pdfs"
 mkdir -p "$OUT"
 
 declare -A TITULOS=(
-  [UD1]="UD1 - Arquitecturas y tecnologías de programación web en servidor"
-  [UD2]="UD2 - Fundamentos de PHP"
+  [UD1]="UD1 - Arquitecturas y tecnologías de programación Web en servidor"
+  [UD2]="UD2 - Fundamentos de PHP: variables, operadores y sintaxis embebida"
   [UD3]="UD3 - Estructuras de control, funciones y formularios en PHP"
-  [UD4]="UD4 - POO en PHP: autenticación, sesiones y cookies"
+  [UD4]="UD4 - POO en PHP + Desarrollo de funcionalidades Web: autenticación, sesiones y cookies"
   [UD5]="UD5 - Separación de la lógica de negocio: MVC con Laravel"
-  [UD6]="UD6 - Acceso a almacenes de datos con PDO: seguridad e integridad"
+  [UD6]="UD6 - Acceso a BBDD con PDO: seguridad e integridad"
   [UD7]="UD7 - Servicios Web: API REST con Laravel (Resources y Sanctum)"
   [UD8]="UD8 - Generación dinámica de páginas Web"
   [UD9]="UD9 - Aplicaciones web híbridas: librerías y repositorios heterogéneos (Composer)"
@@ -37,7 +37,7 @@ for dir in UD1 UD2 UD3 UD4 UD5 UD6 UD7 UD8 UD9; do
   cat > "$tmp/index.qmd" << 'IDX'
 # Presentación {.unnumbered}
 
-Unidad didáctica del módulo **Desarrollo Web en Entorno Servidor** (DWES, 0613) · 2º DAW.
+Unidad didáctica del módulo **Desarrollo Web en Entorno Servidor** (DWES, 0613) | 2º DAW.
 IDX
 
   {
@@ -81,5 +81,5 @@ FMT
   rm -rf "$tmp"
 done
 
-echo "PDFs por unidad generados en $OUT:"
+echo "PDFs por UD generados en $OUT:"
 ls -1 "$OUT" || true

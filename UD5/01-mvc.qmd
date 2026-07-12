@@ -1,0 +1,179 @@
+# Separación de capas y patrón MVC {#sec-ud5-mvc}
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque trabaja **CE5.a** (ventajas de separar lógica y presentación) y **CE5.b** (mecanismos y frameworks que permiten la separación).
+:::
+
+## El problema: código espagueti
+
+Así hemos programado hasta ahora. Todo en el mismo fichero:
+
+```php
+<?php // producto.php — TODO mezclado (estilo UD2–UD4)
+session_start();
+$descuento = ($_SESSION['perfil'] ?? '') === 'socio' ? 0.9 : 1.0; // lógica
+$precioFinal = 25.50 * $descuento;
+?>
+<html><body>
+  <h1>Camiseta DAW</h1>            <!-- presentación -->
+  <p>Precio: <?= number_format($precioFinal, 2) ?> €</p>
+</body></html>
+```
+
+Salida en el navegador (visitante sin perfil de socio):
+
+```html
+<html><body>
+  <h1>Camiseta DAW</h1>
+  <p>Precio: 25.50 €</p>
+</body></html>
+```
+
+Ahora imagina que la tienda crece a 40 páginas y llegan tres peticiones de cambio:
+
+1. **"Cambiad el diseño entero"** → hay que editar 40 ficheros que contienen lógica crítica. Un `<div>` mal cerrado puede romper un cálculo.
+2. **"El descuento de socio pasa del 10% al 15%"** → el `0.9` está copiado en `producto.php`, `carrito.php` y `factura.php`. ¿Seguro que los encuentras todos?
+3. **"Queremos una app móvil que use los mismos precios"** → imposible: el cálculo está soldado al HTML.
+
+## La solución: capas
+
+Separamos la aplicación en tres responsabilidades:
+
+| Capa | Responde a… | Ejemplo |
+|---|---|---|
+| **Presentación** | ¿Cómo se muestra? | El HTML del catálogo |
+| **Lógica de negocio** | ¿Qué reglas aplican? | "Un socio tiene un 10% de descuento" |
+| **Datos** | ¿Dónde se guarda? | La tabla `productos`, la sesión |
+
+El mismo ejemplo, ya separado (todavía sin framework, PHP puro):
+
+```php
+<?php // logica/Precios.php — SOLO lógica de negocio
+class Precios
+{
+    public static function conDescuento(float $base, string $perfil): float
+    {
+        $descuento = $perfil === 'socio' ? 0.9 : 1.0;
+        return $base * $descuento;
+    }
+}
+```
+
+```php
+<?php // producto.php — SOLO coordina y presenta
+require 'logica/Precios.php';
+session_start();
+$precioFinal = Precios::conDescuento(25.50, $_SESSION['perfil'] ?? '');
+?>
+<html><body>
+  <h1>Camiseta DAW</h1>
+  <p>Precio: <?= number_format($precioFinal, 2) ?> €</p>
+</body></html>
+```
+
+La salida es **idéntica**, pero ahora:
+
+- El 15% de descuento se cambia en **una** línea de `Precios.php`.
+- La app móvil puede llamar a `Precios::conDescuento()` sin tocar HTML.
+- `Precios` se puede probar sin navegador: `Precios::conDescuento(100, 'socio')` debe devolver `90.0`. Siempre.
+
+::: {.callout-note title="Concepto clave"}
+Separar capas no es estética: es lo que hace el software **mantenible** (cada cambio toca una capa), **reutilizable** (una regla sirve a todas las vistas), **testeable** (la lógica se prueba sin navegador) y apto para **trabajar en equipo** (maquetación y programación en paralelo).
+:::
+
+## El patrón Modelo-Vista-Controlador
+
+MVC organiza esa separación en tres piezas con nombre propio:
+
+- **Modelo**: los datos y sus reglas. Sabe qué es un contacto y qué operaciones son válidas.
+- **Vista**: genera el HTML a partir de los datos que recibe. No decide nada.
+- **Controlador**: recibe la petición, pide datos al modelo y elige qué vista devolver.
+
+El flujo de **toda** petición es siempre el mismo. Para `GET /contactos`:
+
+1. El navegador pide `GET /contactos`.
+2. El **enrutador** decide qué controlador la atiende.
+3. El **controlador** pide los contactos al **modelo**.
+4. El modelo devuelve los datos.
+5. El controlador se los entrega a la **vista**.
+6. La vista genera el HTML, que vuelve al navegador.
+
+Visto con código orientativo (en el próximo bloque será Laravel real):
+
+```php
+// 2. Enrutador: /contactos → ContactoController::index()
+
+// 3–5. Controlador
+class ContactoController
+{
+    public function index()
+    {
+        $contactos = Contacto::todos();          // 3–4: pide al modelo
+        return vista('contactos', $contactos);   // 5: entrega a la vista
+    }
+}
+
+// 6. Vista: recorre $contactos y pinta <li> por cada uno
+```
+
+## ¿Y quién impone esta disciplina? Los frameworks
+
+Podrías montar MVC a mano, pero un **framework** te lo da hecho y con las decisiones difíciles ya tomadas: enrutado, plantillas, validación, sesiones. En PHP los más relevantes son:
+
+| Framework | Perfil |
+|---|---|
+| **Laravel** | Convención sobre configuración, ecosistema enorme (Blade, Eloquent, artisan), documentación excelente. El que usaremos. |
+| **Symfony** | Componentes desacoplados y muy configurables; de hecho Laravel usa varios por dentro. Curva de entrada mayor. |
+| **CodeIgniter** | Muy ligero y fácil de arrancar; menos convenciones y menor ecosistema. |
+
+::: {.callout-warning title="Errores frecuentes"}
+- Poner lógica en la vista "porque es solo un if". Ese `if` mañana son veinte.
+- Confundir *imprimir* un dato (presentación) con *calcularlo* (negocio).
+- Creer que MVC es cosa del framework: es una disciplina; el framework solo te ayuda a mantenerla.
+:::
+
+::: {#exr-UD5-1}
+
+### E5.1 · De espagueti a capas
+
+Se te entrega el fichero `tienda_espagueti.php`:
+
+```php
+<?php
+session_start();
+$productos = [
+    ['nombre' => 'Camiseta DAW', 'precio' => 25.50],
+    ['nombre' => 'Taza PHP',     'precio' => 12.00],
+    ['nombre' => 'Pegatinas',    'precio' => 3.75],
+];
+$perfil = $_SESSION['perfil'] ?? 'visitante';
+$descuento = $perfil === 'socio' ? 0.9 : 1.0;
+$ivaTipo = 0.21;
+?>
+<!DOCTYPE html>
+<html>
+<head><title>Tienda DAW</title></head>
+<body>
+  <h1>Catálogo (<?= $perfil ?>)</h1>
+  <ul>
+  <?php foreach ($productos as $p):
+      $conDescuento = $p['precio'] * $descuento;
+      $final = $conDescuento * (1 + $ivaTipo);
+  ?>
+      <li><?= $p['nombre'] ?> —
+          <?= number_format($final, 2) ?> €
+          <?php if ($descuento < 1): ?><em>(precio socio)</em><?php endif; ?>
+      </li>
+  <?php endforeach; ?>
+  </ul>
+</body>
+</html>
+```
+
+1. Copia el fichero y marca con comentarios `// PRESENTACIÓN`, `// NEGOCIO` o `// DATOS` cada zona del código.
+2. Escribe una tabla con **cinco ventajas** de separar capas, ilustrando cada una con un ejemplo de este fichero concreto (p. ej.: "si cambia el IVA hay que editar un fichero con HTML").
+3. Dibuja el diagrama de flujo de la petición `GET /productos` en una arquitectura MVC, nombrando los componentes y qué viaja entre ellos.
+4. Busca información sobre **dos** frameworks MVC de PHP distintos de Laravel y compáralos con él en un párrafo.
+
+*Entrega apto/no apto: se considera apto si la clasificación de capas es correcta, la tabla tiene los cinco ejemplos anclados al fichero y el diagrama refleja los seis pasos del flujo.*
+:::

@@ -1,32 +1,49 @@
 ---
-title: "Servidor Web y servidor de aplicaciones"
+title: "Servidor web y servidor de aplicaciones"
 ---
 
-::: {.callout-important title="Normativa · RA-CE"}
-Este bloque desarrolla **CE1.d** («se han reconocido las funcionalidades que aportan los servidores de aplicaciones y su integración con los servidores Web»), según RD 686/2010, Anexo II.
-:::
+En conversaciones informales se habla de «el servidor» como si fuera una única pieza. En la práctica, en una arquitectura web real suelen coexistir al menos dos tipos de servidor con responsabilidades distintas.
 
-Aunque coloquialmente se habla de «el servidor» como si fuera una única pieza de software, en arquitecturas Web reales conviven distintos tipos de servidor, cada uno con una responsabilidad específica.
+## El servidor web
 
-## El servidor Web
+El servidor web (Apache, Nginx, IIS) es el punto de entrada: recibe peticiones HTTP y decide qué hacer con ellas.
 
-Un servidor Web (Apache HTTP Server, Nginx, IIS) es el software responsable de:
+Lo que sabe hacer solo:
 
-- Recibir peticiones HTTP/HTTPS y enviar respuestas, gestionando los detalles del protocolo.
-- Servir directamente ficheros estáticos (HTML, CSS, JS, imágenes) desde el sistema de ficheros.
-- Delegar la ejecución de código dinámico al mecanismo correspondiente (módulo embebido, FastCGI, proxy inverso hacia otro proceso).
-- Gestionar aspectos transversales: compresión, caché, certificados TLS, control de acceso por IP, registro de logs.
+- Devolver ficheros estáticos (HTML, CSS, imágenes, JS).
+- Gestionar TLS, compresión, caché y logs.
+- Redirigir o reescribir URLs.
+
+Lo que **no** sabe hacer solo: ejecutar PHP, Python o cualquier otro código. Para eso delega en otro componente (FastCGI, módulo embebido, proxy hacia un servidor de aplicaciones).
 
 ## El servidor de aplicaciones
 
-Un servidor de aplicaciones (Apache Tomcat, JBoss/WildFly, Microsoft IIS con .NET) añade un nivel superior de funcionalidad orientado a ejecutar lógica de negocio compleja:
+El servidor de aplicaciones ejecuta la lógica de negocio y ofrece servicios de infraestructura que un servidor web no proporciona:
 
-- Mantiene en memoria el estado de la aplicación entre peticiones (sesiones, pools de conexión a bases de datos, objetos de negocio).
-- Ofrece servicios de infraestructura: transacciones distribuidas, balanceo de carga interno, gestión de hilos, seguridad declarativa.
-- En el ecosistema Java EE, es el contenedor que ejecuta Servlets, JSP y EJB.
+- Mantiene en memoria el estado de la aplicación entre peticiones (sesiones, pools de conexión a la BD).
+- Gestiona transacciones, seguridad declarativa y balanceo de carga interno.
+- En Java EE, es el contenedor que ejecuta Servlets, JSP y EJB (Tomcat, JBoss, WildFly).
+
+## Cómo cooperan
+
+Una arquitectura típica con ambos:
+
+```text
+Navegador
+   │  HTTP
+   ▼
+Nginx  ──── ficheros estáticos ──▶ respuesta directa
+   │
+   │  petición dinámica
+   ▼
+PHP-FPM / Tomcat  ──▶ lógica + BD  ──▶ HTML generado
+   │
+   ▼
+Nginx devuelve la respuesta al navegador
+```
 
 ::: {.callout-note title="Concepto clave"}
-**Cómo cooperan ambos servidores.** En muchas arquitecturas, el servidor Web actúa como punto de entrada y proxy inverso: recibe todas las peticiones, sirve directamente lo estático, y reenvía las peticiones dinámicas al servidor de aplicaciones, que las procesa y devuelve el resultado al servidor Web para que este lo entregue al cliente. En el ecosistema PHP esta separación suele ser menos visible porque PHP-FPM cumple un papel similar al de un servidor de aplicaciones ligero, integrado estrechamente con el servidor Web.
+En el ecosistema PHP, PHP-FPM hace el papel de servidor de aplicaciones ligero: mantiene procesos activos en un pool y los reutiliza. No ofrece transacciones distribuidas ni servicios empresariales, pero cubre la mayoría de los casos de uso web.
 :::
 
 ## Ejercicio E1.3 {#exr-UD1-3}
@@ -34,13 +51,27 @@ Un servidor de aplicaciones (Apache Tomcat, JBoss/WildFly, Microsoft IIS con .NE
 ::: {#exr-UD1-3}
 **Identificación de roles en una arquitectura real**
 
-Se presenta un diagrama simplificado de una arquitectura de producción con los siguientes componentes: navegador, balanceador de carga, dos instancias de Nginx, un clúster de tres procesos PHP-FPM y un servidor de base de datos MySQL.
+La siguiente arquitectura de producción tiene estos componentes:
 
-**Tarea:** 
+```text
+Internet
+   │
+   ▼
+Balanceador de carga
+   │              │
+   ▼              ▼
+Nginx #1       Nginx #2
+   │
+   ▼
+PHP-FPM (pool de 3 procesos)
+   │
+   ▼
+MySQL
+```
 
-1. Señala qué elemento actúa como **servidor Web**.
-2. Identifica el componente que más se aproxima al concepto de **servidor de aplicaciones** y justifica por qué, indicando también en qué se diferencia de un servidor de aplicaciones en sentido estricto.
-3. Explica por qué el **balanceador de carga** no es ni servidor Web ni servidor de aplicaciones.
+Responde:
 
-Se realiza individualmente con corrección oral en gran grupo.
+1. ¿Qué componente actúa como **servidor web**?
+2. ¿Qué componente se aproxima más al concepto de **servidor de aplicaciones**? Justifica por qué y señala en qué se diferencia de un servidor de aplicaciones en sentido estricto.
+3. ¿Por qué el balanceador de carga **no es** ni servidor web ni servidor de aplicaciones?
 :::

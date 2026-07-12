@@ -1,95 +1,68 @@
 ---
-title: "Identificación, RA y objetivos"
+title: "Presentación de la unidad"
 ---
 
-# UD3 · Estructuras de control en PHP {.unnumbered}
+# UD3. Estructuras de control en PHP {.unnumbered}
 
 **Condicionales, bucles, funciones y formularios**
 
-> **Módulo:** Desarrollo Web en Entorno Servidor (0613) · **Curso:** 2º DAW  
-> **Duración:** 19 horas (9 sesiones de 2 h + 1 sesión de 1 h)
+---
+
+## Qué aprenderás
+
+Al terminar la unidad sabrás:
+
+- Tomar decisiones en tu código con `if`, `switch` y `match`.
+- Repetir operaciones con `while`, `for` y `foreach`.
+- Almacenar colecciones de datos con arrays indexados, asociativos y multidimensionales.
+- Organizar tu código en funciones reutilizables.
+- Crear formularios HTML y recoger los datos que envía el usuario.
 
 ---
 
-## Identificación de la unidad
+## Resultados de Aprendizaje y Criterios de Evaluación
 
-| Campo | Detalle |
+> **RA3.** Escribe bloques de sentencias embebidos en lenguajes de marcas, seleccionando y utilizando las estructuras de programación.
+
+| CE | Qué se evalúa |
 |---|---|
-| **Horas totales** | 19 h — 9 sesiones de 2 h + 1 sesión de 1 h |
-| **Resultado de Aprendizaje** | RA3 — Escribe bloques de sentencias embebidos en lenguajes de marcas, seleccionando y utilizando las estructuras de programación |
-| **Criterios de Evaluación** | CE3.a · CE3.b · CE3.c · CE3.d · CE3.e · CE3.f · CE3.g |
-| **Normativa** | RD 686/2010, Anexo II · Decreto 114/2025, DOGV núm. 10165 (04/08/2025) |
-
-Esta unidad da continuidad a la progresión **sintaxis embebida (UD2) → estructuras de control (UD3)**, sin solapamiento de contenidos entre ambas.
-
----
-
-## Resultado de Aprendizaje y Criterios de Evaluación
-
-::: {.callout-important title="Normativa · RA-CE"}
-**RA3.** Escribe bloques de sentencias embebidos en lenguajes de marcas, seleccionando y utilizando las estructuras de programación.
-
-*RD 686/2010, Anexo II — criterios no modificados por RD 405/2023 para este módulo.*
-:::
-
-### Criterios de evaluación y ponderación
-
-| CE | Descripción (RD 686/2010, Anexo II) | Peso |
-|---|---|---|
-| CE3.a | Se han utilizado mecanismos de decisión en la creación de bloques de sentencias. | 12 % |
-| CE3.b | Se han utilizado bucles y se ha verificado su funcionamiento. | 15 % |
-| CE3.c | Se han utilizado matrices (arrays) para almacenar y recuperar conjuntos de datos. | 18 % |
-| CE3.d | Se han creado y utilizado funciones. | 20 % |
-| CE3.e | Se han utilizado formularios web para interactuar con el usuario del navegador web. | 15 % |
-| CE3.f | Se han empleado métodos para recuperar la información introducida en el formulario. | 15 % |
-| CE3.g | Se han añadido comentarios al código. | 5 % |
-
-> La ponderación es propuesta del docente conforme a la metodología del módulo (la normativa no pondera los CE). Otorga mayor peso relativo a arrays y funciones, núcleo competencial más exigente en 2º DAW.
+| CE3.a | Uso de estructuras condicionales |
+| CE3.b | Uso de bucles |
+| CE3.c | Uso de arrays |
+| CE3.d | Creación y uso de funciones |
+| CE3.e | Uso de formularios web |
+| CE3.f | Recogida de datos del formulario |
+| CE3.g | Comentarios en el código *(transversal)* |
 
 ---
 
-## Objetivos de la unidad
+## Materiales
 
-Al finalizar la unidad, el alumnado será capaz de:
-
-1. Seleccionar y aplicar estructuras condicionales (`if/elseif/else`, `switch`, `match`) para controlar el flujo de ejecución de un script PHP embebido.
-2. Construir bucles (`while`, `do-while`, `for`, `foreach`) y verificar su correcto funcionamiento, incluyendo el control de niveles de anidamiento.
-3. Crear y manipular arrays indexados, asociativos y multidimensionales para almacenar y recuperar conjuntos de datos.
-4. Diseñar y utilizar funciones propias, con parámetros, valores de retorno y control de ámbito, como mecanismo de modularización del código.
-5. Construir formularios HTML funcionales y seleccionar el método de envío (GET/POST) adecuado a cada caso de uso.
-6. Recoger y validar la información enviada desde un formulario web mediante las superglobales de PHP.
-7. Documentar el código mediante comentarios claros y consistentes con las convenciones del lenguaje.
+- Servidor local PHP (XAMPP, MAMP o equivalente) y VS Code.
+- Navegador con herramientas de desarrollador (F12).
+- [Documentación oficial de PHP](https://www.php.net/manual/es/)
 
 ---
 
-## Recursos y materiales
-
-- Equipo informático con servidor local PHP (XAMPP, MAMP o equivalente) y editor de código (VS Code recomendado).
-- Navegador web con herramientas de desarrollador para inspección de peticiones GET/POST.
-- [Documentación oficial de PHP](https://www.php.net/manual/es/) (`php.net/manual/es`).
-- Apuntes y diapositivas de la unidad (disponibles en el aula virtual).
-- Enunciados de los ejercicios prácticos de la unidad.
-
----
-
-## Mapa de contenidos
-
-La unidad se organiza en seis bloques con progresión interna: de las estructuras de decisión e iteración más básicas (heredadas conceptualmente de Java) hacia las estructuras de datos y modularización propias de PHP, terminando en su aplicación real sobre un formulario web.
+## Contenidos
 
 ```
-Bloque 1 · Condicionales (CE3.a)
-    ↓
-Bloque 2 · Bucles (CE3.b)
-    ↓
-Bloque 3 · Arrays (CE3.c)
-    ↓
-Bloque 4 · Funciones (CE3.d)
-    ↓
-Bloque 5 · Formularios HTML (CE3.e)
-    ↓
-Bloque 6 · Recogida de datos del formulario (CE3.f)
+Bloque 1 · Condicionales
+Bloque 2 · Bucles
+Bloque 3 · Arrays
+Bloque 4 · Funciones
+Bloque 5 · Formularios HTML
+Bloque 6 · Recogida y validación de datos
 ```
+
+---
+
+## Evaluación
+
+Los ejercicios de práctica son de **apto / no apto** y tienen un peso pequeño en la nota final. El grueso de la calificación recae en el **examen de la unidad**.
+
+---
 
 ::: {.callout-note title="Concepto clave"}
-El criterio **CE3.g** (comentarios al código) no se trabaja como bloque independiente: es transversal a los seis bloques y a las nueve actividades prácticas de la unidad. Todo el código que se entregue debe incluir, como mínimo, un comentario de cabecera por función y comentarios en los bloques de lógica más compleja.
+Los comentarios (**CE3.g**) son obligatorios en todos los ejercicios: como mínimo un bloque PHPDoc en cada función y comentarios de línea en la lógica más compleja.
 :::

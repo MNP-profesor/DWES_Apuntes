@@ -1,0 +1,126 @@
+# Configuración de la aplicación por entornos {#sec-ud5-configuracion}
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque trabaja **CE5.e**: identificar y aplicar los parámetros de configuración de la aplicación web.
+:::
+
+Tu agenda va a ejecutarse en tres sitios: tu portátil, el servidor de pruebas del centro y (algún día) producción. El código es **idéntico** en los tres; lo que cambia es la configuración.
+
+## La cadena completa: `.env` → `config/` → `config()`
+
+Ya la usaste en @sec-ud5-instalacion; ahora la explotamos entera.
+
+```bash
+# .env — desarrollo               # .env — producción
+APP_ENV=local                     APP_ENV=production
+APP_DEBUG=true                    APP_DEBUG=false
+SESSION_DRIVER=file               SESSION_DRIVER=database
+```
+
+Mismo proyecto, comportamiento distinto según la máquina. Nada de esto requiere tocar código.
+
+## `APP_DEBUG`: el parámetro crítico
+
+Provoca un error a propósito (por ejemplo, llama a una función inexistente en una ruta) y compara:
+
+**Con `APP_DEBUG=true` (desarrollo)** — el navegador muestra la página de error completa de Laravel:
+
+```
+Call to undefined function noExiste()
+
+routes/web.php : 15
+    13  Route::get('/error', function () {
+    14      // ...
+  ▶ 15      return noExiste();
+    16  });
+
+Stack trace, variables de entorno, consultas SQL ejecutadas…
+```
+
+**Con `APP_DEBUG=false` (producción)** — el visitante solo ve:
+
+```
+500 | SERVER ERROR
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+Desplegar con `APP_DEBUG=true` es un fallo de seguridad grave: la traza expone rutas del servidor, fragmentos de código, consultas y potencialmente credenciales **a cualquier visitante**. Es de los primeros parámetros que revisa cualquier auditoría.
+:::
+
+## Configuración propia: `config/agenda.php`
+
+Puedes crear tus propios ficheros de configuración. Creamos `config/agenda.php`:
+
+```php
+<?php // config/agenda.php
+
+return [
+    'por_pagina' => env('AGENDA_POR_PAGINA', 10),
+    'centro'     => env('AGENDA_CENTRO', 'IES —'),
+    'favoritos'  => env('AGENDA_FAVORITOS', true),
+];
+```
+
+```bash
+# .env
+AGENDA_POR_PAGINA=5
+AGENDA_CENTRO="IES del Grau"
+AGENDA_FAVORITOS=true
+```
+
+Y se consume desde cualquier punto de la aplicación con `config('agenda.clave')`:
+
+```php
+// En el controlador: paginación del listado
+$contactos = Contacto::orderBy('nombre')
+    ->paginate(config('agenda.por_pagina'));
+```
+
+```php
+{{-- En el layout: pie y menú condicional --}}
+<footer>{{ config('agenda.centro') }} · 2º DAW</footer>
+
+@if (config('agenda.favoritos'))
+    <a href="{{ route('favoritos.index') }}">
+        Favoritos ({{ count(session('favoritos', [])) }})
+    </a>
+@endif
+```
+
+Efecto de cada cambio en `.env` (tras reiniciar el servidor):
+
+| Cambio en `.env` | Efecto visible |
+|---|---|
+| `AGENDA_POR_PAGINA=2` | El listado muestra 2 contactos por página con paginador |
+| `AGENDA_CENTRO="IES Nou"` | El pie de todas las páginas cambia |
+| `AGENDA_FAVORITOS=false` | El enlace Favoritos desaparece del menú en toda la aplicación |
+| *(quitar la línea)* | Se aplican los valores por defecto del fichero `config/` |
+
+::: {.callout-note title="Concepto clave"}
+Un parámetro bien diseñado tiene **tres niveles**: valor por defecto razonable en `config/` (el proyecto funciona recién clonado), valor por máquina en `.env`, y lectura única en el código con `config()`. Si te encuentras un número mágico repetido por el código (elementos por página, nombre del centro…), probablemente debería ser configuración.
+:::
+
+## Configuración en producción: la caché
+
+En producción, Laravel compila toda la configuración a un único fichero para acelerar:
+
+```bash
+php artisan config:cache
+```
+
+```
+   INFO  Configuration cached successfully.
+```
+
+Desde ese momento `.env` **deja de leerse** en cada petición: si cambias algo, vuelve a ejecutar `config:cache` (o `config:clear` en desarrollo). Y esta es la razón de fondo de la regla de @sec-ud5-instalacion: con la caché activa, `env()` fuera de `config/` devuelve `null`.
+
+::: {#exr-UD5-7}
+
+### E5.7 · La agenda configurable
+
+1. Crea `config/agenda.php` con al menos **tres parámetros propios** (contactos por página, nombre del centro, activación de favoritos) alimentados desde `.env` y con valores por defecto.
+2. Haz que la aplicación consuma los tres (paginación del listado, pie del layout, menú condicional) usando exclusivamente `config()`.
+3. Simula el paso a producción: cambia `APP_ENV` y `APP_DEBUG`, provoca un error y compara con capturas lo que ve el usuario en cada entorno, justificando en 3–4 líneas el riesgo de `APP_DEBUG=true` en producción.
+
+*Entrega apto/no apto: los tres parámetros operativos con sus valores por defecto y la comparativa de entornos documentada.*
+:::

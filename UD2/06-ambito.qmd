@@ -2,100 +2,166 @@
 title: "Bloque 4 · Ámbito de las variables"
 ---
 
-## Ámbito de las variables
+## Ámbito global y local
 
 ::: {.callout-note title="Concepto clave"}
-El **ámbito** (*scope*) determina en qué parte del programa es accesible una variable. En PHP:
-
-- Una variable declarada en el cuerpo principal tiene **ámbito global**.
-- Una variable declarada dentro de una función tiene **ámbito local**: no es visible desde fuera de la función, ni la función puede ver las variables globales de forma automática.
+En PHP, una función **no puede leer ni modificar** las variables del exterior a menos que se lo indiquemos explícitamente. Las variables declaradas dentro de una función son locales y desaparecen al salir de ella.
 :::
-
-::: {.callout-tip title="Analogía Java"}
-En Java, un método de una clase sí puede acceder directamente a los atributos de instancia (`this.contador`) sin declaración extra. En PHP esto **no ocurre**: una función no puede leer una variable global a menos que se lo indiquemos explícitamente. Este es el punto de diferencia más sorprendente para quien viene de Java.
-:::
-
-## La palabra clave `global`
-
-Para que una función acceda o modifique una variable global, debe declararla dentro de la función con `global`:
 
 ```php
+<?php
 $contador = 0;
 
-function incrementar(): int {
-    global $contador;   // "quiero trabajar con la variable global $contador"
+function incrementar() {
+    $contador++;           // crea una variable LOCAL $contador
+    return $contador;
+}
+
+echo incrementar();  // 1
+echo incrementar();  // 1  ← siempre 1: la local empieza en 0 cada vez
+echo $contador;      // 0  ← la global no fue tocada
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+Este es el punto más sorprendente para quien llega de otros lenguajes: aunque exista una variable `$contador` fuera de la función, PHP no la ve dentro. Crea una **nueva variable local** con el mismo nombre.
+:::
+
+## `global` — acceder a una variable del exterior
+
+```php
+<?php
+$contador = 0;
+
+function incrementar() {
+    global $contador;     // ahora sí: usa la variable del exterior
     $contador++;
     return $contador;
 }
 
 echo incrementar();  // 1
 echo incrementar();  // 2
-echo $contador;      // 2 — la función sí modificó la variable global
+echo incrementar();  // 3
+echo $contador;      // 3  ← la global sí fue modificada
 ```
 
-Sin `global`, PHP crearía una **variable local nueva** con el mismo nombre, independiente de la global:
+Varios `global` en la misma función:
 
 ```php
-$contador = 0;
+<?php
+$visitas = 0;
+$errores = 0;
 
-function incrementarRoto(): int {
-    $contador++;         // crea una variable LOCAL $contador, comienza en 0
-    return $contador;    // siempre devuelve 1
+function registrar(bool $exito) {
+    global $visitas, $errores;
+    $visitas++;
+    if (!$exito) {
+        $errores++;
+    }
 }
 
-echo incrementarRoto();  // 1
-echo incrementarRoto();  // 1  ← siempre 1: la variable local no persiste entre llamadas
-echo $contador;          // 0  ← la global no fue tocada
+registrar(true);
+registrar(true);
+registrar(false);
+
+echo "Visitas: $visitas, Errores: $errores";
+// → Visitas: 3, Errores: 1
 ```
 
-::: {.callout-warning title="Errores frecuentes"}
-Olvidar `global` es el error más frecuente con el ámbito en PHP. Los síntomas: la función siempre devuelve el mismo valor (porque la variable local se reinicia a `0` o `null` en cada llamada) y la variable global no cambia nunca aunque la función parezca modificarla.
-:::
+## `static` — variable local que recuerda su valor
 
-## La palabra clave `static`
-
-`static` permite que una variable **local** conserve su valor entre llamadas, sin necesidad de recurrir al ámbito global:
+Con `static`, la variable es local (no accesible desde fuera) pero conserva su valor entre llamadas:
 
 ```php
-function contadorStatic(): int {
-    static $veces = 0;  // se inicializa solo en la primera llamada
-    $veces++;
-    return $veces;
+<?php
+function contarLlamadas() {
+    static $n = 0;   // se inicializa solo la primera vez
+    $n++;
+    return $n;
 }
 
-echo contadorStatic();  // 1
-echo contadorStatic();  // 2
-echo contadorStatic();  // 3
+echo contarLlamadas();  // 1
+echo contarLlamadas();  // 2
+echo contarLlamadas();  // 3
+// $n no existe fuera de la función
 ```
 
-::: {.callout-tip title="Analogía Java"}
-`static` en PHP es conceptualmente similar a una variable de clase (`static`) en Java que se usa como contador de instancias: conserva su valor entre llamadas al método, sin estar expuesta al exterior. La diferencia es que en PHP la variable `static` es local a la función, invisible desde fuera, mientras que en Java un campo `static` es accesible a través de la clase.
-:::
+Comparación directa de las tres estrategias:
 
-### Comparativa de las tres estrategias
+```php
+<?php
+$global_n = 0;
 
-| Estrategia | Persiste entre llamadas | Accesible desde fuera | Riesgo |
-|---|:---:|:---:|---|
-| Variable local normal | No | No | Siempre empieza en cero/null |
-| `global` | Sí (variable externa) | Sí | Cualquier código puede modificarla |
-| `static` | Sí (variable local) | No | Mínimo: encapsulada en la función |
+function conGlobal(): int {
+    global $global_n;
+    return ++$global_n;
+}
+
+function conStatic(): int {
+    static $n = 0;
+    return ++$n;
+}
+
+function sinMemoria(): int {
+    $n = 0;
+    return ++$n;
+}
+
+// Cuatro llamadas a cada una:
+echo conGlobal()  . " ";  // 1
+echo conGlobal()  . " ";  // 2
+echo conGlobal()  . " ";  // 3
+echo conGlobal()  . "\n"; // 4
+
+echo conStatic()  . " ";  // 1
+echo conStatic()  . " ";  // 2
+echo conStatic()  . " ";  // 3
+echo conStatic()  . "\n"; // 4
+
+echo sinMemoria() . " ";  // 1
+echo sinMemoria() . " ";  // 1
+echo sinMemoria() . " ";  // 1
+echo sinMemoria() . "\n"; // 1
+```
+
+Salida:
+
+```
+1 2 3 4
+1 2 3 4
+1 1 1 1
+```
+
+La diferencia entre `global` y `static`:
+
+| | `global` | `static` |
+|---|---|---|
+| ¿Persiste entre llamadas? | Sí (es la variable exterior) | Sí (variable local especial) |
+| ¿Accesible desde fuera? | Sí | No |
+| ¿Puede modificarla otro código? | Sí, cualquier parte del script | No, solo esta función |
 
 : {.striped}
 
+Para un sistema real, `static` es preferible: encapsula el estado dentro de la función y evita que otro código la modifique por error.
+
 ::: {#exr-UD2-9}
-### E2.9 — Sistema de tickets con tres estrategias de ámbito
+### E2.9 — Sistema de tickets
 
-Implementa tres funciones independientes que numeren tickets de soporte, cada una con una estrategia distinta:
+Crea `tickets.php` e implementa tres funciones que numeren tickets:
 
-1. `generarTicketGlobal()`: usa una variable global `$ultimo_ticket`, accedida con `global`.
-2. `generarTicketStatic()`: usa una variable local `static`, sin tocar nada externo a la función.
-3. `generarTicketRoto()`: declara una variable local **sin** `static` y **sin** `global`, e incrementa esa variable local en cada llamada (a propósito, para observar que no conserva el valor).
+- `ticketGlobal()` — usa `global`
+- `ticketStatic()` — usa `static`
+- `ticketRoto()` — variable local sin `static` ni `global`
 
-Pasos:
+Llama a cada función 4 veces y muestra los 12 resultados en una tabla HTML con una columna por función.
 
-- Llama a cada una de las tres funciones **4 veces** seguidas.
-- Muestra los resultados de las 12 llamadas en una tabla HTML comparativa con una columna por función.
-- Añade un párrafo explicando por qué `generarTicketRoto()` siempre devuelve el mismo número, y cuál de las otras dos estrategias recomendarías para un sistema real de numeración de tickets, justificando la respuesta en términos de seguridad y mantenibilidad del código.
+Añade un párrafo explicando por qué `ticketRoto()` siempre devuelve 1 y qué estrategia recomendarías para un sistema real.
 
-**Resultado esperado:** `generarTicketGlobal()` y `generarTicketStatic()` deben producir la serie 1, 2, 3, 4. `generarTicketRoto()` debe devolver siempre 1, porque la variable local se reinicia en cada llamada.
+Resultado esperado de la tabla:
+
+| Llamada | ticketGlobal() | ticketStatic() | ticketRoto() |
+|:---:|:---:|:---:|:---:|
+| 1 | 1 | 1 | 1 |
+| 2 | 2 | 2 | 1 |
+| 3 | 3 | 3 | 1 |
+| 4 | 4 | 4 | 1 |
 :::

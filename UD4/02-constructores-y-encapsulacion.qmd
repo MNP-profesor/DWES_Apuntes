@@ -1,0 +1,116 @@
+# Constructores y encapsulación
+
+## Constructores y `$this`
+
+`__construct()` se ejecuta automáticamente al crear el objeto con `new`. `$this` es la referencia al objeto actual dentro de un método.
+
+::: {.callout-note title="Concepto clave"}
+Un buen constructor obliga a que el objeto nazca ya con datos válidos, evitando el patrón "creo el objeto vacío y lo relleno después".
+:::
+
+```php
+class Producto {
+    public string $nombre;
+    public float $precio;
+
+    public function __construct(string $nombre, float $precio) {
+        $this->nombre = $nombre;
+        $this->precio = $precio;
+    }
+}
+
+$p = new Producto('Teclado', 25.90);
+echo $p->nombre; // Teclado
+```
+
+Más ejemplos:
+
+```php
+class Punto {
+    public float $x;
+    public float $y;
+
+    public function __construct(float $x, float $y) {
+        $this->x = $x;
+        $this->y = $y;
+    }
+
+    public function distanciaAlOrigen(): float {
+        return sqrt($this->x ** 2 + $this->y ** 2);
+    }
+}
+
+$origen = new Punto(3, 4);
+echo $origen->distanciaAlOrigen(); // 5
+```
+
+```php
+class CuentaBancaria {
+    public string $titular;
+    public float $saldo;
+
+    public function __construct(string $titular, float $saldoInicial = 0) {
+        $this->titular = $titular;
+        $this->saldo = $saldoInicial;
+    }
+}
+
+$cuenta = new CuentaBancaria('Ana');       // saldo por defecto: 0
+$cuenta2 = new CuentaBancaria('Luis', 500); // saldo inicial: 500
+echo $cuenta->saldo;  // 0
+echo $cuenta2->saldo; // 500
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+Si declaras una propiedad tipada (`public float $saldo;`) y no la inicializas ni en el constructor ni con un valor por defecto, PHP lanza un error al intentar leerla antes de asignarla. Da siempre un valor inicial, aunque sea `0` o `''`.
+:::
+
+## Encapsulación: visibilidad, getters y setters
+
+Tres niveles de visibilidad: `public` (accesible desde cualquier lugar), `protected` (clase y subclases) y `private` (solo la propia clase).
+
+```php
+class Usuario {
+    private string $passwordHash;
+
+    public function setPassword(string $passwordPlano): void {
+        $this->passwordHash = password_hash($passwordPlano, PASSWORD_DEFAULT);
+    }
+
+    public function verificarPassword(string $passwordPlano): bool {
+        return password_verify($passwordPlano, $this->passwordHash);
+    }
+}
+
+$u = new Usuario();
+$u->setPassword('MiClave123');
+var_dump($u->verificarPassword('MiClave123')); // true
+var_dump($u->verificarPassword('otraClave'));  // false
+```
+
+Getters/setters con validación, ejemplo típico:
+
+```php
+class Producto {
+    private float $precio;
+
+    public function setPrecio(float $precio): void {
+        if ($precio < 0) {
+            throw new InvalidArgumentException('El precio no puede ser negativo');
+        }
+        $this->precio = $precio;
+    }
+
+    public function getPrecio(): float {
+        return $this->precio;
+    }
+}
+
+$p = new Producto();
+$p->setPrecio(19.99);
+echo $p->getPrecio(); // 19.99
+```
+
+::: {.callout-note title="Concepto clave"}
+Regla práctica: si un dato es sensible (contraseñas) o necesita validación (precios, edades), hazlo `private` y expón getters/setters. Si es un dato simple sin restricciones, `public` es suficiente.
+:::

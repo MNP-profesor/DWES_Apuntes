@@ -2,121 +2,241 @@
 title: "Bloque 3 · Directivas y operadores"
 ---
 
-## Directivas: modificando el comportamiento predeterminado
+## Directivas de error
 
-::: {.callout-note title="Concepto clave"}
-Una **directiva** no forma parte de la lógica de negocio del programa: configura cómo se comporta el propio intérprete de PHP. No generan salida HTML; actúan sobre el motor antes de que empiece la ejecución del resto del script.
-:::
+Las directivas configuran el comportamiento del intérprete, no generan salida HTML.
 
-### Directivas de notificación de errores
-
-Las más relevantes al iniciarse son las que controlan qué errores se muestran y dónde:
+### Mostrar errores en desarrollo
 
 ```php
 <?php
-error_reporting(E_ALL);            // notificar todos los tipos de error
-ini_set('display_errors', '1');    // mostrar errores en pantalla (desarrollo)
-ini_set('display_errors', '0');    // ocultarlos al usuario (producción)
-ini_set('log_errors',     '1');    // guardarlos en el log del servidor (producción)
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
+echo $variable_que_no_existe;  // Warning: Undefined variable
+echo 10 / 0;                   // Warning: Division by zero
 ```
 
-::: {.callout-warning title="Errores frecuentes"}
-Mostrar errores detallados en producción puede revelar rutas del servidor, nombres de tablas de la base de datos o credenciales. La regla es: **`display_errors = 1` solo en desarrollo local; siempre `0` en el servidor de producción**. Activar `log_errors` en producción para no perder la información.
-:::
+Salida visible en pantalla:
+
+```
+Warning: Undefined variable $variable_que_no_existe in /var/www/html/test.php on line 4
+Warning: Division by zero in /var/www/html/test.php on line 5
+```
+
+### Ocultar errores en producción
+
+```php
+<?php
+ini_set('display_errors', '0');
+ini_set('log_errors',     '1');   // guardar en el log del servidor
+
+echo $variable_que_no_existe;  // El error ocurre pero el usuario no lo ve
+echo 10 / 0;
+```
+
+Salida visible: *(nada — la página parece funcionar, pero el log del servidor registra los errores)*
 
 ### `declare(strict_types=1)`
 
-Esta directiva obliga a que los tipos de los parámetros de las funciones tipadas coincidan exactamente, desactivando la conversión automática. Debe ser la **primera sentencia ejecutable** del archivo:
+Obliga a que los tipos de los parámetros de funciones tipadas coincidan exactamente. Debe ser la **primera línea** del archivo:
 
 ```php
 <?php
 declare(strict_types=1);
 
-// A partir de aquí, las funciones tipadas exigen el tipo exacto,
-// igual que en Java con tipos primitivos.
-
-function sumar(int $a, int $b): int {
-    return $a + $b;
+function duplicar(int $n): int {
+    return $n * 2;
 }
 
-sumar(3, 5);     // OK
-sumar("3", 5);   // TypeError: sin strict_types PHP convertiría "3" a 3;
-                 // con strict_types lanza excepción.
+echo duplicar(5);     // 10
+echo duplicar("5");   // TypeError: sin strict_types PHP convertiría "5" a 5 automáticamente;
+                      // con strict_types lanza excepción
 ```
 
-::: {.callout-tip title="Analogía Java"}
-`declare(strict_types=1)` aproxima PHP al comportamiento por defecto de Java con tipos primitivos: una función que espera un `int` rechaza un `String` sin conversión explícita. Sin esta directiva, PHP convierte silenciosamente, lo que puede enmascarar errores de tipo.
-:::
-
 ::: {#exr-UD2-7}
-### E2.7 — Comparativa de entornos: desarrollo vs. producción
+### E2.7 — Desarrollo vs. producción
 
-1. Crea un script que contenga, a propósito, dos errores: una variable no definida usada en un `echo`, y una división entre cero.
-2. Configura las directivas para mostrar todos los errores y ejecuta el script, anotando exactamente qué avisos/errores aparecen en pantalla.
-3. Cambia las directivas al modo «producción» (sin mostrar errores al usuario) y comprueba que la página ya no muestra los avisos, aunque los errores sigan ocurriendo internamente.
-4. Añade `declare(strict_types=1)` al principio del archivo y explica, en un comentario, qué cambiaría si este script tuviera una función con un parámetro tipado como `int` y se le pasara un string numérico.
+Crea `errores.php` con este código de partida:
 
-**Resultado esperado:** en modo desarrollo deben verse claramente los 2 problemas; en modo producción la página no debe mostrar ningún error visible al usuario, aunque el comportamiento interno siga siendo incorrecto.
+```php
+<?php
+// Configura aquí las directivas
+
+$x = $variable_indefinida + 5;
+$y = 10 / 0;
+
+echo "x = $x, y = $y";
+```
+
+1. Configura el modo desarrollo y anota exactamente qué mensajes aparecen.
+2. Cambia a modo producción y describe qué ve el usuario.
+3. Añade `declare(strict_types=1)` y explica en un comentario qué cambiaría si `$variable_indefinida` fuera el parámetro de una función tipada como `int`.
 :::
 
 ## Operadores
 
-PHP dispone de las categorías de operadores habituales en cualquier lenguaje imperativo, con una sintaxis casi idéntica a Java:
-
-| Categoría | Operadores | Ejemplo |
-|---|---|---|
-| **Aritméticos** | `+` `-` `*` `/` `%` `**` | `$a % $b` (resto) · `$a ** 2` (potencia — no existe en Java) |
-| **Asignación** | `=` `+=` `-=` `*=` `/=` `.=` | `$total += 10;` |
-| **Comparación** | `==` `===` `!=` `!==` `<` `>` `<=` `>=` | `$a === $b` |
-| **Lógicos** | `&&` `\|\|` `!` `and` `or` | `($edad >= 18) && $tiene_carnet` |
-| **Concatenación** | `.` `.=` | `"Hola " . $nombre` *(en Java sería `+`)* |
-
-: {.striped}
-
-### Precedencia de operadores
-
-Cuando una expresión combina varios operadores, PHP los resuelve por precedencia, igual que Java. Ante cualquier duda, conviene usar paréntesis explícitos:
+### Aritméticos
 
 ```php
-$resultado  = 2 + 3 * 4;      // 14 — la multiplicación va primero
-$resultado2 = (2 + 3) * 4;    // 20 — el paréntesis fuerza el orden
+<?php
+$a = 17;
+$b = 5;
+
+echo $a + $b;   // 22
+echo $a - $b;   // 12
+echo $a * $b;   // 85
+echo $a / $b;   // 3.4
+echo $a % $b;   // 2   ← resto de la división entera
+echo $a ** 2;   // 289 ← potencia (17²)
+echo $b ** 3;   // 125 ← 5³
+```
+
+### Asignación compuesta
+
+```php
+<?php
+$precio = 100;
+
+$precio += 20;   echo $precio;  // 120
+$precio -= 5;    echo $precio;  // 115
+$precio *= 1.1;  echo $precio;  // 126.5
+$precio /= 2;    echo $precio;  // 63.25
+$precio  = 100;
+
+$texto  = "Hola";
+$texto .= ", mundo";   echo $texto;  // Hola, mundo
+```
+
+### Incremento y decremento
+
+```php
+<?php
+$i = 5;
+echo $i++;   // 5  ← muestra primero, luego incrementa
+echo $i;     // 6
+echo ++$i;   // 7  ← incrementa primero, luego muestra
+echo $i--;   // 7  ← muestra primero, luego decrementa
+echo $i;     // 6
+```
+
+### Comparación
+
+```php
+<?php
+var_dump(5 >  3);     // bool(true)
+var_dump(5 <  3);     // bool(false)
+var_dump(5 >= 5);     // bool(true)
+var_dump(5 <= 4);     // bool(false)
+var_dump(5 == "5");   // bool(true)  ← convierte antes de comparar
+var_dump(5 === "5");  // bool(false) ← tipo distinto: int vs string
+var_dump(5 != 3);     // bool(true)
+var_dump(5 !== "5");  // bool(true)  ← tipo distinto
+```
+
+### Lógicos
+
+```php
+<?php
+$edad   = 20;
+$carnet = true;
+
+var_dump($edad >= 18 && $carnet);  // bool(true)  — ambas verdaderas
+var_dump($edad >= 18 && !$carnet); // bool(false) — segunda es false
+var_dump($edad < 18 || $carnet);   // bool(true)  — al menos una verdadera
+var_dump(!($edad >= 18));          // bool(false) — negación
+```
+
+### Concatenación
+
+```php
+<?php
+$nombre = "Ana";
+$ciudad = "Valencia";
+
+echo $nombre . " vive en " . $ciudad . ".";
+// → Ana vive en Valencia.
+
+$msg  = "Hola";
+$msg .= ", $nombre!";
+echo $msg;
+// → Hola, Ana!
+```
+
+### Operador ternario
+
+```php
+<?php
+$edad = 20;
+$acceso = ($edad >= 18) ? "Permitido" : "Denegado";
+echo $acceso;  // Permitido
+
+// Forma corta: si la condición es truthy, usa el propio valor
+$nombre = "" ?: "Anónimo";
+echo $nombre;  // Anónimo   ← "" es falsy, usa el valor de la derecha
+```
+
+## Precedencia y la trampa de `and`/`or`
+
+PHP resuelve los operadores por precedencia. Ante cualquier duda, usa paréntesis:
+
+```php
+<?php
+echo 2 + 3 * 4;      // 14  ← * antes que +
+echo (2 + 3) * 4;    // 20  ← el paréntesis fuerza el orden
 ```
 
 ::: {.callout-warning title="Errores frecuentes"}
-**Trampa de precedencia: `and`/`or` vs `&&`/`||`**
-
-PHP tiene **dos formas** de escribir los operadores lógicos:
-
-- `&&` y `||` tienen **precedencia alta** (igual que en Java).
-- `and` y `or` tienen **precedencia muy baja**, por debajo incluso de la asignación `=`.
+**`and`/`or` tienen precedencia menor que `=`**
 
 ```php
-$a = true || false;   // $a = true  (|| evalúa antes que =)
-$b = true or false;   // $b = true  (parece igual, pero...)
+<?php
+$a = false || true;   // $a = true   ← || evalúa antes que =
+$b = false or true;   // $b = false  ← = asigna primero, luego or se descarta
 
-$c = false || true;   // $c = true  (|| evalúa antes que =)
-$d = false or true;   // $d = false (!!) porque = asigna false ANTES de que or actúe
+var_dump($a);  // bool(true)
+var_dump($b);  // bool(false)  ← ¡sorpresa!
 ```
 
-La última línea es la trampa: `$d = false or true` se parsea como `($d = false) or true`. La variable `$d` recibe `false`, y luego se evalúa `false or true` (resultado `true`) que se descarta.
+La segunda línea se parsea como `($b = false) or true`: primero asigna `false` a `$b`, y luego evalúa `false or true` (resultado `true`) que se descarta sin asignar a nada.
 
-**Regla práctica:** usar siempre `&&` y `||` en expresiones condicionales. Reservar `and`/`or` solo como «control flow» (`file_exists(...) or die(...)`) donde la baja precedencia es intencionada.
+**Regla:** usa siempre `&&` y `||` en condiciones. `and`/`or` solo en construcciones de control de flujo donde la baja precedencia es intencionada.
 :::
 
 ::: {#exr-UD2-8}
-### E2.8 — Motor de descuentos con operadores combinados
+### E2.8 — Motor de descuentos
+
+Crea `descuentos.php` con este código de partida y completa los cálculos:
 
 ```php
+<?php
 $precio_base  = 120.0;
 $es_socio     = true;
 $unidades     = 5;
 $codigo_promo = "VERANO10";
+
+// 1. Aplica 15% de descuento si $es_socio es true
+//    Guarda el resultado en $precio_tras_socio
+
+// 2. Aplica 10% adicional si $codigo_promo === "VERANO10"
+//    (sobre el precio ya descontado, no sobre el base)
+//    Guarda en $precio_tras_promo
+
+// 3. Multiplica por $unidades y redondea a 2 decimales → $precio_final
+
+// 4. Calcula $envio_gratis: true si (es socio Y más de 3 unidades)
+//    O si el precio final supera 400 €
+
+// 5. Muestra todos los valores intermedios y el resultado final
 ```
 
-1. Calcula un descuento del 15% si `$es_socio` es `true`, combinándolo con un descuento adicional del 10% si `$codigo_promo` es exactamente `"VERANO10"`. Los descuentos no se aplican sumándolos: aplica primero el 15% y luego el 10% sobre el resultado.
-2. Calcula el precio final multiplicando por `$unidades` y redondea a 2 decimales con `round()`.
-3. Construye una expresión lógica única (combinando `&&` y `||`, con paréntesis) que determine si el pedido merece «envío prioritario gratuito»: socio **Y** más de 3 unidades, **O bien** precio final superior a 400 €.
-4. Muestra todos los resultados intermedios (cada descuento aplicado por separado) además del resultado final, para poder verificar el cálculo paso a paso.
+Resultado esperado:
 
-**Resultado esperado:** con los valores dados, tras el 15% el precio queda en 102 €; tras el 10% adicional, en 91,80 €; multiplicado por 5 unidades, 459 €. La condición de envío prioritario debe evaluarse a `true` por el segundo criterio (459 > 400).
+```
+Precio base:          120.00 €
+Tras descuento socio: 102.00 €
+Tras descuento promo:  91.80 €
+Precio final (×5):    459.00 €
+Envío gratuito:       Sí
+```
 :::

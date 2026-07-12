@@ -2,27 +2,28 @@
 title: "Presentación de la unidad"
 ---
 
-## Identificación
+# UD1. Arquitecturas y tecnologías de programación Web en entorno servidor {.unnumbered}
 
-Esta unidad introduce los fundamentos conceptuales sobre los que se apoya todo el módulo: cómo se ejecuta el código en un entorno servidor, qué tecnologías existen para ello y cómo se integran con los lenguajes de marcas que el cliente Web interpreta. Su carácter es eminentemente conceptual y comparativo, sin desarrollo de código propio, ya que la programación efectiva en PHP comienza en la UD2.
+En esta unidad verás qué ocurre entre que el usuario escribe una URL y el navegador muestra la página: qué software interviene, dónde se ejecuta el código y con qué tecnologías se construyen las aplicaciones web del lado del servidor. No escribirás código todavía — eso empieza en UD2 — pero sin este mapa conceptual todo lo que viene después carece de contexto.
 
-| Concepto | Detalle |
-|---|---|
-| Horas totales | 14 horas (7 sesiones de 2 horas) |
-| Resultado de Aprendizaje | RA1 — Selecciona las arquitecturas y tecnologías de programación Web en entorno servidor, analizando sus capacidades y características propias. |
-| Criterios de Evaluación | CE1.a, CE1.b, CE1.c, CE1.d, CE1.e, CE1.f, CE1.g (7 criterios) |
+## Qué aprenderás
 
-: Ficha de identificación {.striped}
+Al terminar esta unidad serás capaz de:
 
-## Resultado de aprendizaje y criterios de evaluación
+- Distinguir si un fragmento de código se ejecuta en el navegador o en el servidor, y explicar por qué importa esa diferencia.
+- Reconocer las distintas formas en que un servidor web puede ejecutar código dinámico (CGI, módulo embebido, FastCGI).
+- Diferenciar un servidor web de un servidor de aplicaciones.
+- Comparar las principales tecnologías de servidor (PHP, Java EE, ASP.NET, Python, Node.js) y argumentar cuál encaja mejor en un proyecto concreto.
+- Identificar los delimitadores que separan el código de servidor del HTML en un documento mixto.
+- Poner en marcha un entorno de desarrollo PHP local (XAMPP o Docker).
 
-::: {.callout-important title="Normativa · RA-CE"}
-**RA1.** Selecciona las arquitecturas y tecnologías de programación Web en entorno servidor, analizando sus capacidades y características propias.
+---
 
-*(RD 686/2010, Anexo II, módulo 0613)*
-:::
+## Resultados de Aprendizaje y Criterios de Evaluación
 
-| CE | Criterio de evaluación |
+> **RA1.** Selecciona las arquitecturas y tecnologías de programación web en entorno servidor, analizando sus capacidades y características propias.
+
+| CE | Descripción |
 |---|---|
 | CE1.a | Se han caracterizado y diferenciado los modelos de ejecución de código en el servidor y en el cliente Web. |
 | CE1.b | Se han reconocido las ventajas que proporciona la generación dinámica de páginas Web y sus diferencias con la inclusión de sentencias de guiones en el interior de las páginas Web. |
@@ -32,7 +33,7 @@ Esta unidad introduce los fundamentos conceptuales sobre los que se apoya todo e
 | CE1.f | Se han verificado los mecanismos de integración de los lenguajes de marcas con los lenguajes de programación en entorno servidor. |
 | CE1.g | Se han reconocido y evaluado las herramientas de programación en entorno servidor. |
 
-: Criterios de evaluación del RA1 {.striped}
+---
 
 ## Objetivos de la unidad
 
@@ -47,84 +48,26 @@ Al finalizar esta unidad, el alumnado será capaz de:
 - Aplicar los mecanismos de integración entre código de servidor y lenguajes de marcas, reconociendo etiquetas y delimitadores propios de cada tecnología.
 - Seleccionar y configurar las herramientas básicas de un entorno de desarrollo Web en servidor (distribuciones empaquetadas, contenedores, IDE).
 
-## Recursos y materiales
+---
 
-- Equipo informático con acceso a Internet y permisos de instalación de software.
-- Distribución XAMPP (Apache + PHP + MySQL/MariaDB) o entorno equivalente basado en Docker (imagen oficial de PHP + Apache/Nginx).
-- Editor de código o IDE: Visual Studio Code con la extensión PHP Intelephense (recomendado), o alternativa equivalente.
-- Navegador Web actualizado con herramientas de desarrollador (inspección de peticiones y cabeceras HTTP).
-- Documentación oficial de PHP ([php.net/manual/es](https://www.php.net/manual/es/)) y de los lenguajes objeto de comparativa.
-- Acceso al aula virtual del centro para la entrega de actividades y consulta de materiales de apoyo.
+## Contenidos
 
-## Mapa de contenidos
+| Bloque | Título |
+|---|---|
+| 1 | Modelos de ejecución: cliente y servidor |
+| 2 | Páginas estáticas y dinámicas |
+| 3 | Servidor web y servidor de aplicaciones |
+| 4 | Lenguajes y tecnologías en entorno servidor |
+| 5 | Integración con lenguajes de marcas |
+| 6 | Herramientas de desarrollo |
 
-| Bloque | Título | CE cubiertos |
+## Evaluación
+
+Los ejercicios de esta unidad son de práctica guiada: se califican **apto / no apto** y tienen un peso conjunto reducido. El grueso de la nota corresponde al examen final de la unidad.
+
+| Instrumento | Calificación | Peso |
 |---|---|---|
-| 1 | Modelos de ejecución cliente / servidor | CE1.a · CE1.c |
-| 2 | Páginas estáticas y dinámicas | CE1.b |
-| 3 | Servidor Web vs. servidor de aplicaciones | CE1.d |
-| 4 | Lenguajes y tecnologías en entorno servidor | CE1.e |
-| 5 | Integración con lenguajes de marcas | CE1.f |
-| 6 | Herramientas de desarrollo | CE1.g |
+| Ejercicios (E1.1 – E1.6) | Apto / No apto | 20 % |
+| Examen de la unidad | Numérica (0–10) | 80 % |
 
-: Bloques temáticos y CE asociados {.striped}
-
-> Los Bloques 1 y 3 comparten sesión por su proximidad conceptual (modelo de ejecución del servidor); el resto de bloques se desarrolla en sesiones independientes.
-
-## Secuencia didáctica
-
-La unidad se desarrolla en 7 sesiones de 2 horas (14 horas totales). Cada sesión combina exposición teórica con la actividad práctica intercalada correspondiente.
-
-| Sesión | Contenidos | Actividad | CE trabajados |
-|---|---|---|---|
-| 1 | Bloque 1: modelos de ejecución cliente/servidor; mecanismos de ejecución en el servidor (CGI, módulos, FastCGI) | E1.1 | CE1.a, CE1.c |
-| 2 | Bloque 2: páginas estáticas y dinámicas; código embebido frente a guion independiente | E1.2 | CE1.b |
-| 3 | Bloque 3: servidor Web frente a servidor de aplicaciones; arquitecturas de cooperación | E1.3 | CE1.d |
-| 4 | Bloque 4 (parte 1): panorama de lenguajes y tecnologías de programación en servidor | — | CE1.e |
-| 5 | Bloque 4 (parte 2): justificación de la elección tecnológica para un proyecto dado | E1.4 | CE1.e |
-| 6 | Bloque 5: delimitadores e integración entre código de servidor y lenguaje de marcas | E1.5 | CE1.f |
-| 7 | Bloque 6: herramientas y entornos de desarrollo; puesta en marcha del entorno de trabajo | E1.6 | CE1.g |
-
-: Secuencia didáctica {.striped}
-
-> La sesión 4 se dedica íntegramente a la exposición teórica comparativa, sin actividad evaluable independiente, dado el volumen de contenido del Bloque 4 (el de mayor ponderación de la unidad); su evaluación práctica se concentra en la E1.4 de la sesión 5.
-
-## Evaluación y ponderación
-
-La calificación de la unidad combina dos tipos de instrumentos:
-
-- **Actividades formativas-sumativas (20 % del total):** seis actividades desarrolladas durante las sesiones de clase, que permiten evaluar la comprensión progresiva de los contenidos y la capacidad de argumentar razonadamente las decisiones técnicas.
-- **Prueba de evaluación escrita (80 % del total):** examen individual realizado al finalizar la unidad, que cubre los siete criterios de evaluación del RA1.
-
-### Actividades sumativas
-
-| Actividad | Descripción breve | CE cubiertos | Peso |
-|---|---|---|---|
-| E1.1 | Clasificación de doce tecnologías según si se ejecutan en cliente, servidor o ambos | CE1.a, CE1.c | 4,80 % |
-| E1.2 | Clasificación de seis fragmentos como estáticos, dinámicos embebidos o scripts independientes | CE1.b | 3,00 % |
-| E1.3 | Identificación de roles en un diagrama de arquitectura Web de producción | CE1.d | 2,40 % |
-| E1.4 | Estudio comparativo razonado: selección y defensa de una tecnología de servidor para un escenario dado | CE1.e | 4,00 % |
-| E1.5 | Trazado manual del HTML resultante de un documento con código embebido en pseudocódigo | CE1.f | 3,40 % |
-| E1.6 | Puesta en marcha del entorno XAMPP o Docker + comprobación mediante `phpinfo()` | CE1.g | 2,40 % |
-| Prueba | Examen escrito individual que cubre todos los CE de la unidad | CE1.a–g | 80,00 % |
-
-: Actividades sumativas y ponderación {.striped}
-
-### Reparto del peso entre actividades
-
-La siguiente tabla refleja qué actividad evalúa cada criterio. La «X» indica cobertura directa.
-
-| CE | Peso CE | E1.1 | E1.2 | E1.3 | E1.4 | E1.5 | E1.6 | Prueba |
-|---|---|---|---|---|---|---|---|---|
-| CE1.a | 12 % | X | | | | | | X |
-| CE1.b | 15 % | | X | | | | | X |
-| CE1.c | 12 % | X | | | | | | X |
-| CE1.d | 12 % | | | X | | | | X |
-| CE1.e | 20 % | | | | X | | | X |
-| CE1.f | 17 % | | | | | X | | X |
-| CE1.g | 12 % | | | | | | X | X |
-| **Peso actividad** | — | 4,80 % | 3,00 % | 2,40 % | 4,00 % | 3,40 % | 2,40 % | 80,00 % |
-
-: Matriz CE × actividad {.striped}
-
-> El peso de cada CE (12 %–20 %) se reparte a partes iguales entre las actividades ordinarias que lo trabajan, sin incluir la prueba en este reparto. El conjunto de actividades ordinarias suma el 20 % de la nota de la UD; la prueba de evaluación, el 80 % restante.
+: {.striped}

@@ -1,0 +1,199 @@
+# Rutas y controladores {#sec-ud5-rutas}
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque trabaja **CE5.b** (mecanismos del framework), **CE5.c** (generación del aspecto visual desde el servidor) y, de forma transversal, **CE5.h** (documentación y prueba del código).
+:::
+
+## Rutas: la puerta de entrada
+
+Una ruta asocia **método HTTP + URL** con el código que la atiende. Se definen en `routes/web.php`.
+
+### Con closures (para probar cosas)
+
+```php
+use Illuminate\Support\Facades\Route;
+
+Route::get('/hola', fn () => 'Hola, 2º DAW');
+
+Route::get('/fecha', fn () => date('d/m/Y'));
+
+Route::get('/suma', fn () => 2 + 2);
+```
+
+| URL visitada | Respuesta en el navegador |
+|---|---|
+| `/hola` | `Hola, 2º DAW` |
+| `/fecha` | `12/07/2026` (la fecha del día) |
+| `/suma` | `4` |
+
+### Con parámetros
+
+```php
+Route::get('/saludo/{nombre}', fn (string $nombre) => "Hola, $nombre");
+
+// Parámetro opcional con valor por defecto
+Route::get('/adios/{nombre?}', fn (string $nombre = 'anónimo') => "Adiós, $nombre");
+```
+
+| URL visitada | Respuesta |
+|---|---|
+| `/saludo/Aitana` | `Hola, Aitana` |
+| `/saludo/Marc` | `Hola, Marc` |
+| `/saludo` | error 404 (el parámetro es obligatorio) |
+| `/adios` | `Adiós, anónimo` |
+
+### Con restricciones
+
+```php
+Route::get('/contactos/{id}', fn (int $id) => "Ficha del contacto $id")
+     ->whereNumber('id');
+```
+
+| URL visitada | Respuesta |
+|---|---|
+| `/contactos/3` | `Ficha del contacto 3` |
+| `/contactos/abc` | error 404 — la ruta ni siquiera se ejecuta |
+
+Sin `whereNumber`, `/contactos/abc` entraría en tu código con `"abc"` como id y el error aparecería más tarde y más feo. Restringir en la ruta corta el problema en la puerta.
+
+### Con nombre (la buena práctica que exigiremos siempre)
+
+```php
+Route::get('/contactos/{id}', /* ... */)
+     ->whereNumber('id')
+     ->name('contactos.show');
+```
+
+A partir de ahora, cualquier vista genera la URL con `route()` en lugar de escribirla a mano:
+
+```php
+route('contactos.show', 3)
+```
+
+```
+http://localhost:8000/contactos/3
+```
+
+Si mañana la URL cambia a `/agenda/contactos/{id}`, se cambia **una** línea en `web.php` y toda la aplicación sigue funcionando.
+
+## Controladores
+
+Las closures valen para probar; una aplicación real agrupa las acciones de cada recurso en un **controlador**:
+
+```bash
+php artisan make:controller ContactoController
+```
+
+```
+   INFO  Controller [app/Http/Controllers/ContactoController.php] created successfully.
+```
+
+```php
+<?php // app/Http/Controllers/ContactoController.php
+
+namespace App\Http\Controllers;
+
+class ContactoController extends Controller
+{
+    /** Datos de trabajo en memoria (el modelo real llegará en @sec-ud5-eloquent). */
+    private array $contactos = [
+        1 => ['nombre' => 'Aitana', 'tlf' => '600111222'],
+        2 => ['nombre' => 'Marc',   'tlf' => '600333444'],
+        3 => ['nombre' => 'Júlia',  'tlf' => '611222333'],
+    ];
+
+    /**
+     * Muestra el listado completo de contactos.
+     */
+    public function index()
+    {
+        return view('contactos.index', ['contactos' => $this->contactos]);
+    }
+
+    /**
+     * Muestra la ficha de un contacto.
+     *
+     * @param int $id Identificador recibido en la ruta.
+     */
+    public function show(int $id)
+    {
+        $contacto = $this->contactos[$id] ?? null;
+        return view('contactos.show', ['contacto' => $contacto, 'id' => $id]);
+    }
+}
+```
+
+Y las rutas delegan en él:
+
+```php
+use App\Http\Controllers\ContactoController;
+
+Route::get('/contactos', [ContactoController::class, 'index'])
+     ->name('contactos.index');
+
+Route::get('/contactos/{id}', [ContactoController::class, 'show'])
+     ->whereNumber('id')
+     ->name('contactos.show');
+```
+
+Dos detalles del código anterior:
+
+- `view('contactos.index', [...])` busca `resources/views/contactos/index.blade.php` (el punto es el separador de carpetas) y le pasa los datos como variables: en la vista existirá `$contactos`.
+- El parámetro `{id}` de la ruta llega como argumento `$id` del método. Laravel los casa por nombre.
+
+Comprobación con `route:list`:
+
+```bash
+php artisan route:list --except-vendor
+```
+
+```
+  GET|HEAD  contactos ......... contactos.index › ContactoController@index
+  GET|HEAD  contactos/{id} ...... contactos.show › ContactoController@show
+```
+
+## Resource controllers: las siete acciones de un CRUD
+
+Para un recurso completo, Laravel genera de una vez las siete acciones convencionales:
+
+```bash
+php artisan make:controller ProductoController --resource
+```
+
+```php
+Route::resource('productos', ProductoController::class);
+```
+
+| Método | URI | Acción | Para qué |
+|---|---|---|---|
+| GET | `/productos` | `index` | Listado |
+| GET | `/productos/create` | `create` | Formulario de alta |
+| POST | `/productos` | `store` | Guardar el alta |
+| GET | `/productos/{id}` | `show` | Ficha |
+| GET | `/productos/{id}/edit` | `edit` | Formulario de edición |
+| PUT/PATCH | `/productos/{id}` | `update` | Guardar la edición |
+| DELETE | `/productos/{id}` | `destroy` | Borrar |
+
+Esta convención es universal en Laravel y será la base de la API REST de la UD7.
+
+::: {.callout-tip title="Analogía Java"}
+En Spring las rutas se declaran con anotaciones sobre el método (`@GetMapping("/contactos/{id}")` + `@PathVariable`). En Laravel viven **centralizadas en un fichero de rutas**: para saber todas las URLs de la aplicación no hay que rastrear anotaciones por el proyecto, basta abrir `web.php` o ejecutar `route:list`.
+:::
+
+::: {.callout-warning title="Errores frecuentes"}
+- Escribir URLs a mano en las vistas (`/contactos/3`) en lugar de `route('contactos.show', 3)`.
+- Olvidar el `use App\Http\Controllers\ContactoController;` en `web.php`: da error `Class not found`.
+- Definir la ruta `/contactos/create` **después** de `/contactos/{id}`: `{id}` captura la palabra `create` y el formulario nunca se muestra. Las rutas fijas van antes que las variables (o se restringe `{id}` con `whereNumber`).
+:::
+
+::: {#exr-UD5-3}
+
+### E5.3 · Enrutado de la agenda
+
+1. Crea `ContactoController` con los métodos `index` y `show`. `index` debe pasar a la vista un array de **al menos cinco contactos**; `show` debe recibir `{id}` restringido a numérico y mostrar el contacto correspondiente, o un mensaje claro si no existe.
+2. Define ambas rutas con nombre (`contactos.index`, `contactos.show`) y enlaza el listado con las fichas usando `route()`, nunca URLs escritas a mano.
+3. Añade una ruta `/acerca` resuelta con closure que muestre tus datos de autoría.
+4. **Transversal CE5.h**: documenta cada método del controlador con un bloque PHPDoc (descripción y `@param`/`@return` donde proceda) y adjunta una captura de `php artisan route:list` como evidencia.
+
+*Entrega apto/no apto: rutas con nombre y restricción funcionando, caso "contacto inexistente" cubierto y PHPDoc presente.*
+:::

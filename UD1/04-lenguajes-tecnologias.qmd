@@ -2,30 +2,59 @@
 title: "Lenguajes y tecnologías en entorno servidor"
 ---
 
-::: {.callout-important title="Normativa · RA-CE"}
-Este bloque desarrolla **CE1.e** («se han identificado y caracterizado los principales lenguajes y tecnologías relacionados con la programación Web en entorno servidor»), según RD 686/2010, Anexo II.
-:::
+No existe la tecnología «mejor» para programar en servidor. La elección depende del proyecto, el equipo y los requisitos. A continuación se comparan las opciones más habituales.
 
-Existen múltiples lenguajes y plataformas para programar en el servidor. Ninguno es objetivamente «mejor» en abstracto: la elección depende del contexto del proyecto (rendimiento necesario, equipo disponible, ecosistema de librerías, coste de las licencias, integración con sistemas existentes). El módulo emplea PHP como lenguaje vehicular para el resto de unidades, pero este criterio de evaluación exige conocer el panorama completo, no solo la tecnología elegida.
+## Comparativa
 
-## Comparativa de las principales tecnologías
+| Tecnología | Modelo de ejecución | Puntos fuertes | Uso típico |
+|---|---|---|---|
+| **PHP** | Proceso por petición (FastCGI/FPM) | Sencillo de aprender, enorme ecosistema web, frameworks maduros (Laravel, Symfony) | CMS, comercio electrónico, APIs web |
+| **Java EE / JSP** | Multihilo en servidor de aplicaciones | Tipado fuerte, escalabilidad empresarial, ecosistema maduro | Banca, administración pública, ERPs |
+| **ASP.NET (C#)** | Multihilo en IIS / Kestrel | Integración con ecosistema Microsoft, alto rendimiento, .NET Core multiplataforma | Aplicaciones corporativas Microsoft |
+| **Python (Django/Flask)** | Proceso/hilo según servidor | Sintaxis legible, fuerte en datos e IA, Django «todo incluido» | Ciencia de datos, startups, APIs |
+| **Node.js** | E/S no bloqueante, un hilo de evento | Mismo lenguaje en cliente y servidor, altísima concurrencia | APIs en tiempo real, microservicios |
 
-| Tecnología | Tipo / origen | Características destacadas |
-|---|---|---|
-| PHP | Lenguaje de scripting de propósito específico Web, código abierto | Sintaxis sencilla de aprender, enorme cuota de mercado en CMS y comercio electrónico, débilmente tipado, ecosistema de frameworks (Laravel, Symfony). |
-| Java EE / JSP / Servlets | Plataforma empresarial, fuertemente tipada | Robustez y escalabilidad para sistemas de gran tamaño, curva de aprendizaje más exigente, fuerte presencia en banca y administración pública. |
-| ASP.NET (C# / VB.NET) | Plataforma de Microsoft | Integración nativa con el ecosistema Microsoft (IIS, SQL Server, Azure), buen rendimiento, tradicionalmente vinculada a licencias propietarias (aunque .NET Core es ahora multiplataforma y de código abierto). |
-| Python (Django / Flask) | Lenguaje de propósito general, tipado dinámico | Sintaxis muy legible, fuerte presencia en ciencia de datos e inteligencia artificial además de Web, Django ofrece un framework «todo incluido». |
-| Node.js (JavaScript en servidor) | Entorno de ejecución de JavaScript fuera del navegador | Permite usar el mismo lenguaje en cliente y servidor, modelo de E/S no bloqueante orientado a alta concurrencia, ecosistema npm muy extenso. |
+: Tecnologías de programación en entorno servidor {.striped}
 
-: Comparativa de tecnologías de programación en entorno servidor {.striped}
+## Ejemplos del mismo resultado en distintas tecnologías
+
+El siguiente fragmento muestra cómo se imprime «Hola, mundo» en cada tecnología. La lógica es idéntica; solo cambia la sintaxis y el mecanismo de salida.
+
+**PHP**
+```php
+<?php echo "Hola, mundo"; ?>
+```
+
+**JSP (Java)**
+```jsp
+<%= "Hola, mundo" %>
+```
+
+**ASP.NET (C#) — Razor**
+```csharp
+@("Hola, mundo")
+```
+
+**Python (Flask)**
+```python
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return "Hola, mundo"
+```
+
+**Node.js (Express)**
+```javascript
+const express = require('express')
+const app = express()
+
+app.get('/', (req, res) => res.send('Hola, mundo'))
+```
 
 ::: {.callout-note title="Concepto clave"}
-**¿Por qué PHP en este módulo?** La elección de PHP como lenguaje vehicular es una decisión metodológica del docente, no una imposición normativa: el currículo no fija un lenguaje concreto. Los motivos de esta elección son:
-
-- Sigue siendo la tecnología de programación en servidor más extendida en el sector del desarrollo Web en España, especialmente en pequeña y mediana empresa.
-- Su modelo de código embebido facilita la transición conceptual desde HTML hacia la programación en servidor.
-- Permite alcanzar, dentro de las 200 horas del módulo, contenidos avanzados (MVC con Laravel, servicios REST) sin la sobrecarga de configuración de otras plataformas.
+**¿Por qué PHP en este módulo?** Es la tecnología de servidor más extendida en el mercado laboral español para pequeña y mediana empresa, su modelo de código embebido facilita la transición desde HTML, y dentro de las 200 horas del módulo permite llegar a contenidos avanzados (MVC con Laravel, APIs REST) sin sobrecarga de configuración.
 :::
 
 ## Ejercicio E1.4 {#exr-UD1-4}
@@ -33,12 +62,18 @@ Existen múltiples lenguajes y plataformas para programar en el servidor. Ningun
 ::: {#exr-UD1-4}
 **Estudio comparativo razonado**
 
-En grupos de tres, cada grupo recibe uno de los siguientes escenarios:
+En grupos de tres, cada grupo recibe uno de estos escenarios:
 
-- **Escenario A:** una tienda online de pequeño volumen.
-- **Escenario B:** una intranet corporativa de una gran empresa con equipo de desarrollo Java.
-- **Escenario C:** una API de altísima concurrencia para una aplicación de mensajería.
-- **Escenario D:** un proyecto académico de aprendizaje personal.
+- **A:** tienda online de pequeño volumen, presupuesto ajustado, equipo de dos desarrolladores sin experiencia previa en servidor.
+- **B:** intranet corporativa de una gran empresa cuyo equipo de desarrollo lleva diez años trabajando con Java.
+- **C:** API para una aplicación de mensajería que debe soportar 50 000 conexiones simultáneas.
+- **D:** proyecto personal de aprendizaje sin restricciones de equipo ni presupuesto.
 
-**Tarea:** el grupo debe recomendar una tecnología de servidor para su escenario, justificando la elección con al menos **tres argumentos técnicos** (no de gusto personal) y citando explícitamente qué alternativa han descartado y por qué. Se expone en clase en formato de defensa breve (3 minutos por grupo).
+El grupo debe:
+
+1. Recomendar una tecnología de servidor para su escenario.
+2. Justificar la elección con **al menos tres argumentos técnicos** (no de preferencia personal).
+3. Citar una alternativa descartada y explicar por qué no encaja en ese escenario.
+
+Defensa oral: 3 minutos por grupo.
 :::

@@ -1,0 +1,69 @@
+# Autenticación, redirecciones e inclusiones
+
+## Mecanismos de autenticación
+
+Autenticar significa comprobar que alguien es quien dice ser. Nunca se guarda una contraseña en texto plano ni cifrada de forma reversible: se aplica una función *hash* de un solo sentido.
+
+::: {.callout-note title="Concepto clave"}
+`password_hash()` genera un hash seguro (bcrypt por defecto, con "salt" aleatorio incluido). `password_verify()` comprueba una contraseña en texto plano contra ese hash. No hace falta guardar el salt aparte: va incluido en el propio hash.
+:::
+
+```php
+$hash = password_hash('MiClave123', PASSWORD_DEFAULT);
+echo $hash;
+// $2y$10$eImiTXuWVxfM37uY4JANjQ==... (cadena distinta cada vez que lo ejecutas)
+
+var_dump(password_verify('MiClave123', $hash)); // true
+var_dump(password_verify('otraClave', $hash));  // false
+```
+
+Comparación rápida de enfoques:
+
+```php
+// MAL — nunca hagas esto
+if ($_POST['password'] === $passwordGuardadaEnTextoPlano) { /* ... */ }
+
+// MAL — md5/sha1 no están pensados para contraseñas (son muy rápidos de romper por fuerza bruta)
+if (md5($_POST['password']) === $hashGuardado) { /* ... */ }
+
+// BIEN
+if (password_verify($_POST['password'], $hashGuardado)) { /* ... */ }
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+`password_hash()` devuelve un hash distinto cada vez que lo llamas con la misma contraseña (el salt es aleatorio). Esto es correcto: nunca compares dos hashes entre sí, compara siempre con `password_verify()`.
+:::
+
+## Redirecciones
+
+`header('Location: url')` redirige el navegador. Debe llamarse antes de cualquier salida (igual que `session_start()` o `setcookie()`).
+
+```php
+header('Location: /panel.php');
+exit; // imprescindible: detén el script tras redirigir
+```
+
+```php
+// Redirección condicional típica: si no hay sesión, vuelve al login
+session_start();
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: /login.php');
+    exit;
+}
+```
+
+## Inclusiones
+
+`include`/`require` dividen el código en ficheros reutilizables. La diferencia es la gravedad si el fichero no existe: `include` avisa y continúa; `require` detiene el script con error fatal. Las variantes `_once` evitan duplicados.
+
+```php
+require_once __DIR__ . '/Modelo/Usuario.php'; // clase imprescindible: si falta, no tiene sentido seguir
+require_once __DIR__ . '/config.php';
+include 'cabecera.php'; // vista: si falla, seguimos con un aviso
+```
+
+::: {#exr-UD4-6}
+## E4.6 — Comparativa de mecanismos de autenticación (autoevaluación, no se entrega)
+
+Escribe un script que compare, con ejemplos ejecutados, el resultado de guardar una contraseña en texto plano frente a aplicarle `password_hash()`, y demuestra la verificación con `password_verify()`. Este ejercicio te prepara para el examen; no hace falta que lo entregues.
+:::

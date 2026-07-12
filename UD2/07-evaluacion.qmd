@@ -1,60 +1,35 @@
 ---
-title: "Evaluación y ponderación"
+title: "Evaluación"
 ---
 
-## Criterios de Evaluación y sus pesos
+## Criterios de evaluación
 
-Cada uno de los 8 CE de RA2 tiene asignado un peso dentro de la unidad. La superación de la UD2 exige una calificación ponderada mínima de **5 sobre 10**.
+Esta unidad se evalúa mediante dos instrumentos:
 
-| CE | Peso |
-|---|---:|
-| CE2.a — Mecanismos de generación embebida | 7 % |
-| CE2.b — Tecnologías asociadas | 7 % |
-| CE2.c — Etiquetas de inclusión (delimitadores) | 12 % |
-| CE2.d — Sintaxis del lenguaje | 13 % |
-| CE2.e — Sentencias simples y comprobación de efectos | 13 % |
-| CE2.f — Directivas | 10 % |
-| CE2.g — Variables y operadores | 23 % |
-| CE2.h — Ámbito de las variables | 15 % |
-| **Total** | **100 %** |
+### Ejercicios prácticos
 
-: {.striped}
+Los 9 ejercicios de la unidad se evalúan con criterio **apto / no apto**. Para obtener el apto es necesario que el código funcione correctamente y cubra todos los apartados del enunciado. Los ejercicios tienen un peso conjunto reducido en la nota final.
 
-## Reparto del peso entre actividades
-
-El peso de cada CE se reparte a partes iguales entre las actividades en las que se trabaja ese CE. La tabla presenta los CE en filas y las actividades en columnas:
-
-| CE | E2.1 | E2.2 | E2.3 | E2.4 | E2.5 | E2.6 | E2.7 | E2.8 | E2.9 | Prueba |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| CE2.a | ✓ | | | | | | | | | ✓ |
-| CE2.b | ✓ | | | | | | | | | ✓ |
-| CE2.c | | ✓ | | | | | | | | ✓ |
-| CE2.d | | | ✓ | | | | | | | ✓ |
-| CE2.e | | | | ✓ | | ✓ | | | | ✓ |
-| CE2.f | | | | | | | ✓ | | | ✓ |
-| CE2.g | | | | ✓ | ✓ | ✓ | | ✓ | | ✓ |
-| CE2.h | | | | | | | | | ✓ | ✓ |
+| CE evaluado | Ejercicio |
+|---|---|
+| CE2.a · CE2.b | E2.1 |
+| CE2.c | E2.2 |
+| CE2.d | E2.3 |
+| CE2.e · CE2.g | E2.4 |
+| CE2.g | E2.5 |
+| CE2.e · CE2.g | E2.6 |
+| CE2.f | E2.7 |
+| CE2.f · CE2.g | E2.8 |
+| CE2.h | E2.9 |
 
 : {.striped}
 
-## Peso final de cada actividad
+### Prueba de evaluación
 
-| Actividad | Peso |
-|---|---:|
-| E2.1 — De Java a PHP: observando el cambio de paradigma | 7,00 % |
-| E2.2 — Mapa de delimitadores en una plantilla compleja | 6,00 % |
-| E2.3 — Depurador humano: caza de errores en cadena | 6,50 % |
-| E2.4 — Panel de configuración con variables y constantes | 8,93 % |
-| E2.5 — Catálogo de productos con array asociativo multinivel | 4,60 % |
-| E2.6 — Validador de formulario de registro | 8,93 % |
-| E2.7 — Comparativa de entornos: desarrollo vs. producción | 5,00 % |
-| E2.8 — Motor de descuentos con operadores combinados | 4,60 % |
-| E2.9 — Sistema de tickets con tres estrategias de ámbito | 7,50 % |
-| Prueba de evaluación | 40,93 % |
-| **Total** | **100 %** |
+La prueba de evaluación constituye el **grueso de la nota** de la unidad. Tiene una duración de 90 minutos, se realiza en el aula de informática con acceso al entorno configurado en la UD1 y permite consultar la documentación oficial de PHP en [php.net](https://www.php.net/manual/es/).
 
-: {.striped}
+La prueba cubre los 8 CE de RA2 y combina preguntas teóricas de respuesta corta con ejercicios prácticos de programación.
 
 ::: {.callout-important title="Normativa · RA-CE"}
-La prueba de evaluación tiene una duración orientativa de **90 minutos** y se realiza en el aula de informática con acceso al entorno configurado en la UD1. Se permite el uso de la documentación oficial de PHP ([php.net](https://www.php.net/manual/es/)). El enunciado completo y su solución se distribuyen exclusivamente a través del repositorio privado del módulo.
+La superación de la UD2 requiere obtener **apto en los ejercicios** y alcanzar la calificación mínima en la prueba de evaluación. Ambas condiciones son necesarias.
 :::

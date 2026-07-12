@@ -2,52 +2,68 @@
 title: "Arrays"
 ---
 
-# Bloque 3 · Arrays
 
 ::: {.callout-important title="Normativa · RA-CE"}
-**CE3.c** — Se han utilizado matrices (arrays) para almacenar y recuperar conjuntos de datos.  
-*RD 686/2010, Anexo II.*
+**CE3.c** — Se han utilizado matrices (arrays) para almacenar y recuperar conjuntos de datos.
 :::
 
 ---
 
 ## Arrays indexados
 
-A diferencia del array de Java, que es de tamaño y tipo fijo, el array de PHP es una **estructura dinámica** que puede crecer, reducirse y mezclar tipos de datos.
+Un array indexado almacena valores accesibles por posición numérica (desde `0`):
 
 ```php
 <?php
 $colores = ["rojo", "verde", "azul"];
-$colores[] = "amarillo"; // se añade al final automáticamente
 
-echo count($colores);    // 4
-echo $colores[0];        // rojo
-echo $colores[3];        // amarillo
+echo $colores[0];   // rojo
+echo $colores[2];   // azul
+echo count($colores); // 3
 
-// Funciones de ordenación y manipulación
-sort($colores);           // ordena por valor, reindexando desde 0
-array_push($colores, "negro");  // añade al final (equivalente a $colores[])
-$ultimo = array_pop($colores);  // extrae el último elemento
+$colores[] = "amarillo"; // añade al final
+echo count($colores); // 4
 ?>
 ```
 
-::: {.callout-tip title="Analogía Java"}
-| PHP | Java (equivalente aproximado) |
-|---|---|
-| `$a = [1, 2, 3]` | `int[] a = {1, 2, 3}` o `new ArrayList<>(List.of(1,2,3))` |
-| `$a[] = 4` | `a.add(4)` (ArrayList) |
-| `count($a)` | `a.size()` (ArrayList) / `a.length` (array) |
-| `sort($a)` | `Collections.sort(a)` |
-| `array_pop($a)` | `a.remove(a.size()-1)` |
+```php
+<?php
+// Funciones habituales
+$numeros = [3, 1, 4, 1, 5, 9, 2, 6];
 
-PHP no distingue entre arrays de tamaño fijo y listas dinámicas: el mismo tipo sirve para ambos casos.
-:::
+sort($numeros);
+print_r($numeros);
+// Array ( [0] => 1 [1] => 1 [2] => 2 [3] => 3 [4] => 4 [5] => 5 [6] => 6 [7] => 9 )
+
+$ultimo  = array_pop($numeros);    // extrae el último (9)
+$primero = array_shift($numeros);  // extrae el primero (1)
+
+array_push($numeros, 100);         // añade al final
+array_unshift($numeros, 0);        // añade al inicio
+
+echo count($numeros); // 8 (6 originales menos 2 extraídos, más 2 añadidos)
+?>
+```
+
+```php
+<?php
+// Comprobar si un valor existe
+$frutas = ["manzana", "pera", "naranja"];
+
+var_dump(in_array("pera", $frutas));      // true
+var_dump(in_array("uva", $frutas));       // false
+
+// Posición de un elemento
+$pos = array_search("naranja", $frutas);
+echo $pos; // 2
+?>
+```
 
 ---
 
 ## Arrays asociativos
 
-Equivalen conceptualmente a un `HashMap<K,V>` de Java (escrito así en código), pero forman parte del mismo tipo `array` nativo de PHP, sin necesidad de una clase contenedora distinta.
+Las claves son cadenas de texto en lugar de números:
 
 ```php
 <?php
@@ -57,51 +73,56 @@ $alumno = [
     "nota"   => 8.5,
 ];
 
-echo $alumno["nombre"];  // Laura
-echo $alumno["nota"];    // 8.5
+echo $alumno["nombre"]; // Laura
+echo $alumno["nota"];   // 8.5
 
-// Añadir o modificar una clave
+// Añadir o modificar
 $alumno["email"] = "laura@example.com";
+$alumno["nota"]  = 9.0;
 
 // Comprobar si una clave existe
-if (array_key_exists("email", $alumno)) {
-    echo "Tiene email";
-}
-
-// Recorrer con foreach (clave => valor)
-foreach ($alumno as $clave => $valor) {
-    echo "$clave: $valor<br>";
-}
+var_dump(array_key_exists("email", $alumno)); // true
+var_dump(isset($alumno["telefono"]));          // false
 ?>
-```
-
-::: {.callout-tip title="Analogía Java"}
-```java
-// Java
-Map<String, Object> alumno = new HashMap<>();
-alumno.put("nombre", "Laura");
-alumno.put("nota", 8.5);
-System.out.println(alumno.get("nombre"));
 ```
 
 ```php
 <?php
-// PHP — sintaxis nativa, sin importar clases
-$alumno = ["nombre" => "Laura", "nota" => 8.5];
-echo $alumno["nombre"];
+// Recorrer con foreach
+$capitales = [
+    "España"   => "Madrid",
+    "Francia"  => "París",
+    "Portugal" => "Lisboa",
+];
+
+foreach ($capitales as $pais => $capital) {
+    echo "$pais → $capital\n";
+}
+// España → Madrid
+// Francia → París
+// Portugal → Lisboa
 ?>
 ```
 
-En PHP no hay distinción entre `HashMap` y `LinkedHashMap`: el array asociativo **mantiene el orden de inserción** por definición (desde PHP 5).
-:::
+```php
+<?php
+// Eliminar una clave
+$config = ["debug" => true, "cache" => false, "timeout" => 30];
+unset($config["debug"]);
+print_r($config);
+// Array ( [cache] => [timeout] => 30 )
+?>
+```
 
 ::: {.callout-warning title="Errores frecuentes"}
-Acceder a una clave que no existe genera un aviso (`Warning: Undefined array key`) en PHP 8. Usa siempre `array_key_exists()` o el operador `??` antes de leer una clave cuya existencia no estés seguro:
+Acceder a una clave que no existe lanza un aviso en PHP 8. Usa `??` para dar un valor por defecto seguro:
 
 ```php
 <?php
-$valor = $alumno["telefono"] ?? "sin teléfono";  // seguro
-$valor = $alumno["telefono"];                     // Warning en PHP 8 si no existe
+$datos = ["nombre" => "Ana"];
+
+echo $datos["telefono"];         // Warning: Undefined array key
+echo $datos["telefono"] ?? "—";  // —   (sin aviso)
 ?>
 ```
 :::
@@ -110,122 +131,304 @@ $valor = $alumno["telefono"];                     // Warning en PHP 8 si no exis
 
 ## Arrays multidimensionales
 
-Un array de arrays asociativos permite representar conjuntos de "registros" sin necesidad de definir una clase. Este patrón anticipa la motivación de la POO que se introducirá en la UD4.
+Arrays que contienen otros arrays — el patrón habitual para representar listas de registros:
 
 ```php
 <?php
 $alumnos = [
-    ["nombre" => "Laura", "nota" => 8.5],
-    ["nombre" => "Marc",  "nota" => 6.0],
-    ["nombre" => "Aisha", "nota" => 9.2],
+    ["nombre" => "Laura", "nota" => 8.5, "aprobado" => true],
+    ["nombre" => "Marc",  "nota" => 4.0, "aprobado" => false],
+    ["nombre" => "Aisha", "nota" => 9.2, "aprobado" => true],
 ];
 
-// Acceso por índice numérico y luego por clave
-echo $alumnos[0]["nombre"];  // Laura
-echo $alumnos[2]["nota"];    // 9.2
+echo $alumnos[0]["nombre"]; // Laura
+echo $alumnos[1]["nota"];   // 4.0
 
-// Recorrido con foreach anidado
-foreach ($alumnos as $alumno) {
-    echo "{$alumno['nombre']}: {$alumno['nota']}<br>";
+foreach ($alumnos as $a) {
+    $estado = $a["aprobado"] ? "✅" : "❌";
+    echo "$estado {$a['nombre']}: {$a['nota']}\n";
 }
+// ✅ Laura: 8.5
+// ❌ Marc: 4.0
+// ✅ Aisha: 9.2
 ?>
 ```
 
-::: {.callout-note title="Concepto clave"}
-PHP no tiene una clase `Record`, `Struct` ni `Bean` para agrupar campos relacionados sin comportamiento. El array multidimensional cubre ese hueco en PHP procedimental. Cuando los datos necesiten comportamiento (métodos), la solución correcta es definir una clase, como veremos en UD4.
-:::
+```php
+<?php
+// Añadir, modificar y filtrar sobre multidimensional
+$productos = [
+    ["nombre" => "Camiseta", "precio" => 15.0, "stock" => 10],
+    ["nombre" => "Pantalón", "precio" => 35.0, "stock" => 0],
+    ["nombre" => "Zapatos",  "precio" => 60.0, "stock" => 5],
+];
+
+// Contar los disponibles
+$disponibles = 0;
+foreach ($productos as $p) {
+    if ($p["stock"] > 0) $disponibles++;
+}
+echo "Disponibles: $disponibles / " . count($productos);
+// Disponibles: 2 / 3
+?>
+```
 
 ---
 
-## Funciones de orden superior sobre arrays
+## Funciones de orden superior
 
-`array_map()`, `array_filter()` y `array_reduce()` permiten transformar, filtrar y agregar arrays **sin bucles explícitos**, pasando una función anónima (*closure*) como argumento.
+`array_map`, `array_filter` y `array_reduce` transforman arrays sin bucles explícitos:
+
+### `array_map` — transforma cada elemento
 
 ```php
 <?php
-$precios = [10, 25, 8, 40];
+$precios = [10.0, 25.0, 8.0, 40.0];
 
-// array_map: transforma cada elemento y devuelve un nuevo array
-$conIva = array_map(fn($p) => $p * 1.21, $precios);
-// [12.1, 30.25, 9.68, 48.4]
-
-// array_filter: filtra elementos según una condición (preserva claves)
-$caros = array_filter($precios, fn($p) => $p > 15);
-// [1 => 25, 3 => 40]   ← las claves originales se conservan
-
-// array_reduce: agrega a un único valor acumulado
-$total = array_reduce($precios, fn($acc, $p) => $acc + $p, 0);
-// 83
+// Aplicar IVA a todos
+$conIva = array_map(fn($p) => round($p * 1.21, 2), $precios);
+print_r($conIva);
+// Array ( [0] => 12.1 [1] => 30.25 [2] => 9.68 [3] => 48.4 )
 ?>
 ```
 
-::: {.callout-tip title="Analogía Java"}
-```java
-// Java — Stream API
-List<Double> conIva = precios.stream()
-    .map(p -> p * 1.21)
-    .collect(Collectors.toList());
+```php
+<?php
+// Aplicar a arrays asociativos dentro de un array
+$alumnos = [
+    ["nombre" => "Laura", "nota" => 7.0],
+    ["nombre" => "Marc",  "nota" => 4.5],
+    ["nombre" => "Aisha", "nota" => 9.1],
+];
 
-List<Integer> caros = precios.stream()
-    .filter(p -> p > 15)
-    .collect(Collectors.toList());
+// Añadir campo 'aprobado' a cada alumno
+$conEstado = array_map(function($a) {
+    $a["aprobado"] = $a["nota"] >= 5;
+    return $a;
+}, $alumnos);
 
-int total = precios.stream()
-    .reduce(0, Integer::sum);
+foreach ($conEstado as $a) {
+    $s = $a["aprobado"] ? "✅" : "❌";
+    echo "$s {$a['nombre']}\n";
+}
+// ✅ Laura
+// ❌ Marc
+// ✅ Aisha
+?>
 ```
 
-La diferencia clave: la Stream API de Java es **perezosa** (lazy) y no materializa resultados intermedios. PHP devuelve un nuevo array inmediatamente en cada operación. Para listas pequeñas o medianas la diferencia de rendimiento es despreciable.
-:::
+### `array_filter` — filtra elementos
+
+```php
+<?php
+$numeros = [1, 2, 3, 4, 5, 6, 7, 8];
+
+$pares = array_filter($numeros, fn($n) => $n % 2 === 0);
+print_r(array_values($pares)); // reindexar con array_values
+// Array ( [0] => 2 [1] => 4 [2] => 6 [3] => 8 )
+?>
+```
+
+```php
+<?php
+$productos = [
+    ["nombre" => "Teclado", "precio" => 25.0, "stock" => 0],
+    ["nombre" => "Ratón",   "precio" => 15.0, "stock" => 8],
+    ["nombre" => "Monitor", "precio" => 180.0,"stock" => 3],
+];
+
+// Solo los que tienen stock
+$disponibles = array_filter($productos, fn($p) => $p["stock"] > 0);
+
+foreach ($disponibles as $p) {
+    echo "{$p['nombre']}: {$p['precio']} €\n";
+}
+// Ratón: 15 €
+// Monitor: 180 €
+?>
+```
 
 ::: {.callout-warning title="Errores frecuentes"}
-`array_filter()` **preserva las claves** del array original. Si después necesitas un array reindexado desde 0, aplica `array_values()`:
+`array_filter` conserva las claves originales. Si después necesitas índices `0, 1, 2...`, aplica `array_values()`:
 
 ```php
 <?php
-$caros = array_filter($precios, fn($p) => $p > 15);
-// [1 => 25, 3 => 40]  ← claves no consecutivas
-
-$carosReindexados = array_values($caros);
-// [0 => 25, 1 => 40]  ← reindexado
+$pares = array_filter([1,2,3,4,5], fn($n) => $n % 2 === 0);
+var_dump(array_keys($pares));         // [1, 3]  — claves no consecutivas
+var_dump(array_keys(array_values($pares))); // [0, 1]  — reindexado
 ?>
 ```
 :::
 
-Otras funciones útiles de array:
+### `array_reduce` — agrega a un único valor
 
-| Función | Efecto |
-|---|---|
-| `array_search($valor, $array)` | Devuelve la clave del primer elemento igual a `$valor`, o `false` |
-| `in_array($valor, $array)` | `true` si `$valor` existe en el array |
-| `ksort($array)` | Ordena por clave, manteniendo la asociación clave-valor |
-| `asort($array)` | Ordena por valor, manteniendo la asociación clave-valor |
-| `array_keys($array)` | Devuelve un array indexado con todas las claves |
-| `array_values($array)` | Devuelve un array indexado con todos los valores |
+```php
+<?php
+$notas = [7.5, 8.0, 6.5, 9.0, 5.5];
+
+$suma = array_reduce($notas, fn($acum, $n) => $acum + $n, 0);
+echo "Suma: $suma\n";      // Suma: 36.5
+echo "Media: " . ($suma / count($notas)); // Media: 7.3
+?>
+```
+
+```php
+<?php
+// Agrupar productos por categoría con array_reduce
+$items = [
+    ["nombre" => "Manzana", "tipo" => "fruta"],
+    ["nombre" => "Pan",     "tipo" => "panadería"],
+    ["nombre" => "Pera",    "tipo" => "fruta"],
+    ["nombre" => "Croissant","tipo"=> "panadería"],
+];
+
+$agrupados = array_reduce($items, function($acum, $item) {
+    $acum[$item["tipo"]][] = $item["nombre"];
+    return $acum;
+}, []);
+
+print_r($agrupados);
+// Array (
+//   [fruta] => Array ( [0] => Manzana [1] => Pera )
+//   [panadería] => Array ( [0] => Pan [1] => Croissant )
+// )
+?>
+```
+
+---
+
+## Otras funciones útiles
+
+```php
+<?php
+$catalogo = ["DAW2" => "Desarrollo Web", "DAM2" => "Apps Móviles", "ASIR2" => "Redes"];
+
+// Ordenar por clave
+ksort($catalogo);
+print_r($catalogo);
+// Array ( [ASIR2] => Redes [DAM2] => Apps Móviles [DAW2] => Desarrollo Web )
+
+// Ordenar por valor (mantiene asociación clave-valor)
+asort($catalogo);
+print_r($catalogo);
+// Array ( [DAM2] => Apps Móviles [DAW2] => Desarrollo Web [ASIR2] => Redes )
+
+// Extraer solo claves o solo valores
+print_r(array_keys($catalogo));   // Array ( [0] => DAM2 [1] => DAW2 [2] => ASIR2 )
+print_r(array_values($catalogo)); // Array ( [0] => Apps Móviles [1] => Desarrollo Web [2] => Redes )
+?>
+```
+
+```php
+<?php
+// array_slice: extraer una porción
+$letras = ["a","b","c","d","e","f"];
+print_r(array_slice($letras, 2, 3));
+// Array ( [0] => c [1] => d [2] => e )
+
+// array_splice: extraer y (opcionalmente) insertar
+$numeros = [1,2,3,4,5];
+$extraidos = array_splice($numeros, 1, 2, [10, 20]);
+print_r($numeros);    // Array ( [0] => 1 [1] => 10 [2] => 20 [3] => 4 [4] => 5 )
+print_r($extraidos);  // Array ( [0] => 2 [1] => 3 )
+?>
+```
 
 ---
 
 ## Actividades
 
 ::: {#exr-UD3-5}
-**E3.5 — Catálogo de cursos** `CE3.c · CE3.g · Sesión 5`
+**E3.5 — Catálogo de cursos**
 
-Crea un array asociativo `$catalogo` donde cada clave sea el código de un curso (p. ej. `"DAW2"`) y el valor sea su nombre completo (p. ej. `"Desarrollo de Aplicaciones Web"`). Incluye al menos cuatro cursos.
+Completa las funciones que gestionan el catálogo:
 
-Implementa las siguientes funciones auxiliares con documentación PHPDoc:
+```php
+<?php
+$catalogo = [
+    "DAW2"  => "Desarrollo de Aplicaciones Web",
+    "DAM2"  => "Desarrollo de Aplicaciones Multiplataforma",
+    "ASIR2" => "Administración de Sistemas Informáticos en Red",
+    "SMR1"  => "Sistemas Microinformáticos y Redes",
+];
 
-a) `buscarCurso(array $catalogo, string $codigo): ?string` — devuelve el nombre del curso si existe, o `null` si no.
-b) `existeCurso(array $catalogo, string $nombre): bool` — devuelve `true` si el nombre del curso existe en el catálogo (usa `in_array` con comparación estricta).
-c) Muestra el catálogo ordenado por código (`ksort`) y ordenado por nombre (`asort`), imprimiendo ambas versiones.
+function buscarCurso(array $catalogo, string $codigo): ?string {
+    // Devuelve el nombre si existe, null si no
+}
+
+function existeCurso(array $catalogo, string $nombre): bool {
+    // true si el nombre existe como valor (usa in_array estricto)
+}
+
+// Pruebas
+var_dump(buscarCurso($catalogo, "DAW2"));        // string "Desarrollo de Aplicaciones Web"
+var_dump(buscarCurso($catalogo, "XXX"));          // NULL
+var_dump(existeCurso($catalogo, "Redes"));        // false (nombre parcial)
+var_dump(existeCurso($catalogo, "Sistemas Microinformáticos y Redes")); // true
+
+// Muestra el catálogo ordenado por código y luego por nombre
+?>
+```
+
+Resultado esperado de la parte de ordenación:
+```
+Por código:
+ASIR2: Administración de Sistemas Informáticos en Red
+DAM2: Desarrollo de Aplicaciones Multiplataforma
+DAW2: Desarrollo de Aplicaciones Web
+SMR1: Sistemas Microinformáticos y Redes
+
+Por nombre:
+ASIR2: Administración de Sistemas Informáticos en Red
+DAM2: Desarrollo de Aplicaciones Multiplataforma
+DAW2: Desarrollo de Aplicaciones Web
+SMR1: Sistemas Microinformáticos y Redes
+```
 :::
 
 ::: {#exr-UD3-6}
-**E3.6 — Inventario multinivel de almacén** `CE3.c · CE3.g · Sesión 6`
+**E3.6 — Inventario multinivel de almacén**
 
-Define un array multidimensional `$almacenes` con al menos dos almacenes (claves `"Madrid"` y `"Valencia"`), cada uno con un array de productos. Cada producto debe tener las claves `"producto"`, `"precio"` y `"stock"`. Incluye al menos dos productos por almacén.
+Dado este array, implementa las operaciones con `array_map` y `array_filter` (sin bucles explícitos):
 
-Implementa las siguientes operaciones **sin bucles explícitos** (usa `array_map` y `array_filter`):
+```php
+<?php
+$almacenes = [
+    "Madrid" => [
+        ["producto" => "Portátil", "precio" => 600.0, "stock" => 4],
+        ["producto" => "Tablet",   "precio" => 250.0, "stock" => 1],
+    ],
+    "Valencia" => [
+        ["producto" => "Monitor",  "precio" => 180.0, "stock" => 8],
+        ["producto" => "Teclado",  "precio" => 25.0,  "stock" => 2],
+    ],
+];
 
-a) Genera `$almacenesActualizados` aplicando un **incremento del 10 %** al precio de todos los productos, sin modificar `$almacenes` original. Usa `array_map` anidado (uno por almacén, otro por producto dentro de cada almacén).
-b) Genera `$stockBajo` con solo los productos cuyo `stock` sea **menor o igual a 2**, manteniendo la estructura por almacén. Usa `array_map` + `array_filter`.
-c) Imprime ambos resultados con `print_r`.
+// a) $almacenesActualizados: precios +10%, sin modificar $almacenes
+//    Usa array_map anidado (uno por almacén, uno por producto)
+$almacenesActualizados = // Tu código aquí
+
+// b) $stockBajo: solo productos con stock <= 2, manteniendo estructura por almacén
+//    Usa array_map + array_filter
+$stockBajo = // Tu código aquí
+
+print_r($almacenesActualizados);
+print_r($stockBajo);
+?>
+```
+
+Resultado esperado de `$stockBajo`:
+```
+Array
+(
+    [Madrid] => Array
+        (
+            [1] => Array ( [producto] => Tablet [precio] => 250 [stock] => 1 )
+        )
+    [Valencia] => Array
+        (
+            [1] => Array ( [producto] => Teclado [precio] => 25 [stock] => 2 )
+        )
+)
+```
 :::

@@ -2,54 +2,143 @@
 title: "Bucles"
 ---
 
-# Bloque 2 · Bucles
 
 ::: {.callout-important title="Normativa · RA-CE"}
-**CE3.b** — Se han utilizado bucles y se ha verificado su funcionamiento.  
-*RD 686/2010, Anexo II.*
+**CE3.b** — Se han utilizado bucles y se ha verificado su funcionamiento.
 :::
 
 ---
 
-## `while` y `do-while`
+## `while`
 
-La lógica es idéntica a la de Java: `while` evalúa la condición **antes** de cada iteración, mientras que `do-while` la evalúa **después**, garantizando al menos una ejecución del bloque.
+Evalúa la condición antes de cada iteración. Si la condición es `false` desde el inicio, el bloque no se ejecuta:
 
 ```php
 <?php
-// while: puede no ejecutarse ninguna vez
-$contador = 1;
-while ($contador <= 5) {
-    echo $contador . " ";
-    $contador++;
+$i = 1;
+while ($i <= 5) {
+    echo $i . " ";
+    $i++;
 }
-// Salida: 1 2 3 4 5
-
-// do-while: se ejecuta al menos una vez
-$intento = 0;
-do {
-    echo "Intento " . $intento . "\n";
-    $intento++;
-} while ($intento < 3);
-// Salida: Intento 0 / Intento 1 / Intento 2
+// 1 2 3 4 5
 ?>
 ```
 
-::: {.callout-tip title="Analogía Java"}
-La sintaxis de `while` y `do-while` en PHP es idéntica a la de Java. La única diferencia práctica es que la condición de PHP puede ser cualquier expresión que PHP convierta a booleano (ver Bloque 1), no solo una expresión estrictamente `boolean` como exige Java.
-:::
+```php
+<?php
+$total = 0;
+$numero = 1;
+while ($numero <= 100) {
+    $total += $numero;
+    $numero++;
+}
+echo "Suma 1..100 = $total";
+// Suma 1..100 = 5050
+?>
+```
+
+```php
+<?php
+// Contar dígitos de un número
+$n = 38472;
+$digitos = 0;
+while ($n > 0) {
+    $n = (int)($n / 10);
+    $digitos++;
+}
+echo "Dígitos: $digitos";
+// Dígitos: 5
+?>
+```
+
+---
+
+## `do-while`
+
+Evalúa la condición **después** de cada iteración — el bloque se ejecuta al menos una vez:
+
+```php
+<?php
+$intentos = 0;
+do {
+    $intentos++;
+    echo "Intento $intentos\n";
+} while ($intentos < 3);
+// Intento 1
+// Intento 2
+// Intento 3
+?>
+```
+
+```php
+<?php
+// Útil para menús: muestra opciones al menos una vez
+$numeros = [7, 12, 3, 18, 5, -1]; // -1 es el centinela
+$idx = 0;
+do {
+    $valor = $numeros[$idx];
+    if ($valor === -1) break;
+    echo "Procesando: $valor\n";
+    $idx++;
+} while ($idx < count($numeros));
+// Procesando: 7
+// Procesando: 12
+// Procesando: 3
+// Procesando: 18
+// Procesando: 5
+?>
+```
 
 ---
 
 ## `for`
 
-La cabecera del `for` es idéntica a la de Java: inicialización, condición e incremento separados por punto y coma.
+Cuando sabes exactamente cuántas iteraciones necesitas:
 
 ```php
 <?php
 for ($i = 1; $i <= 10; $i++) {
-    echo $i * 2 . "<br>";
+    echo "$i ";
 }
+// 1 2 3 4 5 6 7 8 9 10
+?>
+```
+
+```php
+<?php
+// Tabla de multiplicar del 7
+for ($i = 1; $i <= 10; $i++) {
+    echo "7 × $i = " . (7 * $i) . "\n";
+}
+// 7 × 1 = 7
+// 7 × 2 = 14
+// ...
+// 7 × 10 = 70
+?>
+```
+
+```php
+<?php
+// Recorrer un array indexado con for
+$frutas = ["manzana", "pera", "naranja", "uva"];
+for ($i = 0; $i < count($frutas); $i++) {
+    echo "$i: {$frutas[$i]}\n";
+}
+// 0: manzana
+// 1: pera
+// 2: naranja
+// 3: uva
+?>
+```
+
+```php
+<?php
+// Bucle decreciente
+for ($i = 5; $i >= 1; $i--) {
+    echo "$i... ";
+}
+echo "¡Ya!";
+// 5... 4... 3... 2... 1... ¡Ya!
 ?>
 ```
 
@@ -57,114 +146,196 @@ for ($i = 1; $i <= 10; $i++) {
 
 ## `foreach`
 
-`foreach` no tiene una traducción literal en Java básico (es conceptualmente similar al `for-each` de colecciones). En PHP se utiliza de forma habitual para recorrer arrays, incluyendo el acceso simultáneo a **clave** y **valor** en arrays asociativos.
+La forma más natural de recorrer arrays en PHP:
+
+```php
+<?php
+$colores = ["rojo", "verde", "azul"];
+
+foreach ($colores as $color) {
+    echo $color . "\n";
+}
+// rojo
+// verde
+// azul
+?>
+```
+
+Con arrays asociativos — accedes a clave y valor:
 
 ```php
 <?php
 $precios = ["pan" => 1.20, "leche" => 0.95, "huevos" => 2.50];
 
 foreach ($precios as $producto => $precio) {
-    echo "$producto cuesta $precio €<br>";
+    echo "$producto: $precio €\n";
 }
-// Salida:
-// pan cuesta 1.2 €
-// leche cuesta 0.95 €
-// huevos cuesta 2.5 €
+// pan: 1.2 €
+// leche: 0.95 €
+// huevos: 2.5 €
 ?>
-```
-
-::: {.callout-note title="Concepto clave"}
-La sintaxis `foreach ($array as $clave => $valor)` desempaqueta cada elemento del array en dos variables locales al bloque. Si solo necesitas el valor, puedes omitir la clave: `foreach ($array as $valor)`.
-:::
-
-::: {.callout-tip title="Analogía Java"}
-```java
-// Java — for-each sobre un Map
-for (Map.Entry<String, Double> entry : precios.entrySet()) {
-    System.out.println(entry.getKey() + " cuesta " + entry.getValue());
-}
 ```
 
 ```php
 <?php
-// PHP — foreach equivalente, más conciso
-foreach ($precios as $producto => $precio) {
-    echo "$producto cuesta $precio\n";
+// Acumular con foreach
+$notas = [7.5, 8.0, 6.5, 9.0, 5.5];
+$suma = 0;
+foreach ($notas as $nota) {
+    $suma += $nota;
 }
+$media = $suma / count($notas);
+echo "Media: $media";
+// Media: 7.3
 ?>
 ```
 
-PHP no necesita `entrySet()`, `getKey()` ni `getValue()`; la desestructuración es directa.
+```php
+<?php
+// Modificar elementos con referencia (&)
+$precios = [10.0, 25.0, 8.0];
+foreach ($precios as &$precio) {
+    $precio *= 1.21; // aplicar IVA
+}
+unset($precio); // importante: romper la referencia al salir del bucle
+
+print_r($precios);
+// Array ( [0] => 12.1 [1] => 30.25 [2] => 9.68 )
+?>
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+Si usas `&$variable` en un `foreach`, **siempre** añade `unset($variable)` justo después del bucle. Si no lo haces, la última posición del array queda apuntada por esa referencia y el siguiente código que use esa variable puede sobreescribir el array sin querer.
 :::
 
 ---
 
-## `break` y `continue` con niveles
+## `break` y `continue`
 
-PHP permite indicar **cuántos niveles** de bucle romper o saltar mediante `break N` / `continue N`. En Java el mismo control sobre bucles anidados requiere etiquetas (`label:`).
+`break` detiene el bucle; `continue` salta al inicio de la siguiente iteración:
+
+```php
+<?php
+// break: para en cuanto encuentra el primer número par
+$numeros = [1, 3, 7, 4, 9, 2];
+foreach ($numeros as $n) {
+    if ($n % 2 === 0) {
+        echo "Primer par: $n";
+        break;
+    }
+}
+// Primer par: 4
+?>
+```
+
+```php
+<?php
+// continue: imprime solo los impares
+for ($i = 1; $i <= 10; $i++) {
+    if ($i % 2 === 0) continue;
+    echo "$i ";
+}
+// 1 3 5 7 9
+?>
+```
+
+### `break N` y `continue N` en bucles anidados
+
+`break 2` sale de los dos bucles más internos; `continue 2` salta a la siguiente iteración del bucle externo:
 
 ```php
 <?php
 for ($i = 1; $i <= 3; $i++) {
     for ($j = 1; $j <= 3; $j++) {
-        if ($j == 2) continue 2; // salta a la siguiente iteración del bucle EXTERNO
+        if ($j === 2) continue 2; // salta al siguiente $i
         echo "i=$i j=$j  ";
     }
 }
-// Salida: i=1 j=1  i=2 j=1  i=3 j=1
+// i=1 j=1  i=2 j=1  i=3 j=1
 ?>
 ```
 
 ```php
 <?php
-for ($i = 1; $i <= 5; $i++) {
-    for ($j = 1; $j <= 5; $j++) {
-        if ($i * $j > 6) break 2; // sale de AMBOS bucles
-        echo "$i×$j=" . ($i * $j) . "  ";
+// Buscar un valor en una matriz 2D y salir de ambos bucles al encontrarlo
+$matriz = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+];
+$buscado = 5;
+$encontrado = false;
+
+for ($fila = 0; $fila < count($matriz); $fila++) {
+    for ($col = 0; $col < count($matriz[$fila]); $col++) {
+        if ($matriz[$fila][$col] === $buscado) {
+            echo "Encontrado en fila $fila, columna $col";
+            $encontrado = true;
+            break 2;
+        }
     }
 }
+// Encontrado en fila 1, columna 1
 ?>
 ```
-
-::: {.callout-tip title="Analogía Java"}
-```java
-// Java necesita una etiqueta para romper un bucle externo
-externo:
-for (int i = 1; i <= 3; i++) {
-    for (int j = 1; j <= 3; j++) {
-        if (j == 2) continue externo;
-        System.out.print("i=" + i + " j=" + j + "  ");
-    }
-}
-```
-
-PHP logra lo mismo con `continue 2` sin necesidad de etiquetar el bucle.
-:::
-
-::: {.callout-warning title="Errores frecuentes"}
-`break` / `continue` sin número actúan sobre el bucle más interno, igual que en Java. Usar `break 2` cuando solo hay un nivel de bucle activo genera un error en tiempo de ejecución (`Cannot break/continue 2 levels`). Cuenta los niveles de anidamiento antes de usar el modificador numérico.
-:::
 
 ---
 
 ## Actividades
 
 ::: {#exr-UD3-3}
-**E3.3 — Generador de tablas de multiplicar** `CE3.b · CE3.g · Sesión 3`
+**E3.3 — Generador de tablas de multiplicar**
 
-Crea un script PHP que genere dinámicamente una tabla de multiplicar embebida en HTML:
+Completa las tres funciones. Cada una genera la tabla del número recibido del 1 al 10:
 
-a) **Versión con `for`:** genera la tabla del número `5` (o el que prefieras) del 1 al 10, mostrando cada resultado en un `<li>` dentro de una `<ul>`.
-b) **Versión con `while`:** genera la misma tabla pero usando `while`.
-c) **Versión con `do-while` y centinela:** dado el array `$numeros = [3, 7, 9, -1, 4]`, recorre el array con `do-while` y genera la tabla de cada número hasta encontrar el valor `-1` (centinela), que debe detener el proceso sin generar tabla para él ni para los valores posteriores.
+```php
+<?php
+function tablaFor(int $n): void {
+    // Usa for
+}
 
-Documenta cada función con PHPDoc.
+function tablaWhile(int $n): void {
+    // Usa while
+}
+
+function tablasCentinela(array $numeros): void {
+    // Usa do-while. Genera la tabla de cada número del array
+    // hasta encontrar -1 (centinela); -1 y los siguientes no se procesan.
+}
+
+tablaFor(3);
+echo "---\n";
+tablaWhile(3);
+echo "---\n";
+tablasCentinela([2, 4, -1, 6]);
+?>
+```
+
+Resultado esperado:
+```
+3 × 1 = 3
+3 × 2 = 6
+...
+3 × 10 = 30
+---
+3 × 1 = 3
+...
+3 × 10 = 30
+---
+2 × 1 = 2
+...
+2 × 10 = 20
+4 × 1 = 4
+...
+4 × 10 = 40
+```
+*(El -1 y el 6 no generan tabla.)*
 :::
 
 ::: {#exr-UD3-4}
-**E3.4 — Filtro de inventario** `CE3.b · CE3.g · Sesión 4`
+**E3.4 — Filtro de inventario**
 
-Dado el siguiente array de productos:
+Dado este inventario, implementa los dos recorridos:
 
 ```php
 <?php
@@ -174,13 +345,30 @@ $inventario = [
     ["nombre" => "Monitor",   "precio" => 180.0, "stock" => 5],
     ["nombre" => "Cable USB", "precio" => 5.0,   "stock" => 30],
 ];
+
+// a) Con break: lista productos hasta encontrar el primero con stock === 0
+//    Al encontrarlo, muestra "Agotado: {nombre}" y para.
+echo "--- Con break ---\n";
+foreach ($inventario as $p) {
+    // Tu código aquí
+}
+
+// b) Con continue: muestra solo los productos con precio <= 50 €
+echo "--- Con continue (precio <= 50 €) ---\n";
+foreach ($inventario as $p) {
+    // Tu código aquí
+}
 ?>
 ```
 
-Implementa dos recorridos independientes con `foreach`:
-
-a) **Recorrido con `break`:** muestra el nombre y el stock de cada producto. En cuanto encuentres el primer producto con `stock === 0`, muestra el mensaje `"Producto agotado: {nombre}. Deteniendo recorrido."` y para el bucle.
-b) **Recorrido con `continue`:** define un umbral de precio de 50 €. Omite con `continue` los productos cuyo precio supere el umbral y muestra el nombre y precio de los que sí lo cumplen.
-
-Añade comentarios que expliquen la lógica de cada bloque.
+Resultado esperado:
+```
+--- Con break ---
+Teclado: 12 uds
+Agotado: Ratón
+--- Con continue (precio <= 50 €) ---
+Teclado: 25 €
+Ratón: 15 €
+Cable USB: 5 €
+```
 :::

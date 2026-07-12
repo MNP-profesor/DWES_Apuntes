@@ -1,0 +1,80 @@
+# Cookies
+
+`setcookie()` crea una cookie antes de cualquier salida al navegador. `$_COOKIE` la lee, pero **solo a partir de la siguiente petición** (no en la misma en la que se crea).
+
+::: {.callout-note title="Concepto clave"}
+Una cookie recién creada con `setcookie()` no aparece todavía en `$_COOKIE` durante esa misma ejecución del script: viaja al navegador y vuelve en la petición siguiente.
+:::
+
+```php
+setcookie('tema', 'oscuro', time() + 86400 * 30); // 30 días
+```
+
+```php
+// En la siguiente petición:
+$tema = $_COOKIE['tema'] ?? 'claro';
+echo $tema; // oscuro
+```
+
+Más ejemplos:
+
+```php
+// Contador de visitas con cookie (persiste aunque se cierre el navegador)
+$visitas = (int) ($_COOKIE['visitas'] ?? 0);
+$visitas++;
+setcookie('visitas', (string) $visitas, time() + 86400 * 365);
+echo "Visitas totales: $visitas";
+```
+
+```php
+// Eliminar una cookie: fijar expiración en el pasado
+setcookie('tema', '', time() - 3600);
+```
+
+## Flags de seguridad
+
+Desde PHP 7.3, `setcookie()` acepta un array de opciones con flags imprescindibles en producción:
+
+```php
+setcookie('sesion_pref', 'compacta', [
+    'expires'  => time() + 86400 * 30,
+    'path'     => '/',
+    'httponly' => true,   // no accesible desde JavaScript (mitiga XSS)
+    'secure'   => true,   // solo viaja por HTTPS
+    'samesite' => 'Strict', // no se envía en peticiones de origen cruzado (mitiga CSRF)
+]);
+```
+
+| Flag | Qué evita si falta |
+|---|---|
+| `httponly` | Robo de la cookie mediante JavaScript malicioso (XSS) |
+| `secure` | Envío de la cookie sin cifrar por HTTP |
+| `samesite` | Envío automático de la cookie en peticiones iniciadas desde otro sitio (CSRF) |
+
+::: {.callout-warning title="Errores frecuentes"}
+Poner `secure: true` en un entorno de desarrollo local sin HTTPS hace que la cookie nunca se guarde, y el fallo es silencioso (no hay ningún error visible). Si una cookie "desaparece" en local, revisa primero este flag.
+:::
+
+::: {#exr-UD4-4}
+## E4.4 — Preferencias de usuario con cookie
+
+Crea una página que guarde el idioma elegido por el usuario ('es'/'en') en una cookie de 30 días y lo recupere en visitas posteriores, con 'es' como valor por defecto si no existe la cookie.
+
+Código de partida:
+
+```php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    setcookie('idioma', $_POST['idioma'], time() + 86400 * 30, '/');
+}
+$idiomaActual = $_COOKIE['idioma'] ?? 'es';
+echo "Idioma actual: $idiomaActual";
+```
+
+Resultado esperado la primera vez (sin cookie previa): `Idioma actual: es`. Tras enviar el formulario eligiendo "en" y recargar: `Idioma actual: en`.
+:::
+
+::: {#exr-UD4-5}
+## E4.5 — Cookie con flags de seguridad
+
+Reescribe la cookie del ejercicio anterior aplicando `httponly`, `secure` y `samesite`, y añade un comentario junto a cada flag explicando qué mitiga.
+:::

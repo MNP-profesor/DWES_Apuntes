@@ -6,7 +6,7 @@ lang: es
 
 book:
   title: "Desarrollo Web en Entorno Servidor"
-  subtitle: "2º DAW · Módulo 0613 · 200 horas"
+  subtitle: "2º DAW | Cód. Módulo 0613 | 200 horas"
   author: "Manel Navarro Pérez"
   #date: today
   #date-format: "MMMM YYYY"
@@ -19,8 +19,8 @@ book:
     style: docked
     collapse-level: 1
   page-footer:
-    left: "© Manel Navarro Pérez · CC BY-NC-SA 4.0"
-    right: "DWES · 2º DAW · Módulo 0613"
+    left: "© Manel Navarro Pérez | CC BY-NC-SA 4.0"
+    right: "DWES | 2º DAW | Módulo 0613"
 
   chapters:
     - index.qmd
@@ -33,7 +33,7 @@ book:
     # cuando llegue la UD1 real.
     # ══════════════════════════════════════════════════════════
 
-    - part: "UD1 - Arquitecturas y tecnologías Web en entorno servidor"
+    - part: "UD1. Arquitecturas y tecnologías de programación Web en entorno servidor"
       chapters:
         - UD1/00-presentacion.qmd
         - UD1/01-modelo-ejecucion.qmd
@@ -43,7 +43,7 @@ book:
         - UD1/05-integracion-marcas.qmd
         - UD1/06-herramientas.qmd        
 
-    - part: "UD2 - Fundamentos de PHP"
+    - part: "UD2. Fundamentos de PHP: variables, operadores y sintaxis embebida"
       chapters:
         - UD2/01-presentacion.qmd
         - UD2/02-generacion-embebida.qmd
@@ -53,7 +53,7 @@ book:
         - UD2/06-ambito.qmd
         - UD2/07-evaluacion.qmd
 
-    - part: "UD3 - Estructuras de control, funciones y formularios en PHP"
+    - part: "UD3. Estructuras de control, funciones y formularios en PHP"
       chapters:
         - UD3/01-presentacion.qmd
         - UD3/02-condicionales.qmd
@@ -64,13 +64,32 @@ book:
         - UD3/07-recogida-datos.qmd
         - UD3/08-evaluacion.qmd
 
-    # - part: "UD4 · POO en PHP: autenticación, sesiones y cookies"
-    #   chapters:
-    #     - UD4/01-tema.qmd
+    - part: "UD4. POO en PHP y Desarrollo de funcionalidades Web: autenticación, sesiones y cookies"
+      chapters:
+        - UD4/00-presentacion.qmd
+        - UD4/01-ambito-y-clases.qmd
+        - UD4/02-constructores-y-encapsulacion.qmd
+        - UD4/03-herencia-namespaces-excepciones.qmd
+        - UD4/04-sesiones.qmd
+        - UD4/05-cookies.qmd
+        - UD4/06-autenticacion.qmd
+        - UD4/07-login-registro.qmd
+        - UD4/08-recordarme-y-roles.qmd
+        - UD4/09-depuracion-y-cierre.qmd
 
-    # - part: "UD5 · Separación de la lógica de negocio: MVC con Laravel"
-    #   chapters:
-    #     - UD5/01-tema.qmd
+    - part: "UD5. Separación de la lógica de negocio: MVC con Laravel"
+      chapters:
+        - UD5/00-presentacion.qmd
+        - UD5/01-mvc.qmd
+        - UD5/02-instalacion-laravel.qmd
+        - UD5/03-rutas-controladores.qmd
+        - UD5/04-blade.qmd
+        - UD5/05-formularios.qmd
+        - UD5/06-eloquent.qmd
+        - UD5/07-sesiones.qmd
+        - UD5/08-configuracion.qmd
+        - UD5/09-poo-servicios.qmd
+        - UD5/10-pruebas-proyecto.qmd
 
     # - part: "UD6 · Acceso a almacenes de datos con PDO"
     #   chapters:

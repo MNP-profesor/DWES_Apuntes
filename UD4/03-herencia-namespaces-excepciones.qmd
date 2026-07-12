@@ -1,0 +1,139 @@
+# Herencia, namespaces y excepciones
+
+## Herencia
+
+`extends` permite que una clase reutilice y amplíe otra. `parent::` invoca el método del padre.
+
+```php
+class Usuario {
+    protected string $nombre;
+
+    public function __construct(string $nombre) {
+        $this->nombre = $nombre;
+    }
+
+    public function permisos(): array {
+        return ['ver_perfil'];
+    }
+}
+
+class Administrador extends Usuario {
+    public function permisos(): array {
+        return array_merge(parent::permisos(), ['gestionar_usuarios']);
+    }
+}
+
+$u = new Usuario('Ana');
+$a = new Administrador('Luis');
+print_r($u->permisos()); // ['ver_perfil']
+print_r($a->permisos()); // ['ver_perfil', 'gestionar_usuarios']
+```
+
+Otro ejemplo, jerarquía de figuras:
+
+```php
+class Figura {
+    public function area(): float {
+        return 0;
+    }
+}
+
+class Circulo extends Figura {
+    public function __construct(private float $radio) {}
+
+    public function area(): float {
+        return pi() * $this->radio ** 2;
+    }
+}
+
+class Cuadrado extends Figura {
+    public function __construct(private float $lado) {}
+
+    public function area(): float {
+        return $this->lado ** 2;
+    }
+}
+
+$formas = [new Circulo(3), new Cuadrado(4)];
+foreach ($formas as $f) {
+    echo round($f->area(), 2) . "\n";
+}
+// 28.27
+// 16
+```
+
+::: {.callout-note title="Concepto clave"}
+El segundo ejemplo usa **promoción de propiedades en el constructor** (`private float $radio` directamente en la firma), una forma abreviada disponible desde PHP 8 que evita escribir la propiedad y la asignación por separado.
+:::
+
+## Namespaces
+
+Organizan las clases en espacios de nombres para evitar colisiones entre ficheros/librerías.
+
+```php
+// Fichero: App/Modelo/Usuario.php
+namespace App\Modelo;
+
+class Usuario {
+    public string $nombre;
+}
+```
+
+```php
+// Fichero: index.php
+require_once 'App/Modelo/Usuario.php';
+use App\Modelo\Usuario;
+
+$u = new Usuario();
+$u->nombre = 'Ana';
+echo $u->nombre; // Ana
+```
+
+## Control de errores y excepciones
+
+PHP ofrece mecanismos básicos (`@`, `die()`/`exit()`) y el modelo moderno de excepciones (`try/catch/throw`).
+
+::: {.callout-warning title="Errores frecuentes"}
+El operador `@` no soluciona el error, solo lo oculta. Un script con `@` por todas partes es casi imposible de depurar porque los fallos desaparecen en silencio. Evítalo salvo casos muy puntuales y bien documentados.
+:::
+
+```php
+class SaldoInsuficienteException extends Exception {}
+
+function retirar(float $saldo, float $cantidad): float {
+    if ($cantidad > $saldo) {
+        throw new SaldoInsuficienteException('Saldo insuficiente');
+    }
+    return $saldo - $cantidad;
+}
+
+try {
+    $nuevoSaldo = retirar(100, 150);
+} catch (SaldoInsuficienteException $e) {
+    echo 'Error: ' . $e->getMessage(); // Error: Saldo insuficiente
+} finally {
+    echo ' — operación finalizada';
+}
+```
+
+Capturar varios tipos de excepción:
+
+```php
+function dividir(float $a, float $b): float {
+    if ($b === 0.0) {
+        throw new DivisionByZeroError('No se puede dividir entre 0');
+    }
+    return $a / $b;
+}
+
+try {
+    echo dividir(10, 0);
+} catch (DivisionByZeroError $e) {
+    echo 'Error matemático: ' . $e->getMessage();
+} catch (Exception $e) {
+    echo 'Error general: ' . $e->getMessage();
+}
+// Error matemático: No se puede dividir entre 0
+```
+
+Gracias a la herencia, crear excepciones propias es tan simple como extender `Exception`, lo que te permite capturar de forma selectiva solo el error que te interesa — esto es justo lo que usarás en el login del capítulo 7.

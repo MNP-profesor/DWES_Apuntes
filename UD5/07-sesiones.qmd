@@ -1,0 +1,156 @@
+# Sesiones y mantenimiento de estado {#sec-ud5-sesiones}
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque trabaja **CE5.f**: aplicaciones web con mantenimiento de estado y separación de la lógica de negocio.
+:::
+
+HTTP no recuerda nada entre peticiones. En la UD4 mantuviste estado a mano con `session_start()` y `$_SESSION`; Laravel eleva el nivel: la sesión ya está abierta en cada petición y se accede con una interfaz única.
+
+## La API de sesión, con ejemplos
+
+```php
+// Guardar
+session(['tema' => 'oscuro']);
+
+// Leer (con valor por defecto si no existe)
+$tema = session('tema', 'claro');
+
+// También desde el objeto Request:
+$request->session()->put('idioma', 'es');
+$request->session()->get('idioma');          // "es"
+$request->session()->has('idioma');          // true
+$request->session()->forget('idioma');       // eliminar la clave
+$request->session()->flash('aviso', 'Solo dura una petición');
+```
+
+Ruta de demostración para verlo funcionar:
+
+```php
+Route::get('/visitas', function () {
+    $n = session('visitas', 0) + 1;
+    session(['visitas' => $n]);
+    return "Has visitado esta página $n veces";
+});
+```
+
+| Acción | Respuesta |
+|---|---|
+| Primera visita a `/visitas` | `Has visitado esta página 1 veces` |
+| Refrescar (F5) | `Has visitado esta página 2 veces` |
+| Refrescar otra vez | `Has visitado esta página 3 veces` |
+| Abrir en **otro navegador** | `Has visitado esta página 1 veces` (otra sesión) |
+
+::: {.callout-note title="Concepto clave"}
+El estado vive **en el servidor**; el navegador solo transporta la cookie de sesión, que en Laravel viaja **firmada y cifrada** (frente al `PHPSESSID` desnudo de la UD4). Ábrela en las herramientas de desarrollador (Aplicación → Cookies): verás `laravel_session` con un valor ilegible. El driver de almacenamiento (fichero, base de datos, Redis) se cambia por configuración, sin tocar código.
+:::
+
+## Ejemplo completo: favoritos en la agenda
+
+Caso de uso real: marcar contactos como favoritos, con la marca persistiendo entre peticiones **en sesión** (no en base de datos: es una preferencia del visitante, no un dato del contacto).
+
+**Rutas:**
+
+```php
+Route::post('/favoritos/{id}', [ContactoController::class, 'toggleFavorito'])
+     ->whereNumber('id')->name('favoritos.toggle');
+
+Route::get('/favoritos', [ContactoController::class, 'favoritos'])
+     ->name('favoritos.index');
+
+Route::post('/favoritos-vaciar', [ContactoController::class, 'vaciarFavoritos'])
+     ->name('favoritos.vaciar');
+```
+
+**Controlador:**
+
+```php
+/**
+ * Marca o desmarca un contacto como favorito.
+ */
+public function toggleFavorito(Request $request, int $id)
+{
+    $fav = $request->session()->get('favoritos', []);
+
+    if (in_array($id, $fav)) {
+        $fav = array_values(array_diff($fav, [$id]));  // quitar
+    } else {
+        $fav[] = $id;                                  // añadir
+    }
+
+    $request->session()->put('favoritos', $fav);
+    return back();   // vuelve a la página desde la que se pulsó
+}
+
+/**
+ * Listado de contactos marcados como favoritos.
+ */
+public function favoritos(Request $request)
+{
+    $ids = $request->session()->get('favoritos', []);
+    $contactos = Contacto::whereIn('id', $ids)->orderBy('nombre')->get();
+
+    return view('contactos.favoritos', compact('contactos'));
+}
+
+/**
+ * Vacía la lista de favoritos.
+ */
+public function vaciarFavoritos(Request $request)
+{
+    $request->session()->forget('favoritos');
+
+    return redirect()->route('favoritos.index')
+                     ->with('exito', 'Favoritos vaciados');
+}
+```
+
+**Botón en el listado** (dentro del `@foreach`):
+
+```php
+<form method="POST" action="{{ route('favoritos.toggle', $c->id) }}">
+    @csrf
+    <button type="submit">
+        {{ in_array($c->id, session('favoritos', [])) ? '★ Quitar' : '☆ Favorito' }}
+    </button>
+</form>
+```
+
+**Contador global en el layout** (visible en toda la aplicación):
+
+```php
+<nav>
+    <a href="{{ route('contactos.index') }}">Contactos</a> ·
+    <a href="{{ route('favoritos.index') }}">
+        Favoritos ({{ count(session('favoritos', [])) }})
+    </a>
+</nav>
+```
+
+Secuencia de uso y lo que se ve:
+
+| Acción | Resultado en pantalla |
+|---|---|
+| Pulsar ☆ en Aitana | El botón pasa a `★ Quitar`; el menú muestra `Favoritos (1)` |
+| Pulsar ☆ en Júlia | Menú: `Favoritos (2)` |
+| Visitar `/favoritos` | Listado con Aitana y Júlia |
+| Pulsar `★ Quitar` en Aitana | Menú: `Favoritos (1)` |
+| Pulsar "Vaciar favoritos" | `✔ Favoritos vaciados` y menú: `Favoritos (0)` |
+| Cerrar el navegador y volver | Favoritos vacíos: la sesión expiró o es nueva |
+
+::: {.callout-warning title="Errores frecuentes"}
+- Usar GET para el toggle. Cambia estado → debe ser POST (con `@csrf`). Un GET que modifica cosas acaba disparado por un prefetch del navegador o un buscador.
+- Olvidar el valor por defecto en `session('favoritos', [])`: la primera vez la clave no existe y `in_array` sobre `null` lanza error.
+- Guardar los favoritos en base de datos "porque es más fácil": son preferencias de la sesión del visitante; en BD contaminarías los datos de todos.
+:::
+
+::: {#exr-UD5-6}
+
+### E5.6 · Favoritos en sesión
+
+1. Añade a tu agenda la funcionalidad de favoritos completa del ejemplo: marcar/desmarcar desde el listado, guardando la marca en sesión.
+2. Crea la ruta `GET /favoritos` con su vista, que muestre solo los contactos marcados, y el contador en el menú del layout visible en toda la aplicación.
+3. Añade el botón "Vaciar favoritos" que limpie la clave de sesión y confirme con un mensaje flash.
+4. Redacta un breve informe (5–10 líneas): qué viaja exactamente en la cookie del navegador, dónde reside el estado, y compáralo con la implementación manual de la UD4.
+
+*Entrega apto/no apto: las cuatro operaciones funcionando (marcar, desmarcar, listar, vaciar), contador correcto en todas las páginas e informe entregado.*
+:::

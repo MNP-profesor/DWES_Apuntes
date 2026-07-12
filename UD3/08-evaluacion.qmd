@@ -2,61 +2,48 @@
 title: "Secuencia didáctica y evaluación"
 ---
 
-# Secuencia didáctica y evaluación
-
----
 
 ## Secuencia didáctica
 
-La unidad se desarrolla en diez sesiones (19 horas), con teoría y práctica intercaladas en cada sesión, salvo la última, dedicada a la integración y repaso.
-
 | Sesión | Duración | Contenido | Actividad |
 |---|---|---|---|
-| 1 | 2 h | Condicionales: `if/elseif/else`, ternario, `??` | E3.1 — Motor de tarifas |
+| 1 | 2 h | Condicionales: `if/elseif/else`, ternario, `??` | E3.1 — Clasificador de tarifas |
 | 2 | 2 h | `switch` / `match` | E3.2 — Selector de plan de hosting |
 | 3 | 2 h | Bucles `while`, `do-while`, `for` | E3.3 — Generador de tablas de multiplicar |
-| 4 | 2 h | `foreach`, `break`/`continue` con niveles | E3.4 — Filtro de inventario |
+| 4 | 2 h | `foreach`, `break`/`continue` | E3.4 — Filtro de inventario |
 | 5 | 2 h | Arrays indexados y asociativos | E3.5 — Catálogo de cursos |
 | 6 | 2 h | Arrays multidimensionales y funciones de orden superior | E3.6 — Inventario multinivel de almacén |
 | 7 | 2 h | Funciones: parámetros, retorno, referencia, ámbito | E3.7 — Librería de funciones de validación |
-| 8 | 2 h | Formularios HTML: GET vs POST | E3.8 — Formulario de inscripción a curso |
-| 9 | 2 h | Superglobales y validación de datos | E3.9 — Procesador de inscripción con validación |
-| 10 | 1 h | Integración y repaso general de la unidad | Sin entregable evaluable |
-
-> La sesión 10 no introduce contenidos nuevos: se dedica a resolver dudas, repasar los bloques de mayor dificultad (funciones y validación de formularios) y realizar ejercicios de repaso sin carácter evaluable.
+| 8 | 2 h | Formularios HTML: GET vs POST | E3.8 — Formulario de inscripción |
+| 9 | 2 h | Superglobales y validación de datos | E3.9 — Procesador de inscripción |
+| 10 | 1 h | Repaso e integración | Sin entregable |
 
 ---
 
-## Evaluación y ponderación de las actividades
+## Evaluación
 
-La evaluación de la unidad es de carácter **formativo y sumativo**, combinando el seguimiento de las nueve actividades prácticas (E3.1–E3.9) intercaladas con la teoría, y una prueba de evaluación independiente entregada al margen de este documento.
+### Ejercicios de práctica
 
-### Reparto del peso entre actividades
+Los ejercicios E3.1–E3.9 se evalúan como **apto / no apto** y representan un porcentaje pequeño de la nota final. Su objetivo es practicar y consolidar los contenidos sesión a sesión.
 
-Cada CE tiene un peso porcentual dentro del RA. Ese peso se reparte a partes iguales entre todas las actividades que trabajan ese CE; el peso final de cada actividad es la suma de las aportaciones de todos los CE en los que participa.
+Para obtener el **apto** es necesario:
 
-| CE | Peso | E3.1 | E3.2 | E3.3 | E3.4 | E3.5 | E3.6 | E3.7 | E3.8 | E3.9 |
-|---|---|---|---|---|---|---|---|---|---|---|
-| CE3.a | 12 % | X | X | | | | | | | |
-| CE3.b | 15 % | | | X | X | | | | | |
-| CE3.c | 18 % | | | | | X | X | | | |
-| CE3.d | 20 % | | | | | | | X | | |
-| CE3.e | 15 % | | | | | | | | X | |
-| CE3.f | 15 % | | | | | | | | | X |
-| CE3.g | 5 % | X | X | X | X | X | X | X | X | X |
-| **Peso final** | **100 %** | **6,56 %** | **6,56 %** | **8,06 %** | **8,06 %** | **9,56 %** | **9,56 %** | **20,56 %** | **15,56 %** | **15,56 %** |
+- El código produce el resultado esperado.
+- La estructura elegida (condicional, bucle, array, función) es adecuada al problema.
+- El código incluye comentarios PHPDoc en cada función y comentarios de línea en la lógica más compleja.
 
-> **Verificación:** la suma de los pesos finales de las nueve actividades es 100 %. La tabla está dispuesta con los CE en filas y las actividades en columnas para facilitar su copia directa a la hoja de cálculo de ponderaciones.
+### Examen de la unidad
 
-### Observación pedagógica sobre el reparto
+El grueso de la calificación recae en el **examen**, que se proporciona en documento aparte. El examen cubre los seis bloques de la unidad y tiene una duración de 60 minutos.
 
-El criterio CE3.d (funciones) concentra su peso íntegro (20 %) en una única actividad (E3.7), al no compartirse con ninguna otra. Esto hace que E3.7 sea la actividad de mayor peso individual de la unidad (20,56 %). Si se considera que los formularios de las actividades E3.8 y E3.9 también ponen en práctica funciones (por ejemplo, al reutilizar `formatearPrecio()` o `validarDNI()` en el procesador de inscripción), podría valorarse marcar CE3.d también en E3.9, lo que repartiría mejor el peso.
+### Tabla de criterios y actividades
 
-### Instrumentos y criterios de calificación
-
-La calificación de cada actividad atenderá a los siguientes aspectos, ponderados de forma equivalente salvo indicación específica en el enunciado:
-
-- **Corrección funcional:** el script produce el resultado esperado para los casos de prueba planteados.
-- **Selección adecuada de la estructura** (condicional, bucle, array, función) en relación con el problema planteado.
-- **Calidad del código:** legibilidad, nomenclatura coherente y comentarios conforme al criterio CE3.g.
-- En las actividades E3.8 y E3.9: **validación correcta y completa** de los datos recibidos del formulario.
+| CE | E3.1 | E3.2 | E3.3 | E3.4 | E3.5 | E3.6 | E3.7 | E3.8 | E3.9 |
+|---|---|---|---|---|---|---|---|---|---|
+| CE3.a | X | X | | | | | | | |
+| CE3.b | | | X | X | | | | | |
+| CE3.c | | | | | X | X | | | |
+| CE3.d | | | | | | | X | | |
+| CE3.e | | | | | | | | X | |
+| CE3.f | | | | | | | | | X |
+| CE3.g | X | X | X | X | X | X | X | X | X |

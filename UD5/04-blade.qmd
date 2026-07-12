@@ -1,0 +1,242 @@
+# Vistas con Blade {#sec-ud5-blade}
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque trabaja **CE5.c**: el aspecto visual del cliente se genera con objetos y controles del servidor (plantillas, componentes, slots). Transversal: **CE5.h**.
+:::
+
+Blade es el motor de plantillas de Laravel. Las vistas `.blade.php` se compilan a PHP y se cachean: su coste en ejecución es cero, y su sintaxis elimina el ruido de `<?php ?>`.
+
+## Interpolación: `{{ }}`
+
+```php
+{{-- resources/views/demo.blade.php --}}
+<p>Hola, {{ $nombre }}</p>
+<p>2 + 2 = {{ 2 + 2 }}</p>
+<p>Hoy es {{ date('d/m/Y') }}</p>
+```
+
+```php
+// routes/web.php
+Route::get('/demo', fn () => view('demo', ['nombre' => 'Aitana']));
+```
+
+HTML recibido por el navegador:
+
+```html
+<p>Hola, Aitana</p>
+<p>2 + 2 = 4</p>
+<p>Hoy es 12/07/2026</p>
+```
+
+### El escapado automático (tu seguro anti-XSS)
+
+`{{ }}` aplica `htmlspecialchars` a todo lo que imprime. Observa qué pasa si un dato contiene HTML malicioso:
+
+```php
+Route::get('/xss', fn () => view('demo', [
+    'nombre' => '<script>alert("hackeado")</script>',
+]));
+```
+
+HTML recibido:
+
+```html
+<p>Hola, &lt;script&gt;alert(&quot;hackeado&quot;)&lt;/script&gt;</p>
+```
+
+El navegador **muestra** el texto del script, pero no lo ejecuta. En UD3 este escapado lo hacías tú a mano en cada `echo`; aquí es imposible olvidarlo.
+
+::: {.callout-warning title="Errores frecuentes"}
+`{!! $variable !!}` imprime **sin escapar**. Solo se usa con contenido que tú mismo has generado y jamás con datos que vengan del usuario. Si dudas, `{{ }}`.
+:::
+
+## Directivas de control
+
+```php
+{{-- resources/views/contactos/index.blade.php --}}
+<h1>Agenda ({{ count($contactos) }})</h1>
+
+@if (empty($contactos))
+    <p>No hay contactos todavía.</p>
+@else
+    <ul>
+        @foreach ($contactos as $id => $c)
+            <li class="{{ $loop->odd ? 'impar' : 'par' }}">
+                {{ $loop->iteration }}.
+                <a href="{{ route('contactos.show', $id) }}">
+                    {{ $c['nombre'] }}
+                </a>
+            </li>
+        @endforeach
+    </ul>
+@endif
+```
+
+Con los tres contactos del controlador del bloque anterior, el navegador recibe:
+
+```html
+<h1>Agenda (3)</h1>
+<ul>
+    <li class="impar">1. <a href="http://localhost:8000/contactos/1">Aitana</a></li>
+    <li class="par">2. <a href="http://localhost:8000/contactos/2">Marc</a></li>
+    <li class="impar">3. <a href="http://localhost:8000/contactos/3">Júlia</a></li>
+</ul>
+```
+
+La variable mágica `$loop` existe dentro de todo `@foreach`:
+
+| Propiedad | Valor |
+|---|---|
+| `$loop->iteration` | 1, 2, 3… (empieza en 1) |
+| `$loop->index` | 0, 1, 2… (empieza en 0) |
+| `$loop->first` / `$loop->last` | `true` en la primera/última vuelta |
+| `$loop->odd` / `$loop->even` | vuelta impar/par |
+| `$loop->count` | total de elementos |
+
+Más directivas útiles, con su resultado:
+
+```php
+@empty ($contactos)
+    <p>Agenda vacía.</p>
+@endempty
+
+@unless ($esAdmin)
+    <p>Solo lectura.</p>
+@endunless
+
+@isset ($mensaje)
+    <p>{{ $mensaje }}</p>
+@endisset
+```
+
+Con `$contactos = []`, `$esAdmin = false` y `$mensaje` sin definir:
+
+```html
+<p>Agenda vacía.</p>
+<p>Solo lectura.</p>
+```
+
+## La vista de la ficha (`show`)
+
+```php
+{{-- resources/views/contactos/show.blade.php --}}
+@if ($contacto === null)
+    <h1>Contacto no encontrado</h1>
+    <p>No existe ningún contacto con id {{ $id }}.</p>
+@else
+    <h1>{{ $contacto['nombre'] }}</h1>
+    <p>Teléfono: {{ $contacto['tlf'] }}</p>
+@endif
+
+<p><a href="{{ route('contactos.index') }}">← Volver al listado</a></p>
+```
+
+| URL | Resultado |
+|---|---|
+| `/contactos/2` | `Marc — Teléfono: 600333444` y enlace de vuelta |
+| `/contactos/99` | `Contacto no encontrado — No existe ningún contacto con id 99` |
+
+## Layouts y componentes: una sola plantilla para todo el sitio
+
+Sin layouts, cada vista repite `<html>`, `<head>`, el menú y el pie. La solución moderna son los **componentes anónimos**: un fichero en `resources/views/components/` que se usa como etiqueta `<x-nombre>`.
+
+```php
+{{-- resources/views/components/layout.blade.php --}}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>{{ $titulo ?? 'Agenda DAW' }}</title>
+</head>
+<body>
+    <nav>
+        <a href="{{ route('contactos.index') }}">Contactos</a> ·
+        <a href="{{ route('acerca') }}">Acerca de</a>
+    </nav>
+    <main>{{ $slot }}</main>
+    <footer>2º DAW · DWES</footer>
+</body>
+</html>
+```
+
+Cualquier vista lo consume así:
+
+```php
+{{-- resources/views/contactos/index.blade.php --}}
+<x-layout titulo="Listado de contactos">
+    <h1>Agenda</h1>
+    {{-- ...el listado de antes... --}}
+</x-layout>
+```
+
+Qué ocurre al renderizar:
+
+- El atributo `titulo="..."` llega al componente como variable `$titulo`.
+- Todo lo que va **entre** `<x-layout>` y `</x-layout>` ocupa el hueco `{{ $slot }}`.
+
+HTML resultante (recortado):
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Listado de contactos</title></head>
+<body>
+    <nav><a href="...">Contactos</a> · <a href="...">Acerca de</a></nav>
+    <main><h1>Agenda</h1> ...listado...</main>
+    <footer>2º DAW · DWES</footer>
+</body>
+</html>
+```
+
+Cambia el `<nav>` del layout y el cambio aparece en **todas** las páginas al instante: eso es generar el aspecto visual con controles del servidor.
+
+## Componentes con `@props`: piezas reutilizables
+
+```php
+{{-- resources/views/components/tarjeta.blade.php --}}
+@props(['nombre', 'tlf'])
+<article class="tarjeta">
+    <strong>{{ $nombre }}</strong>
+    <span>{{ $tlf }}</span>
+</article>
+```
+
+Uso en el listado (fíjate en los dos puntos para pasar variables PHP):
+
+```php
+@foreach ($contactos as $c)
+    <x-tarjeta :nombre="$c['nombre']" :tlf="$c['tlf']" />
+@endforeach
+```
+
+HTML resultante para el primer contacto:
+
+```html
+<article class="tarjeta">
+    <strong>Aitana</strong>
+    <span>600111222</span>
+</article>
+```
+
+::: {.callout-note title="Concepto clave"}
+`<x-layout>` con su `$slot` y los componentes con `@props` son **objetos y controles del servidor** que generan la interfaz del cliente (CE5.c). El navegador nunca ve componentes: recibe HTML plano ya montado.
+:::
+
+::: {.callout-warning title="Errores frecuentes"}
+- Escribir `<x-tarjeta nombre="$c['nombre']">` sin los dos puntos: el navegador mostrará literalmente el texto `$c['nombre']`. Con `:` se evalúa como PHP; sin él, es texto.
+- Crear el componente fuera de `resources/views/components/`: la etiqueta `<x-...>` no lo encontrará.
+- Olvidar `{{ $slot }}` en el layout: las páginas saldrán vacías.
+:::
+
+::: {#exr-UD5-4}
+
+### E5.4 · Identidad visual de la agenda
+
+1. Crea el componente `<x-layout>` con cabecera, menú de navegación (Inicio, Contactos, Acerca de) y pie, y migra a él todas las vistas que ya tienes.
+2. Crea un componente `<x-tarjeta>` que reciba `nombre` y `tlf` como props y úsalo en el listado de contactos.
+3. Utiliza en el listado al menos **tres directivas** de control distintas (`@if`/`@empty`, `@foreach` con `$loop`, `@unless` u otras) de forma justificada.
+4. Demuestra el escapado automático: crea un contacto cuyo nombre sea `<script>alert(1)</script>`, comprueba en el navegador que no se ejecuta y localiza en el código fuente de la página (Ctrl+U) las entidades `&lt;script&gt;`. Adjunta captura.
+5. **Transversal CE5.h**: comenta los componentes indicando la finalidad de cada slot/prop y adjunta evidencia de prueba en dos navegadores.
+
+*Entrega apto/no apto: layout aplicado a todas las vistas, tarjeta funcionando con props, directivas justificadas y demo anti-XSS documentada.*
+:::

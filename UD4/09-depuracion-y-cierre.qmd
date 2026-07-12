@@ -1,0 +1,53 @@
+# Depuración y cierre de la unidad
+
+## Herramientas de depuración
+
+Depurar aplicaciones con estado (sesiones, cookies) tiene una particularidad: el error no siempre es visible en la petición actual, sino en la siguiente.
+
+```php
+session_start();
+var_dump($_SESSION); // inspección rápida de todo lo que hay guardado
+```
+
+```php
+print_r($_COOKIE); // igual, pero para cookies
+```
+
+```php
+// Registrar un error sin mostrarlo en pantalla (útil en producción)
+error_log('Fallo al verificar el usuario: ' . $email);
+```
+
+::: {.callout-note title="Concepto clave"}
+`var_dump()`/`print_r()` son la primera herramienta: rápidas y sin instalar nada. Xdebug, integrado en el editor, permite poner puntos de ruptura e inspeccionar variables paso a paso cuando el problema no es evidente con un simple `var_dump()`.
+:::
+
+Ejemplo de bug típico y su diagnóstico:
+
+```php
+// bug.php — la sesión "se pierde" tras el login
+echo "Bienvenido"; // ← esta línea envía salida ANTES de session_start()
+session_start();   // demasiado tarde: PHP avisa "headers already sent"
+$_SESSION['usuario_id'] = 1; // esto no llega a guardarse correctamente
+```
+
+```php
+// corregido.php
+session_start(); // siempre lo primero, sin nada antes
+echo "Bienvenido";
+$_SESSION['usuario_id'] = 1; // ahora sí persiste
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+Cualquier salida antes de `session_start()`, `setcookie()` o `header()` — incluido un simple espacio en blanco antes de `<?php` — provoca el error "headers already sent". Es la primera sospecha cuando una sesión o cookie "no funciona".
+:::
+
+::: {#exr-UD4-11}
+## E4.11 — Depuración de una aplicación con errores en sesión/cookie
+
+Se te entrega una aplicación en la que la sesión del usuario se pierde tras el login. Localiza el error usando `var_dump()`/Xdebug y documenta brevemente el proceso de depuración seguido (qué comprobaste, qué encontraste, cómo lo corregiste).
+:::
+
+## Cierre de la unidad
+
+Con esto tienes todo lo necesario para construir una aplicación web con estado: clases bien diseñadas, sesiones para el estado activo, cookies para lo persistente, contraseñas cifradas correctamente y control de acceso por roles. Es exactamente la base sobre la que trabajarás en la siguiente unidad, donde este mismo código se reorganiza usando un framework (Laravel) en lugar de escribirlo a mano.

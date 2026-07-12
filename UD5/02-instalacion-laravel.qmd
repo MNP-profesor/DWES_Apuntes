@@ -1,0 +1,124 @@
+# Laravel: instalación y estructura {#sec-ud5-instalacion}
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque trabaja **CE5.b** (uso de un framework de separación de capas) y **CE5.e** (parámetros de configuración de la aplicación).
+:::
+
+## Composer: el gestor de dependencias
+
+Composer descarga las librerías del proyecto (declaradas en `composer.json`) dentro de `vendor/` y genera el **autoloader**: nunca más escribirás `require` para cargar clases.
+
+Comprueba que lo tienes instalado:
+
+```bash
+composer --version
+```
+
+```
+Composer version 2.8.x 2025-xx-xx
+```
+
+::: {.callout-tip title="Analogía Java"}
+Composer es el Maven/Gradle de PHP, con una diferencia práctica: las dependencias se instalan **dentro del proyecto** (`vendor/`), no en un repositorio local compartido. Cada proyecto lleva las suyas.
+:::
+
+## Crear el proyecto
+
+```bash
+composer create-project laravel/laravel agenda
+cd agenda
+php artisan serve
+```
+
+```
+  INFO  Server running on [http://127.0.0.1:8000].
+
+  Press Ctrl+C to stop the server
+```
+
+Abre `http://localhost:8000`: verás la página de bienvenida de Laravel. Ya tienes una aplicación MVC funcionando.
+
+## La estructura de carpetas
+
+| Directorio | Qué contiene | Lo usarás para… |
+|---|---|---|
+| `app/` | Tu código: `app/Models` y `app/Http/Controllers` | Modelos y controladores |
+| `routes/` | Definición de rutas | `routes/web.php` en toda la unidad |
+| `resources/views/` | Las vistas Blade (`.blade.php`) | Todas tus pantallas |
+| `config/` | Configuración legible con `config()` | Bloque de configuración |
+| `public/` | Único directorio visible desde el navegador | CSS, JS, imágenes |
+| `storage/` | Ficheros generados: logs, caché, sesiones | Consultar `storage/logs/laravel.log` |
+| `database/` | Migraciones, seeders, factorías | Bloque instrumental |
+| `.env` | Variables de esta instalación concreta | No se sube al repositorio |
+
+::: {.callout-note title="Concepto clave"}
+**Front controller**: toda petición entra por `public/index.php`, que arranca el framework y delega en el enrutador. Es lo contrario de UD2–UD4, donde cada página era un `.php` accesible directamente. Por eso solo `public/` está expuesto: el resto del código queda fuera del alcance del navegador.
+:::
+
+## artisan: la consola de Laravel
+
+`artisan` genera código, inspecciona la aplicación y arranca servicios. Los comandos que más usarás:
+
+```bash
+php artisan list            # todos los comandos disponibles
+php artisan serve           # servidor de desarrollo
+php artisan route:list      # radiografía del enrutado
+php artisan make:controller NombreController
+php artisan make:model Nombre
+```
+
+Ejemplo real de `route:list` en un proyecto recién creado:
+
+```bash
+php artisan route:list
+```
+
+```
+  GET|HEAD   / ...................................................
+  GET|HEAD   storage/{path} .......................... storage.local
+  GET|HEAD   up ...................................................
+
+                                                     Showing [3] routes
+```
+
+Cada fila: método HTTP, URI, nombre de la ruta y acción que la atiende.
+
+## `.env` y la configuración
+
+`.env` guarda lo que cambia **entre máquinas** (tu portátil, el servidor del centro, producción): credenciales, URLs, modo de depuración. Los ficheros de `config/` leen esos valores con `env()` y el código de la aplicación los consume **siempre** con `config()`:
+
+```bash
+# .env
+APP_NAME="Agenda DAW"
+```
+
+```php
+// routes/web.php — prueba rápida
+Route::get('/nombre', fn () => config('app.name'));
+```
+
+Visitando `http://localhost:8000/nombre`:
+
+```
+Agenda DAW
+```
+
+La cadena completa es: `.env` → `config/app.php` (que hace `'name' => env('APP_NAME', 'Laravel')`) → `config('app.name')` en tu código.
+
+::: {.callout-warning title="Errores frecuentes"}
+- Llamar a `env('APP_NAME')` desde un controlador o una vista. Funciona… hasta que en producción se cachea la configuración (`php artisan config:cache`) y `env()` empieza a devolver `null` fuera de `config/`. Regla: `env()` **solo** dentro de `config/`; en tu código, **siempre** `config()`.
+- Editar `.env` y no ver el cambio: reinicia `php artisan serve` (y si cacheaste, `php artisan config:clear`).
+- Subir `.env` al repositorio. Contiene credenciales; por eso Laravel lo incluye en `.gitignore`.
+:::
+
+::: {#exr-UD5-2}
+
+### E5.2 · Puesta en marcha del proyecto
+
+1. Instala un proyecto Laravel llamado `agenda` con Composer y arráncalo con `php artisan serve`. Captura la pantalla de bienvenida.
+2. Elabora tu propia tabla describiendo la función de **ocho** directorios/ficheros de la estructura, señalando en cuál trabajarás para modelos, vistas, controladores y rutas.
+3. Cambia en `.env` el valor de `APP_NAME` a `"Agenda DAW"` y compruébalo con una ruta de prueba que imprima `config('app.name')`, como la del ejemplo. Explica en dos líneas por qué no se debe usar `env('APP_NAME')` directamente en esa ruta.
+4. Ejecuta `php artisan route:list` y explica qué información aporta cada columna.
+
+*Entrega apto/no apto: proyecto funcionando, tabla completa y justificación correcta de `config()` frente a `env()`.*
+:::

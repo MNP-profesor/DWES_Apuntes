@@ -5,7 +5,7 @@
 Añade la siguiente entrada dentro de la clave `book.chapters`, en el lugar que corresponda a UD1 (antes de UD2):
 
 ```yaml
-  - part: "UD1 - Arquitecturas y tecnologías Web en entorno servidor"
+  - part: "UD1. Arquitecturas y tecnologías de programación Web en entorno servidor"
     chapters:
       - UD1/00-presentacion.qmd
       - UD1/01-modelo-ejecucion.qmd
@@ -20,15 +20,15 @@ Añade la siguiente entrada dentro de la clave `book.chapters`, en el lugar que 
 
 ---
 
-## 2. Fila a añadir en `descargas.qmd`
+## 2. `descargas.qmd` — no requiere cambios
 
-Añade la siguiente fila en la tabla de descargas, en la sección correspondiente a UD1:
+La fila de UD1 ya está descomentada y activa en tu `descargas.qmd`:
 
 ```markdown
 | 1 | Arquitecturas y tecnologías web en servidor | [Descargar](download/DWES-UD1.pdf) |
 ```
 
-> Sustituye `ruta/` por la ruta relativa real donde alojes los ficheros descargables (p. ej. `descargas/` si los colocas en esa carpeta del repo).
+El PDF `download/DWES-UD1.pdf` lo genera automáticamente `scripts/build-unit-pdfs.sh` en cada publicación. No tienes que tocar nada en este fichero.
 
 ---
 

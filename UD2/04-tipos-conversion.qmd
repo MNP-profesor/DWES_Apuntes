@@ -2,165 +2,268 @@
 title: "Bloque 2 · Tipos de datos y conversión"
 ---
 
-## Tipos de datos
-
-::: {.callout-note title="Concepto clave"}
-PHP es de **tipado dinámico**: el tipo de una variable se infiere automáticamente del valor que se le asigna y puede cambiar a lo largo de la ejecución. No se declara el tipo al crear la variable (a diferencia de Java, donde el tipo es obligatorio y estático).
-:::
-
-### Tipos simples
-
-| Tipo | Ejemplo | Descripción |
-|---|---|---|
-| `int` | `$edad = 17;` | Entero. Equivale a `int`/`long` en Java. |
-| `float` | `$precio = 19.95;` | Número con decimales (punto como separador). Equivale a `double`/`float` en Java. |
-| `string` | `$nombre = "Ana";` | Cadena de texto. Las comillas dobles **interpolan** variables; las simples no. |
-| `bool` | `$activo = true;` | Valor lógico `true`/`false`. Igual que `boolean` en Java. |
-
-: {.striped}
+## Tipos simples
 
 ```php
-$nombre  = "Laura";
-$saludo  = "Hola, $nombre";   // "Hola, Laura"  — interpolación con comillas dobles
-$literal = 'Hola, $nombre';   // "Hola, $nombre" — sin interpolación con comillas simples
+<?php
+$entero  = 42;
+$decimal = 3.14;
+$cadena  = "Hola PHP";
+$booleano = true;
 
-echo gettype($nombre);  // string
-echo gettype(42);       // integer
-echo gettype(3.14);     // double   ← PHP llama "double" al float
-echo gettype(true);     // boolean
+echo gettype($entero);   // integer
+echo gettype($decimal);  // double   ← PHP llama "double" al decimal
+echo gettype($cadena);   // string
+echo gettype($booleano); // boolean
 ```
 
-### Tipo compuesto: array
-
-El tipo `array` almacena varios valores. Puede ser **indexado** (índices numéricos, como un array o `ArrayList` de Java) o **asociativo** (índices por clave, como un `HashMap`):
+### Cadenas: comillas dobles vs simples
 
 ```php
-// Array indexado
+<?php
+$producto = "monitor";
+$precio   = 159.99;
+
+echo "El $producto cuesta $precio €.";
+// → El monitor cuesta 159.99 €.
+
+echo 'El $producto cuesta $precio €.';
+// → El $producto cuesta $precio €.   ← sin interpolación
+
+// Comillas dobles también interpretan secuencias de escape
+echo "Línea 1\nLínea 2";   // salto de línea en el HTML fuente
+echo "Columna1\tColumna2"; // tabulación
+```
+
+### Cadenas multilínea (heredoc)
+
+```php
+<?php
+$nombre = "Laura";
+$texto = <<<EOT
+Hola, $nombre.
+Bienvenida al sistema.
+EOT;
+
+echo $texto;
+// → Hola, Laura.
+// → Bienvenida al sistema.
+```
+
+### Operaciones con cadenas
+
+```php
+<?php
+$a = "Hola";
+$b = " mundo";
+
+echo $a . $b;          // Hola mundo   ← concatenar con .
+echo strlen($a);       // 4            ← longitud
+echo strtoupper($a);   // HOLA
+echo strtolower($a);   // hola
+echo str_replace("Hola", "Adiós", $a . $b);  // Adiós mundo
+```
+
+## Arrays
+
+### Array indexado
+
+```php
+<?php
 $colores = ["rojo", "verde", "azul"];
-echo $colores[0];              // "rojo"
-echo count($colores);          // 3
 
-// Array asociativo
-$persona = ["nombre" => "Ana", "edad" => 22];
-echo $persona["nombre"];       // "Ana"
-echo $persona["edad"];         // 22
+echo $colores[0];        // rojo
+echo $colores[2];        // azul
+echo count($colores);    // 3
+
+// Añadir elementos
+$colores[] = "amarillo";
+echo count($colores);    // 4
+
+// Modificar
+$colores[0] = "naranja";
+echo $colores[0];        // naranja
 ```
 
-::: {.callout-tip title="Analogía Java"}
-- Array indexado → `String[] colores = {"rojo", "verde", "azul"};` o `ArrayList<String>`
-- Array asociativo → `HashMap<String, Object>` (PHP es más flexible: las claves y los valores pueden ser de cualquier tipo sin declararlo)
-:::
+### Array asociativo
 
-### Tipos para unidades posteriores
+```php
+<?php
+$producto = [
+    "nombre"   => "Teclado mecánico",
+    "precio"   => 79.90,
+    "stock"    => 15,
+    "en_oferta" => true,
+];
 
-PHP reconoce además estos tipos que aparecerán más adelante:
+echo $producto["nombre"];    // Teclado mecánico
+echo $producto["precio"];    // 79.9
+echo $producto["stock"];     // 15
 
-| Tipo | Descripción | Se estudia en |
-|---|---|---|
-| `object` | Instancia de una clase PHP. Equivale directamente al objeto de Java. | UD4 (POO en PHP) |
-| `resource` | Referencia a un recurso externo, como una conexión a base de datos (`PDO`). | UD6 (Acceso a datos) |
-| `null` | Ausencia de valor. Una variable sin dato o destruida con `unset()` vale `null`. `gettype(null)` devuelve `"NULL"`. | Esta unidad |
+// Modificar un campo
+$producto["precio"] = 69.90;
+echo $producto["precio"];    // 69.9
+
+// Añadir un campo nuevo
+$producto["categoria"] = "Periféricos";
+echo $producto["categoria"]; // Periféricos
+```
+
+### Array multidimensional
+
+```php
+<?php
+$catalogo = [
+    ["nombre" => "Ratón",   "precio" => 19.90],
+    ["nombre" => "Teclado", "precio" => 79.90],
+    ["nombre" => "Monitor", "precio" => 189.00],
+];
+
+echo $catalogo[0]["nombre"];  // Ratón
+echo $catalogo[1]["precio"];  // 79.9
+echo $catalogo[2]["nombre"];  // Monitor
+
+echo count($catalogo);        // 3
+```
+
+### `print_r()` y `var_dump()`
+
+```php
+<?php
+$datos = ["Ana", 22, true];
+
+print_r($datos);
+/*
+Array
+(
+    [0] => Ana
+    [1] => 22
+    [2] => 1
+)
+*/
+
+var_dump($datos);
+/*
+array(3) {
+  [0]=>  string(3) "Ana"
+  [1]=>  int(22)
+  [2]=>  bool(true)
+}
+*/
+// var_dump muestra además el tipo y la longitud de cada elemento
+```
+
+## Tipos para unidades posteriores
+
+| Tipo | Cuándo aparece |
+|---|---|
+| `object` | UD4 — Programación orientada a objetos en PHP |
+| `resource` | UD6 — Acceso a datos con PDO |
+| `null` | Ya: `unset($var)` hace que la variable valga `null` |
 
 : {.striped}
-
-::: {#exr-UD2-5}
-### E2.5 — Catálogo de productos con array asociativo multinivel
-
-1. Declara un array `$catalogo` con al menos 4 productos, cada uno representado como un array asociativo anidado con las claves `nombre`, `precio`, `stock` y `categoria`.
-2. Muestra el catálogo completo en una tabla HTML, accediendo manualmente a cada producto y cada clave (sin bucles, que se estudiarán en la UD3).
-3. Calcula a mano (sin función de suma automática) el valor total del inventario (`precio × stock` de cada producto, sumado).
-4. Declara un array indexado `$categorias_disponibles` con las categorías únicas presentes en tu catálogo, y muestra cuántas hay usando `count()`.
-5. Usa `print_r()` sobre el array completo `$catalogo` y compáralo con la salida de `var_dump()`: explica en un comentario qué información adicional aporta `var_dump()` que `print_r()` no muestra.
-
-**Resultado esperado:** el valor total del inventario debe coincidir con la suma manual; `var_dump()` debe mostrar, además de la estructura, el tipo exacto y el tamaño en bytes de cada cadena.
-:::
 
 ## Conversión de tipos
 
-### Conversión implícita (*type juggling*)
-
-PHP convierte automáticamente los tipos según el operador usado:
+### Implícita — PHP decide
 
 ```php
-$total = "5" + 3;    // 8  — el operador + es aritmético, convierte "5" a int
-$texto = "3" . 5;    // "35" — el operador . es concatenación, convierte 5 a string
+<?php
+echo "5" + 3;       // 8     ← "5" se convierte a entero porque + es aritmético
+echo "5" . 3;       // 53    ← 3 se convierte a cadena porque . concatena
+echo true + true;   // 2     ← true vale 1
+echo false + 1;     // 1     ← false vale 0
+echo "3 cajas" + 2; // 5     ← toma el número del inicio de la cadena
+echo "cajas" + 2;   // 2     ← sin número inicial → 0
 ```
 
-### Conversión explícita (*cast*)
-
-El programador fuerza la conversión anteponiendo el tipo entre paréntesis, igual que en Java:
+### Explícita — cast
 
 ```php
-$n = (int)   "42 unidades";  // 42   — descarta todo lo que no sea número
-$f = (float) "3.14abc";      // 3.14
-$s = (string) 19.95;         // "19.95"
-$b = (bool)  "";              // false — cadena vacía es falsy
+<?php
+$texto = "42 unidades";
+
+$entero  = (int)    $texto;   // 42
+$decimal = (float)  "3.14abc"; // 3.14
+$cadena  = (string) 99;        // "99"
+$bool    = (bool)   0;         // false
+$bool2   = (bool)   "hola";    // true  ← cualquier cadena no vacía es true
+$bool3   = (bool)   "";        // false ← cadena vacía es false
+$bool4   = (bool)   "0";       // false ← excepción: "0" es false
+
+var_dump($entero);   // int(42)
+var_dump($decimal);  // float(3.14)
+var_dump($cadena);   // string(2) "99"
+var_dump($bool);     // bool(false)
 ```
 
-### Funciones de conversión (código legado)
-
-Existen funciones equivalentes al cast, heredadas de versiones antiguas de PHP. Producen el mismo resultado pero con un estilo más verboso. Se encontrarán con frecuencia en código legado:
+### Coma decimal en cadenas — error frecuente
 
 ```php
-intval("42 unidades");  // 42    — equivale a (int)
-doubleval("3.14");      // 3.14  — equivale a (float)
-strval(19.95);          // "19.95" — equivale a (string)
+<?php
+// Un precio que llega como texto con coma decimal
+$precio_texto = "29,99";
 
-// Recomendación: usa siempre el cast; reserva estas funciones para leer código ajeno.
+$mal  = (float) $precio_texto;                      // 29.0  ← INCORRECTO
+$bien = (float) str_replace(",", ".", $precio_texto); // 29.99 ← correcto
+
+echo $mal;   // 29
+echo $bien;  // 29.99
+```
+
+### Funciones de conversión (código heredado)
+
+Son equivalentes al cast pero más verbosas. Las verás en código antiguo:
+
+```php
+<?php
+echo intval("42px");    // 42   — igual que (int)
+echo floatval("3.14");  // 3.14 — igual que (float)
+echo strval(100);       // "100" — igual que (string)
 ```
 
 ::: {.callout-warning title="Errores frecuentes"}
 **`==` frente a `===`**
 
-`===` compara **tipo y valor** a la vez (el comportamiento que Java aplicaría siempre con tipos primitivos); `==` convierte antes de comparar.
+`==` convierte los tipos antes de comparar. `===` compara tipo **y** valor sin convertir.
 
 ```php
-"0" == false   // true  ← PHP convierte "0" a bool antes de comparar
-"0" === false  // false ← tipos distintos (string vs bool): no son iguales
+<?php
+var_dump(0    == false);   // bool(true)   ← 0 se considera falsy
+var_dump(0    === false);  // bool(false)  ← int vs bool: distintos tipos
+var_dump("0"  == false);   // bool(true)
+var_dump("0"  === false);  // bool(false)
+var_dump(""   == false);   // bool(true)
+var_dump("1"  == true);    // bool(true)
+var_dump("1"  === true);   // bool(false)  ← string vs bool
 
-0 == false     // true
-0 === false    // false
-
-"" == false    // true
-"" === false   // false
+// Regla: usa === por defecto
 ```
-
-**Regla práctica:** usar siempre `===` por defecto, igual que en Java se compara con `.equals()` en lugar de confiar en conversiones implícitas. Reservar `==` solo cuando la conversión de tipos sea intencionada y documentada.
 :::
 
-::: {.callout-warning title="Errores frecuentes"}
-**La coma decimal en cadenas**
+::: {#exr-UD2-5}
+### E2.5 — Catálogo con cálculo de inventario
 
-En muchos contextos (formularios, archivos CSV) los números llegan como cadenas con coma decimal (`"29,99"`). Un cast directo a `float` solo lee hasta la coma:
-
-```php
-(float) "29,99"   // 29.0  ← INCORRECTO: la coma detiene la conversión
-```
-
-Solución: sustituir la coma por punto antes del cast:
-
-```php
-$precio = (float) str_replace(",", ".", "29,99");  // 29.99 ← correcto
-```
+Crea `catalogo.php`. Declara un array `$catalogo` con 4 productos (nombre, precio, stock, categoría). Muéstralos en una tabla HTML sin usar bucles. Calcula y muestra el valor total del inventario (`precio × stock` sumado para todos los productos).
 :::
 
 ::: {#exr-UD2-6}
-### E2.6 — Validador de formulario de registro (sin HTML aún)
+### E2.6 — Validación de datos de texto
 
-Se simulan datos recibidos como texto de un formulario:
+Crea `validar.php` con este código de partida y completa los apartados:
 
 ```php
+<?php
 $edad_texto     = "17 años";
 $precio_texto   = "29,99";
 $acepta_texto   = "on";
 $cantidad_texto = "3";
+
+// 1. Convierte $edad_texto a entero y comprueba si es >= 18
+// 2. Convierte $precio_texto a float (OJO con la coma)
+// 3. Determina si $acepta_texto indica aceptación (===, no cast)
+// 4. Calcula el importe total redondeado a 2 decimales
+// 5. Compara (int)$edad_texto con "17" y con 17 usando ===
+//    Muestra los dos resultados con var_dump()
 ```
-
-1. Convierte `$edad_texto` a entero con `(int)` y comprueba si la persona es mayor o igual a 18 (declara una variable `$es_adulto`).
-2. `$precio_texto` usa coma decimal: sustitúyela con `str_replace` antes de convertir a `float`.
-3. Convierte `$acepta_texto` a booleano comparando con la cadena `"on"` (no uses cast directo: explica en un comentario por qué `(bool) "on"` no haría lo que se espera).
-4. Calcula el importe final como `$precio_convertido * (int) $cantidad_texto` y redondea a 2 decimales con `round()`.
-5. Compara, con `===` y con `==`, el resultado de `(int) $edad_texto` contra el número 17 escrito como cadena `"17"` y como entero `17`; documenta los 2 resultados distintos.
-
-**Resultado esperado:** `$es_adulto` debe ser `false` (17 < 18). El importe final debe calcularse correctamente tras corregir la coma decimal. `(int)$edad_texto === "17"` debe ser `false`; `(int)$edad_texto === 17` debe ser `true`.
 :::

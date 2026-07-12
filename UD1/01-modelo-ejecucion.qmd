@@ -2,66 +2,68 @@
 title: "Modelos de ejecución: cliente y servidor"
 ---
 
-::: {.callout-important title="Normativa · RA-CE"}
-Este bloque desarrolla **CE1.a** («se han caracterizado y diferenciado los modelos de ejecución de código en el servidor y en el cliente Web») y **CE1.c** («se han identificado los mecanismos de ejecución de código en los servidores Web»), según RD 686/2010, Anexo II.
-:::
+Cuando el navegador pide una página, el servidor la procesa y devuelve HTML. Pero ese procesamiento puede ocurrir en dos lugares muy distintos: **en el servidor** (antes de que llegue nada al navegador) o **en el cliente** (dentro del propio navegador, después de recibir la respuesta). Saber distinguirlos es la base de todo lo que viene en el módulo.
 
-Toda aplicación Web se sustenta en el modelo cliente-servidor: un programa cliente (típicamente el navegador) envía peticiones a través del protocolo HTTP/HTTPS, y un programa servidor las atiende y devuelve una respuesta. La clave de esta unidad es entender que el código que interviene en ese intercambio puede ejecutarse en dos lugares completamente distintos, con consecuencias muy diferentes.
+## Ejecución en el cliente
 
-## Ejecución de código en el cliente
+El código que se ejecuta en el cliente lo interpreta el navegador del usuario. Tiene acceso al contenido visible de la página (el DOM) pero no puede tocar la base de datos ni el sistema de ficheros del servidor.
 
-El código ejecutado en el cliente (fundamentalmente JavaScript) corre en el propio navegador del usuario, una vez la página ya ha sido descargada. Sus características principales son:
+Ejemplos típicos de código de cliente:
 
-- Se ejecuta en el dispositivo del usuario, consumiendo sus recursos (CPU, memoria) y no los del servidor.
-- Tiene acceso al DOM (Document Object Model) y puede modificar la página sin necesidad de recargar.
-- No tiene acceso directo y seguro a recursos del servidor (bases de datos, ficheros del sistema), salvo a través de peticiones HTTP adicionales.
-- Su comportamiento depende del navegador, la versión y la configuración del cliente, lo que introduce variabilidad.
+- Validar que un campo de formulario no está vacío antes de enviarlo.
+- Mostrar u ocultar un menú desplegable al hacer clic.
+- Actualizar un contador en pantalla sin recargar la página.
 
-## Ejecución de código en el servidor
+La tecnología principal en el cliente es **JavaScript**. CSS y HTML también se procesan en el cliente, pero no son lenguajes de programación.
 
-El código ejecutado en el servidor corre antes de que la respuesta llegue al cliente. El usuario nunca ve ese código: solo recibe el resultado de su ejecución (normalmente HTML, JSON o cualquier otro formato de salida).
+## Ejecución en el servidor
 
-- Se ejecuta en la máquina servidor, bajo el control exclusivo del proveedor de la aplicación.
-- Tiene acceso directo a recursos protegidos: bases de datos, sistemas de ficheros, servicios internos de red.
-- El cliente nunca accede al código fuente, lo que permite proteger lógica de negocio sensible (algoritmos, claves de acceso, credenciales).
-- Es independiente del navegador del cliente: el mismo programa de servidor sirve a cualquier dispositivo.
+El código que se ejecuta en el servidor corre **antes** de que la respuesta llegue al navegador. El usuario nunca ve ese código: solo recibe el HTML que el servidor genera como resultado.
+
+Ventajas clave:
+
+- Acceso directo a bases de datos, ficheros y servicios internos.
+- El código fuente nunca llega al cliente (protege lógica de negocio y credenciales).
+- Funciona igual en cualquier navegador o dispositivo.
 
 ::: {.callout-note title="Concepto clave"}
-La pregunta que debes hacerte ante cualquier línea de código de una aplicación Web no es «¿qué lenguaje es?» sino **«¿dónde se ejecuta?»**. PHP, Java o Python se ejecutan en el servidor; JavaScript puede ejecutarse en ambos lados, según el contexto (navegador o Node.js).
+La pregunta que debes hacerte ante cualquier fragmento de código no es «¿qué lenguaje es?» sino **«¿dónde se ejecuta?»**. PHP se ejecuta en el servidor. JavaScript puede ejecutarse en ambos lados según el contexto: en el navegador es código de cliente; en Node.js es código de servidor.
 :::
 
-## Mecanismos de ejecución de código en los servidores Web
+## Mecanismos de ejecución en el servidor
 
-Un servidor Web (Apache, Nginx, IIS) por sí mismo solo sabe servir ficheros estáticos. Para ejecutar código dinámico necesita alguno de los siguientes mecanismos:
+Un servidor web (Apache, Nginx) por sí solo solo sabe devolver ficheros estáticos. Para ejecutar código necesita uno de estos mecanismos:
 
-| Mecanismo | Funcionamiento |
-|---|---|
-| CGI (Common Gateway Interface) | El servidor lanza un proceso externo independiente por cada petición, que ejecuta el script y devuelve la salida. Es el mecanismo más antiguo y el de mayor coste, ya que crea y destruye un proceso en cada petición. |
-| Módulo embebido en el servidor | El intérprete del lenguaje se integra como un módulo dentro del propio proceso del servidor Web (p. ej. `mod_php` en Apache). Evita el coste de crear procesos nuevos, pero acopla el ciclo de vida del intérprete al del servidor. |
-| FastCGI / PHP-FPM | Variante optimizada de CGI: mantiene un grupo de procesos del intérprete ya inicializados («pool»), que se reutilizan para sucesivas peticiones, evitando el coste de arranque de cada proceso. Es el modelo más usado en producción con PHP actual. |
-| Contenedor de servlets (Java EE) | Un servidor de aplicaciones Java (p. ej. Tomcat) mantiene cargadas en memoria las clases del programa (Servlets) y atiende las peticiones mediante hilos, sin crear procesos nuevos. |
+| Mecanismo | Cómo funciona | Coste |
+|---|---|---|
+| **CGI** | Lanza un proceso nuevo por cada petición | Alto — crea y destruye un proceso en cada request |
+| **Módulo embebido** (`mod_php`) | El intérprete vive dentro del propio proceso del servidor | Bajo, pero el intérprete y el servidor comparten ciclo de vida |
+| **FastCGI / PHP-FPM** | Mantiene un pool de procesos ya iniciados que se reutilizan | Bajo — es el modelo estándar en producción con PHP |
+| **Contenedor de servlets** | Un servidor de aplicaciones (Tomcat) mantiene las clases cargadas en memoria y usa hilos | Bajo — modelo estándar en Java EE |
 
 : Mecanismos de ejecución de código en el servidor {.striped}
 
 ## Ejercicio E1.1 {#exr-UD1-1}
 
 ::: {#exr-UD1-1}
-**Clasificación de tecnologías por lugar de ejecución**
+**Clasificación por lugar de ejecución**
 
-Se proporciona un listado de doce tecnologías y fragmentos de código:
+Indica si cada elemento de la lista se ejecuta en el **cliente**, en el **servidor** o en **ambos**. Razona la respuesta en una frase.
 
-1. PHP
-2. JavaScript del navegador
-3. jQuery
-4. Node.js
-5. CSS
-6. Java/Servlets
-7. Python/Django
-8. AJAX (petición desde el cliente)
-9. WebSockets desde el cliente
-10. Una consulta SQL ejecutada desde PHP
-11. Una validación de formulario con JavaScript
-12. Una API REST consumida con `fetch()`
+| # | Elemento |
+|---|---|
+| 1 | PHP |
+| 2 | JavaScript en el navegador |
+| 3 | jQuery |
+| 4 | Node.js |
+| 5 | CSS |
+| 6 | Java Servlets |
+| 7 | Python con Django |
+| 8 | Una petición AJAX |
+| 9 | WebSockets (lado cliente) |
+| 10 | Una consulta SQL ejecutada desde PHP |
+| 11 | Validación de formulario con JavaScript |
+| 12 | `fetch()` en el navegador |
 
-**Tarea:** para cada elemento, indica si se ejecuta en el **cliente**, en el **servidor**, o en **ambos** según el contexto, razonando la respuesta en una frase. Se realiza en parejas y se corrige en gran grupo, abriendo debate en los casos ambiguos (JavaScript con Node.js, AJAX).
+Los casos 4, 8 y 9 admiten más de una respuesta válida — lo importante es el razonamiento.
 :::

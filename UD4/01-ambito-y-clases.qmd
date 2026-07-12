@@ -1,0 +1,127 @@
+# Ámbito de variables y clases
+
+## Ámbito de variables
+
+Una variable declarada fuera de una función es **global**; una declarada dentro es **local** a esa función. Hasta aquí, como en la mayoría de lenguajes.
+
+```php
+$contador = 0;
+
+function verContador() {
+    echo $contador; // Aviso: variable indefinida. $contador no es visible aquí.
+}
+
+verContador();
+```
+
+::: {.callout-tip title="Analogía Java"}
+En Java, una variable de instancia es visible en todos los métodos de la clase sin nada especial. En PHP, una variable global **no** entra automáticamente en una función: hay que declararla con `global`. Es la sorpresa más común al llegar a PHP desde Java.
+:::
+
+Para acceder a una variable global dentro de una función, se declara explícitamente:
+
+```php
+$contador = 0;
+
+function incrementar() {
+    global $contador;
+    $contador++;
+}
+
+incrementar();
+incrementar();
+echo $contador; // 2
+```
+
+`static` declara una variable local que **conserva su valor** entre llamadas sucesivas a la misma función:
+
+```php
+function siguienteId() {
+    static $ultimoId = 0;
+    $ultimoId++;
+    return $ultimoId;
+}
+
+echo siguienteId(); // 1
+echo siguienteId(); // 2
+echo siguienteId(); // 3
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+Olvidar `global` es la causa más habitual de "esta variable no se actualiza" en scripts sencillos de PHP. Si una función necesita leer o modificar una variable externa, decláralo explícitamente o, mejor aún, pásala como parámetro y devuélvela — es más limpio que depender de `global`.
+:::
+
+Curiosidad, no evaluable: PHP permite **variables variables** (`$$nombre`), donde el valor de una variable se usa como nombre de otra:
+
+```php
+$clave = 'color';
+$$clave = 'azul'; // equivale a $color = 'azul'
+echo $color; // azul
+```
+
+## Clases y objetos
+
+Una clase es una plantilla; un objeto es una instancia concreta de esa clase.
+
+::: {.callout-note title="Concepto clave"}
+`class` define la plantilla. `new` crea un objeto. `->` accede a propiedades y métodos del objeto.
+:::
+
+```php
+class Producto {
+    public string $nombre;
+    public float $precio;
+
+    public function descripcion(): string {
+        return "{$this->nombre}: {$this->precio} €";
+    }
+}
+
+$p = new Producto();
+$p->nombre = 'Teclado';
+$p->precio = 25.90;
+echo $p->descripcion(); // Teclado: 25.9 €
+```
+
+Más ejemplos rápidos, mismo patrón:
+
+```php
+class Libro {
+    public string $titulo;
+    public int $paginas;
+}
+
+$l1 = new Libro();
+$l1->titulo = 'PHP para todos';
+$l1->paginas = 320;
+
+$l2 = new Libro();
+$l2->titulo = 'Domina Laravel';
+$l2->paginas = 210;
+
+echo $l1->titulo . ' — ' . $l1->paginas . ' páginas'; // PHP para todos — 320 páginas
+echo $l2->titulo . ' — ' . $l2->paginas . ' páginas'; // Domina Laravel — 210 páginas
+```
+
+```php
+class Coche {
+    public string $marca;
+    public int $velocidad = 0;
+
+    public function acelerar(int $incremento): void {
+        $this->velocidad += $incremento;
+    }
+}
+
+$c = new Coche();
+$c->marca = 'Toyota';
+$c->acelerar(30);
+$c->acelerar(20);
+echo $c->velocidad; // 50
+```
+
+::: {#exr-UD4-1}
+## E4.1 — Comparativa de mecanismos de mantenimiento de información de cliente (autoevaluación, no se entrega)
+
+Elabora tu propia tabla comparando cookies, sesiones y "otros mecanismos" (URL, campos ocultos): dónde se almacena el dato, capacidad, persistencia y un caso de uso típico para cada uno. Este ejercicio te prepara para el examen; no hace falta que lo entregues.
+:::

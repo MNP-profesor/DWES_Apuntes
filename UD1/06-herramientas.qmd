@@ -1,59 +1,91 @@
 ---
-title: "Herramientas de programación en servidor"
+title: "Herramientas de desarrollo"
 ---
 
-::: {.callout-important title="Normativa · RA-CE"}
-Este bloque desarrolla **CE1.g** («se han reconocido y evaluado las herramientas de programación en entorno servidor»), según RD 686/2010, Anexo II.
-:::
+Para ejecutar PHP en local necesitas tres componentes: un servidor web (Apache o Nginx), el intérprete PHP y, habitualmente, un gestor de base de datos (MySQL/MariaDB). Hay dos formas principales de tenerlos juntos.
 
-Antes de empezar a programar en PHP en la UD2, es necesario disponer de un entorno de trabajo funcional. Este bloque presenta y compara las herramientas más habituales para preparar dicho entorno, sin entrar todavía en la programación propiamente dicha.
+## Opción A — XAMPP (stack tradicional)
 
-## Distribuciones empaquetadas (stack tradicional)
+XAMPP agrupa Apache, PHP, MariaDB y phpMyAdmin en un único instalador. Es la opción más rápida para empezar.
 
-Una distribución empaquetada agrupa en un único instalador el servidor Web, el intérprete del lenguaje y el sistema gestor de bases de datos, evitando configurar cada componente por separado.
+Descarga: [apachefriends.org](https://www.apachefriends.org)
 
-- **XAMPP:** incluye Apache, MySQL/MariaDB, PHP y Perl. Multiplataforma (Windows, Linux, macOS). Es la opción más sencilla para empezar.
-- **WAMP / MAMP:** variantes equivalentes orientadas específicamente a Windows y macOS respectivamente.
-- **phpMyAdmin:** herramienta Web de administración de bases de datos MySQL/MariaDB, habitualmente incluida en estas distribuciones.
+Una vez instalado, coloca tus ficheros `.php` en la carpeta `htdocs/` y accede a `http://localhost/` en el navegador. El panel de control de XAMPP te permite arrancar y parar Apache y MySQL con un clic.
 
-## Contenedores (Docker)
+Variantes equivalentes: **WAMP** (Windows), **MAMP** (macOS).
 
-Docker permite empaquetar cada servicio (servidor Web, intérprete PHP, base de datos) en contenedores aislados, definidos mediante ficheros de configuración (`docker-compose.yml`) que se pueden versionar y compartir con el resto del equipo de desarrollo.
+## Opción B — Docker (entorno reproducible)
 
-- **Ventaja principal:** el entorno es reproducible exactamente igual en cualquier máquina, eliminando el clásico problema de «en mi equipo funciona».
-- Requiere mayor familiaridad con la línea de comandos que una distribución empaquetada tradicional.
-- Es el enfoque que se utilizará de forma preferente a lo largo del módulo, por su cercanía a las prácticas profesionales actuales.
+Docker permite definir el entorno como código. El mismo fichero `docker-compose.yml` funciona igual en cualquier máquina, eliminando el problema de «en mi equipo funciona».
 
-## Entornos de desarrollo (IDE) y editores
+Ejemplo mínimo de `docker-compose.yml` para PHP + Apache:
 
-| Herramienta | Tipo | Características |
+```yaml
+services:
+  web:
+    image: php:8.2-apache
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+```
+
+Con este fichero en una carpeta, ejecuta:
+
+```bash
+docker compose up -d
+```
+
+Coloca tus ficheros `.php` en la subcarpeta `src/` y accede a `http://localhost:8080/`.
+
+Para parar el entorno:
+
+```bash
+docker compose down
+```
+
+## Editor de código
+
+| Herramienta | Tipo | Notas |
 |---|---|---|
-| Visual Studio Code | Editor extensible | Gratuito, ligero, gran ecosistema de extensiones (PHP Intelephense, Docker); es el recomendado para este módulo. |
-| PhpStorm | IDE específico para PHP | Muy completo (depurador integrado, refactorización avanzada), de pago, recomendado en entornos profesionales con proyectos grandes. |
-| Eclipse PDT | IDE genérico con plugin PHP | Gratuito, basado en la plataforma Eclipse; entorno más pesado que VS Code. |
+| **Visual Studio Code** + PHP Intelephense | Editor extensible, gratuito | Recomendado para este módulo |
+| **PhpStorm** | IDE específico PHP, de pago | Más completo; recomendado en proyectos grandes |
+| **Eclipse PDT** | IDE genérico con plugin PHP, gratuito | Más pesado que VS Code |
 
-: Herramientas de desarrollo para PHP {.striped}
-
-::: {.callout-note title="Concepto clave"}
-**Criterio de selección de herramientas.** No existe una combinación de herramientas universalmente correcta. La elección depende del tamaño del proyecto, de si se trabaja en equipo (Docker favorece la reproducibilidad), del presupuesto disponible (licencias de PhpStorm frente a alternativas gratuitas) y de la familiaridad previa del equipo de desarrollo con cada herramienta.
-:::
+: {.striped}
 
 ## Ejercicio E1.6 {#exr-UD1-6}
 
 ::: {#exr-UD1-6}
-**Puesta en marcha del entorno de trabajo**
+**Puesta en marcha del entorno**
 
-Instala, a tu elección, XAMPP o un entorno Docker con Apache/Nginx + PHP, siguiendo la documentación oficial correspondiente. A continuación, crea un fichero `info.php` con el siguiente contenido y comprueba que el servidor lo ejecuta correctamente:
+1. Instala XAMPP o levanta el contenedor Docker del ejemplo anterior.
+2. Crea el fichero `info.php` con este contenido:
 
 ```php
 <?php phpinfo(); ?>
 ```
 
-**Tarea:** localiza y anota en una breve memoria los siguientes datos obtenidos a través de `phpinfo()`:
+3. Accede a `http://localhost/info.php` (XAMPP) o `http://localhost:8080/info.php` (Docker) y comprueba que el servidor muestra la página de información de PHP.
 
-1. Versión de PHP instalada.
-2. Ruta del fichero de configuración cargado (*Loaded Configuration File*).
-3. Valor de la directiva `memory_limit`.
+Anota en un documento breve:
 
-Esta actividad deja preparado el entorno de trabajo que se usará desde la UD2.
+- Versión de PHP instalada (busca la línea **PHP Version** al principio de la página).
+- Ruta del fichero `php.ini` cargado (busca **Loaded Configuration File**).
+- Valor de la directiva `memory_limit` (busca en la sección **Core**).
+
+El resultado esperado es una página similar a esta:
+
+```text
+PHP Version 8.2.x
+
+System          Linux / Windows / macOS ...
+Build Date      ...
+...
+Loaded Configuration File   /ruta/a/php.ini
+...
+memory_limit    128M
+```
+
+Si ves el código fuente `<?php phpinfo(); ?>` en lugar de la página de información, el intérprete PHP no está activo — revisa que Apache esté en marcha y que el fichero tenga extensión `.php`.
 :::

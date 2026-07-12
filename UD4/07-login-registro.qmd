@@ -1,0 +1,96 @@
+# Login y registro
+
+Aquí se junta todo lo anterior: clases, sesiones, cookies-vía-sesión (`PHPSESSID`), hashing y excepciones.
+
+::: {.callout-note title="Concepto clave"}
+El flujo estándar es: (1) el formulario recoge credenciales, (2) se busca el usuario, (3) se verifica la contraseña con `password_verify()`, (4) si es correcta, se regenera el ID de sesión y se guarda el identificador del usuario en `$_SESSION` — nunca la contraseña.
+:::
+
+```php
+class Usuario {
+    private string $email;
+    private string $passwordHash;
+
+    public function __construct(string $email) {
+        $this->email = $email;
+    }
+
+    public function setPassword(string $plano): void {
+        $this->passwordHash = password_hash($plano, PASSWORD_DEFAULT);
+    }
+
+    public function verificarPassword(string $plano): bool {
+        return password_verify($plano, $this->passwordHash);
+    }
+
+    public function getEmail(): string {
+        return $this->email;
+    }
+}
+```
+
+```php
+// login.php
+require_once __DIR__ . '/Modelo/Usuario.php';
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        $usuario = buscarUsuarioPorEmail($_POST['email']); // función de tu capa de datos
+        if ($usuario === null) {
+            throw new Exception('Usuario no encontrado');
+        }
+        if (!$usuario->verificarPassword($_POST['password'])) {
+            throw new Exception('Credenciales incorrectas');
+        }
+        session_regenerate_id(true);
+        $_SESSION['usuario_id'] = $usuario->getEmail();
+        header('Location: /panel.php');
+        exit;
+    } catch (Exception $e) {
+        $error = $e->getMessage();
+    }
+}
+```
+
+```php
+// panel.php — página protegida
+session_start();
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: /login.php');
+    exit;
+}
+echo 'Bienvenido, ' . $_SESSION['usuario_id'];
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+No confundas `$_SESSION['usuario_id']` con la contraseña: en `$_SESSION` solo se guarda el identificador del usuario ya autenticado. La contraseña, ni en texto plano ni hasheada, se guarda nunca en la sesión.
+:::
+
+::: {#exr-UD4-7}
+## E4.7 — Login básico con clase `Usuario`
+
+Usando la clase `Usuario` anterior, escribe un `login.php` completo: recibe email/contraseña por POST, verifica contra un array de usuarios en memoria, y si son correctos, inicia sesión regenerando el ID y redirige a `panel.php`.
+
+Resultado esperado con credenciales correctas: redirección HTTP a `/panel.php` y `$_SESSION['usuario_id']` con el email del usuario. Con credenciales incorrectas: el formulario se vuelve a mostrar con el mensaje `Credenciales incorrectas`.
+:::
+
+::: {#exr-UD4-8}
+## E4.8 — Registro con validación y hash de contraseñas
+
+Implementa `registro.php`: recoge email y contraseña, comprueba que el email no exista ya, crea el objeto `Usuario` con la contraseña ya hasheada mediante el setter, y lo persiste (un array o fichero es suficiente, sin base de datos).
+
+Código de partida:
+
+```php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (existeUsuario($_POST['email'])) {
+        $error = 'El email ya está registrado';
+    } else {
+        $u = new Usuario($_POST['email']);
+        $u->setPassword($_POST['password']);
+        guardarUsuario($u);
+    }
+}
+```
+:::

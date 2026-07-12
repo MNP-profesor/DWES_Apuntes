@@ -2,106 +2,167 @@
 title: "Funciones"
 ---
 
-# Bloque 4 · Funciones
 
 ::: {.callout-important title="Normativa · RA-CE"}
-**CE3.d** — Se han creado y utilizado funciones.  
-*RD 686/2010, Anexo II.*
+**CE3.d** — Se han creado y utilizado funciones.
 :::
 
 ::: {.callout-note title="Concepto clave"}
-Este bloque trata las funciones en **PHP procedimental**: declaración, parámetros, retorno y ámbito. La programación orientada a objetos en PHP (clases, propiedades, métodos) **no se introduce aquí**: se desarrollará como bloque de apertura de la UD4, una vez consolidado el manejo de funciones procedurales.
+Este bloque cubre PHP procedimental. Las clases y objetos se introducen en la UD4.
 :::
 
 ---
 
-## Declaración y parámetros con valor por defecto
-
-PHP permite definir **valores por defecto** para los parámetros directamente en la declaración, sin necesidad de recurrir a la sobrecarga de métodos (*overloading*) que exige Java para conseguir un efecto equivalente.
+## Declaración básica
 
 ```php
 <?php
-function formatearPrecio(float $valor, int $decimales = 2): string {
-    return number_format($valor, $decimales, ',', '.') . ' €';
+function saludar(string $nombre): string {
+    return "Hola, $nombre!";
 }
 
-echo formatearPrecio(19.5);     // 19,50 €
-echo formatearPrecio(19.5, 0);  // 20 €
-echo formatearPrecio(1234.5);   // 1.234,50 €
+echo saludar("Laura"); // Hola, Laura!
+echo saludar("Marc");  // Hola, Marc!
 ?>
 ```
 
-::: {.callout-tip title="Analogía Java"}
-En Java los parámetros opcionales se implementan mediante sobrecarga:
+```php
+<?php
+function esPar(int $n): bool {
+    return $n % 2 === 0;
+}
 
-```java
-// Java — hay que declarar dos métodos
-public static String formatearPrecio(double valor) {
-    return formatearPrecio(valor, 2);
-}
-public static String formatearPrecio(double valor, int decimales) {
-    return String.format("%." + decimales + "f €", valor);
-}
+var_dump(esPar(4));  // true
+var_dump(esPar(7));  // false
+?>
 ```
 
-PHP resuelve el mismo caso con un único método y valor por defecto en la firma.
+```php
+<?php
+function factorial(int $n): int {
+    if ($n <= 1) return 1;
+    return $n * factorial($n - 1); // recursión
+}
+
+echo factorial(5);  // 120
+echo factorial(0);  // 1
+?>
+```
+
+---
+
+## Parámetros con valor por defecto
+
+```php
+<?php
+function formatearPrecio(float $valor, int $decimales = 2, string $moneda = "€"): string {
+    return number_format($valor, $decimales, ',', '.') . " $moneda";
+}
+
+echo formatearPrecio(19.5);          // 19,50 €
+echo formatearPrecio(19.5, 0);       // 20 €
+echo formatearPrecio(1234.5);        // 1.234,50 €
+echo formatearPrecio(99.99, 2, "$"); // 99,99 $
+?>
+```
+
+```php
+<?php
+function repetir(string $texto, int $veces = 3, string $separador = " "): string {
+    return implode($separador, array_fill(0, $veces, $texto));
+}
+
+echo repetir("PHP");          // PHP PHP PHP
+echo repetir("PHP", 5);       // PHP PHP PHP PHP PHP
+echo repetir("eco", 4, "-");  // eco-eco-eco-eco
+?>
+```
+
+::: {.callout-note title="Concepto clave"}
+Los parámetros con valor por defecto deben ir siempre **al final** de la lista. Poner un parámetro sin defecto después de uno con defecto es un error de sintaxis.
 :::
 
 ---
 
-## Paso por valor y paso por referencia
+## Paso por valor y por referencia
 
-Por defecto, PHP pasa los argumentos **por valor** (igual que los tipos primitivos en Java). Para modificar la variable original dentro de la función, debe indicarse explícitamente el paso por referencia con el símbolo `&`.
+Por defecto, PHP pasa los valores **por copia** (por valor). Para modificar la variable original, usa `&`:
 
 ```php
 <?php
-// Paso por valor (por defecto): la función trabaja con una copia
-function duplicar(int $n): int {
-    return $n * 2;
+// Por valor: la función trabaja con una copia
+function doblar(int $n): int {
+    $n *= 2;
+    return $n;
 }
 
 $valor = 5;
-$resultado = duplicar($valor);
+$resultado = doblar($valor);
 echo $valor;     // 5  — sin cambios
 echo $resultado; // 10
-
-// Paso por referencia: la función modifica la variable original
-function intercambiar(&$a, &$b): void {
-    $temp = $a;
-    $a = $b;
-    $b = $temp;
-}
-
-$x = 1;
-$y = 2;
-intercambiar($x, $y);
-echo "$x $y"; // 2 1
 ?>
 ```
 
-::: {.callout-tip title="Analogía Java"}
-En Java los tipos primitivos (`int`, `double`, etc.) siempre se pasan **por valor**; los objetos se pasan **por valor de la referencia** (es decir, se puede modificar el objeto apuntado, pero no redirigir la referencia). PHP es más explícito: para pasar por referencia hay que usar `&` tanto en la firma como —en ciertos contextos— en la llamada.
-:::
+```php
+<?php
+// Por referencia: la función modifica la variable original
+function intercambiar(mixed &$a, mixed &$b): void {
+    $temp = $a;
+    $a    = $b;
+    $b    = $temp;
+}
 
-::: {.callout-warning title="Errores frecuentes"}
-Pasar un array por valor y modificarlo dentro de la función **no cambia el array original**:
+$x = "manzana";
+$y = "naranja";
+intercambiar($x, $y);
+echo $x; // naranja
+echo $y; // manzana
+?>
+```
 
 ```php
 <?php
-function agregar(array $lista, string $elemento): void {
-    $lista[] = $elemento;  // modifica la copia local
+// Otro uso habitual: normalizar un array en el sitio
+function limpiarEspacios(array &$lista): void {
+    foreach ($lista as &$elemento) {
+        $elemento = trim($elemento);
+    }
+    unset($elemento); // romper la referencia
+}
+
+$nombres = ["  Laura  ", "Marc ", " Aisha"];
+limpiarEspacios($nombres);
+print_r($nombres);
+// Array ( [0] => Laura [1] => Marc [2] => Aisha )
+?>
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+Los arrays se pasan por valor por defecto. Modificar un array dentro de una función sin `&` no afecta al original:
+
+```php
+<?php
+function agregar(array $lista, string $item): void {
+    $lista[] = $item; // modifica la copia local
 }
 
 $frutas = ["manzana", "pera"];
 agregar($frutas, "naranja");
-print_r($frutas);  // solo tiene manzana y pera — naranja no se añadió
+print_r($frutas); // solo manzana y pera — naranja no se añadió
 
-// Solución: pasar por referencia
-function agregarRef(array &$lista, string $elemento): void {
-    $lista[] = $elemento;
+// Solución A: devolver el array modificado
+function agregarV2(array $lista, string $item): array {
+    $lista[] = $item;
+    return $lista;
 }
-agregarRef($frutas, "naranja");
-print_r($frutas);  // ahora sí tiene naranja
+$frutas = agregarV2($frutas, "naranja");
+
+// Solución B: pasar por referencia
+function agregarV3(array &$lista, string $item): void {
+    $lista[] = $item;
+}
+agregarV3($frutas, "uva");
+print_r($frutas); // manzana, pera, naranja, uva
 ?>
 ```
 :::
@@ -110,137 +171,223 @@ print_r($frutas);  // ahora sí tiene naranja
 
 ## Tipado de parámetros y retorno
 
-Desde PHP 7, es posible (aunque no obligatorio) declarar el tipo de los parámetros y del valor de retorno. Esto aporta una seguridad de tipos similar a la que ya conoce el alumnado de Java, aunque en PHP la verificación se realiza en **tiempo de ejecución**, no en compilación.
-
 ```php
 <?php
-// Con tipado explícito: PHP lanzará TypeError si se pasa un tipo incorrecto
-function suma(int $a, int $b): int {
-    return $a + $b;
+function dividir(float $a, float $b): float {
+    if ($b === 0.0) {
+        throw new \InvalidArgumentException("División por cero");
+    }
+    return $a / $b;
 }
 
-// Tipo de retorno void: la función no devuelve nada útil
-function registrarAcceso(string $usuario): void {
-    // ... lógica de registro ...
-}
-
-// Tipo nullable: el parámetro o retorno puede ser del tipo indicado o null
-function buscarUsuario(int $id): ?string {
-    // Devuelve el nombre si existe, null si no
-    return $id === 1 ? "Laura" : null;
-}
+echo dividir(10, 3);    // 3.3333333333333
+echo dividir(9.0, 3.0); // 3
 ?>
 ```
 
-::: {.callout-note title="Concepto clave"}
-Añadir `declare(strict_types=1);` al inicio del fichero hace que PHP rechace conversiones implícitas de tipo: pasar una cadena `"5"` a un parámetro `int` lanzará un `TypeError` en lugar de convertirla silenciosamente. Es la práctica recomendada en código moderno.
-:::
+```php
+<?php
+// Tipo nullable: el valor puede ser del tipo indicado o null
+function buscarUsuario(int $id): ?string {
+    $usuarios = [1 => "Laura", 2 => "Marc", 3 => "Aisha"];
+    return $usuarios[$id] ?? null;
+}
 
----
-
-## Ámbito de variables en funciones
-
-Toda variable declarada dentro de una función es **local** a esa función, de forma análoga a las variables locales de un método en Java. Para acceder a una variable global desde dentro de una función es necesario declararla explícitamente con `global`.
+var_dump(buscarUsuario(2));  // string "Marc"
+var_dump(buscarUsuario(99)); // NULL
+?>
+```
 
 ```php
 <?php
-$contadorGlobal = 0;
-
-function incrementar(): void {
-    global $contadorGlobal;   // declara que usaremos la variable global
-    $contadorGlobal++;
+// Tipo de retorno void: la función no devuelve nada útil
+function registrar(string $mensaje): void {
+    echo "[LOG] $mensaje\n";
+    // no hay return
 }
 
-incrementar();
-incrementar();
-echo $contadorGlobal; // 2
+registrar("Usuario autenticado");
+// [LOG] Usuario autenticado
+?>
+```
+
+---
+
+## Ámbito de variables
+
+Las variables declaradas **dentro** de una función son locales y no son visibles fuera:
+
+```php
+<?php
+function calcular(): int {
+    $resultado = 42; // local a la función
+    return $resultado;
+}
+
+calcular();
+echo $resultado; // Warning: Undefined variable — no existe aquí
+?>
+```
+
+Para usar una variable global dentro de una función, declárala con `global`:
+
+```php
+<?php
+$impuesto = 0.21;
+
+function precioFinal(float $precio): float {
+    global $impuesto;
+    return $precio * (1 + $impuesto);
+}
+
+echo precioFinal(100); // 121
 ?>
 ```
 
 ::: {.callout-warning title="Errores frecuentes"}
-El uso de `global` es una **práctica a evitar** siempre que sea posible: acopla la función al estado global del script, dificulta las pruebas y el mantenimiento. La alternativa limpia es **pasar el valor como parámetro y devolver el resultado**:
+El uso de `global` dificulta el mantenimiento. La alternativa limpia es pasar el valor como parámetro:
 
 ```php
 <?php
-// Mal: depende del estado global
-function incrementarGlobal(): void {
-    global $contador;
-    $contador++;
+// Evitar esto:
+$impuesto = 0.21;
+function precioMalo(): float {
+    global $impuesto;
+    return 100 * (1 + $impuesto);
 }
 
-// Bien: función pura, sin efectos laterales
-function incrementar(int $contador): int {
-    return $contador + 1;
+// Preferir esto:
+function precioBueno(float $base, float $impuesto): float {
+    return $base * (1 + $impuesto);
 }
-
-$contador = 0;
-$contador = incrementar($contador);
-$contador = incrementar($contador);
-echo $contador; // 2
+echo precioBueno(100, 0.21); // 121
 ?>
 ```
-:::
-
-::: {.callout-tip title="Analogía Java"}
-En Java, las variables de un método son locales por definición; no existe un mecanismo equivalente a `global` porque el estado compartido se gestiona mediante atributos de clase (`static` o de instancia). El consejo es el mismo en ambos lenguajes: evitar el estado global mutable en favor de funciones puras con parámetros y retorno explícitos.
 :::
 
 ---
 
 ## Funciones variádicas
 
-El operador `...` permite definir funciones con un **número variable de argumentos**, de forma equivalente al `varargs` de Java (`int... args`).
+Aceptan un número variable de argumentos con `...`:
 
 ```php
 <?php
-function suma(...$numeros): float {
+function sumar(float ...$numeros): float {
     return array_sum($numeros);
 }
 
-echo suma(1, 2, 3, 4);       // 10
-echo suma(10, 20);            // 30
-echo suma(1, 2, 3, 4, 5, 6); // 21
+echo sumar(1, 2, 3);          // 6
+echo sumar(10, 20, 30, 40);   // 100
+echo sumar();                  // 0
 
-// También se puede expandir un array al llamar a la función
+// También puedes expandir un array con ...
 $valores = [5, 10, 15];
-echo suma(...$valores);       // 30
+echo sumar(...$valores);       // 30
 ?>
 ```
 
-::: {.callout-tip title="Analogía Java"}
-```java
-// Java — varargs
-public static double suma(double... numeros) {
-    double total = 0;
-    for (double n : numeros) total += n;
-    return total;
+```php
+<?php
+function maximo(int $primero, int ...$resto): int {
+    $max = $primero;
+    foreach ($resto as $n) {
+        if ($n > $max) $max = $n;
+    }
+    return $max;
 }
-suma(1, 2, 3, 4);
+
+echo maximo(3);           // 3
+echo maximo(3, 7, 2, 9);  // 9
+?>
 ```
 
-El operador `...` funciona igual en ambos sentidos: como `varargs` en la declaración de la función, y como *spread* al pasar un array como argumentos individuales.
-:::
+---
+
+## PHPDoc
+
+Documenta tus funciones con bloques PHPDoc — los IDEs los leen y ofrecen autocompletado y validación:
+
+```php
+<?php
+/**
+ * Valida el formato de un DNI español.
+ *
+ * @param string $dni Cadena a validar, p. ej. "12345678Z".
+ * @return bool true si el formato es correcto.
+ */
+function validarDNI(string $dni): bool {
+    return preg_match('/^[0-9]{8}[A-Z]$/', $dni) === 1;
+}
+
+var_dump(validarDNI("12345678Z")); // true
+var_dump(validarDNI("1234567z"));  // false
+var_dump(validarDNI("123456"));    // false
+?>
+```
 
 ---
 
 ## Actividades
 
 ::: {#exr-UD3-7}
-**E3.7 — Librería de funciones de validación** `CE3.d · CE3.g · Sesión 7`
+**E3.7 — Librería de funciones de validación**
 
-Crea un fichero `libreria_validacion.php` con las siguientes funciones. Todas deben incluir **documentación PHPDoc completa** (`@param`, `@return`) y tipado de parámetros y retorno.
+Crea un fichero `libreria_validacion.php` con estas cuatro funciones. Todas llevan PHPDoc completo y tipado en parámetros y retorno:
 
-a) `validarDNI(string $dni): bool`  
-   Devuelve `true` si `$dni` tiene el formato correcto de DNI español: exactamente 8 dígitos seguidos de una letra mayúscula. Usa `preg_match` con la expresión regular `/^[0-9]{8}[A-Z]$/`.
+```php
+<?php
+/**
+ * Valida el formato de un DNI español (8 dígitos + letra mayúscula).
+ * @param string $dni  p. ej. "12345678Z"
+ * @return bool
+ */
+function validarDNI(string $dni): bool {
+    // Usa preg_match con /^[0-9]{8}[A-Z]$/
+}
 
-b) `calcularEdad(string $fechaNacimiento): int`  
-   Recibe una fecha en formato `'Y-m-d'` (p. ej. `'2000-05-15'`) y devuelve la edad en años cumplidos. Usa `DateTime` y `diff`.
+/**
+ * Calcula la edad en años cumplidos a partir de una fecha de nacimiento.
+ * @param string $fechaNacimiento  formato 'Y-m-d', p. ej. '2000-05-15'
+ * @return int
+ */
+function calcularEdad(string $fechaNacimiento): int {
+    // Usa DateTime y diff()
+}
 
-c) `formatearPrecio(float $valor, int $decimales = 2): string`  
-   Devuelve el valor formateado como precio en euros, usando coma como separador decimal y punto como separador de miles (p. ej. `1.234,50 €`). El número de decimales tiene valor por defecto `2`.
+/**
+ * Formatea un valor como precio en euros.
+ * @param float $valor
+ * @param int   $decimales  por defecto 2
+ * @return string  p. ej. "1.234,50 €"
+ */
+function formatearPrecio(float $valor, int $decimales = 2): string {
+    // Usa number_format con coma decimal y punto de miles
+}
 
-d) `intercambiar(mixed &$a, mixed &$b): void`  
-   Intercambia los valores de dos variables mediante paso por referencia. Justifica en un comentario por qué el paso por referencia es imprescindible aquí.
+/**
+ * Intercambia los valores de dos variables.
+ * Justifica en un comentario por qué es necesario pasar por referencia.
+ * @param mixed $a
+ * @param mixed $b
+ */
+function intercambiar(mixed &$a, mixed &$b): void {
+    // Tu código aquí
+}
 
-Al final del fichero, incluye un bloque de pruebas que llame a cada función con al menos dos casos de prueba distintos y muestre los resultados.
+// --- Pruebas ---
+var_dump(validarDNI("12345678Z")); // true
+var_dump(validarDNI("1234567z"));  // false
+
+echo calcularEdad("2000-05-15") . " años\n"; // depende de la fecha actual
+
+echo formatearPrecio(19.5)      . "\n"; // 19,50 €
+echo formatearPrecio(1234.5)    . "\n"; // 1.234,50 €
+echo formatearPrecio(1234.5, 0) . "\n"; // 1.235 €
+
+$x = 10; $y = 20;
+intercambiar($x, $y);
+echo "x=$x y=$y\n"; // x=20 y=10
+?>
+```
 :::

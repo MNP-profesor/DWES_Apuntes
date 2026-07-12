@@ -1,0 +1,64 @@
+---
+title: "Presentación de la unidad"
+---
+
+# UD4. POO en PHP + Desarrollo de funcionalidades Web  {.unnumbered}
+
+**Autenticación, sesiones y cookies**
+
+En esta unidad das el salto a la Programación Orientada a Objetos en PHP y la usas para resolver el problema central de cualquier aplicación web: **recordar quién es el usuario** entre una petición y la siguiente. Al terminar, tendrás un sistema de login completo, con sesiones, cookies seguras y control de acceso por roles.
+
+## Resultados de Aprendizaje y Criterios de Evaluación
+
+> **RA4.** Desarrolla aplicaciones web embebidas en lenguajes de marcas analizando e incorporando funcionalidades según especificaciones.
+
+| CE | Descripción |
+|----|-------------------------|
+| CE4.a | Mecanismos disponibles para el mantenimiento de información de un cliente web concreto, y sus ventajas |
+| CE4.b | Mecanismos para mantener el estado de las aplicaciones web |
+| CE4.c | Mecanismos para almacenar información en el cliente web y recuperar su contenido |
+| CE4.d | Mecanismos disponibles para la autentificación de usuarios |
+| CE4.e | Aplicaciones que integren mecanismos de autentificación de usuarios |
+| CE4.f | Herramientas y entornos para facilitar la programación, prueba y depuración del código |
+
+El bloque de POO (capítulos 1-3) no tiene un CE propio: es la base instrumental sin la que no se puede escribir con garantías el código de CE4.e.
+
+## Objetivos
+
+- Escribir clases en PHP nativo: propiedades, métodos, constructores, encapsulación, herencia y namespaces.
+- Comparar y elegir entre cookies y sesiones según el caso de uso.
+- Implementar sesiones para mantener el estado de una aplicación (carritos, login).
+- Almacenar y recuperar información en el cliente mediante cookies seguras.
+- Construir un sistema de login y registro con contraseñas cifradas correctamente.
+- Aplicar control de acceso por roles y depurar aplicaciones con estado.
+
+## Mapa de la unidad
+
+| Bloque 1 — POO en PHP | Bloque 2 — Funcionalidades Web |
+|---|---|
+| Ámbito de variables y clases | Sesiones |
+| Constructores y encapsulación | Cookies |
+| Herencia, namespaces, excepciones | Autenticación y redirecciones |
+| | Login y registro |
+| | Recordarme y roles |
+| | Depuración |
+
+## Evaluación
+
+La calificación de la unidad se compone de un **examen** (la mayor parte de la nota) y un conjunto de **ejercicios prácticos, evaluados como apto/no apto**, que suponen un porcentaje reducido de la calificación total.
+
+No todos los ejercicios requieren entrega: los de análisis/comparación son de autoevaluación (te sirven para preparar el examen, pero no se entregan), y el resto sí requiere entrega.
+
+| Ejercicio | Tema | ¿Entrega? |
+|---|---|---|
+| E4.1 | Comparativa de mecanismos de mantenimiento de cliente | No — autoevaluación |
+| E4.2 | Carrito de la compra con sesión | Sí |
+| E4.3 | Expiración y regeneración de sesión | Sí |
+| E4.4 | Preferencias con cookie | Sí |
+| E4.5 | Cookie con flags de seguridad | Sí |
+| E4.6 | Comparativa de mecanismos de autenticación | No — autoevaluación |
+| E4.7 | Login con clase `Usuario` | Sí |
+| E4.8 | Registro con validación | Sí |
+| E4.9 | «Recordarme» con cookie persistente | Sí |
+| E4.10 | Control de acceso por roles | Sí |
+| E4.11 | Depuración de sesión/cookie | Sí |

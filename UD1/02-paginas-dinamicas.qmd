@@ -2,42 +2,110 @@
 title: "Páginas estáticas y dinámicas"
 ---
 
-::: {.callout-important title="Normativa · RA-CE"}
-Este bloque desarrolla **CE1.b** («se han reconocido las ventajas que proporciona la generación dinámica de páginas Web y sus diferencias con la inclusión de sentencias de guiones en el interior de las páginas Web»), según RD 686/2010, Anexo II.
-:::
+Una página **estática** es un fichero HTML guardado en disco que el servidor devuelve tal cual. Siempre es la misma para todos los usuarios.
 
-Una página Web **estática** es un fichero HTML cuyo contenido es idéntico para todos los usuarios y en todo momento: el servidor se limita a leerlo del disco y enviarlo tal cual. Una página **dinámica**, en cambio, se genera o modifica en el momento de la petición, normalmente a partir de datos variables (una base de datos, parámetros de la URL, la hora del sistema, el usuario autenticado, etc.).
+Una página **dinámica** se genera en el momento de la petición: el servidor ejecuta código, consulta datos y construye el HTML resultante sobre la marcha. El usuario puede recibir un contenido distinto dependiendo de quién es, qué ha pedido o qué hay en la base de datos.
 
 ## Dos estrategias para generar contenido dinámico
 
-El RD 686/2010 distingue explícitamente dos enfoques para lograr la generación dinámica, que conviene diferenciar con precisión:
+### Código embebido en el HTML
 
-| Estrategia | Descripción | Ejemplo |
-|---|---|---|
-| Código embebido en el lenguaje de marcas | El código de programación se inserta directamente dentro del documento HTML, delimitado por etiquetas especiales que el servidor reconoce y procesa antes de enviar la respuesta. El documento es, a la vez, plantilla de presentación y contenedor del código. | PHP embebido en HTML mediante `<?php ... ?>`; ASP clásico mediante `<% ... %>` |
-| Guion o script independiente | El código de programación es el punto de entrada de la petición y genera él mismo, mediante instrucciones explícitas, todo el documento de salida (incluidas las etiquetas HTML), normalmente concatenando cadenas de texto o usando motores de plantillas. | Un script CGI en Perl o Python que construye el HTML completo mediante instrucciones `print` |
+El código de servidor se inserta directamente dentro del documento HTML. El servidor localiza los bloques de código, los ejecuta y sustituye el resultado en su lugar antes de enviar la respuesta.
 
-: Estrategias para generar contenido dinámico {.striped}
+```html
+<!-- fichero saludo.php -->
+<html>
+<body>
+  <h1>Hola, <?php echo "mundo"; ?></h1>
+  <p>Hoy es <?php echo date('d/m/Y'); ?></p>
+</body>
+</html>
+```
 
-Esta distinción es importante porque condiciona el resto del módulo: el lenguaje que vamos a utilizar (PHP) admite ambos estilos, pero el currículo de esta unidad y el de las siguientes (UD2 y UD3) se centra en el primero —el código embebido—, dejando los motores de plantillas y los frameworks MVC para unidades posteriores (UD5).
+Lo que llega al navegador:
+
+```html
+<html>
+<body>
+  <h1>Hola, mundo</h1>
+  <p>Hoy es 11/07/2026</p>
+</body>
+</html>
+```
+
+Este es el modelo que usaremos en PHP a lo largo del módulo.
+
+### Script independiente
+
+El código genera él mismo todo el HTML mediante instrucciones de salida. No hay plantilla HTML: el script construye el documento completo.
+
+```python
+# Ejemplo CGI en Python
+print("Content-Type: text/html\n")
+print("<html><body>")
+print("<h1>Hola desde Python</h1>")
+print("</body></html>")
+```
 
 ::: {.callout-note title="Concepto clave"}
-**Ventajas de la generación dinámica frente al contenido estático.** Permite personalizar el contenido según el usuario, mostrar datos actualizados sin modificar el código fuente cada vez, separar (parcialmente) la información de su presentación, y reaccionar a la interacción del usuario (formularios, parámetros) de forma automática.
+**Ventajas de la generación dinámica.** Puedes mostrar datos actualizados sin tocar el código, personalizar el contenido según el usuario y responder a formularios o parámetros de la URL de forma automática.
 :::
 
 ## Ejercicio E1.2 {#exr-UD1-2}
 
 ::: {#exr-UD1-2}
-**Estático, dinámico embebido o script independiente**
+**¿Estático, dinámico embebido o script independiente?**
 
-Se entregan seis fragmentos de código de distinta naturaleza:
+Clasifica cada fragmento e identifica la pista textual que te ha llevado a esa conclusión.
 
-1. Una página HTML pura.
-2. Un fragmento PHP embebido en HTML.
-3. Un script Python que construye HTML mediante concatenación de cadenas.
-4. Una página HTML con JavaScript que modifica el DOM tras la carga.
-5. Una plantilla con marcadores tipo `{{variable}}` (sin resolver aún).
-6. Un fragmento ASP clásico.
+**Fragmento 1**
+```html
+<html>
+<body>
+  <h1>Bienvenido</h1>
+  <p>Esta página no cambia nunca.</p>
+</body>
+</html>
+```
 
-**Tarea:** clasifica cada fragmento como **estático**, **dinámico con código embebido** o **dinámico con guion independiente**, justificando la respuesta señalando la pista textual que ha permitido identificarlo (presencia de etiquetas de apertura/cierre de código, ausencia total de marcado, etc.).
+**Fragmento 2**
+```php
+<html>
+<body>
+  <p>Usuarios registrados: <?php echo $total; ?></p>
+</body>
+</html>
+```
+
+**Fragmento 3**
+```python
+print("Content-Type: text/html\n")
+print("<html><body><p>Generado desde Python</p></body></html>")
+```
+
+**Fragmento 4**
+```html
+<html>
+<body>
+  <p id="contador">0</p>
+  <script>
+    document.getElementById('contador').textContent = Date.now();
+  </script>
+</body>
+</html>
+```
+
+**Fragmento 5**
+```html
+<p>Hola, {{ nombre }}. Tienes {{ mensajes }} mensajes nuevos.</p>
+```
+
+**Fragmento 6**
+```asp
+<html>
+<body>
+  <% Response.Write("Hora: " & Now()) %>
+</body>
+</html>
+```
 :::

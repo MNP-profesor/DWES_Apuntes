@@ -1,0 +1,47 @@
+---
+title: "Presentación de la unidad"
+---
+
+# UD5. Separación de la lógica de negocio  {.unnumbered}
+
+**MVC con Laravel**
+
+En las unidades anteriores has escrito PHP donde el HTML, la lógica y los datos conviven en el mismo fichero. Funciona, pero no escala: en esta unidad das el salto a la arquitectura que usa la industria. Aprenderás a separar la aplicación en capas con el patrón **Modelo-Vista-Controlador (MVC)** usando **Laravel**, el framework PHP más extendido, que además será la base de la UD7 (servicios REST).
+
+El hilo conductor será una aplicación real: una **agenda de contactos** que irás construyendo bloque a bloque hasta entregarla completa como proyecto integrador.
+
+## Resultados de Aprendizaje y Criterios de Evaluación
+
+> **RA5.** Desarrolla aplicaciones web identificando y aplicando mecanismos para separar el código de presentación de la lógica de negocio.
+
+| CE | Descripción |
+|------|--------------------------------------------------------------|
+| CE5.a | Identificar las ventajas de separar la lógica de negocio de la presentación. |
+| CE5.b | Analizar y utilizar mecanismos y frameworks que permiten esta separación. |
+| CE5.c | Utilizar objetos y controles en el servidor para generar el aspecto visual en el cliente. |
+| CE5.d | Utilizar formularios generados de forma dinámica para responder a los eventos de la aplicación. |
+| CE5.e | Identificar y aplicar los parámetros de configuración de la aplicación web. |
+| CE5.f | Escribir aplicaciones web con mantenimiento de estado y separación de la lógica de negocio. |
+| CE5.g | Aplicar los principios y patrones de diseño de la programación orientada a objetos. |
+| CE5.h | Probar y documentar el código. |
+
+## Objetivos
+
+Al terminar la unidad serás capaz de:
+
+- Argumentar las ventajas de separar la presentación de la lógica de negocio.
+- Describir el patrón MVC y el flujo completo de una petición HTTP dentro de él.
+- Instalar y poner en marcha un proyecto Laravel con Composer.
+- Definir rutas y controladores que atiendan peticiones y deleguen en vistas.
+- Construir la interfaz con plantillas Blade: layouts, componentes y directivas.
+- Crear formularios dinámicos con protección CSRF, validación en servidor y realimentación de errores.
+- Identificar y aplicar los parámetros de configuración de la aplicación y diferenciar entornos.
+- Desarrollar aplicaciones completas con mantenimiento de estado (sesiones) y separación estricta de capas.
+- Aplicar principios y patrones de la POO (servicios, inyección de dependencias) al estructurar la lógica.
+- Probar el código con `artisan test` y documentarlo con PHPDoc.
+
+## Evaluación
+
+- **Ejercicios E5.1 a E5.9**: se califican como **apto / no apto** y suponen un porcentaje muy reducido de la nota. Su función es que llegues al examen habiendo practicado cada pieza.
+- **Examen de la unidad**: es el grueso de la calificación. Todo lo que se pide en los ejercicios es materia de examen.
+- El bloque de Eloquent y migraciones (@sec-ud5-eloquent) es **contenido instrumental de apoyo**: no tiene ejercicio evaluable, pero su práctica guiada es necesaria para seguir el resto de la unidad.

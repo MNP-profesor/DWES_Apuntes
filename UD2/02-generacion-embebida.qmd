@@ -2,114 +2,150 @@
 title: "Bloque 1 · Generación embebida, tecnologías y delimitadores"
 ---
 
-## Mecanismos de generación de páginas Web con código embebido
+## ¿Qué hace el servidor con un archivo PHP?
 
-::: {.callout-note title="Concepto clave"}
-PHP nace para **mezclarse directamente con el HTML** que se envía al navegador. El servidor recorre el archivo de arriba a abajo: cuando encuentra HTML normal lo copia tal cual a la salida; cuando encuentra un bloque PHP lo ejecuta y sustituye ese bloque por el resultado de la ejecución.
+El servidor recorre el archivo de arriba a abajo. Cuando encuentra HTML lo envía tal cual; cuando encuentra un bloque PHP lo ejecuta y envía el resultado. El navegador nunca ve código PHP.
 
-El resultado final que llega al navegador es **HTML puro**, sin rastro del código PHP que lo generó.
-:::
+```php
+<!-- archivo.php -->
+<!DOCTYPE html>
+<html>
+<body>
+  <p>Hoy es <?php echo date('d/m/Y'); ?>.</p>
+  <p>El servidor tiene PHP <?php echo PHP_VERSION; ?>.</p>
+</body>
+</html>
+```
 
-Este mecanismo —código embebido en un lenguaje de marcas— es el rasgo que define a PHP frente a un lenguaje de propósito general:
+Lo que recibe el navegador:
 
-- El documento es, ante todo, HTML: una secuencia de caracteres que el navegador interpreta visualmente.
-- El código PHP se inserta en puntos concretos, marcados por delimitadores.
-- El servidor ejecuta esos fragmentos **antes** de enviar nada al cliente.
+```
+<!DOCTYPE html>
+<html>
+<body>
+  <p>Hoy es 02/07/2026.</p>
+  <p>El servidor tiene PHP 8.2.12.</p>
+</body>
+</html>
+```
 
-::: {.callout-tip title="Analogía Java"}
-En Java, la lógica del programa y la interfaz están separadas en clases distintas. En PHP «clásico» (el que se estudia en esta unidad), la lógica y la interfaz pueden convivir en el mismo archivo `.php`, intercalando HTML y código. Esta libertad es cómoda para programas pequeños, pero exige disciplina para no acabar con archivos difíciles de mantener.
+## Tecnologías de servidor
 
-En la **UD5** (MVC con Laravel) se recuperará la separación de responsabilidades, de forma análoga a como Spring Boot separa controladores, servicios y vistas en Java.
-:::
+Hay varias formas de generar HTML dinámico en el servidor:
 
-## Tecnologías de programación en entorno servidor
-
-Una página web dinámica necesita generar parte de su contenido en el momento de la petición. Esa generación puede producirse en el **cliente** (JavaScript) o en el **servidor**, antes de enviar la respuesta. Esta unidad se centra en la programación en entorno servidor, usando PHP.
-
-| Tecnología | Características |
+| Tecnología | Descripción |
 |---|---|
-| **PHP** | Lenguaje libre y específico para web; el más extendido en hosting compartido y CMS. |
-| **ASP / ASP.NET** | Tecnología Microsoft, ligada a IIS y al ecosistema .NET. |
-| **JSP / Servlets** | Tecnología Java; se ejecuta en un contenedor de servlets (Tomcat). El alumnado ya conoce Java como lenguaje, aunque no este uso concreto en el servidor. |
-| **Node.js** | JavaScript en el servidor; mismo lenguaje en cliente y servidor. |
+| **PHP** | Lenguaje libre, embebido en HTML, muy extendido en hosting y CMS. |
+| **ASP.NET** | Tecnología Microsoft sobre IIS y el ecosistema .NET. |
+| **JSP / Servlets** | Java en servidor; requiere un contenedor como Tomcat. |
+| **Node.js** | JavaScript en servidor; mismo lenguaje que en el cliente. |
 
 : {.striped}
 
-PHP se elige como lenguaje de trabajo del módulo por ser software libre, estar disponible en cualquier hosting, tener una curva de aprendizaje inicial baja y sustentar una parte muy significativa de la web actual.
+## Delimitadores
 
-::: {#exr-UD2-1}
-### E2.1 — De Java a PHP: observando el cambio de paradigma
+### `<?php ?>` — bloque de código
 
-Se entrega un archivo HTML estático (sin PHP) con una ficha de un producto escrita a mano.
-
-1. Reescribe la ficha para que el nombre, precio y stock del producto se generen desde tres variables PHP embebidas en el HTML.
-2. Añade un comentario al principio del archivo explicando, en 2-3 líneas, en qué se diferencia este modelo del modelo de clases y objetos de Java visto en 1º curso.
-3. Comprueba con «ver código fuente» del navegador que el resultado final es HTML puro.
-4. Identifica en tu propio código qué tecnología de servidor estás usando (CE2.b) y qué mecanismo de generación embebida se aplica (CE2.a).
-
-**Resultado esperado:** el código fuente recibido por el navegador es HTML idéntico al de una página estática; no contiene la palabra `php` ni los símbolos `<?`.
-:::
-
-## Delimitadores: integrando PHP en HTML
-
-El servidor necesita distinguir qué fragmentos de un documento debe interpretar como código y cuáles debe enviar como texto literal. PHP usa **delimitadores de apertura y cierre**: todo lo que está entre ellos se ejecuta; todo lo que queda fuera se envía tal cual.
+Todo lo que esté entre `<?php` y `?>` se ejecuta. Todo lo que esté fuera se envía sin tocar.
 
 ```php
+<h1>Bienvenido</h1>
+<?php
+    $nombre = "Laura";
+    echo "Hola, $nombre";
+?>
+<p>Fin de la página.</p>
+```
+
+Salida:
+
+```
+<h1>Bienvenido</h1>
+Hola, Laura
+<p>Fin de la página.</p>
+```
+
+### `<?= ?>` — echo abreviado
+
+Equivale exactamente a `<?php echo ... ?>`. Se usa mucho dentro de HTML para insertar valores:
+
+```php
+<p>El IVA es <?= 21 ?>%.</p>
+<p>El precio con IVA es <?= 100 * 1.21 ?> €.</p>
+```
+
+Salida:
+
+```
+<p>El IVA es 21%.</p>
+<p>El precio con IVA es 121 €.</p>
+```
+
+### Mezcla real: varios bloques en una misma página
+
+```php
+<?php $usuario = "Marta"; $carrito = 3; ?>
 <!DOCTYPE html>
 <html>
 <body>
-  <h1>Bienvenido</h1>
-  <?php
-      $nombre = "Laura";
-      echo "Hola, " . $nombre;
-  ?>
+  <header>
+    <p>Hola, <?= $usuario ?>. Tienes <?= $carrito ?> artículos.</p>
+  </header>
+
+  <?php if ($carrito > 0): ?>
+    <p>¿Quieres finalizar tu compra?</p>
+  <?php endif; ?>
+
+  <footer>
+    <p>&copy; <?= date('Y') ?></p>
+  </footer>
 </body>
 </html>
 ```
 
-El servidor ejecuta el bloque `<?php ... ?>` y envía al cliente:
+Salida (con `$carrito = 3`):
 
-```html
+```
 <!DOCTYPE html>
 <html>
 <body>
-  <h1>Bienvenido</h1>
-  Hola, Laura
+  <header>
+    <p>Hola, Marta. Tienes 3 artículos.</p>
+  </header>
+
+    <p>¿Quieres finalizar tu compra?</p>
+
+  <footer>
+    <p>&copy; 2026</p>
+  </footer>
 </body>
 </html>
 ```
-
-El código PHP **nunca llega al navegador**: solo se transmite el resultado de su ejecución.
-
-### Forma corta `<?= ?>`
-
-Existe una forma corta, muy usada en plantillas, que equivale exactamente a un `echo`:
-
-```php
-<p>El precio es <?= $precio ?> €</p>
-
-<!-- Equivale a: -->
-<p>El precio es <?php echo $precio; ?> €</p>
-```
-
-### Variantes obsoletas
-
-PHP admite variantes de delimitador menos frecuentes (`<% %>` estilo ASP, `<script language="php">`), hoy en día obsoletas y deshabilitadas por defecto. Conviene conocer que existieron históricamente, pero se usa siempre `<?php ?>` y `<?= ?>`.
 
 ::: {.callout-warning title="Errores frecuentes"}
-- **Olvidar el cierre `?>`**: PHP interpreta todo el HTML siguiente como parte del bloque de código, generando errores o una página en blanco.
-- **Usar `<?` sin la `p`**: el delimitador corto `<?` (sin `=`) solo funciona si `short_open_tag` está habilitado en `php.ini`. En instalaciones modernas puede estar desactivado. Usar siempre `<?php`.
-- **Guardar el archivo como `.html`**: el servidor Apache no procesará el código PHP en archivos `.html` a menos que se configure explícitamente. Los archivos deben tener extensión **`.php`**.
+**Olvidar el cierre `?>`**
+
+Si abres un bloque `<?php` y no lo cierras, PHP interpreta todo el HTML siguiente como código y genera un error de parse o una página en blanco.
+
+**Extensión del archivo**
+
+El servidor solo procesa PHP en archivos `.php`. Un archivo `.html` con bloques `<?php ?>` se enviará sin ejecutar.
+
+**El delimitador corto `<?`** (sin `php`) solo funciona si está habilitado en `php.ini`. Usa siempre `<?php` o `<?=`.
+:::
+
+::: {#exr-UD2-1}
+### E2.1 — Ficha de producto dinámica
+
+Crea el archivo `ficha.php`. Declara tres variables con los datos de un producto cualquiera y muéstralas en una tabla HTML usando `<?= ?>`.
+
+Comprueba con «Ver código fuente» en el navegador que el resultado no contiene ninguna etiqueta `<?php` ni el símbolo `$`.
 :::
 
 ::: {#exr-UD2-2}
-### E2.2 — Mapa de delimitadores en una plantilla compleja
+### E2.2 — Plantilla con cuatro zonas
 
-Se entrega una plantilla HTML de una tienda online con 4 zonas distintas: cabecera, listado de 3 productos, barra lateral de filtros y pie de página.
+Crea `tienda.php` con cuatro secciones: cabecera, listado de productos, barra lateral y pie. Cada sección debe contener al menos un bloque `<?php ?>` y un bloque `<?= ?>` generando contenido distinto.
 
-1. Inserta al menos un bloque `<?php ?>` y un bloque `<?= ?>` en cada una de las 4 zonas, generando contenido distinto en cada una (nombre del usuario en la cabecera, precios en el listado, contador de filtros activos en la barra lateral, año actual en el pie).
-2. Numera cada bloque con un comentario (`// bloque 1`, `// bloque 2`…) y elabora una tabla aparte que indique, para cada bloque, qué CE de los estudiados se está aplicando.
-3. Verifica que, si comentas accidentalmente el cierre `?>` de un bloque, el resto de la página deja de renderizarse correctamente, y explica por qué.
-
-**Resultado esperado:** cada zona del HTML final debe mostrar contenido dinámico correcto; comentar un cierre `?>` debe romper visualmente el resto del documento, demostrando el alcance de cada bloque.
+Después, comenta el cierre `?>` de uno de los bloques y observa qué ocurre. Explica en un comentario PHP por qué la página se rompe.
 :::
