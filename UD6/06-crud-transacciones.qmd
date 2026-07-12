@@ -1,0 +1,126 @@
+---
+title: "CRUD completo: transacciones e integridad"
+---
+
+Hasta aquí solo hemos leído. **Modificar** datos (INSERT, UPDATE, DELETE) usa el mismo patrón de sentencia preparada, y añade un requisito: la **integridad**.
+
+## Insertar
+
+```php
+<?php
+$sql = 'INSERT INTO contactos (nombre, telefono, email)
+        VALUES (:nombre, :telefono, :email)';
+$st = $pdo->prepare($sql);
+$st->execute([
+    ':nombre'   => $_POST['nombre'],
+    ':telefono' => $_POST['telefono'],
+    ':email'    => $_POST['email'] ?: null,
+]);
+$nuevoId = $pdo->lastInsertId();
+echo "Creado contacto #$nuevoId";
+```
+
+Salida esperada (partiendo de los 3 contactos de la base de prácticas):
+
+```
+Creado contacto #4
+```
+
+## Transacciones: todo o nada
+
+Cuando varias operaciones deben tener éxito o fracasar **en bloque**, se envuelven en una transacción:
+
+```php
+<?php
+try {
+    $pdo->beginTransaction();
+
+    $pdo->prepare('UPDATE cuentas SET saldo = saldo - :i WHERE id = :o')
+        ->execute([':i' => 100, ':o' => 1]);
+    $pdo->prepare('UPDATE cuentas SET saldo = saldo + :i WHERE id = :d')
+        ->execute([':i' => 100, ':d' => 2]);
+
+    $pdo->commit();          // ambas o ninguna
+} catch (PDOException $e) {
+    $pdo->rollBack();        // deshace todo si algo falla
+    error_log($e->getMessage());
+    exit('No se pudo completar la operación.');
+}
+```
+
+::: {.callout-note title="Concepto clave"}
+El RA exige "seguridad **e** integridad":
+
+- **Seguridad** → sentencias preparadas (frente a inyección).
+- **Integridad** → transacciones (`commit` / `rollBack`) y restricciones del SGBD (claves foráneas, `NOT NULL`, `UNIQUE`), que evitan estados intermedios inconsistentes.
+:::
+
+::: {#exr-UD6-7}
+**E6.7 — Alta de registros con validación en servidor**
+
+Implementa el alta de un contacto: formulario, **validación en servidor** (nombre obligatorio de máximo 50 caracteres; teléfono con formato válido; email opcional pero bien formado) e inserción con sentencia preparada. Recupera el id generado con `lastInsertId()`. Ante datos inválidos, vuelve a mostrar el formulario con los valores introducidos y los errores.
+
+Código de arranque:
+
+```php
+<?php
+$errores = [];
+$nombre = trim($_POST['nombre'] ?? '');
+$tlf    = trim($_POST['telefono'] ?? '');
+$email  = trim($_POST['email'] ?? '');
+
+if ($nombre === '' || mb_strlen($nombre) > 50) $errores[] = 'Nombre no válido.';
+if (!preg_match('/^[6-9]\d{8}$/', $tlf))        $errores[] = 'Teléfono no válido.';
+if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) $errores[] = 'Email no válido.';
+
+if (!$errores) {
+    // TODO: INSERT preparado + lastInsertId()
+}
+// TODO: si hay errores, re-mostrar el formulario con $nombre, $tlf, $email y $errores
+```
+:::
+
+::: {#exr-UD6-8}
+**E6.8 — Edición y borrado con transacciones (con pruebas)**
+
+Añade la **edición** (UPDATE) y el **borrado** (DELETE) de contactos. El borrado debe pedir confirmación y, si el contacto tiene registros asociados en la tabla `llamadas`, eliminarlos **en la misma transacción** para no dejar datos huérfanos.
+
+Documenta con una tabla de casos de prueba el comportamiento ante un fallo forzado a mitad de la transacción, comprobando que el `rollBack` deja la base de datos intacta.
+
+Código de arranque:
+
+```php
+<?php
+// Borrado del contacto y sus llamadas, en una transacción
+try {
+    $pdo->beginTransaction();
+    $pdo->prepare('DELETE FROM llamadas  WHERE contacto_id = :id')->execute([':id' => $id]);
+    $pdo->prepare('DELETE FROM contactos WHERE id = :id')->execute([':id' => $id]);
+    $pdo->commit();
+} catch (PDOException $e) {
+    $pdo->rollBack();
+    error_log($e->getMessage());
+    exit('No se pudo eliminar el contacto.');
+}
+```
+
+| Caso | Acción | Resultado esperado |
+|------|--------|--------------------|
+| Borrado correcto | Eliminar contacto con llamadas | Desaparecen contacto y llamadas |
+| Fallo a mitad | Error forzado tras el 1.er DELETE | `rollBack`: la BD queda intacta |
+| Edición válida | UPDATE de nombre | Cambio persistido (1 fila afectada) |
+:::
+
+## Eloquent por debajo
+
+Contenido de apoyo, **no evaluable**. En la UD5 escribías `Contacto::find(1)` o `$contacto->save()` sin ver el SQL. Ahora entiendes qué hace Eloquent por debajo: cada método genera una sentencia preparada PDO como las que has escrito a mano.
+
+| En Eloquent (UD5) | Por debajo (PDO, esta unidad) |
+|-------------------|-------------------------------|
+| `Contacto::find(1)` | `SELECT * FROM contactos WHERE id = :id` |
+| `Contacto::all()` | `SELECT * FROM contactos` |
+| `$c->save()` (nuevo) | `INSERT INTO contactos (...) VALUES (...)` |
+| `$c->save()` (existente) | `UPDATE contactos SET ... WHERE id = :id` |
+| `$c->delete()` | `DELETE FROM contactos WHERE id = :id` |
+
+El ORM no es magia: es una capa de comodidad sobre exactamente lo que acabas de aprender a hacer manualmente.

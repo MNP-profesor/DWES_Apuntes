@@ -1,0 +1,83 @@
+---
+title: "Presentación de la unidad"
+---
+
+# UD6. Acceso a BBDD con PDO {.unnumbered}
+
+**Seguridad e integridad**
+
+En esta unidad las aplicaciones dejan de trabajar con datos efímeros y aprenden a **persistirlos** en una base de datos relacional y a recuperarlos de forma segura. Todo el acceso a datos se hace con **PDO** (PHP Data Objects), la capa de acceso a bases de datos de PHP.
+
+## Resultados de Aprendizaje y Criterios de Evaluación
+
+> **RA6.** Desarrolla aplicaciones web de acceso a almacenes de datos, aplicando medidas para mantener la seguridad y la integridad de la información.
+
+| CE | Descripción |
+|----|----------|
+| CE6.a | Analiza las tecnologías de acceso por programación a los almacenes de datos. |
+| CE6.b | Crea aplicaciones que establecen conexiones con bases de datos. |
+| CE6.c | Recupera información almacenada en bases de datos. |
+| CE6.d | Publica en la web la información recuperada. |
+| CE6.e | Utiliza conjuntos de datos para almacenar la información. |
+| CE6.f | Crea aplicaciones que actualizan y eliminan información. |
+| CE6.g | Prueba y documenta las aplicaciones web. |
+
+## Objetivos
+
+- Comparar las tecnologías de acceso a datos y justificar el uso de PDO.
+- Conectar con MySQL/MariaDB mediante PDO, configurando el DSN y la gestión de errores por excepciones.
+- Recuperar información con sentencias preparadas y entender por qué evitan la inyección SQL.
+- Publicar los datos en la web con escape de salida y paginación.
+- Usar los distintos modos de recuperación, incluida la hidratación de objetos con `FETCH_CLASS`.
+- Crear operaciones completas (CRUD) protegiendo la integridad con transacciones.
+- Probar y documentar el código de acceso a datos.
+
+## Mapa de contenidos
+
+| Fase | De qué trata | CE |
+|------|--------------|----|
+| ① Conectar | Tecnologías de acceso · conexión PDO · DSN · excepciones | a, b |
+| ② Consultar | Sentencias preparadas · inyección SQL · publicación web | c, d |
+| ③ Recorrer | Modos de fetch · `FETCH_CLASS` · hidratación de objetos | e |
+| ④ Modificar | INSERT · UPDATE · DELETE · transacciones · integridad | f |
+| ⑤ Asegurar | Pruebas · documentación | g |
+
+::: {.callout-note title="Concepto clave"}
+Trabajaremos con **PDO nativo**, que es la API que de verdad hay que dominar. PDO es además la base sobre la que Laravel construye su ORM Eloquent (que viste en la UD5): al final de la unidad entenderás "qué ocurre por debajo" de ese ORM.
+:::
+
+## Base de datos de prácticas
+
+Todos los ejemplos usan una base de datos `agenda` con dos tablas. Impórtala antes de empezar para que las salidas de los ejemplos coincidan con las tuyas.
+
+```sql
+CREATE TABLE contactos (
+    id       INT AUTO_INCREMENT PRIMARY KEY,
+    nombre   VARCHAR(50)  NOT NULL,
+    telefono VARCHAR(9),
+    email    VARCHAR(120) NULL
+);
+
+CREATE TABLE llamadas (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    contacto_id INT NOT NULL,
+    fecha       DATE,
+    duracion    INT,
+    FOREIGN KEY (contacto_id) REFERENCES contactos(id)
+);
+
+INSERT INTO contactos (nombre, telefono, email) VALUES
+  ('Ana Ruiz',     '600111222', 'ana@example.com'),
+  ('Carlos Vidal', '600333444', NULL),
+  ('Marta Gil',    '600555666', 'marta@example.com');
+```
+
+Los ejemplos de esta unidad asumen estos tres contactos; por eso puedes comparar sus salidas con las que muestran los apuntes.
+
+## Evaluación
+
+Los nueve ejercicios (E6.1–E6.9) se evalúan como **apto / no apto** y tienen un peso pequeño en la nota de la unidad: sirven para asegurar la práctica continua. El **grueso de la calificación es el examen** de la unidad, donde se comprueban de forma individual los criterios de evaluación del RA6.
+
+::: {.callout-note title="Concepto clave"}
+Para llegar al examen en buenas condiciones, lo importante es tener **todos los ejercicios en apto**: cada uno cubre una pieza del recorrido (conectar, consultar, publicar, recorrer, modificar) que el examen combina.
+:::

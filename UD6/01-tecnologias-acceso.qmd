@@ -1,0 +1,26 @@
+---
+title: "Tecnologías de acceso a datos"
+---
+
+Una aplicación web delega la persistencia de sus datos en un **SGBD** (sistema gestor de bases de datos). Para hablar con él, PHP ofrece tres enfoques:
+
+- **Extensión específica** (`mysqli`): solo MySQL/MariaDB. Rápida, pero ata el código a un motor.
+- **PDO**: capa común a más de una docena de motores. Cambiar de motor implica, en el caso ideal, cambiar solo el DSN.
+- **ORM** (Eloquent, Doctrine): mapean tablas a objetos y ocultan el SQL. Por debajo usan PDO.
+
+Usamos **PDO** porque es independiente del motor, ofrece sentencias preparadas homogéneas (clave para la seguridad) y es la base de Eloquent.
+
+| Aspecto | `mysqli` | PDO |
+|---------|----------|-----|
+| Motores | Solo MySQL/MariaDB | 12+ (MySQL, PostgreSQL, SQLite…) |
+| Sentencias preparadas | Sí (sintaxis propia) | Sí (homogénea, marcadores con nombre) |
+| Estilo de API | Procedimental y OO | Solo OO |
+| Errores | Códigos / excepciones | Excepciones |
+
+::: {#exr-UD6-1}
+**E6.1 — Estudio comparativo de tecnologías de acceso a datos**
+
+Elabora una tabla comparativa razonada entre `mysqli`, PDO y un ORM (Eloquent). Para cada tecnología indica: motores soportados, si permite portar el código a otro SGBD, cómo gestiona la seguridad frente a inyección y un caso de uso en el que sería la opción preferible. Cierra con un párrafo justificando por qué este módulo adopta PDO.
+
+*Ejercicio de diseño libre: no requiere código.*
+:::

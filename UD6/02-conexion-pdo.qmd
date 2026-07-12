@@ -1,0 +1,86 @@
+---
+title: "Conexión con PDO"
+---
+
+Conectar es crear un objeto `PDO` pasándole un **DSN** (Data Source Name), el usuario y la contraseña:
+
+```php
+<?php
+$dsn = 'mysql:host=localhost;dbname=agenda;charset=utf8mb4';
+
+$opciones = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
+
+try {
+    $pdo = new PDO($dsn, 'daw', 'secreto', $opciones);
+    echo "Conectado.\n";
+} catch (PDOException $e) {
+    error_log($e->getMessage());   // registrar, nunca mostrar al usuario
+    exit('No se pudo conectar con la base de datos.');
+}
+```
+
+Salida esperada:
+
+```
+Conectado.
+```
+
+::: {.callout-note title="Concepto clave"}
+Los tres atributos que nunca deben faltar:
+
+- `ATTR_ERRMODE => ERRMODE_EXCEPTION`: los errores lanzan `PDOException` y se manejan con `try/catch`.
+- `ATTR_DEFAULT_FETCH_MODE => FETCH_ASSOC`: las filas llegan como arrays asociativos (`columna => valor`).
+- `ATTR_EMULATE_PREPARES => false`: las preparadas se preparan de verdad en el servidor, reforzando la seguridad.
+:::
+
+En una aplicación real la conexión no se repite en cada script: se **encapsula** en una clase y se reutiliza.
+
+::: {#exr-UD6-2}
+**E6.2 — Clase de conexión PDO reutilizable**
+
+Crea una clase `Conexion` con un método estático `getInstancia()` que devuelva un **único** objeto PDO (patrón *singleton*). Los datos del DSN deben leerse de un fichero de configuración externo, no estar escritos en la clase. Gestiona el fallo con `try/catch`, registrando el error con `error_log` y mostrando un mensaje genérico. Demuestra su uso recuperando el número de contactos.
+
+Código de arranque:
+
+```php
+<?php
+// config.php  (fichero externo, fuera del control de versiones)
+return [
+    'host' => 'localhost',
+    'bd'   => 'agenda',
+    'user' => 'daw',
+    'pass' => 'secreto',
+];
+```
+
+```php
+<?php
+// Conexion.php
+class Conexion {
+    private static ?PDO $pdo = null;
+
+    public static function getInstancia(): PDO {
+        if (self::$pdo === null) {
+            // TODO: leer config.php, construir el DSN y crear el PDO
+            //       con ERRMODE_EXCEPTION y FETCH_ASSOC, dentro de try/catch
+        }
+        return self::$pdo;
+    }
+}
+
+// Uso esperado:
+$pdo = Conexion::getInstancia();
+$total = $pdo->query('SELECT COUNT(*) FROM contactos')->fetchColumn();
+echo "Contactos: $total";
+```
+
+Salida esperada (con los 3 contactos de la base de prácticas):
+
+```
+Contactos: 3
+```
+:::

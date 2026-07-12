@@ -10,8 +10,7 @@ book:
   author: "Manel Navarro Pérez"
   #date: today
   #date-format: "MMMM YYYY"
-  output-file: "DWES - 2º DAW"
-  # ── Cambia USUARIO por tu usuario de GitHub ──
+  output-file: "DWES-2DAW"
   repo-url: https://github.com/MNP-profesor/DWES_Apuntes
   repo-actions: [edit, issue]
   search: true
@@ -91,9 +90,16 @@ book:
         - UD5/09-poo-servicios.qmd
         - UD5/10-pruebas-proyecto.qmd
 
-    # - part: "UD6 · Acceso a almacenes de datos con PDO"
-    #   chapters:
-    #     - UD6/01-tema.qmd
+    - part: "UD6. Acceso a BBDD con PDO: seguridad e integridad"
+      chapters:
+        - UD6/00-presentacion.qmd
+        - UD6/01-tecnologias-acceso.qmd
+        - UD6/02-conexion-pdo.qmd
+        - UD6/03-recuperacion-seguridad.qmd
+        - UD6/04-publicacion-web.qmd
+        - UD6/05-conjuntos-datos.qmd
+        - UD6/06-crud-transacciones.qmd
+        - UD6/07-proyecto.qmd
 
     # - part: "UD7 · Servicios web REST"
     #   chapters:

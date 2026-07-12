@@ -1,0 +1,86 @@
+---
+title: "Conjuntos de datos y modos de recuperación"
+---
+
+El **modo de recuperación** (*fetch mode*) decide qué estructura recibes por cada fila:
+
+| Modo | Qué devuelve | Cuándo usarlo |
+|------|--------------|---------------|
+| `FETCH_ASSOC` | Array asociativo `columna => valor` | Caso general |
+| `FETCH_NUM` | Array con índices numéricos | Consultas simples / rendimiento |
+| `FETCH_OBJ` | Objeto anónimo con propiedades | Acceso con `->propiedad` sin clase propia |
+| `FETCH_CLASS` | Instancia de una clase tuya | Cuando ya tienes un modelo |
+
+El mismo dato con dos modos distintos:
+
+```php
+<?php
+// FETCH_ASSOC
+$fila = $pdo->query('SELECT nombre FROM contactos LIMIT 1')->fetch(PDO::FETCH_ASSOC);
+echo $fila['nombre'] . "\n";   // acceso por clave
+
+// FETCH_OBJ
+$fila = $pdo->query('SELECT nombre FROM contactos LIMIT 1')->fetch(PDO::FETCH_OBJ);
+echo $fila->nombre . "\n";     // acceso por propiedad
+```
+
+Salida esperada:
+
+```
+Ana Ruiz
+Ana Ruiz
+```
+
+`FETCH_CLASS` **hidrata objetos** de una clase tuya, asignando cada columna a la propiedad del mismo nombre:
+
+```php
+<?php
+class Contacto {
+    public int $id;
+    public string $nombre;
+    public string $telefono;
+
+    public function etiqueta(): string {
+        return $this->nombre . ' (' . $this->telefono . ')';
+    }
+}
+
+$st = $pdo->query('SELECT id, nombre, telefono FROM contactos');
+$contactos = $st->fetchAll(PDO::FETCH_CLASS, Contacto::class);
+
+foreach ($contactos as $c) {          // $c es un objeto Contacto
+    echo $c->etiqueta() . "\n";
+}
+```
+
+Salida esperada:
+
+```
+Ana Ruiz (600111222)
+Carlos Vidal (600333444)
+Marta Gil (600555666)
+```
+
+::: {.callout-tip title="Analogía Java"}
+En Java construías el objeto y **después** rellenabas sus campos recorriendo el `ResultSet`. PDO con `FETCH_CLASS` hace lo contrario, y esto sorprende: **asigna las propiedades ANTES de ejecutar el constructor**. Si tu constructor pone valores por defecto, los pisará. Para que el constructor corra primero, combina las banderas: `fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Contacto::class)`.
+:::
+
+::: {#exr-UD6-6}
+**E6.6 — Fetch modes y FETCH_CLASS**
+
+1. Recupera el listado de contactos con `FETCH_ASSOC`, `FETCH_OBJ` y `FETCH_CLASS` y comenta las diferencias de acceso a los datos.
+2. Reutiliza (o crea) una clase `Contacto` con al menos un método de comportamiento y complétala con `FETCH_CLASS`, comprobando que puedes invocar ese método sobre los objetos recuperados.
+
+Código de arranque:
+
+```php
+<?php
+$sql = 'SELECT id, nombre, telefono FROM contactos';
+
+$asoc = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+$objs = $pdo->query($sql)->fetchAll(PDO::FETCH_CLASS, Contacto::class);
+
+// TODO: recorrer $asoc  (acceso: $fila['nombre'])
+// TODO: recorrer $objs  (acceso: $obj->etiqueta())
+```
+:::

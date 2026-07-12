@@ -1,0 +1,88 @@
+---
+title: "Recuperación de datos y seguridad"
+---
+
+Para una consulta **fija**, sin datos externos, vale `query()`:
+
+```php
+<?php
+$sql = 'SELECT id, nombre FROM contactos ORDER BY nombre';
+foreach ($pdo->query($sql) as $fila) {
+    echo $fila['nombre'] . "\n";
+}
+```
+
+Salida esperada:
+
+```
+Ana Ruiz
+Carlos Vidal
+Marta Gil
+```
+
+En cuanto la consulta usa un **valor del usuario** (un id, un término de búsqueda) hay que usar **sentencias preparadas**.
+
+## El peligro: inyección SQL
+
+Nunca concatenes datos del usuario en el SQL:
+
+```php
+<?php
+// ❌ VULNERABLE — jamás en producción
+$id = $_GET['id'];
+$pdo->query("SELECT * FROM contactos WHERE id = $id");
+```
+
+Con `?id=0 OR 1=1` la consulta pasa a ser `... WHERE id = 0 OR 1=1`, que es siempre cierta y **devuelve toda la tabla**. Con `?id=0; DROP TABLE contactos; --` se puede destruir la tabla.
+
+## La solución: marcadores
+
+El valor viaja **separado** del SQL; el motor nunca lo interpreta como código:
+
+```php
+<?php
+// ✅ SEGURO — sentencia preparada con marcador con nombre
+$sql = 'SELECT id, nombre, telefono FROM contactos WHERE id = :id';
+$sentencia = $pdo->prepare($sql);
+$sentencia->execute([':id' => $_GET['id']]);
+$contacto = $sentencia->fetch();
+
+if ($contacto === false) {
+    echo 'Contacto no encontrado.';
+} else {
+    echo $contacto['nombre'];
+}
+```
+
+Ahora `?id=0 OR 1=1` se trata como un id literal que no existe: la consulta **no devuelve filas** y se muestra `Contacto no encontrado.`.
+
+::: {.callout-tip title="Analogía Java"}
+Si vienes de JDBC reconocerás el `PreparedStatement`, pero hay una diferencia que sorprende: en Java enlazabas cada parámetro con un *setter* tipado y posicional (`ps.setInt(1, id)`), mientras que en PHP pasas **todos los parámetros juntos en un array asociativo** (`execute([':id' => $id])`), sin indicar el tipo. PHP lo infiere del valor; por eso conviene castear a entero (`(int)`) los identificadores numéricos importantes.
+:::
+
+::: {.callout-warning title="Errores frecuentes"}
+- Concatenar el valor en el SQL "solo por esta vez": cualquier hueco es una vía de inyección.
+- Olvidar comprobar `fetch() === false` cuando el registro puede no existir.
+- Mostrar `$e->getMessage()` al usuario: filtra información del servidor. Regístralo con `error_log`.
+:::
+
+::: {#exr-UD6-3}
+**E6.3 — Sentencias preparadas y demostración de inyección SQL**
+
+Parte de este script vulnerable, que busca contactos por nombre concatenando el término:
+
+```php
+<?php
+// buscar_inseguro.php  (punto de partida)
+$q = $_GET['q'] ?? '';
+$sql = "SELECT id, nombre FROM contactos WHERE nombre LIKE '%$q%'";
+foreach ($pdo->query($sql) as $fila) {
+    echo $fila['nombre'] . "<br>";
+}
+```
+
+1. Demuestra la inyección con un valor de `q` que devuelva toda la tabla (por ejemplo `%' OR '1'='1`).
+2. Reescribe la consulta con una sentencia preparada y marcador `:q`.
+3. Verifica que el mismo valor malicioso ya no surte efecto.
+4. Explica en dos o tres líneas por qué la preparada neutraliza el ataque.
+:::

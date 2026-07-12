@@ -1,0 +1,32 @@
+---
+title: "Proyecto integrador y evaluación"
+---
+
+## Proyecto integrador
+
+::: {#exr-UD6-9}
+**E6.9 — CRUD completo seguro y documentado**
+
+Desarrolla una aplicación completa de gestión de la agenda que integre todo lo anterior:
+
+- conexión encapsulada (E6.2),
+- listado con búsqueda y paginación (E6.4),
+- ficha de detalle (E6.5),
+- alta con validación (E6.7),
+- edición y borrado transaccional (E6.8),
+- objetos hidratados con `FETCH_CLASS` (E6.6).
+
+Checklist de calidad:
+
+1. Conexión única encapsulada, con credenciales externas.
+2. **Todas** las consultas con datos externos usan sentencias preparadas (cero concatenación).
+3. **Toda** la salida escapada con `htmlspecialchars()`.
+4. CRUD completo funcional (alta, listado, ficha, edición, borrado).
+5. Borrado con dependencias resuelto en transacción.
+6. Validación en servidor en alta y edición.
+7. Código documentado y con una tabla de casos de prueba de las operaciones críticas.
+
+*Ejercicio de diseño libre: no lleva código de arranque; parte de tus soluciones de E6.2 a E6.8.*
+:::
+
+
