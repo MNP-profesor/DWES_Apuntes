@@ -1,6 +1,8 @@
 ---
-title: "Presentación de la unidad"
+title: "🗂️ UD8. Aplicaciones Web híbridas: librerías y repositorios heterogéneos (Composer)"
 ---
+
+## Qué aprenderás
 
 Esta unidad cierra el ciclo técnico del módulo integrando las dos mitades del desarrollo web: el código que se ejecuta en el servidor y el que se ejecuta en el navegador. Hasta ahora, todas las aplicaciones construidas siguen el ciclo clásico de petición-respuesta: el navegador solicita una página, el servidor la genera completa y el navegador la sustituye por entero. En esta unidad se aprende a romper ese ciclo cuando conviene, generando páginas que, una vez cargadas, obtienen información remota del servidor y modifican su propio contenido y estructura sin recargarse.
 
@@ -10,11 +12,11 @@ El enfoque tecnológico es continuista con el resto del módulo: PHP nativo como
 El JavaScript empleado en esta unidad tiene carácter instrumental y se limita a lo imprescindible: peticiones `fetch`, tratamiento de JSON y manipulación básica del DOM. El estudio en profundidad del lenguaje JavaScript y sus frameworks corresponde al módulo DWEC, con el que esta unidad se coordina. Aquí el foco permanece en el servidor: qué genera, qué expone y cómo se combina con el cliente.
 :::
 
-## Resultado de aprendizaje y criterios de evaluación
+## Resultados de Aprendizaje y Criterios de Evaluación
 
-**RA8. Genera páginas web dinámicas analizando y utilizando tecnologías y frameworks del servidor web que añadan código al lenguaje de marcas.**
+> **RA8.** Genera páginas web dinámicas analizando y utilizando tecnologías y frameworks del servidor web que añadan código al lenguaje de marcas.
 
-| CE | Criterio de evaluación |
+| CE | Descripción |
 |------|-----------------------------------------------------------|
 | CE8.a | Se han identificado las diferencias entre la ejecución de código en el servidor y en el cliente web. |
 | CE8.b | Se han reconocido las ventajas de unir ambas tecnologías en el proceso de desarrollo de programas. |

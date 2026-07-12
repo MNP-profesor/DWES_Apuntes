@@ -1,10 +1,8 @@
 ---
-title: "Presentación de la unidad"
+title: "🗂️ UD2. Fundamentos de PHP: Variables, operadores y sintaxis embebida"
 ---
 
-# UD2. Fundamentos de PHP: Variables, operadores y sintaxis embebida {.unnumbered}
-
-## ¿De qué trata esta unidad?
+## Qué aprenderás
 
 En esta unidad aprendemos a escribir código PHP dentro de documentos HTML para generar páginas web dinámicas. Cubrimos la sintaxis básica, los tipos de datos, los operadores y el concepto de ámbito de variables.
 

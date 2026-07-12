@@ -136,3 +136,12 @@ a:hover {
   overflow-wrap: anywhere;
   line-height: 1.3;
 }
+
+// ── Bloques de ejercicio ───────────────────────────────────
+.ejercicio {
+  border-left: 4px solid #C0561F;
+  padding: .6rem 1rem;
+  margin: 1.2rem 0;
+  border-radius: .3rem;
+  background: rgba(192, 86, 31, 0.06);
+}

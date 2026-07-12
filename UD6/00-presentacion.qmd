@@ -1,8 +1,8 @@
 ---
-title: "Presentación de la unidad"
+title: "🗂️ UD6. Acceso a BBDD con PDO: Seguridad e integridad"
 ---
 
-# UD6. Acceso a BBDD con PDO: Seguridad e integridad {.unnumbered}
+## Qué aprenderás
 
 En esta unidad las aplicaciones dejan de trabajar con datos efímeros y aprenden a **persistirlos** en una base de datos relacional y a recuperarlos de forma segura. Todo el acceso a datos se hace con **PDO** (PHP Data Objects), la capa de acceso a bases de datos de PHP.
 

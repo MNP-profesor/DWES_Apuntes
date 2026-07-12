@@ -1,8 +1,8 @@
 ---
-title: "Presentación de la unidad"
+title: "🗂️ UD7. Servicios Web: API REST con Laravel (Resources y Sanctum)"
 ---
 
-# UD7. Servicios Web: API REST con Laravel (Resources y Sanctum) {.unnumbered}
+## Qué aprenderás
 
 Hasta ahora tus aplicaciones Laravel producían páginas HTML para un navegador. En esta unidad el servidor deja de producir HTML para producir **datos**: construirás una **API REST** completa que cualquier cliente —una app móvil, una SPA en JavaScript u otro servidor— podrá consumir sin conocer nada de su interior.
 

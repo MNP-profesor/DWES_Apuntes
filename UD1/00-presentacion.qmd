@@ -1,12 +1,10 @@
 ---
-title: "Presentación de la unidad"
+title: "🗂️ UD1. Arquitecturas y tecnologías de programación Web en entorno servidor"
 ---
 
-# UD1. Arquitecturas y tecnologías de programación Web en entorno servidor {.unnumbered}
+## Qué aprenderás
 
 En esta unidad verás qué ocurre entre que el usuario escribe una URL y el navegador muestra la página: qué software interviene, dónde se ejecuta el código y con qué tecnologías se construyen las aplicaciones web del lado del servidor. No escribirás código todavía — eso empieza en UD2 — pero sin este mapa conceptual todo lo que viene después carece de contexto.
-
-## Qué aprenderás
 
 Al terminar esta unidad serás capaz de:
 

@@ -1,8 +1,6 @@
 ---
-title: "Presentación de la unidad"
+title: "🗂️ UD3. Estructuras de control en PHP: Condicionales, bucles, funciones y formularios"
 ---
-
-# UD3. Estructuras de control en PHP: Condicionales, bucles, funciones y formularios {.unnumbered}
 
 ## Qué aprenderás
 

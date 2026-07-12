@@ -13,3 +13,5 @@ _ud-pdfs/
 # Sistema
 .DS_Store
 Thumbs.db
+
+**/*.quarto_ipynb
