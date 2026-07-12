@@ -2,7 +2,6 @@
 title: "Secuencia didáctica y evaluación"
 ---
 
-
 ## Secuencia didáctica
 
 | Sesión | Duración | Contenido | Actividad |
@@ -17,8 +16,6 @@ title: "Secuencia didáctica y evaluación"
 | 8 | 2 h | Formularios HTML: GET vs POST | E3.8 — Formulario de inscripción |
 | 9 | 2 h | Superglobales y validación de datos | E3.9 — Procesador de inscripción |
 | 10 | 1 h | Repaso e integración | Sin entregable |
-
----
 
 ## Evaluación
 
@@ -36,14 +33,3 @@ Para obtener el **apto** es necesario:
 
 El grueso de la calificación recae en el **examen**, que se proporciona en documento aparte. El examen cubre los seis bloques de la unidad y tiene una duración de 60 minutos.
 
-### Tabla de criterios y actividades
-
-| CE | E3.1 | E3.2 | E3.3 | E3.4 | E3.5 | E3.6 | E3.7 | E3.8 | E3.9 |
-|---|---|---|---|---|---|---|---|---|---|
-| CE3.a | X | X | | | | | | | |
-| CE3.b | | | X | X | | | | | |
-| CE3.c | | | | | X | X | | | |
-| CE3.d | | | | | | | X | | |
-| CE3.e | | | | | | | | X | |
-| CE3.f | | | | | | | | | X |
-| CE3.g | X | X | X | X | X | X | X | X | X |

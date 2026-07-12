@@ -18,8 +18,6 @@ Añade la siguiente entrada dentro de la clave `book.chapters`, en el lugar que 
 
 > **Nota sobre sangría:** Quarto es sensible a la sangría YAML. Asegúrate de que `- part:` queda al mismo nivel que el resto de entradas `- part:` existentes en `book.chapters`.
 
----
-
 ## 2. `descargas.qmd` — no requiere cambios
 
 La fila de UD1 ya está descomentada y activa en tu `descargas.qmd`:
@@ -29,8 +27,6 @@ La fila de UD1 ya está descomentada y activa en tu `descargas.qmd`:
 ```
 
 El PDF `download/DWES-UD1.pdf` lo genera automáticamente `scripts/build-unit-pdfs.sh` en cada publicación. No tienes que tocar nada en este fichero.
-
----
 
 ## 3. Pasos manuales adicionales
 
@@ -56,8 +52,6 @@ git push
 
 > La carpeta de destino en `DWES_Soluciones` debe llamarse `UD1/` (misma convención que en el repo público), y el fichero dentro será `soluciones.md`.
 
----
-
 ## 4. Referencias cruzadas disponibles
 
 Una vez integrada la UD1, puedes referenciar los ejercicios desde cualquier otro `.qmd` del libro con:
@@ -70,8 +64,6 @@ Una vez integrada la UD1, puedes referenciar los ejercicios desde cualquier otro
 @exr-UD1-5  →  E1.5 — Trazado manual de la salida generada
 @exr-UD1-6  →  E1.6 — Puesta en marcha del entorno de trabajo
 ```
-
----
 
 ## 5. Advertencias de sintaxis a verificar en el render local
 

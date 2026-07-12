@@ -1,5 +1,5 @@
 ---
-title: "Bloque 1 · Generación embebida, tecnologías y delimitadores"
+title: "Generación embebida, tecnologías y delimitadores"
 ---
 
 ## ¿Qué hace el servidor con un archivo PHP?

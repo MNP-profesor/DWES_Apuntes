@@ -2,9 +2,7 @@
 title: "Presentación de la unidad"
 ---
 
-# UD4. POO en PHP + Desarrollo de funcionalidades Web  {.unnumbered}
-
-**Autenticación, sesiones y cookies**
+# UD4. POO en PHP + Desarrollo de funcionalidades Web: Autenticación, sesiones y cookies  {.unnumbered}
 
 En esta unidad das el salto a la Programación Orientada a Objetos en PHP y la usas para resolver el problema central de cualquier aplicación web: **recordar quién es el usuario** entre una petición y la siguiente. Al terminar, tendrás un sistema de login completo, con sesiones, cookies seguras y control de acceso por roles.
 

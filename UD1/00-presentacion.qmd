@@ -17,8 +17,6 @@ Al terminar esta unidad serás capaz de:
 - Identificar los delimitadores que separan el código de servidor del HTML en un documento mixto.
 - Poner en marcha un entorno de desarrollo PHP local (XAMPP o Docker).
 
----
-
 ## Resultados de Aprendizaje y Criterios de Evaluación
 
 > **RA1.** Selecciona las arquitecturas y tecnologías de programación web en entorno servidor, analizando sus capacidades y características propias.
@@ -33,8 +31,6 @@ Al terminar esta unidad serás capaz de:
 | CE1.f | Se han verificado los mecanismos de integración de los lenguajes de marcas con los lenguajes de programación en entorno servidor. |
 | CE1.g | Se han reconocido y evaluado las herramientas de programación en entorno servidor. |
 
----
-
 ## Objetivos de la unidad
 
 Al finalizar esta unidad, el alumnado será capaz de:
@@ -47,8 +43,6 @@ Al finalizar esta unidad, el alumnado será capaz de:
 - Justificar la elección de un lenguaje de programación en entorno servidor para un proyecto Web dado, argumentando ventajas e inconvenientes.
 - Aplicar los mecanismos de integración entre código de servidor y lenguajes de marcas, reconociendo etiquetas y delimitadores propios de cada tecnología.
 - Seleccionar y configurar las herramientas básicas de un entorno de desarrollo Web en servidor (distribuciones empaquetadas, contenedores, IDE).
-
----
 
 ## Contenidos
 

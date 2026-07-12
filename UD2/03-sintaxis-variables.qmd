@@ -1,5 +1,5 @@
 ---
-title: "Bloque 2 · Sintaxis, variables y constantes"
+title: "Sintaxis, variables y constantes"
 ---
 
 ## Sentencias y comentarios

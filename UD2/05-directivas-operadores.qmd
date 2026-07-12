@@ -1,5 +1,5 @@
 ---
-title: "Bloque 3 · Directivas y operadores"
+title: "Directivas y operadores"
 ---
 
 ## Directivas de error

@@ -2,11 +2,7 @@
 title: "Presentación de la unidad"
 ---
 
-# UD3. Estructuras de control en PHP {.unnumbered}
-
-**Condicionales, bucles, funciones y formularios**
-
----
+# UD3. Estructuras de control en PHP: Condicionales, bucles, funciones y formularios {.unnumbered}
 
 ## Qué aprenderás
 
@@ -17,8 +13,6 @@ Al terminar la unidad sabrás:
 - Almacenar colecciones de datos con arrays indexados, asociativos y multidimensionales.
 - Organizar tu código en funciones reutilizables.
 - Crear formularios HTML y recoger los datos que envía el usuario.
-
----
 
 ## Resultados de Aprendizaje y Criterios de Evaluación
 
@@ -34,15 +28,11 @@ Al terminar la unidad sabrás:
 | CE3.f | Recogida de datos del formulario |
 | CE3.g | Comentarios en el código *(transversal)* |
 
----
-
 ## Materiales
 
 - Servidor local PHP (XAMPP, MAMP o equivalente) y VS Code.
 - Navegador con herramientas de desarrollador (F12).
 - [Documentación oficial de PHP](https://www.php.net/manual/es/)
-
----
 
 ## Contenidos
 
@@ -54,8 +44,6 @@ Bloque 4 · Funciones
 Bloque 5 · Formularios HTML
 Bloque 6 · Recogida y validación de datos
 ```
-
----
 
 ## Evaluación
 

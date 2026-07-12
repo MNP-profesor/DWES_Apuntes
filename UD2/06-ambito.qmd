@@ -1,5 +1,5 @@
 ---
-title: "Bloque 4 · Ámbito de las variables"
+title: "Ámbito de las variables"
 ---
 
 ## Ámbito global y local
