@@ -48,7 +48,6 @@ book:
         - UD2/04-tipos-conversion.qmd
         - UD2/05-directivas-operadores.qmd
         - UD2/06-ambito.qmd
-        - UD2/07-evaluacion.qmd
 
     - part: "📌 UD3. Estruct. Control, funciones y forms en PHP"
       chapters:
@@ -59,7 +58,6 @@ book:
         - UD3/05-funciones.qmd
         - UD3/06-formularios.qmd
         - UD3/07-recogida-datos.qmd
-        - UD3/08-evaluacion.qmd
 
     - part: "UD4. POO en PHP, autenticación, sesiones y cookies"
       chapters:
@@ -131,11 +129,12 @@ format:
     number-depth: 2
     number-chapters: false # <-- MANEL: Esto quita el número autoincremental de todo el sitio
     code-copy: true
-    code-overflow: wrap
+    code-overflow: scroll # wrap <-- antes
+    code-line-numbers: true # Numeración de líneas en código incrustado
     smooth-scroll: true
     link-external-newwindow: true
-    code-line-numbers: true
-    code-overflow: scroll
+
+
 
   pdf:
     documentclass: scrreprt
