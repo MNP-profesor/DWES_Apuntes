@@ -66,7 +66,7 @@ format:
       - right=2.2cm
     toc: true
     toc-depth: 2
-    number-sections: true
+    number-sections: false
     colorlinks: true
     linkcolor: MidnightCoral
     urlcolor: MidnightCoral

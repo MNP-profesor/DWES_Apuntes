@@ -128,7 +128,7 @@ format:
     toc: true
     toc-depth: 3
     number-sections: false # true <-- antes
-    number-depth: 2
+    #number-depth: 2
     number-chapters: false # <-- MANEL: Esto quita el número autoincremental de todo el sitio
     code-copy: true
     code-overflow: scroll # wrap <-- antes
@@ -148,7 +148,7 @@ format:
       - right=2.2cm
     toc: true
     toc-depth: 2
-    number-sections: true
+    number-sections: false # true <-- antes
     colorlinks: true
     linkcolor: MidnightCoral
     urlcolor: MidnightCoral
@@ -160,5 +160,5 @@ format:
 
   epub:
     toc: true
-    number-sections: true
+    number-sections: false # true <-- antes
     epub-cover-image: theme/cover.png
