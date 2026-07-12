@@ -148,7 +148,7 @@ format:
       - right=2.2cm
     toc: true
     toc-depth: 2
-    number-sections: false # true <-- antes
+    number-sections: true
     colorlinks: true
     linkcolor: MidnightCoral
     urlcolor: MidnightCoral
@@ -160,5 +160,5 @@ format:
 
   epub:
     toc: true
-    number-sections: false # true <-- antes
+    number-sections: true 
     epub-cover-image: theme/cover.png

@@ -1,8 +1,8 @@
 ---
-title: "Presentación de la unidad"
+title: "UD2. Fundamentos de PHP: Variables, operadores y sintaxis embebida"
 ---
 
-# UD2. Fundamentos de PHP: Variables, operadores y sintaxis embebida {.unnumbered}
+<!--# UD2. Fundamentos de PHP: Variables, operadores y sintaxis embebida {.unnumbered}-->
 
 ## ¿De qué trata esta unidad?
 
