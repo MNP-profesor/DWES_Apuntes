@@ -14,6 +14,7 @@ book:
   repo-url: https://github.com/MNP-profesor/DWES_Apuntes
   repo-actions: [edit, issue]
   search: true
+  number-chapters: false # <-- MANEL: Esto quita el número autoincremental de todo el sitio
   sidebar:
     style: docked
     collapse-level: 1

@@ -35,6 +35,7 @@ $sidebar-bg: #131834;
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
 
+// ── Titulares ──────────────────────────────────────────────
 h1, h2 {
   letter-spacing: -0.015em;
 }
@@ -47,6 +48,7 @@ h1, h2 {
     display: none;
 }
 
+// ── Barra lateral ──────────────────────────────────────────
 .sidebar-title {
   font-family: $headings-font-family;
   color: $ice;
@@ -57,6 +59,7 @@ h1, h2 {
   font-weight: 600;
 }
 
+// ── Código ─────────────────────────────────────────────────
 div.sourceCode {
   border: 1px solid #262E58;
   border-left: 4px solid $coral-lit;
@@ -66,6 +69,11 @@ code {
   font-size: 0.925em;
 }
 
+// ── Callouts (semántica del módulo) ────────────────────────
+// note      → concepto clave        (navy)
+// tip       → analogía Java         (coral)
+// warning   → errores frecuentes    (por defecto)
+// important → normativa / RA-CE     (por defecto)
 .callout.callout-style-default {
   border-radius: .4rem;
   background-color: $navy-card;
@@ -79,6 +87,7 @@ code {
   .callout-title-container { color: $coral-lit; }
 }
 
+// ── Tablas ─────────────────────────────────────────────────
 table.table {
   font-size: 0.95em;
   thead {
@@ -87,6 +96,7 @@ table.table {
   }
 }
 
+// ── Enlaces ────────────────────────────────────────────────
 a:hover {
   text-decoration: underline;
 }
