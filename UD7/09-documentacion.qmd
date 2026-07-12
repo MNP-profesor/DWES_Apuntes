@@ -1,0 +1,107 @@
+---
+title: "Documentar la API con OpenAPI"
+---
+
+Documentar un servicio web es **publicar su contrato**: qué *endpoints* existen, qué aceptan, qué devuelven y qué errores producen, de forma que un tercero pueda consumirlo sin leer tu código. El estándar actual es **OpenAPI 3** (heredero del proyecto Swagger): un documento YAML o JSON legible por humanos y por máquinas, del que se generan portales interactivos (Swagger UI), clientes automáticos y validadores.
+
+## Anatomía de un documento OpenAPI
+
+El contrato de la tienda de videojuegos, pieza a pieza. Primero la identificación y un *endpoint* de lectura:
+
+```yaml
+openapi: 3.0.3
+info:
+  title: API Tienda de Videojuegos
+  version: 1.0.0
+paths:
+  /api/juegos:
+    get:
+      summary: Lista el catálogo de juegos
+      responses:
+        '200':
+          description: Colección paginada de juegos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Juego'
+```
+
+Después la creación, con su cuerpo de entrada, su seguridad y **todos** sus códigos:
+
+```yaml
+    post:
+      summary: Crea un juego
+      security:
+        - tokenSanctum: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JuegoNuevo'
+      responses:
+        '201': { description: Juego creado }
+        '401': { description: Token ausente o inválido }
+        '403': { description: Token sin permiso de escritura }
+        '422': { description: Datos no válidos }
+```
+
+Y por último `components`: los esquemas reutilizables (fíjate en que `Juego` describe **la respuesta del Resource**, no la tabla) y el esquema de seguridad:
+
+```yaml
+components:
+  securitySchemes:
+    tokenSanctum:
+      type: http
+      scheme: bearer
+  schemas:
+    Juego:
+      type: object
+      properties:
+        id:         { type: integer, example: 5 }
+        titulo:     { type: string,  example: "Celeste" }
+        precio:     { type: number,  example: 19.99 }
+        precio_iva: { type: number,  example: 24.19 }
+        genero:     { type: string,  example: "plataformas" }
+        disponible: { type: boolean, example: true }
+    JuegoNuevo:
+      type: object
+      required: [titulo, precio, genero]
+      properties:
+        titulo: { type: string,  example: "Animal Well" }
+        precio: { type: number,  example: 22.99 }
+        genero: { type: string,  example: "metroidvania" }
+```
+
+## Redactar, validar y renderizar
+
+El flujo de trabajo:
+
+1. Redacta el YAML en [editor.swagger.io](https://editor.swagger.io): la mitad izquierda es el editor, la derecha renderiza Swagger UI en vivo y marca los errores de sintaxis al momento.
+2. Cuando el editor no marque **ningún error**, el contrato es válido.
+3. Desde Swagger UI puedes incluso probar los *endpoints* con el botón *Try it out* apuntando a tu servidor local.
+
+En proyectos reales existen herramientas que generan la especificación desde el propio código Laravel (Scramble, L5-Swagger); en esta unidad redactamos el YAML a mano porque la especificación es lo que perdura entre herramientas. La colección Postman que exportaste en @exr-UD7-7 es documentación ejecutable complementaria, pero no sustituye al contrato OpenAPI.
+
+::: {.callout-warning title="Errores frecuentes"}
+- Documentar solo las respuestas de éxito. Los `401`, `403`, `404` y `422` son parte del contrato: el consumidor programa sus ramas de error leyendo tu documentación.
+- Escribir los esquemas copiando las columnas de la tabla en lugar de la salida real del Resource: la documentación miente desde el primer día.
+- Indentación YAML inconsistente (mezclar tabuladores y espacios): el editor lo marcará, pero es la causa número uno de «no me valida».
+:::
+
+## Actividades
+
+::: {#exr-UD7-10}
+#### E7.10 · Documentación OpenAPI de la API final
+
+Documenta la API de tu proyecto integrador (@exr-UD7-9):
+
+1. Redacta el documento OpenAPI 3 completo: los cinco *endpoints* del CRUD, *login* y *logout*, con sus parámetros, cuerpos, esquemas en `components` y todos los códigos de estado del contrato (`200`, `201`, `204`, `401`, `403`, `404`, `422`).
+2. Declara el esquema de seguridad *bearer* y márcalo en los *endpoints* protegidos.
+3. Valida el documento en [editor.swagger.io](https://editor.swagger.io) (cero errores) y entrega el fichero `.yaml` junto a una captura de Swagger UI renderizando tu documentación.
+:::

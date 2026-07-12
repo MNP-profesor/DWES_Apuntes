@@ -1,0 +1,197 @@
+---
+title: "Validación y códigos de estado"
+---
+
+## El código de estado es el contrato
+
+El cliente de una API decide qué hacer leyendo **primero el código** y después el cuerpo. Tu API debe usarlos con precisión:
+
+| Código | Cuándo lo devuelve tu API |
+|:-------|:--------------------------|
+| `200 OK` | `GET` correcto, actualización correcta |
+| `201 Created` | `POST` que crea el recurso |
+| `204 No Content` | `DELETE` correcto |
+| `401 Unauthorized` | Falta el token o no es válido |
+| `403 Forbidden` | Token válido, pero sin permiso |
+| `404 Not Found` | El `id` no existe |
+| `422 Unprocessable Content` | El cuerpo no supera la validación |
+| `500 Internal Server Error` | Excepción no controlada |
+
+## Validar con Form Requests
+
+La validación funciona como en las unidades anteriores, con una diferencia clave: cuando la petición lleva `Accept: application/json`, un fallo de validación **no redirige a ningún formulario**: devuelve un `422` con el detalle campo a campo, sin que escribas nada.
+
+```bash
+php artisan make:request StoreJuegoRequest
+```
+
+```php
+// app/Http/Requests/StoreJuegoRequest.php
+public function authorize(): bool
+{
+    return true;
+}
+
+public function rules(): array
+{
+    return [
+        'titulo'     => 'required|string|max:120|unique:juegos',
+        'precio'     => 'required|numeric|min:0',
+        'genero'     => 'required|string|max:40',
+        'disponible' => 'boolean',
+    ];
+}
+```
+
+```php
+// JuegoController.php
+public function store(StoreJuegoRequest $request)
+{
+    $juego = Juego::create($request->validated());
+
+    return (new JuegoResource($juego))
+        ->response()
+        ->setStatusCode(201);
+}
+```
+
+Petición correcta:
+
+```text
+POST /api/juegos
+Accept: application/json
+Content-Type: application/json
+
+{ "titulo": "Animal Well", "precio": 22.99, "genero": "metroidvania" }
+```
+
+```text
+HTTP/1.1 201 Created
+```
+
+```json
+{
+  "data": {
+    "id": 9, "titulo": "Animal Well", "precio": 22.99,
+    "precio_iva": 27.82, "genero": "metroidvania", "disponible": true
+  }
+}
+```
+
+Petición inválida (falta `titulo`, `precio` no numérico):
+
+```text
+POST /api/juegos
+Accept: application/json
+Content-Type: application/json
+
+{ "precio": "gratis", "genero": "puzzle" }
+```
+
+```text
+HTTP/1.1 422 Unprocessable Content
+```
+
+```json
+{
+  "message": "El campo titulo es obligatorio. (and 1 more error)",
+  "errors": {
+    "titulo": ["El campo titulo es obligatorio."],
+    "precio": ["El campo precio debe ser un número."]
+  }
+}
+```
+
+Ese `422` lo ha generado Laravel solo: tú únicamente escribiste las `rules()`.
+
+## Actualizar y borrar
+
+Para `update()` hace falta un matiz: la regla `unique` debe **ignorar el propio registro**, o no podrás guardar un juego sin cambiarle el título.
+
+```php
+// app/Http/Requests/UpdateJuegoRequest.php
+use Illuminate\Validation\Rule;
+
+public function rules(): array
+{
+    return [
+        'titulo' => ['sometimes', 'required', 'string', 'max:120',
+                     Rule::unique('juegos')->ignore($this->juego)],
+        'precio' => 'sometimes|required|numeric|min:0',
+        'genero' => 'sometimes|required|string|max:40',
+        'disponible' => 'boolean',
+    ];
+}
+```
+
+```php
+// JuegoController.php
+public function update(UpdateJuegoRequest $request, Juego $juego)
+{
+    $juego->update($request->validated());
+    return new JuegoResource($juego);      // 200 OK
+}
+
+public function destroy(Juego $juego)
+{
+    $juego->delete();
+    return response()->noContent();        // 204 No Content
+}
+```
+
+`DELETE /api/juegos/9`:
+
+```text
+HTTP/1.1 204 No Content
+```
+
+(Sin cuerpo: eso significa `204`.)
+
+## Errores siempre en JSON
+
+Una API nunca debe responder con una página HTML de error. Laravel ya devuelve JSON cuando la petición lleva `Accept: application/json`, pero puedes personalizar el formato de forma centralizada en `bootstrap/app.php`:
+
+```php
+// bootstrap/app.php
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Configuration\Exceptions;
+
+->withExceptions(function (Exceptions $exceptions) {
+    $exceptions->render(function (
+        ModelNotFoundException $e,
+        Illuminate\Http\Request $request
+    ) {
+        if ($request->is('api/*')) {
+            return response()->json(
+                ['message' => 'Recurso no encontrado'], 404
+            );
+        }
+    });
+})
+```
+
+Ahora `GET /api/juegos/999` responde igual lo pida quien lo pida:
+
+```json
+{ "message": "Recurso no encontrado" }
+```
+
+```text
+HTTP/1.1 404 Not Found
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+- Devolver `200` en el `store()` porque «funciona igual». El contrato dice `201`, y las pruebas automáticas (capítulo de verificación) lo comprobarán.
+- Capturar la excepción de validación a mano con `try/catch`: no hace falta; el `422` con `errors` es automático.
+- Escribir las reglas en el controlador con `$request->validate()` y repetirlas en `update()`: los Form Requests existen precisamente para no duplicar.
+:::
+
+## Actividades
+
+::: {#exr-UD7-5}
+#### E7.5 · CRUD completo con validación
+
+1. Completa `store()`, `update()` y `destroy()` en `JuegoController` usando `StoreJuegoRequest` y `UpdateJuegoRequest` (con `unique` ignorando el propio `id`).
+2. Devuelve exactamente los códigos del contrato: `201` al crear, `200` al actualizar, `204` al borrar, `404` con mensaje JSON si el recurso no existe y `422` ante datos inválidos.
+3. Verifica desde Postman las cinco operaciones y captura una petición correcta y una incorrecta de cada tipo con su código de estado.
+:::

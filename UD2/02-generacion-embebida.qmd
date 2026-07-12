@@ -11,7 +11,7 @@ El servidor recorre el archivo de arriba a abajo. Cuando encuentra HTML lo enví
 <!DOCTYPE html>
 <html>
 <body>
-  <p>Hoy es <?php echo date('d/m/Y'); ?>.</p>
+  <p>Son las <?php echo date("H:i:s");" ?>.</p>
   <p>El servidor tiene PHP <?php echo PHP_VERSION; ?>.</p>
 </body>
 </html>
@@ -23,7 +23,7 @@ Lo que recibe el navegador:
 <!DOCTYPE html>
 <html>
 <body>
-  <p>Hoy es 02/07/2026.</p>
+  <p>Son las 18:35:42.</p>
   <p>El servidor tiene PHP 8.2.12.</p>
 </body>
 </html>
@@ -49,10 +49,10 @@ Hay varias formas de generar HTML dinámico en el servidor:
 Todo lo que esté entre `<?php` y `?>` se ejecuta. Todo lo que esté fuera se envía sin tocar.
 
 ```php
-<h1>Bienvenido</h1>
+<h1>Bienvenido/a</h1>
 <?php
-    $nombre = "Laura";
-    echo "Hola, $nombre";
+    $nombre = "Manel";
+    echo "¡Hola $nombre!";
 ?>
 <p>Fin de la página.</p>
 ```
@@ -60,8 +60,8 @@ Todo lo que esté entre `<?php` y `?>` se ejecuta. Todo lo que esté fuera se en
 Salida:
 
 ```
-<h1>Bienvenido</h1>
-Hola, Laura
+<h1>Bienvenido/a</h1>
+¡Hola Manel!
 <p>Fin de la página.</p>
 ```
 
@@ -84,12 +84,12 @@ Salida:
 ### Mezcla real: varios bloques en una misma página
 
 ```php
-<?php $usuario = "Marta"; $carrito = 3; ?>
+<?php $usuario = "Manel"; $carrito = 3; ?>
 <!DOCTYPE html>
 <html>
 <body>
   <header>
-    <p>Hola, <?= $usuario ?>. Tienes <?= $carrito ?> artículos.</p>
+    <p>Hola <?= $usuario ?>. Tienes <?= $carrito ?> artículos.</p>
   </header>
 
   <?php if ($carrito > 0): ?>
@@ -110,10 +110,10 @@ Salida (con `$carrito = 3`):
 <html>
 <body>
   <header>
-    <p>Hola, Marta. Tienes 3 artículos.</p>
+    <p>Hola Manel. Tienes 3 artículos.</p>
   </header>
 
-    <p>¿Quieres finalizar tu compra?</p>
+  <p>¿Quieres finalizar tu compra?</p>
 
   <footer>
     <p>&copy; 2026</p>

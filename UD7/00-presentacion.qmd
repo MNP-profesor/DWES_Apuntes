@@ -1,0 +1,84 @@
+---
+title: "Presentación de la unidad"
+---
+
+# UD7. Servicios Web: API REST con Laravel (Resources y Sanctum) {.unnumbered}
+
+Hasta ahora tus aplicaciones Laravel producían páginas HTML para un navegador. En esta unidad el servidor deja de producir HTML para producir **datos**: construirás una **API REST** completa que cualquier cliente —una app móvil, una SPA en JavaScript u otro servidor— podrá consumir sin conocer nada de su interior.
+
+El hilo conductor es la **API de una tienda de videojuegos**. La construiremos, le daremos forma con Resources, la haremos robusta con validación, la protegeremos con tokens, la verificaremos con Postman, la consumiremos desde otra aplicación PHP y la documentaremos con OpenAPI. El proyecto integrador (@exr-UD7-9) replica ese ciclo completo sobre un dominio que elegirás tú.
+
+## Resultados de Aprendizaje y Criterios de Evaluación
+
+> **RA7.** Desarrolla servicios web reutilizables y accesibles mediante protocolos web, verificando su funcionamiento.
+
+| CE | Descripción |
+|:---|:---------|
+| CE7.a | Reconocer las características propias y el ámbito de aplicación de los servicios web |
+| CE7.b | Reconocer las ventajas de utilizar servicios web para dar acceso a la lógica de negocio |
+| CE7.c | Identificar las tecnologías y los protocolos implicados en el consumo de servicios web |
+| CE7.d | Utilizar los estándares y arquitecturas más difundidos en el desarrollo de servicios web |
+| CE7.e | Programar un servicio web |
+| CE7.f | Verificar el funcionamiento del servicio web |
+| CE7.g | Consumir el servicio web |
+| CE7.h | Documentar un servicio web |
+:::
+
+## Objetivos
+
+Al terminar la unidad sabrás:
+
+- Explicar qué es un servicio web, su ámbito de aplicación y las ventajas de exponer la lógica de negocio como API.
+- Manejar HTTP de forma completa: métodos, cabeceras, códigos de estado y JSON.
+- Aplicar la arquitectura REST y distinguirla de SOAP.
+- Programar una API REST en Laravel: rutas API, controladores `apiResource`, API Resources y validación con respuestas JSON.
+- Proteger la API con tokens y *abilities* de Laravel Sanctum.
+- Verificar el servicio con Postman y con pruebas HTTP automatizadas.
+- Consumir APIs propias y de terceros con el cliente HTTP de Laravel.
+- Documentar el contrato con OpenAPI 3 y Swagger UI.
+
+## Recursos
+
+- PHP 8.2+, Composer y tu proyecto Laravel 12.x de las unidades anteriores (o uno nuevo).
+- MySQL/MariaDB con la base de datos de prácticas.
+- Visual Studio Code con las extensiones de PHP y Laravel.
+- [Postman](https://www.postman.com/downloads/) (escritorio o web).
+- Navegador con herramientas de desarrollador (pestaña Red).
+- [Documentación de Laravel](https://laravel.com/docs): *Routing*, *Eloquent: API Resources*, *Validation*, *Sanctum*, *HTTP Client*.
+- [Editor Swagger](https://editor.swagger.io) para la documentación OpenAPI.
+
+## Mapa de la unidad
+
+| Capítulo | Contenido | CE |
+|:---------|:----------|:---|
+| Fundamentos de servicios web | HTTP, JSON, REST vs SOAP | CE7.a·b·c·d |
+| Rutas API y controladores | `install:api`, `apiResource` | CE7.e |
+| API Resources | Transformación de modelos en JSON | CE7.e |
+| Validación y códigos de estado | Form Requests, contrato de errores | CE7.e·f |
+| Autenticación con Sanctum | Tokens y *abilities* | CE7.d·e |
+| Verificación del servicio | Postman y pruebas HTTP | CE7.c·f |
+| Consumo desde PHP | Cliente `Http::` | CE7.g |
+| Proyecto integrador | API completa sobre tu dominio | CE7.b·e·f·g |
+| Documentación con OpenAPI | El contrato publicado | CE7.h |
+
+## Evaluación
+
+La unidad tiene diez actividades, **E7.1 a E7.10** y se intercalan entre los contenidos de las secciones:
+
+| Actividad | Qué entregas | CE |
+|:----------|:-------------|:---|
+| E7.1 | Estudio comparativo de servicios web | CE7.a-b |
+| E7.2 | Disección de peticiones HTTP reales | CE7.c-d |
+| E7.3 | API de lectura de la tienda | CE7.e |
+| E7.4 | Transformación con API Resources | CE7-e |
+| E7.5 | CRUD completo con validación | CE7.e-f |
+| E7.6 | Protección con Sanctum | CE7.d-e |
+| E7.7 | Colección Postman de verificación | CE7.c-f |
+| E7.8 | Cliente consumidor en PHP | CE7.g |
+| E7.9 | Proyecto integrador (transversal) | CE7.b-e-f-g |
+| E7.10 | Documentación OpenAPI del proyecto | CE7.h |
+
+Las actividades se califican como **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
+
+El proyecto integrador E7.9 es **transversal**: su enunciado se entrega hacia la mitad de la unidad, el desarrollo es autónomo con soporte docente en las últimas sesiones.
+

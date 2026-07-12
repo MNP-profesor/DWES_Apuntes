@@ -143,8 +143,8 @@ La diferencia entre `global` y `static`:
 
 Para un sistema real, `static` es preferible: encapsula el estado dentro de la función y evita que otro código la modifique por error.
 
-::: {#exr-UD2-9}
-### E2.9 — Sistema de tickets
+::: {#exr-UD2-10}
+### E2.10 — Sistema de tickets
 
 Crea `tickets.php` e implementa tres funciones que numeren tickets:
 

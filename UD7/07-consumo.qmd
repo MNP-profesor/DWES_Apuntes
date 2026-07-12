@@ -1,0 +1,139 @@
+---
+title: "Consumir el servicio desde PHP"
+---
+
+Un servicio web cobra sentido cuando alguien lo consume. El consumidor puede ser JavaScript en el navegador (lo verás en la siguiente unidad), pero también **otra aplicación PHP**: integraciones servidor a servidor, procesos programados o una web que agrega datos de terceros.
+
+PHP nativo ofrece cURL y `file_get_contents` con contextos, pero Laravel incluye un cliente HTTP mucho más expresivo: la fachada `Http`.
+
+## Primeros pasos con `Http::`
+
+Demostración con una API pública (esta parte la haremos guiada en clase):
+
+```php
+use Illuminate\Support\Facades\Http;
+
+$respuesta = Http::get('https://pokeapi.co/api/v2/pokemon/pikachu');
+
+if ($respuesta->successful()) {           // código 2xx
+    $datos  = $respuesta->json();         // array asociativo completo
+    $nombre = $datos['name'];
+    $altura = $respuesta->json('height'); // acceso directo por clave
+    echo "$nombre mide $altura decímetros";
+}
+```
+
+```text
+pikachu mide 4 decímetros
+```
+
+Los métodos de inspección que usarás siempre:
+
+```php
+$respuesta->status();       // 200, 404, 422...
+$respuesta->successful();   // true si 2xx
+$respuesta->failed();       // true si 4xx o 5xx
+$respuesta->json('data.id') // notación con puntos para rutas anidadas
+```
+
+## Consumir nuestra propia API autenticada
+
+El ciclo completo contra la API de la tienda: *login* programático, uso del token y gestión de cada código de estado.
+
+```php
+use Illuminate\Support\Facades\Http;
+
+$base = 'http://tienda.test';
+
+// 1. Obtener el token
+$login = Http::acceptJson()->post("$base/api/login", [
+    'email'    => 'admin@tienda.test',
+    'password' => 'secreto123',
+]);
+
+if ($login->status() === 401) {
+    exit('Credenciales incorrectas');
+}
+
+$token = $login->json('token');
+
+// 2. Usarlo en las peticiones siguientes
+$creacion = Http::withToken($token)->acceptJson()
+    ->timeout(3)
+    ->post("$base/api/juegos", [
+        'titulo' => 'Celeste',
+        'precio' => 19.99,
+        'genero' => 'plataformas',
+    ]);
+
+// 3. Reaccionar según el código
+match (true) {
+    $creacion->status() === 201 =>
+        print('Creado con id ' . $creacion->json('data.id')),
+    $creacion->status() === 403 =>
+        print('Tu token no permite escritura'),
+    $creacion->status() === 422 =>
+        print_r($creacion->json('errors')),
+    default =>
+        print('Error inesperado: ' . $creacion->status()),
+};
+```
+
+Salida con un token de administrador y datos válidos:
+
+```text
+Creado con id 11
+```
+
+Con un título repetido (validación `unique`):
+
+```text
+Array
+(
+    [titulo] => Array
+        (
+            [0] => El campo titulo ya ha sido registrado.
+        )
+)
+```
+
+## Errores de red y tiempo de espera
+
+Los códigos 4xx/5xx no son el único fallo posible: el servidor puede no responder. `timeout(3)` limita la espera a 3 segundos, y la excepción de conexión se captura con el `try/catch` que ya conoces:
+
+```php
+use Illuminate\Http\Client\ConnectionException;
+
+try {
+    $r = Http::acceptJson()->timeout(3)->get("$base/api/juegos");
+
+    if ($r->successful()) {
+        $juegos = $r->json('data');
+    }
+} catch (ConnectionException $e) {
+    echo 'Servicio no disponible, inténtalo más tarde';
+}
+```
+
+Alternativa: `$r->throw()` lanza una excepción también ante 4xx/5xx, si prefieres unificar todo el manejo de errores en el `catch`.
+
+::: {.callout-note title="Concepto clave"}
+El buen consumidor hace tres cosas **siempre**: envía `acceptJson()` para garantizar errores en JSON, comprueba el código de estado antes de leer el cuerpo, y pone `timeout()` a toda petición que dependa de un servidor ajeno.
+:::
+
+::: {.callout-warning title="Errores frecuentes"}
+- Leer `$r->json('data.id')` sin comprobar antes el código: si la respuesta fue un `422`, ese campo no existe y trabajarás con `null` sin darte cuenta.
+- Pedir un token nuevo **en cada petición**: el token se obtiene una vez y se reutiliza hasta que caduque o se revoque.
+- Olvidar el `timeout`: una API caída dejará tu página colgada 30 segundos.
+:::
+
+## Actividades
+
+::: {#exr-UD7-8}
+#### E7.8 · Cliente consumidor en PHP
+
+El consumo de una API pública se hace en clase como demostración guiada y no forma parte del entregable. Tu entrega es el cliente de **tu propia API**:
+
+1. Implementa un consumidor de tu API de juegos: *login* programático, listado del catálogo y creación de un juego con el token obtenido, gestionando los códigos `401`, `403` y `422` con mensajes claros.
+2. Añade manejo de errores de red y tiempo de espera (`timeout(3)`) y documenta en comentarios qué código de estado provoca cada rama de tu control de errores.
+:::

@@ -1,0 +1,222 @@
+---
+title: "API Resources: la capa de transformación"
+---
+
+## El problema de devolver el modelo «en crudo»
+
+En el capítulo anterior la respuesta exponía `created_at`, devolvía el precio como *string* y `disponible` como `1`. Peor aún: si mañana renombras una columna de la tabla, rompes a todos los clientes. Devolver el modelo directamente **acopla el contrato de la API al esquema de la base de datos**.
+
+La solución es una capa intermedia que decide qué se publica, con qué nombre y con qué tipo: los **API Resources**.
+
+## Crear y usar un Resource
+
+```bash
+php artisan make:resource JuegoResource
+```
+
+```php
+// app/Http/Resources/JuegoResource.php
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class JuegoResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id'         => $this->id,
+            'titulo'     => $this->titulo,
+            'precio'     => (float) $this->precio,
+            'precio_iva' => round($this->precio * 1.21, 2),
+            'genero'     => $this->genero,
+            'disponible' => (bool) $this->disponible,
+        ];
+    }
+}
+```
+
+```php
+// JuegoController.php
+use App\Http\Resources\JuegoResource;
+
+public function show(Juego $juego)
+{
+    return new JuegoResource($juego);
+}
+```
+
+Compara `GET /api/juegos/2` antes y después:
+
+```json
+{
+  "id": 2,
+  "titulo": "Celeste",
+  "precio": "19.99",
+  "genero": "plataformas",
+  "disponible": 1,
+  "created_at": "2026-07-01T10:12:44.000000Z",
+  "updated_at": "2026-07-01T10:12:44.000000Z"
+}
+```
+
+```json
+{
+  "data": {
+    "id": 2,
+    "titulo": "Celeste",
+    "precio": 19.99,
+    "precio_iva": 24.19,
+    "genero": "plataformas",
+    "disponible": true
+  }
+}
+```
+
+Han pasado cuatro cosas: los *timestamps* han desaparecido, los tipos son correctos, existe un campo **calculado** (`precio_iva`) que no está en la tabla, y todo viene envuelto en una clave raíz `data`.
+
+::: {.callout-note title="Concepto clave"}
+El Resource **es el contrato**. La tabla puede cambiar; mientras `toArray()` devuelva lo mismo, ningún cliente se entera. La envoltura `data` es la convención que deja sitio a los metadatos (paginación, enlaces) sin mezclarlos con los datos.
+:::
+
+## Colecciones y paginación
+
+```php
+public function index()
+{
+    return JuegoResource::collection(Juego::paginate(5));
+}
+```
+
+`GET /api/juegos?page=2` responde con los metadatos ya montados:
+
+```json
+{
+  "data": [
+    { "id": 6, "titulo": "Blasphemous II", "precio": 24.99,
+      "precio_iva": 30.24, "genero": "metroidvania", "disponible": true },
+    { "id": 7, "titulo": "Cuphead", "precio": 19.99,
+      "precio_iva": 24.19, "genero": "run and gun", "disponible": true },
+    { "id": 8, "titulo": "Sea of Stars", "precio": 34.99,
+      "precio_iva": 42.34, "genero": "RPG", "disponible": true }
+  ],
+  "links": {
+    "first": "http://tienda.test/api/juegos?page=1",
+    "last": "http://tienda.test/api/juegos?page=2",
+    "prev": "http://tienda.test/api/juegos?page=1",
+    "next": null
+  },
+  "meta": {
+    "current_page": 2,
+    "from": 6, "to": 8,
+    "per_page": 5,
+    "total": 8,
+    "last_page": 2,
+    "path": "http://tienda.test/api/juegos",
+    "links": [ ... ]
+  }
+}
+```
+
+El cliente no calcula nada: recorre `data` y usa `links.next` para pedir la página siguiente.
+
+## Relaciones con `whenLoaded`
+
+Cada juego pertenece a una desarrolladora. Este *scaffold* se te proporciona hecho; añádelo a tu proyecto:
+
+```php
+// database/migrations/xxxx_create_desarrolladoras_table.php
+Schema::create('desarrolladoras', function (Blueprint $table) {
+    $table->id();
+    $table->string('nombre', 80);
+    $table->string('pais', 40);
+    $table->timestamps();
+});
+
+// añade a la migración de juegos (o crea una nueva):
+$table->foreignId('desarrolladora_id')
+      ->nullable()->constrained()->nullOnDelete();
+```
+
+```php
+// app/Models/Desarrolladora.php
+class Desarrolladora extends Model
+{
+    protected $fillable = ['nombre', 'pais'];
+
+    public function juegos()
+    {
+        return $this->hasMany(Juego::class);
+    }
+}
+
+// app/Models/Juego.php — añade la relación inversa
+public function desarrolladora()
+{
+    return $this->belongsTo(Desarrolladora::class);
+}
+```
+
+```php
+// database/seeders/DesarrolladoraSeeder.php
+Desarrolladora::insert([
+    ['nombre' => 'Team Cherry',       'pais' => 'Australia'],
+    ['nombre' => 'Extremely OK Games', 'pais' => 'Canadá'],
+    ['nombre' => 'ConcernedApe',       'pais' => 'EE. UU.'],
+]);
+```
+
+Ahora, en el Resource, la relación se incluye **solo si ha sido cargada**:
+
+```php
+// JuegoResource.php — añade al array:
+'desarrolladora' => new DesarrolladoraResource(
+    $this->whenLoaded('desarrolladora')
+),
+```
+
+```php
+// Sin cargar la relación:
+return JuegoResource::collection(Juego::paginate(5));
+
+// Cargándola (una sola consulta extra para toda la página):
+return JuegoResource::collection(
+    Juego::with('desarrolladora')->paginate(5)
+);
+```
+
+Con `with()`, cada juego incluye su desarrolladora anidada:
+
+```json
+{
+  "id": 2,
+  "titulo": "Celeste",
+  "precio": 19.99,
+  "precio_iva": 24.19,
+  "genero": "plataformas",
+  "disponible": true,
+  "desarrolladora": {
+    "id": 2,
+    "nombre": "Extremely OK Games",
+    "pais": "Canadá"
+  }
+}
+```
+
+Sin `with()`, el campo `desarrolladora` **desaparece** de la respuesta: eso es `whenLoaded`. Así evitas el problema N+1 que viste con Eloquent: la relación se carga con una consulta para toda la colección, o no se carga en absoluto.
+
+::: {.callout-warning title="Errores frecuentes"}
+- Acceder a `$this->desarrolladora->nombre` directamente en el Resource sin `whenLoaded`: funciona, pero dispara una consulta **por cada juego** de la colección (N+1).
+- Olvidar crear `DesarrolladoraResource` y devolver el modelo crudo anidado: acabas exponiendo los *timestamps* que tanto te costó ocultar.
+:::
+
+## Actividades
+
+::: {#exr-UD7-4}
+#### E7.4 · Transformación con API Resources
+
+1. Crea `JuegoResource` publicando `id`, `titulo`, `precio`, `precio_iva` (calculado), `genero` y `disponible`; los *timestamps* no deben aparecer.
+2. Modifica `index()` para devolver la colección paginada de 5 en 5 y `show()` para devolver el Resource individual. Analiza en Postman la estructura `data` / `links` / `meta`.
+3. Incorpora el *scaffold* del modelo `Desarrolladora` de este capítulo, crea su Resource e inclúyelo en `JuegoResource` con `whenLoaded`. Comprueba y captura la diferencia entre pedir la colección con `with('desarrolladora')` y sin él.
+:::

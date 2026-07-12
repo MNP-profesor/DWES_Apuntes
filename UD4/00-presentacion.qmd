@@ -43,9 +43,9 @@ El bloque de POO (capítulos 1-3) no tiene un CE propio: es la base instrumental
 
 ## Evaluación
 
-La calificación de la unidad se compone de un **examen** (la mayor parte de la nota) y un conjunto de **ejercicios prácticos, evaluados como apto/no apto**, que suponen un porcentaje reducido de la calificación total.
+Los ejercicios de esta unidad se califican **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
 
-No todos los ejercicios requieren entrega: los de análisis/comparación son de autoevaluación (te sirven para preparar el examen, pero no se entregan), y el resto sí requiere entrega.
+No todos los ejercicios requieren entrega: los de análisis/comparación son de autoevaluación (te sirven para preparar la prueba objetiva, pero no se entregan), y el resto sí requiere entrega.
 
 | Ejercicio | Tema | ¿Entrega? |
 |---|---|---|

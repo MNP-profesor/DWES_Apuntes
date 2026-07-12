@@ -19,6 +19,6 @@ Todos los materiales se regeneran automáticamente con cada actualización de lo
 | 4 | POO en PHP y Desarrollo de funcionalidades Web: autenticación, sesiones y cookies | [Descargar](download/DWES-UD4.pdf) |
 | 5 | Separación de la lógica de negocio: MVC con Laravel | [Descargar](download/DWES-UD5.pdf) |
 | 6 | Acceso a BBDD con PDO: seguridad e integridad | [Descargar](download/DWES-UD6.pdf) |
-<!--| 7 | Servicios Web: API REST con Laravel (Resources y Sanctum) | [Descargar](download/DWES-UD7.pdf) |
+| 7 | Servicios Web: API REST con Laravel (Resources y Sanctum) | [Descargar](download/DWES-UD7.pdf) |
 | 8 | Generación dinámica de páginas Web | [Descargar](download/DWES-UD8.pdf) |
-| 9 | Aplicaciones web híbridas: librerías y repositorios heterogéneos (Composer) | [Descargar](download/DWES-UD9.pdf) |-->
+| 9 | Aplicaciones web híbridas: librerías y repositorios heterogéneos (Composer) | [Descargar](download/DWES-UD9.pdf) |

@@ -1,0 +1,33 @@
+---
+title: "Proyecto integrador"
+---
+
+El proyecto integrador recorre el ciclo de vida completo de un servicio web sobre un **dominio distinto** al de la tienda de videojuegos. Puedes elegir entre los dominios propuestos o proponer el tuyo, siempre con al menos dos modelos relacionados:
+
+- **Gestión de recetas**: recetas y categorías (o autores).
+- **Biblioteca de juegos de mesa**: juegos y editoriales.
+- **Cartelera de cine**: películas y salas (o directores).
+
+::: {.callout-note title="Concepto clave"}
+El proyecto es una **actividad transversal con desarrollo autónomo**: el enunciado se entrega hacia la mitad de la unidad, se trabaja fuera del aula con tutorización en las últimas sesiones, y la entrega se cierra antes de la sesión de repaso previa al examen. Requiere entre 6 y 10 horas de dedicación: planifícalo desde el primer día, no es una actividad de última semana.
+:::
+
+::: {#exr-UD7-9}
+#### E7.9 · Proyecto integrador: API REST completa
+
+Sobre el dominio elegido, entrega una API que cumpla los cinco requisitos:
+
+1. **API.** Dos recursos relacionados con `apiResource`, API Resources con al menos un campo calculado y una relación con `whenLoaded`, validación con Form Requests y el contrato de códigos de estado completo (`200`, `201`, `204`, `404`, `422`).
+2. **Seguridad.** Autenticación Sanctum con *login*, *logout* y al menos dos *abilities* diferenciadas que protejan las operaciones de escritura (`401` sin token, `403` sin permiso).
+3. **Verificación.** Colección Postman con entorno y tests (todas las aserciones en verde) y, como mínimo, dos pruebas *feature* que pasen con `php artisan test`.
+4. **Consumo.** Un pequeño cliente PHP (con `Http::`) que se autentique y realice al menos tres operaciones sobre la API.
+5. **Memoria justificativa** (máximo dos páginas): ventajas de haber expuesto la lógica de negocio como servicio para tu dominio concreto, decisiones de diseño del contrato y problemas encontrados.
+
+La documentación OpenAPI del proyecto se entrega como actividad @exr-UD7-10, en el capítulo siguiente.
+:::
+
+## Consejos de planificación
+
+Trocea el proyecto igual que la unidad: primero la API de lectura de un recurso, después el CRUD con validación, luego el segundo recurso y la relación, después Sanctum, y por último verificación y cliente. Cada pieza que termines, verifícala en Postman antes de pasar a la siguiente: depurar una API entera de golpe es mucho más difícil que depurar un *endpoint*.
+
+Reutiliza sin miedo el código de la tienda de videojuegos como plantilla: el objetivo del proyecto no es escribir desde cero, sino demostrar que sabes adaptar el ciclo completo a un dominio nuevo.

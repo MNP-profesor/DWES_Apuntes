@@ -50,7 +50,9 @@ echo $texto;
 // → Bienvenida al sistema.
 ```
 
-### Operaciones con cadenas
+### Operaciones con cadenas (strings)
+
+El lenguaje PHP dispone de una gran cantidad de funciones de tratamiento de cadenas (strings), puedes consultarlas [**aquí**](https://www.php.net/manual/es/ref.strings.php)
 
 ```php
 <?php
@@ -62,7 +64,68 @@ echo strlen($a);       // 4            ← longitud
 echo strtoupper($a);   // HOLA
 echo strtolower($a);   // hola
 echo str_replace("Hola", "Adiós", $a . $b);  // Adiós mundo
+
+$texto = "   Esto es un texto con espacios   ";
+$texto2 = trim($texto); // En este punto, $texto2 vale "Esto es un texto con espacios"
+
+$numero = 3.14159;
+$texto = number_format($numero, 2);
+// En este punto, $texto vale 3.14
+
+$texto = "if (var1 < var2 && ...";
+$textoHTML = htmlspecialchars($texto);
+// En este punto, $textoHTML vale "if (var1 &lt; var2 &amp;&amp; ..."
 ```
+La función `explode(separador, cadena)` devuelve una lista (array) con todas las partes de la cadena en que se puede dividir cortando por el separador indicado. 
+La función `implode(separador, array)` combina todos los elementos de la lista (array), uniéndolos con el separador indicado.
+
+```php
+$texto = "uno-dos-tres-cuatro";
+$partes = explode('-', $texto);
+// En este punto, $partes es una lista o array. En su posición 0 está
+// la palabra 'uno', en la 1 está 'dos', en la 2 está '3' y en la 3 
+// está 'cuatro'
+$texto2 = implode(';', $partes);
+// Aquí $texto2 vale 'uno;dos;tres;cuatro'
+```
+
+La función `substr(cadena, comienzo, fin)` obtiene una subcadena de la cadena, a partir de la posición de comienzo indicada hasta (opcionalmente) la posición de fin indicada (si no se pone fin, se toma hasta el final de la cadena).
+
+```php
+$texto = "Hola, buenas tardes";
+$texto2 = substr($texto, 6, 11); // Aquí $texto2 vale 'buenas'
+```
+
+La función `strcmp(cadena1, cadena2)` compara las dos cadenas viendo cuál es mayor alfabéticamente. Dará un número positivo si la cadena1 es mayor, negativo si la cadena2 es mayor, o cero si son iguales. La función strcasecmp(cadena1, cadena2) funciona como la anterior, pero sin distinguir mayúsculas y minúsculas (las mayúsculas, si no se indica lo contrario, se consideran menores que las minúsculas).
+
+```php
+$texto1 = "hola";
+$texto2 = "adiós";
+$resultado = strcmp($texto1, $texto2); // Aquí $resultado es > 0, porque "hola" es mayor que "adiós".
+```
+
+La función `str_replace(viejacadena, nuevacadena , cadena)` reemplaza todas las ocurrencias de la cadena viejacadena por la cadena nuevacadena en la cadena global cadena.
+
+```php
+$errores = "Un téxto de prueba con acento en la palabra téxto";
+$corregido = str_replace("téxto", "texto", $errores); // Aquí corregido vale "Un texto de prueba con acento en la palabra texto"
+```
+
+::: {#exr-UD2-5}
+### E2.5 — Catálogo con cálculo de inventario
+
+Crea una página llamada `manejo_textos.php.` Realiza en ella las siguientes operaciones:
+
+- Crea una variable `$radio` con un radio de circunferencia (el que quieras).
+- Crea una variable `$area` y calcula en ella el área del círculo, como has hecho en algún ejercicio anterior (PI * radio2, definiendo la constante PI).
+- Crea una variable `$textoResultado` que diga “El área calculada del círculo es” y luego ponga la variable `$area`, mostrando sólo 2 decimales (utiliza la función number_format). Muestra luego esta variable por pantalla con un echo.
+- Crea una variable `$textoResultadoMayus` que convierta el texto anterior a mayúsculas, usando la función `strtoupper`. Muestra también esta variable por pantalla.
+- Crea una variable llamada `$textoResultadoModificado` que reemplace la palabra “calculada” por la palabra “obtenida”, usando la función `str_replace`, en la variable `$textoResultado`.
+- Averigua la longitud del texto de la variable anterior usando la función `strlen`.
+- Averigua en qué posición del texto de la variable anterior se encuentra la palabra “círculo”, usando la función `strpos`.
+- Crea una variable `$numeros` que tenga el valor “1,2,3,4,5”, y utiliza la función `explode` para quedarte con los números por separado. Sácalos por pantalla, separados por el signo “+” (“1+2+3+4+5”), y después, intenta sumarlos entre sí y mostrar el resultado de la suma a continuación (al final, te quedará algo como “1+2+3+4+5=15”).
+
+:::
 
 ## Arrays
 
@@ -241,14 +304,14 @@ var_dump("1"  === true);   // bool(false)  ← string vs bool
 ```
 :::
 
-::: {#exr-UD2-5}
-### E2.5 — Catálogo con cálculo de inventario
+::: {#exr-UD2-6}
+### E2.6 — Catálogo con cálculo de inventario
 
 Crea `catalogo.php`. Declara un array `$catalogo` con 4 productos (nombre, precio, stock, categoría). Muéstralos en una tabla HTML sin usar bucles. Calcula y muestra el valor total del inventario (`precio × stock` sumado para todos los productos).
 :::
 
-::: {#exr-UD2-6}
-### E2.6 — Validación de datos de texto
+::: {#exr-UD2-7}
+### E2.7 — Validación de datos de texto
 
 Crea `validar.php` con este código de partida y completa los apartados:
 

@@ -2,6 +2,7 @@
 title: "Arrays"
 ---
 
+El lenguaje PHP dispone de una gran cantidad de funciones de tratamiento de arrays, puedes consultarlas [**aquí**](https://www.php.net/manual/es/ref.array.php)
 
 ::: {.callout-important title="Normativa · RA-CE"}
 **CE3.c** — Se han utilizado matrices (arrays) para almacenar y recuperar conjuntos de datos.

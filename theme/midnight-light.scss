@@ -100,3 +100,12 @@ table.table {
 a:hover {
   text-decoration: underline;
 }
+
+// ── Sidebar: títulos largos con salto de línea (móvil) ─────
+.sidebar nav .sidebar-item .sidebar-item-text,
+.sidebar nav .sidebar-item .sidebar-link,
+.sidebar .sidebar-item-section > .sidebar-item-container .menu-text {
+  white-space: normal !important;
+  overflow-wrap: break-word;
+  line-height: 1.3;
+}

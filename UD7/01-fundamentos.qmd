@@ -1,0 +1,189 @@
+---
+title: "Fundamentos de servicios web"
+---
+
+## Qué es un servicio web
+
+Un **servicio web** expone funcionalidad a través de la red para que la consuman **otros programas**, no personas. La misma URL que una web devolvería como página HTML, un servicio la devuelve como datos:
+
+```text
+GET https://api.tienda.test/api/juegos/5
+```
+
+```json
+{
+  "data": {
+    "id": 5,
+    "titulo": "Hollow Knight: Silksong",
+    "precio": 29.99,
+    "genero": "metroidvania",
+    "disponible": true
+  }
+}
+```
+
+Ese mismo JSON lo puede pintar una app Android en Kotlin, una SPA en Vue o un script en Python. Ninguno sabe (ni necesita saber) que detrás hay Laravel y MySQL.
+
+::: {.callout-note title="Concepto clave"}
+Tres características definen un servicio web: **interoperabilidad** (cualquier lenguaje cliente, porque la comunicación es HTTP + JSON), **desacoplamiento** (el cliente no conoce la base de datos ni el framework del servidor) y **contrato explícito** (URIs, métodos, formatos y códigos de estado pactados; lo formalizaremos con OpenAPI en el último capítulo).
+:::
+
+¿Dónde se usan? En el backend de las apps móviles, como servidor de datos de las SPA, en integraciones entre empresas (pagos, mensajería, logística) y en arquitecturas de microservicios.
+
+## Por qué exponer la lógica de negocio como API
+
+Imagina la web de un centro deportivo con toda la lógica de reservas dentro de sus vistas Blade. Si mañana quieren app móvil, hay que duplicar la lógica. Con la lógica expuesta como API:
+
+- Un **único backend** sirve a la web, a la app y a terceros.
+- Cliente y servidor **evolucionan por separado**: rediseñar la app no toca el backend.
+- Las integraciones externas (un calendario, una pasarela) se conectan al mismo contrato.
+
+La contrapartida: el contrato es un compromiso. Romperlo rompe a **todos** los clientes a la vez; de ahí el versionado (`/api/v1/...`) y la documentación.
+
+## El protocolo: HTTP semántico
+
+Ya usabas HTTP; ahora lo usarás con toda su semántica. Cada operación combina un **método** con la **URI de un recurso**:
+
+| Método | Semántica | Ejemplo |
+|:-------|:----------|:--------|
+| `GET` | Recuperar (nunca modifica) | `GET /api/juegos/5` |
+| `POST` | Crear en una colección | `POST /api/juegos` |
+| `PUT` / `PATCH` | Actualizar (completo / parcial) | `PUT /api/juegos/5` |
+| `DELETE` | Eliminar | `DELETE /api/juegos/5` |
+
+Una petición y su respuesta completas, tal como las verás en Postman:
+
+```text
+POST /api/juegos HTTP/1.1
+Host: tienda.test
+Accept: application/json
+Content-Type: application/json
+
+{ "titulo": "Celeste", "precio": 19.99, "genero": "plataformas" }
+```
+
+```text
+HTTP/1.1 201 Created
+Content-Type: application/json
+
+{ "data": { "id": 9, "titulo": "Celeste", "precio": 19.99,
+            "genero": "plataformas", "disponible": true } }
+```
+
+Las tres cabeceras que usarás constantemente:
+
+- `Accept: application/json` — el cliente pide las respuestas (¡también los errores!) en JSON.
+- `Content-Type: application/json` — el cuerpo que envía el cliente está en JSON.
+- `Authorization: Bearer <token>` — la credencial; la verás en el capítulo de Sanctum.
+
+Y el **código de estado** es la primera línea que lee el cliente:
+
+| Código | Significado en tu API |
+|:-------|:----------------------|
+| `200 OK` | GET o actualización correctos |
+| `201 Created` | POST que crea un recurso |
+| `204 No Content` | DELETE correcto (sin cuerpo) |
+| `401 Unauthorized` | Falta el token o no es válido |
+| `403 Forbidden` | Token válido pero sin permiso |
+| `404 Not Found` | El recurso no existe |
+| `422 Unprocessable Content` | Los datos no superan la validación |
+| `500 Internal Server Error` | Excepción no controlada |
+
+## El formato: JSON
+
+JSON es texto plano con correspondencia directa con los arrays de PHP:
+
+```php
+<?php
+$juego = [
+    'titulo'     => 'Celeste',
+    'precio'     => 19.99,
+    'generos'    => ['plataformas', 'indie'],
+    'disponible' => true,
+];
+
+echo json_encode($juego, JSON_PRETTY_PRINT);
+```
+
+```json
+{
+    "titulo": "Celeste",
+    "precio": 19.99,
+    "generos": ["plataformas", "indie"],
+    "disponible": true
+}
+```
+
+Y en sentido contrario, `json_decode($texto, true)` devuelve el array asociativo. Laravel hará ambas conversiones por ti, pero conviene saber que no hay magia: solo `json_encode` y `json_decode`.
+
+## La arquitectura: REST frente a SOAP
+
+**REST** no es un protocolo, es un estilo arquitectónico con cuatro principios:
+
+1. Todo es un **recurso** identificado por una URI (`/api/juegos/5`).
+2. Sobre los recursos se opera con los **métodos HTTP** de la tabla anterior.
+3. **Sin estado** (*stateless*): el servidor no recuerda nada entre peticiones; cada una lleva todo lo necesario, incluida la credencial.
+4. Las representaciones viajan en un formato acordado, normalmente JSON.
+
+**SOAP** es el estándar de la generación anterior: protocolo formal, XML obligatorio y contrato WSDL. Compara la misma consulta en ambos mundos:
+
+```text
+GET /api/juegos/5
+Accept: application/json
+```
+
+```xml
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
+  <soap:Body>
+    <ObtenerJuego xmlns="http://tienda.test/servicios">
+      <JuegoId>5</JuegoId>
+    </ObtenerJuego>
+  </soap:Body>
+</soap:Envelope>
+```
+
+| Criterio | REST | SOAP |
+|:---------|:-----|:-----|
+| Naturaleza | Estilo arquitectónico | Protocolo formal |
+| Formato | JSON habitual | XML obligatorio |
+| Contrato | OpenAPI (opcional) | WSDL (obligatorio) |
+| Verbosidad | Baja | Alta |
+| Ámbito actual | Web, móvil, APIs públicas | Banca, administración, legado |
+
+Como mención: **GraphQL** (el cliente decide qué campos quiere) y **gRPC** (binario, microservicios internos) son alternativas que te encontrarás en ofertas de trabajo.
+
+::: {.callout-warning title="Errores frecuentes"}
+- Usar `GET` para operaciones que modifican datos. `GET` debe ser seguro: un robot que recorra tus URLs no puede borrar nada.
+- Devolver `200 OK` para todo y meter el error en el cuerpo (`{"ok": false}`). El código de estado **es** el contrato.
+- Olvidar `Accept: application/json` en las pruebas y desconcertarse porque los errores llegan como páginas HTML.
+:::
+
+## Actividades
+
+::: {#exr-UD7-1}
+#### E7.1 · Estudio comparativo de servicios web
+
+1. Elige dos aplicaciones reales que uses a diario (por ejemplo, una app de transporte y una tienda *online*) e identifica, con las herramientas de red del navegador o razonándolo, qué funcionalidades consumen de una API.
+2. Redacta una tabla comparativa REST vs SOAP con al menos cinco criterios (formato, contrato, verbosidad, ámbito de uso actual, curva de aprendizaje).
+3. Argumenta en un máximo de 300 palabras qué ventajas obtendría el instituto si expusiera la gestión de reservas de aulas como servicio web en lugar de como aplicación web tradicional.
+:::
+
+::: {#exr-UD7-2}
+#### E7.2 · Disección de peticiones HTTP reales
+
+1. Abre la pestaña Red del navegador sobre una web pública que cargue datos dinámicamente y captura tres peticiones XHR/fetch distintas.
+2. Documenta cada una con esta plantilla:
+
+```text
+Método:   GET
+URI:      https://pokeapi.co/api/v2/pokemon/pikachu
+Cabeceras de petición:
+  Accept: application/json
+Respuesta: 200 OK
+  Content-Type: application/json; charset=utf-8
+Fragmento del cuerpo:
+  { "name": "pikachu", "height": 4, "weight": 60, ... }
+```
+
+3. Consume desde Postman la API pública [PokeAPI](https://pokeapi.co) (u otra equivalente) y justifica qué convenciones REST cumple y cuáles no.
+:::

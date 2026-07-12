@@ -1,0 +1,178 @@
+---
+title: "Rutas API y controladores REST"
+---
+
+## Preparar el proyecto
+
+Desde Laravel 11, las rutas API no vienen activadas por defecto. Un único comando crea `routes/api.php`, lo registra en `bootstrap/app.php` e instala Sanctum (lo usaremos dos capítulos más adelante):
+
+```bash
+php artisan install:api
+```
+
+Todo lo declarado en `routes/api.php` queda automáticamente bajo el prefijo `/api` y **sin sesiones ni cookies**: coherente con el principio *stateless* de REST.
+
+## El recurso: modelo, migración y datos de prueba
+
+Nuestro recurso es el juego de la tienda:
+
+```bash
+php artisan make:model Juego -m
+```
+
+```php
+// database/migrations/xxxx_create_juegos_table.php
+Schema::create('juegos', function (Blueprint $table) {
+    $table->id();
+    $table->string('titulo', 120)->unique();
+    $table->decimal('precio', 8, 2);
+    $table->string('genero', 40);
+    $table->boolean('disponible')->default(true);
+    $table->timestamps();
+});
+```
+
+```php
+// app/Models/Juego.php
+class Juego extends Model
+{
+    protected $fillable = ['titulo', 'precio', 'genero', 'disponible'];
+}
+```
+
+```php
+// database/seeders/JuegoSeeder.php
+public function run(): void
+{
+    Juego::insert([
+        ['titulo' => 'Hollow Knight: Silksong', 'precio' => 29.99,
+         'genero' => 'metroidvania', 'disponible' => true],
+        ['titulo' => 'Celeste', 'precio' => 19.99,
+         'genero' => 'plataformas', 'disponible' => true],
+        ['titulo' => 'Stardew Valley', 'precio' => 13.99,
+         'genero' => 'simulación', 'disponible' => true],
+        ['titulo' => 'Hades II', 'precio' => 28.50,
+         'genero' => 'roguelike', 'disponible' => false],
+        // ... completa hasta 8 juegos
+    ]);
+}
+```
+
+```bash
+php artisan migrate --seed
+```
+
+```text
+INFO  Running migrations.
+xxxx_create_juegos_table ........................... 12.41ms DONE
+INFO  Seeding database.
+```
+
+## Cinco rutas en una línea: `apiResource`
+
+```bash
+php artisan make:controller Api/JuegoController --api --model=Juego
+```
+
+La opción `--api` genera el controlador **sin** los métodos `create` y `edit`: no hay formularios HTML que mostrar, el cliente construye sus propias pantallas.
+
+```php
+// routes/api.php
+use App\Http\Controllers\Api\JuegoController;
+
+Route::apiResource('juegos', JuegoController::class);
+```
+
+Comprueba lo que acabas de registrar:
+
+```bash
+php artisan route:list --path=api/juegos
+```
+
+```text
+GET|HEAD    api/juegos ............. juegos.index › JuegoController@index
+POST        api/juegos ............. juegos.store › JuegoController@store
+GET|HEAD    api/juegos/{juego} ..... juegos.show › JuegoController@show
+PUT|PATCH   api/juegos/{juego} ..... juegos.update › JuegoController@update
+DELETE      api/juegos/{juego} ..... juegos.destroy › JuegoController@destroy
+```
+
+## Primeras respuestas JSON
+
+Cualquier modelo o colección Eloquent devuelto desde un controlador API se serializa solo:
+
+```php
+// app/Http/Controllers/Api/JuegoController.php
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Juego;
+
+class JuegoController extends Controller
+{
+    public function index()
+    {
+        return Juego::all();
+    }
+
+    public function show(Juego $juego)
+    {
+        return $juego;
+    }
+}
+```
+
+`GET http://tienda.test/api/juegos` responde:
+
+```json
+[
+  {
+    "id": 1,
+    "titulo": "Hollow Knight: Silksong",
+    "precio": "29.99",
+    "genero": "metroidvania",
+    "disponible": 1,
+    "created_at": "2026-07-01T10:12:44.000000Z",
+    "updated_at": "2026-07-01T10:12:44.000000Z"
+  },
+  {
+    "id": 2,
+    "titulo": "Celeste",
+    "precio": "19.99",
+    "genero": "plataformas",
+    "disponible": 1,
+    "created_at": "2026-07-01T10:12:44.000000Z",
+    "updated_at": "2026-07-01T10:12:44.000000Z"
+  }
+]
+```
+
+Fíjate en tres cosas que **no** nos gustan de esta respuesta: expone `created_at`/`updated_at`, el precio llega como *string* y `disponible` como `1`. Las arreglaremos en el capítulo siguiente con API Resources.
+
+::: {.callout-note title="Concepto clave"}
+Gracias al **enlace implícito de modelos**, el parámetro `{juego}` llega a `show()` como una instancia ya recuperada de la base de datos. Si el `id` no existe, Laravel responde por sí solo con un `404`.
+:::
+
+`GET /api/juegos/999` (no existe), enviando `Accept: application/json`:
+
+```json
+{ "message": "No query results for model [App\\Models\\Juego] 999" }
+```
+
+```text
+HTTP/1.1 404 Not Found
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+Si pruebas la API desde el navegador (que no envía `Accept: application/json`), ese mismo 404 llega como **página HTML de error**. No es que tu API esté rota: es que el cliente no ha pedido JSON. En Postman, acostúmbrate a fijar siempre la cabecera `Accept`.
+:::
+
+## Actividades
+
+::: {#exr-UD7-3}
+#### E7.3 · API de lectura de la tienda de videojuegos
+
+1. Sobre tu proyecto Laravel, ejecuta `php artisan install:api` y crea el modelo `Juego` con la migración y una *seeder* de al menos ocho juegos (puedes partir del código de este capítulo).
+2. Genera el controlador API y registra la ruta `apiResource` limitada con `->only(['index', 'show'])`. Implementa `index()` y `show()` devolviendo los modelos directamente.
+3. Comprueba en el navegador y en Postman: la lista completa, un juego existente y un `id` inexistente (debe responder `404` en JSON, no una página HTML de error).
+:::

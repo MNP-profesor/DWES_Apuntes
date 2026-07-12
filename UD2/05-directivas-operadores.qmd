@@ -203,8 +203,8 @@ La segunda línea se parsea como `($b = false) or true`: primero asigna `false` 
 **Regla:** usa siempre `&&` y `||` en condiciones. `and`/`or` solo en construcciones de control de flujo donde la baja precedencia es intencionada.
 :::
 
-::: {#exr-UD2-8}
-### E2.8 — Motor de descuentos
+::: {#exr-UD2-9}
+### E2.9 — Motor de descuentos
 
 Crea `descuentos.php` con este código de partida y completa los cálculos:
 

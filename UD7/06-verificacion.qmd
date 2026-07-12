@@ -1,0 +1,142 @@
+---
+title: "Verificación: Postman y pruebas HTTP"
+---
+
+Verificar una API es comprobar sistemáticamente que cada *endpoint* cumple el contrato: método, URI, código de estado y estructura de la respuesta. Lo haremos con dos herramientas complementarias: Postman (desde fuera) y las pruebas *feature* de Laravel (desde dentro).
+
+## Postman como banco de pruebas
+
+Tres piezas de Postman convierten tus peticiones sueltas en una verificación seria:
+
+**Colecciones.** Conjuntos organizados de peticiones que se guardan y se exportan. Una colección bien montada es, de hecho, documentación ejecutable de tu API.
+
+**Entornos.** Variables como `{{base_url}}` y `{{token}}` que permiten cambiar de servidor sin reescribir nada. En la petición escribes:
+
+```text
+GET {{base_url}}/api/juegos
+Authorization: Bearer {{token}}
+```
+
+**Tests.** Aserciones en JavaScript que se ejecutan tras cada respuesta (pestaña *Scripts → Post-response*):
+
+```javascript
+pm.test("Devuelve 200", () => pm.response.to.have.status(200));
+
+pm.test("La respuesta tiene la clave data", () => {
+    pm.expect(pm.response.json()).to.have.property("data");
+});
+```
+
+El truco que lo une todo: la petición de *login* guarda el token en el entorno, y el resto de la colección lo usa automáticamente:
+
+```javascript
+// Test de la petición POST {{base_url}}/api/login
+pm.test("Entrega un token", () => {
+    pm.expect(pm.response.json()).to.have.property("token");
+});
+
+pm.environment.set("token", pm.response.json().token);
+```
+
+Ejemplos de tests para las operaciones del CRUD:
+
+```javascript
+// POST /api/juegos (con token de administrador)
+pm.test("Devuelve 201", () => pm.response.to.have.status(201));
+pm.test("El juego creado lleva id", () => {
+    pm.expect(pm.response.json().data).to.have.property("id");
+});
+
+// DELETE /api/juegos/{{id_creado}}
+pm.test("Devuelve 204", () => pm.response.to.have.status(204));
+
+// POST /api/juegos sin token
+pm.test("Devuelve 401", () => pm.response.to.have.status(401));
+```
+
+Con el **Collection Runner** ejecutas la colección completa en orden y obtienes el informe de aserciones:
+
+```text
+Tienda de videojuegos API
+  ✓ POST login — Devuelve 200
+  ✓ POST login — Entrega un token
+  ✓ GET juegos — Devuelve 200
+  ✓ GET juegos — La respuesta tiene la clave data
+  ✓ POST juegos — Devuelve 201
+  ✓ POST juegos — El juego creado lleva id
+  ✓ DELETE juego — Devuelve 204
+  ✓ POST juegos sin token — Devuelve 401
+
+8 passed, 0 failed
+```
+
+Una verificación de regresión de toda tu API en un clic.
+
+## Pruebas *feature* con `artisan test`
+
+La verificación también puede vivir dentro del propio proyecto. Las pruebas *feature* levantan la aplicación y lanzan peticiones reales contra ella:
+
+```bash
+php artisan make:test JuegoApiTest
+```
+
+```php
+// tests/Feature/JuegoApiTest.php
+use App\Models\Juego;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class JuegoApiTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_listado_devuelve_estructura_correcta(): void
+    {
+        Juego::factory()->count(3)->create();
+
+        $respuesta = $this->getJson('/api/juegos');
+
+        $respuesta->assertStatus(200)
+                  ->assertJsonCount(3, 'data')
+                  ->assertJsonStructure([
+                      'data' => [['id', 'titulo', 'precio', 'genero']],
+                  ]);
+    }
+
+    public function test_crear_sin_token_devuelve_401(): void
+    {
+        $this->postJson('/api/juegos', ['titulo' => 'X'])
+             ->assertStatus(401);
+    }
+}
+```
+
+```bash
+php artisan test --filter=JuegoApiTest
+```
+
+```text
+PASS  Tests\Feature\JuegoApiTest
+✓ listado devuelve estructura correcta          0.42s
+✓ crear sin token devuelve 401                  0.11s
+
+Tests:    2 passed (6 assertions)
+Duration: 0.68s
+```
+
+Fíjate en `getJson()` y `postJson()`: envían automáticamente `Accept: application/json`, así que los errores llegan en JSON como en producción. `RefreshDatabase` recrea la base de datos en cada test para que las pruebas no dependan unas de otras.
+
+::: {.callout-warning title="Errores frecuentes"}
+- Probar solo el «camino feliz». La mitad del contrato son los errores: `401`, `403`, `404` y `422` merecen sus propios tests.
+- Encadenar peticiones en Postman sin variables de entorno, copiando el token a mano: al segundo cambio de token, la colección deja de funcionar.
+- Usar `RefreshDatabase` contra la base de datos de desarrollo con datos que aprecias: configura una base de datos de pruebas en `phpunit.xml`.
+:::
+
+## Actividades
+
+::: {#exr-UD7-7}
+#### E7.7 · Colección Postman de verificación
+
+1. Construye una colección Postman con entorno (`{{base_url}}`, `{{token}}`) que cubra el ciclo completo: *login*, listado, detalle, creación, actualización, borrado y *logout*.
+2. Añade a cada petición al menos dos tests: uno de código de estado y otro de estructura del cuerpo. El *login* debe guardar el token en el entorno automáticamente.
+3. Ejecuta la colección con el Collection Runner, exporta el fichero `.json` de la colección y adjunta una captura del informe con todas las aserciones en verde. Documenta brevemente qué cabeceras (`Accept`, `Content-Type`, `Authorization`) has necesitado y por qué.
+:::

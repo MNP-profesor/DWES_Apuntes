@@ -18,3 +18,10 @@
 % Evitar líneas viudas/huérfanas en lo posible
 \widowpenalty=9000
 \clubpenalty=9000
+
+% Numeración arábiga continua: anula el cambio a romanos
+% del preámbulo de libro (portada + índice) y evita el
+% reinicio de página al empezar el cuerpo.
+\AtBeginDocument{%
+  \renewcommand{\pagenumbering}[1]{}%
+}

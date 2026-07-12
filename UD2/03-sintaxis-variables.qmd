@@ -101,7 +101,16 @@ const PI = 3.14159;
 echo PI;  // 3.14159
 ```
 
-## `isset()`, `empty()` y `unset()`
+## `var_dump`,`isset()`, `empty()` y `unset()`
+
+- `var_dump()` es una herramienta para revisar código. Sirve para ver qué hay exactamente dentro de una variable. Muestra el tipo de dato, la longitud y el valor. Es muy útil para encontrar errores en tus programas. 
+
+- `isset()` sirve para comprobar si una variable existe y tiene valor. 
+
+- `empty()` sirve para comprobar si una variable está vacía. 
+
+- `unset()` sirve para eliminar variables y liberar memoria del servidor. 
+
 
 ```php
 <?php

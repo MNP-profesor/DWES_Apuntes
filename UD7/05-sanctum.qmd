@@ -1,0 +1,184 @@
+---
+title: "Autenticación por tokens con Sanctum"
+---
+
+## Por qué las sesiones no sirven aquí
+
+En unidades anteriores autenticaste usuarios con sesiones y *cookies*: el servidor recordaba quién había iniciado sesión. Ese modelo choca con el principio *stateless* de REST y no encaja con clientes que no son navegadores. La solución estándar son los **tokens**: tras identificarse una vez, el cliente recibe una cadena secreta que adjunta en cada petición:
+
+```text
+Authorization: Bearer 4|hT9pLmXw2cRfGq8vN3sKd...
+```
+
+Cada petición se autentica a sí misma. **Laravel Sanctum**, instalado ya con `php artisan install:api`, implementa este modelo guardando los tokens (con *hash*) en la tabla `personal_access_tokens`.
+
+## Emitir tokens: la ruta de login
+
+El modelo `User` debe incorporar el *trait* `HasApiTokens` (compruébalo; los proyectos nuevos ya lo traen tras instalar la API):
+
+```php
+// app/Models/User.php
+use Laravel\Sanctum\HasApiTokens;
+
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Notifiable;
+    // ...
+}
+```
+
+```php
+// routes/api.php
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
+Route::post('/login', function (Request $request) {
+    $request->validate([
+        'email'    => 'required|email',
+        'password' => 'required',
+    ]);
+
+    $user = User::where('email', $request->email)->first();
+
+    if (! $user || ! Hash::check($request->password, $user->password)) {
+        return response()->json(
+            ['message' => 'Credenciales incorrectas'], 401
+        );
+    }
+
+    $token = $user->createToken(
+        'cliente-api',
+        $user->es_admin ? ['juegos:escribir'] : ['juegos:leer']
+    );
+
+    return response()->json([
+        'token' => $token->plainTextToken,
+    ]);
+});
+```
+
+`POST /api/login` con credenciales correctas:
+
+```json
+{ "email": "admin@tienda.test", "password": "secreto123" }
+```
+
+```text
+HTTP/1.1 200 OK
+```
+
+```json
+{ "token": "6|Xk2mPq9wLr5tYv8uZj3nHs7bAcDf..." }
+```
+
+Con credenciales incorrectas:
+
+```text
+HTTP/1.1 401 Unauthorized
+```
+
+```json
+{ "message": "Credenciales incorrectas" }
+```
+
+::: {.callout-note title="Concepto clave"}
+`plainTextToken` solo existe **en el momento de la creación**: en la base de datos se guarda un *hash*, igual que las contraseñas. Si el cliente pierde el token, no se recupera: se emite otro. El segundo argumento de `createToken()` son las ***abilities***: permisos de grano fino de **ese token concreto**, independientes de quién sea el usuario.
+:::
+
+## Proteger rutas
+
+Lectura pública, escritura solo con token:
+
+```php
+// routes/api.php
+Route::apiResource('juegos', JuegoController::class)
+    ->only(['index', 'show']);                 // lectura pública
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('juegos', JuegoController::class)
+        ->except(['index', 'show']);           // escritura con token
+
+    Route::post('/logout', function (Request $request) {
+        $request->user()->currentAccessToken()->delete();
+        return response()->noContent();        // 204
+    });
+});
+```
+
+Y dentro de un método protegido, exige la *ability* concreta:
+
+```php
+// JuegoController.php
+public function store(StoreJuegoRequest $request)
+{
+    if (! $request->user()->tokenCan('juegos:escribir')) {
+        abort(403, 'El token no permite escritura');
+    }
+
+    $juego = Juego::create($request->validated());
+    return (new JuegoResource($juego))
+        ->response()->setStatusCode(201);
+}
+```
+
+## Los cuatro escenarios del contrato de seguridad
+
+Prueba `POST /api/juegos` en las cuatro situaciones posibles:
+
+**1. Sin cabecera `Authorization`:**
+
+```text
+HTTP/1.1 401 Unauthorized
+```
+
+```json
+{ "message": "Unauthenticated." }
+```
+
+**2. Con un token inválido o revocado:**
+
+```text
+HTTP/1.1 401 Unauthorized
+```
+
+```json
+{ "message": "Unauthenticated." }
+```
+
+**3. Con el token de un lector (*ability* `juegos:leer`):**
+
+```text
+HTTP/1.1 403 Forbidden
+```
+
+```json
+{ "message": "El token no permite escritura" }
+```
+
+**4. Con el token de un administrador (*ability* `juegos:escribir`):**
+
+```text
+HTTP/1.1 201 Created
+```
+
+```json
+{ "data": { "id": 10, "titulo": "Tunic", "precio": 27.99,
+            "precio_iva": 33.87, "genero": "aventura", "disponible": true } }
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+- Confundir `401` con `403`. **401**: no sé quién eres (sin token o token inválido). **403**: sé quién eres, pero no puedes hacer esto. Distinguirlos es parte del contrato.
+- Guardar el `plainTextToken` en el código fuente o subirlo a Git. Es una credencial: trátalo como una contraseña.
+- Olvidar `Accept: application/json` al probar rutas protegidas: en vez del `401` en JSON, Laravel intentará redirigir a una ruta `login` que no existe y verás un error confuso.
+:::
+
+## Actividades
+
+::: {#exr-UD7-6}
+#### E7.6 · Protección de la API con Sanctum
+
+1. Implementa `/api/login` con emisión de token y *abilities* diferenciadas (`juegos:leer` para usuarios normales, `juegos:escribir` para administradores; necesitarás un campo `es_admin` en la migración de usuarios) y `/api/logout` con revocación del token actual.
+2. Deja `index()` y `show()` públicos y protege `store()`, `update()` y `destroy()` con `auth:sanctum`, exigiendo la *ability* `juegos:escribir` en las tres.
+3. Demuestra desde Postman los cuatro escenarios del contrato: petición sin token (`401`), token inválido (`401`), token de lector intentando crear (`403`) y token de administrador creando correctamente (`201`).
+:::
