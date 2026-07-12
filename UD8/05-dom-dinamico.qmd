@@ -1,0 +1,135 @@
+---
+title: "Modificación dinámica del contenido y la estructura"
+---
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque desarrolla el criterio **CE8.f** del RA8: generar páginas web que incluyan modificación dinámica de su contenido y su estructura.
+:::
+
+## Más allá de pintar: transformar el documento
+
+En el bloque anterior el DOM solo se usó para insertar datos al cargar; ahora la página debe reaccionar a las acciones del usuario **reorganizándose**: filtrar la cartelera por género, reordenarla por nota o duración, y añadir o retirar elementos sin tocar el servidor, porque los datos ya están en el cliente.
+
+El patrón profesional consta de tres piezas:
+
+1. **El estado:** los datos en una variable JavaScript, obtenidos una sola vez del servidor.
+2. **Transformaciones puras:** funciones que derivan nuevas listas del estado (`filter`, `sort`) sin destruirlo.
+3. **Una única función de repintado** que reconstruye la zona afectada del documento a partir del resultado.
+
+```js
+let peliculas = [];            // estado: datos del servidor
+
+async function iniciar() {
+  peliculas = await (await fetch('api/peliculas.php')).json();
+  pintarCartelera(peliculas);
+}
+
+// Filtrado por género sin nueva petición
+document.querySelector('#filtroGenero')
+  .addEventListener('change', (e) => {
+    const g = e.target.value;
+    const visibles = (g === 'todos')
+      ? peliculas
+      : peliculas.filter(p => p.genero === g);
+    pintarCartelera(visibles);
+  });
+
+// Ordenación por nota descendente
+document.querySelector('#ordenarNota')
+  .addEventListener('click', () => {
+    const orden = [...peliculas].sort((a, b) => b.nota - a.nota);
+    pintarCartelera(orden);
+  });
+```
+
+Con las tres películas del bloque anterior cargadas, la secuencia de interacciones produce:
+
+```text
+(carga inicial)            → Dune: Parte Tres · La sociedad de la nieve II · Torrente 6
+filtro género = "Drama"    → La sociedad de la nieve II          (1 película, 0 peticiones)
+filtro género = "todos"    → las tres de nuevo                   (0 peticiones)
+clic en "Ordenar por nota" → Dune (8.7) · La sociedad (8.1) · Torrente (5.9)
+```
+
+Compruébalo en la pestaña Red: tras la carga inicial, **ninguna interacción genera peticiones**. Los datos ya están en `peliculas` y todo ocurre en el navegador.
+
+::: {.callout-tip title="Analogía Java"}
+`filter` y `sort` recuerdan a los Streams de Java, pero con una trampa importante: en Java, `stream().sorted(...)` **nunca toca la colección original**; en JavaScript, `peliculas.sort(...)` **muta el array sobre el que se llama**. Por eso el listado ordena sobre una copia: `[...peliculas].sort(...)`. Olvidar la copia significa que el estado queda reordenado permanentemente y el botón "restaurar orden original" deja de tener sentido. `filter`, en cambio, sí devuelve un array nuevo, como en Java.
+:::
+
+## Modificar la estructura: crear, mover y eliminar nodos
+
+Además de repintar listados, el DOM permite alterar la estructura del documento pieza a pieza:
+
+- El elemento `<template>` define fragmentos de marcado inertes que se clonan bajo demanda.
+- `remove()` retira nodos.
+- `insertBefore` o `appendChild` los recolocan.
+
+Con ello se implementan patrones habituales: acordeones de sinopsis, paginación en cliente, cestas que crecen y encogen. Tres micro-ejemplos:
+
+**Añadir un distintivo como nodo** (no como texto concatenado):
+
+```js
+if (pelicula.nota >= 8) {
+  const badge = document.createElement('span');
+  badge.textContent = 'TOP';
+  badge.className = 'top';
+  ficha.appendChild(badge);
+}
+```
+
+**Retirar una tarjeta del documento:**
+
+```js
+ficha.querySelector('.btnOcultar').addEventListener('click', () => {
+  ficha.remove();     // el nodo desaparece; el array peliculas NO cambia
+});
+```
+
+**Clonar desde una plantilla inerte:**
+
+```html
+<template id="tplFicha">
+  <article class="pelicula"><h3></h3><p></p></article>
+</template>
+
+<script>
+const tpl   = document.querySelector('#tplFicha');
+const ficha = tpl.content.cloneNode(true);
+ficha.querySelector('h3').textContent = 'Dune: Parte Tres';
+document.querySelector('#cartelera').appendChild(ficha);
+</script>
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+La regla de higiene es la misma del bloque anterior: cualquier dato de origen externo que se inyecte con `innerHTML` debe haberse escapado en el servidor, o insertarse con `textContent`, para no reabrir la puerta al XSS estudiado en la UD4. Un título de película que contuviera `<script>` o un `<img onerror=...>` se ejecutaría al inyectarse con `innerHTML` sin escapar. En caso de duda: `textContent`, siempre.
+:::
+
+::: {#exr-UD8-5}
+**E8.5 · Ocultar, contar, restaurar** *(individual, en equipo local)*
+
+Añade a la cartelera del primer listado de este bloque:
+
+a. Un botón por película "Ocultar" que elimine su tarjeta del documento con `remove()`.
+b. Un contador "Mostrando X de Y películas" que se actualice tras cada filtrado, ordenación u ocultación.
+c. Un botón "Restaurar" que repinte el estado completo.
+
+**No se permite ninguna petición adicional al servidor.**
+:::
+
+## Actividad evaluable E6
+
+::: {#exr-UD8-e6}
+**E6 · Cartelera interactiva: filtrado y ordenación sin recarga** — CE8.f · 1,25 h en clase
+
+Partiendo de tu página de la actividad E3 (o de la versión de referencia), incorpora:
+
+1. Un selector de género que **filtre** las películas mostradas.
+2. Dos controles de **ordenación** (por nota y por duración) que reconstruyan el listado.
+3. La inserción de un distintivo "TOP" en las tarjetas con nota igual o superior a 8, **creado como nodo desde JavaScript**.
+4. El contador de resultados visibles.
+
+Todo **sin ninguna petición al servidor** posterior a la carga inicial.
+
+**Entrega:** carpeta comprimida al aula virtual al finalizar la sesión. Calificación: apto / no apto.
+:::

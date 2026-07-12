@@ -79,6 +79,3 @@ La unidad tiene diez actividades, **E7.1 a E7.10** y se intercalan entre los con
 | E7.10 | Documentación OpenAPI del proyecto | CE7.h |
 
 Las actividades se califican como **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
-
-El proyecto integrador E7.9 es **transversal**: su enunciado se entrega hacia la mitad de la unidad, el desarrollo es autónomo con soporte docente en las últimas sesiones.
-

@@ -112,9 +112,15 @@ book:
         - UD7/08-proyecto.qmd
         - UD7/09-documentacion.qmd
 
-    # - part: "UD8 · Páginas web dinámicas e interactivas"
-    #   chapters:
-    #     - UD8/01-tema.qmd
+    - part: "🗂️ UD8. Generación dinámica de páginas Web"
+      chapters:
+        - UD8/00-presentacion.qmd
+        - UD8/01-modelos-ejecucion.qmd
+        - UD8/02-tecnologias-frameworks.qmd
+        - UD8/03-interaccion-fetch.qmd
+        - UD8/04-verificacion-formularios.qmd
+        - UD8/05-dom-dinamico.qmd
+        - UD8/06-proyecto.qmd
 
     # - part: "UD9 · Aplicaciones web híbridas: Composer y repositorios heterogéneos"
     #   chapters:

@@ -1,0 +1,254 @@
+---
+title: "Obtención remota de información: fetch, JSON y consumo de APIs"
+---
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque desarrolla los criterios **CE8.d** (páginas web que incluyan interacción con el usuario) y **CE8.b** (ventajas de unir ambas tecnologías, demostradas en la práctica) del RA8.
+:::
+
+## El endpoint: un PHP que no devuelve HTML
+
+Un **endpoint** es un script del servidor cuya respuesta no es una página, sino datos. En PHP nativo basta con tres decisiones: declarar la cabecera `Content-Type` adecuada, devolver el código de estado HTTP correcto y serializar con `json_encode`. El siguiente endpoint expone la cartelera:
+
+```php
+<?php
+// api/peliculas.php — endpoint JSON de la cartelera
+header('Content-Type: application/json; charset=utf-8');
+
+$peliculas = [
+    ['id' => 1, 'titulo' => 'Dune: Parte Tres',
+     'genero' => 'Ciencia ficción', 'duracion' => 165, 'nota' => 8.7],
+    ['id' => 2, 'titulo' => 'La sociedad de la nieve II',
+     'genero' => 'Drama', 'duracion' => 138, 'nota' => 8.1],
+    ['id' => 3, 'titulo' => 'Torrente 6',
+     'genero' => 'Comedia', 'duracion' => 97, 'nota' => 5.9],
+];
+
+http_response_code(200);
+echo json_encode($peliculas, JSON_UNESCAPED_UNICODE);
+```
+
+Al visitar `http://localhost/api/peliculas.php` (o pedirlo desde Postman), la respuesta es:
+
+```text
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+[{"id":1,"titulo":"Dune: Parte Tres","genero":"Ciencia ficción","duracion":165,"nota":8.7},{"id":2,"titulo":"La sociedad de la nieve II","genero":"Drama","duracion":138,"nota":8.1},{"id":3,"titulo":"Torrente 6","genero":"Comedia","duracion":97,"nota":5.9}]
+```
+
+En un caso real, el array procedería de una consulta PDO como las de la UD6; el resto del endpoint no cambia. Esa es precisamente la gracia del diseño: la fuente de datos es un detalle interno del servidor que el cliente nunca ve.
+
+Un endpoint completo también contempla los casos de error. Esta variante devuelve una película concreta o un 404:
+
+```php
+<?php
+// api/pelicula.php?id=N — una película o error 404
+header('Content-Type: application/json; charset=utf-8');
+
+$peliculas = [
+    1 => ['titulo' => 'Dune: Parte Tres', 'nota' => 8.7],
+    2 => ['titulo' => 'Torrente 6',       'nota' => 5.9],
+];
+
+$id = filter_var($_GET['id'] ?? '', FILTER_VALIDATE_INT);
+
+if ($id === false || !isset($peliculas[$id])) {
+    http_response_code(404);
+    echo json_encode(['error' => 'Película no encontrada']);
+    exit;
+}
+
+echo json_encode($peliculas[$id], JSON_UNESCAPED_UNICODE);
+```
+
+Probándolo con dos peticiones:
+
+```text
+GET api/pelicula.php?id=1   →  200  {"titulo":"Dune: Parte Tres","nota":8.7}
+GET api/pelicula.php?id=99  →  404  {"error":"Película no encontrada"}
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+El error más frecuente en el aula: **mezclar HTML con JSON en la misma respuesta**. Un endpoint que imprime un aviso con `echo` antes del `json_encode` produce JSON corrupto que rompe el `r.json()` del cliente. Otros dos clásicos: olvidar la cabecera `Content-Type: application/json` (el navegador tratará la respuesta como texto) y devolver siempre 200 aunque haya error. El código de estado debe ser coherente: 200 si hay datos, 404 si el recurso no existe, 400 si la petición es inválida, 500 ante error interno.
+:::
+
+## fetch: pedir y esperar sin bloquear
+
+En la página generada por PHP se embebe el guion que solicita los datos. `fetch` devuelve una **promesa**: la petición viaja en segundo plano y el código indicado se ejecuta cuando llega la respuesta. La sintaxis moderna con `async`/`await` resulta muy legible:
+
+```html
+<script>
+async function cargarCartelera() {
+  try {
+    const respuesta = await fetch('api/peliculas.php');
+    if (!respuesta.ok) {
+      throw new Error('HTTP ' + respuesta.status);
+    }
+    const peliculas = await respuesta.json();
+    pintarCartelera(peliculas);   // ver siguiente apartado
+  } catch (error) {
+    document.querySelector('#aviso').textContent =
+      'No se pudo cargar la cartelera: ' + error.message;
+  }
+}
+cargarCartelera();
+</script>
+```
+
+Tres situaciones posibles y qué ocurre en cada una:
+
+| Situación | Qué sucede |
+|--------------------------|-----------------------------------------|
+| El endpoint responde 200 | `respuesta.ok` es `true`; se parsea el JSON y se pinta |
+| El endpoint responde 404/500 | `respuesta.ok` es `false`; se lanza `Error('HTTP 404')` y lo captura el `catch` |
+| El servidor está apagado | `fetch` falla directamente; el `catch` recibe un error de red (`Failed to fetch`) |
+
+En los dos casos de error, el usuario ve en la página:
+
+```text
+No se pudo cargar la cartelera: HTTP 404
+```
+
+Ninguna operación de red debe darse por infalible: el `try`/`catch` que envuelve la petición cumple el mismo papel que el manejo de excepciones estudiado en la UD4.
+
+## Del JSON al documento: primer contacto con el DOM
+
+Recibidos los datos, hay que incorporarlos al documento. El **DOM** (*Document Object Model*) es la representación en memoria de la página que JavaScript puede consultar y modificar. Para este bloque bastan tres operaciones: localizar un contenedor, crear elementos y añadirlos.
+
+```js
+function pintarCartelera(peliculas) {
+  const contenedor = document.querySelector('#cartelera');
+  contenedor.innerHTML = '';           // vaciar antes de repintar
+  for (const p of peliculas) {
+    const ficha = document.createElement('article');
+    ficha.className = 'pelicula';
+    ficha.innerHTML = `
+      <h3>${p.titulo}</h3>
+      <p>${p.genero} · ${p.duracion} min · nota ${p.nota}</p>`;
+    contenedor.appendChild(ficha);
+  }
+}
+```
+
+La página completa que une las tres piezas es sorprendentemente corta. PHP genera el esqueleto con un contenedor vacío; el guion lo rellena:
+
+```php
+<?php // cartelera.php — página híbrida mínima completa ?>
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Cartelera</title></head>
+<body>
+  <h1>Cartelera</h1>
+  <p id="aviso"></p>
+  <div id="cartelera"></div>
+
+  <script>
+    function pintarCartelera(peliculas) { /* la de arriba */ }
+    async function cargarCartelera()    { /* la del apartado anterior */ }
+    cargarCartelera();
+  </script>
+</body>
+</html>
+```
+
+Resultado en el navegador tras la carga:
+
+```text
+Cartelera
+
+Dune: Parte Tres
+Ciencia ficción · 165 min · nota 8.7
+
+La sociedad de la nieve II
+Drama · 138 min · nota 8.1
+
+Torrente 6
+Comedia · 97 min · nota 5.9
+```
+
+Obsérvese la división de trabajo que define toda la unidad: PHP genera la página con un contenedor vacío y expone los datos; JavaScript los obtiene y los presenta. Si mañana la fuente pasa de un array a PDO o a Eloquent, la página no cambia una sola línea.
+
+::: {#exr-UD8-3}
+**E8.3 · Endpoint de géneros y fallos provocados** *(individual, en equipo local)*
+
+Crea el endpoint `api/generos.php` que devuelva el array de géneros disponibles y una página `generos.html` cuyo JavaScript los obtenga con `fetch` y los muestre como lista (`ul`).
+
+Provoca después **dos fallos a propósito** (renombra el endpoint; elimina la cabecera `Content-Type`) y anota en el cuaderno qué observas en la pestaña Red y en la Consola en cada caso.
+:::
+
+## Actividad evaluable E3
+
+::: {#exr-UD8-e3}
+**E3 · Endpoint propio + pintado en página** — CE8.d · 1,25 h en clase
+
+Construye el par completo endpoint + página para las sesiones de cine:
+
+- `api/sesiones.php` debe devolver en JSON las sesiones de una película recibida por parámetro GET (`id`), con **código 404 y mensaje JSON de error** si el `id` no existe.
+- La página `sesiones.php`, generada con PHP, debe obtener los datos con `fetch` al cargarse y mostrarlos en una **tabla generada desde JavaScript**, con tratamiento visible del caso de error.
+
+**Entrega:** carpeta comprimida con ambos ficheros al aula virtual al finalizar la sesión. Calificación: apto / no apto.
+:::
+
+## Consumir la API REST de la UD7 desde una página web
+
+Hasta aquí, los endpoints eran scripts PHP sueltos. El salto profesional consiste en alimentar la página desde una API REST completa: la construida en la UD7 con Laravel, API Resources y Sanctum. Nada cambia conceptualmente —sigue siendo `fetch` contra una URL que devuelve JSON—, pero aparecen dos elementos nuevos: la **autenticación por token** y la **estructura de respuesta de los Resources**.
+
+```js
+// La API de la UD7 exige token Sanctum: se añade la cabecera
+// Authorization igual que se hacía en Postman.
+async function cargarDesdeApi(token) {
+  const respuesta = await fetch(
+    'http://localhost:8000/api/v1/peliculas', {
+    headers: {
+      'Authorization': 'Bearer ' + token,
+      'Accept': 'application/json'
+    }
+  });
+  if (respuesta.status === 401) {
+    throw new Error('Token inválido o caducado');
+  }
+  const cuerpo = await respuesta.json();
+  return cuerpo.data;   // los Resources envuelven en data
+}
+```
+
+Recordatorio de la forma de la respuesta que ya conoces de la UD7 (por eso se lee `cuerpo.data`):
+
+```json
+{
+  "data": [
+    { "id": 1, "titulo": "Dune: Parte Tres", "nota": 8.7 },
+    { "id": 2, "titulo": "Torrente 6", "nota": 5.9 }
+  ]
+}
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+**El aviso CORS aparecerá.** Si la página se sirve desde XAMPP (puerto 80) y la API desde `artisan serve` (puerto 8000), el navegador considera que son orígenes distintos y aplica la política CORS: bloqueará la respuesta salvo que la API la autorice. El error en consola tiene este aspecto:
+
+```text
+Access to fetch at 'http://localhost:8000/api/v1/peliculas' from origin
+'http://localhost' has been blocked by CORS policy: No
+'Access-Control-Allow-Origin' header is present on the requested resource.
+```
+
+Laravel trae el middleware CORS configurable en `config/cors.php`; en clase se autorizará el origen como demostración guiada. Comprender en profundidad CORS excede esta unidad: basta con **reconocer el error en consola y saber dónde se autoriza el origen**.
+:::
+
+## Actividad evaluable E4
+
+::: {#exr-UD8-e4}
+**E4 · Cliente web de la propia API (UD7)** — CE8.b, CE8.d · 1,5 h en clase
+
+Con tu proyecto Laravel de la UD7 arrancado en local, construye una página PHP nativa (fuera de Laravel) que:
+
+1. Obtenga mediante `fetch` el listado del recurso principal de tu API con el token Sanctum en la cabecera.
+2. Lo presente en **tarjetas generadas desde JavaScript**.
+3. Muestre un mensaje claro y **diferenciado** ante los estados 401 (token inválido) y de error de red.
+4. Incluya al pie un breve párrafo (en la propia página) argumentando **dos ventajas del modelo híbrido** que esta actividad demuestra en la práctica.
+
+**Requisito previo:** API de la UD7 operativa con al menos un token válido. Quien no la conserve funcional dispondrá del proyecto de referencia del docente.
+
+**Entrega:** carpeta comprimida + captura de la pestaña Red mostrando la petición autenticada. Calificación: apto / no apto.
+:::

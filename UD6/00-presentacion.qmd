@@ -74,10 +74,8 @@ Los ejemplos de esta unidad asumen estos tres contactos; por eso puedes comparar
 
 ## Evaluación
 
-Los nueve ejercicios (E6.1–E6.9) se evalúan como **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
+Los ejercicios se evalúan como **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
 
 ::: {.callout-note title="Concepto clave"}
 Para llegar a la prueba objetiva en buenas condiciones, lo importante es tener **todos los ejercicios en apto**: cada uno cubre una pieza del recorrido (conectar, consultar, publicar, recorrer, modificar) que la prueba objetiva combina.
 :::
-
-Los ejercicios de esta unidad se califican **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.

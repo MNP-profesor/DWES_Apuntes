@@ -1,0 +1,161 @@
+---
+title: "Servidor y cliente: dos modelos de ejecución"
+---
+
+::: {.callout-important title="Normativa · RA-CE"}
+Este bloque desarrolla los criterios **CE8.a** (diferencias entre la ejecución de código en el servidor y en el cliente web) y **CE8.b** (ventajas de unir ambas tecnologías) del RA8.
+:::
+
+## Dónde se ejecuta cada cosa
+
+En la UD1 se caracterizaron los modelos de ejecución en servidor y en cliente como alternativas: o la lógica corre en el servidor (PHP) o corre en el navegador (JavaScript). Esta unidad cambia el punto de vista: en las aplicaciones web modernas **ambos modelos conviven en la misma página** y el trabajo del desarrollador de entorno servidor consiste, en buena parte, en decidir qué responsabilidad se asigna a cada lado.
+
+| Aspecto | Servidor (PHP) | Cliente (JavaScript) |
+|-------------|----------------------------|----------------------------|
+| Momento | Antes de enviar la respuesta HTTP | Después de cargar la página, en el navegador |
+| Acceso a datos | Directo: PDO, Eloquent, ficheros | Solo a través de peticiones HTTP al servidor |
+| Visibilidad del código | Nunca llega al navegador | Descargable e inspeccionable por el usuario |
+| Confianza | Entorno controlado: apto para seguridad | Entorno hostil: manipulable por el usuario |
+| Coste de cada acción | Una petición-respuesta completa | Inmediato, sin ida y vuelta a la red |
+| Estado | Sesiones, base de datos | Variables JS, almacenamiento del navegador |
+
+Veámoslo sobre código real. Una misma página, `cartelera.php`, puede contener fragmentos de los dos mundos:
+
+```php
+<?php
+// SERVIDOR: se ejecuta ANTES de enviar la página.
+// El navegador jamás verá esta línea, solo su resultado.
+$conexion = new PDO('mysql:host=localhost;dbname=cine', 'dwes', 'dwes');
+$total = $conexion->query('SELECT COUNT(*) FROM peliculas')->fetchColumn();
+?>
+<p>Hay <?= $total ?> películas en cartel.</p>
+
+<button id="saludo">Saludar</button>
+<script>
+// CLIENTE: se ejecuta DESPUÉS, en el navegador, con la página ya cargada.
+// Cualquiera puede leerlo con "Ver código fuente".
+document.querySelector('#saludo').addEventListener('click', () => {
+  alert('¡Hola desde el navegador!');
+});
+</script>
+```
+
+Si el navegador pide esta página y hay 12 películas, lo que recibe (y lo que muestra "Ver código fuente") es:
+
+```html
+<p>Hay 12 películas en cartel.</p>
+
+<button id="saludo">Saludar</button>
+<script>
+document.querySelector('#saludo').addEventListener('click', () => {
+  alert('¡Hola desde el navegador!');
+});
+</script>
+```
+
+El PHP ha desaparecido: solo viaja su resultado. El JavaScript, en cambio, viaja íntegro y se ejecuta en la máquina del usuario. Esta asimetría explica la fila "Confianza" de la tabla: **todo lo que hace el cliente es manipulable**, porque el usuario tiene el código en su poder.
+
+Una prueba rápida más para fijar el criterio. ¿Dónde se ejecuta cada uno de estos cuatro fragmentos?
+
+```php
+// F1
+$stmt = $pdo->query("SELECT * FROM peliculas");
+```
+
+```js
+// F2
+boton.addEventListener('click', ocultarSinopsis);
+```
+
+```php
+// F3
+session_start();
+$usuario = $_SESSION['usuario'];
+```
+
+```js
+// F4
+const r = await fetch('api/peliculas.php');
+```
+
+F1 y F3 solo pueden ejecutarse en el servidor: el acceso a la base de datos con PDO y las sesiones son capacidades exclusivas del entorno servidor. F2 y F4 solo existen en el navegador: los eventos del DOM y `fetch` son APIs del cliente.
+
+## El ciclo clásico y su límite
+
+Todo lo construido desde la UD2 sigue el ciclo clásico: el navegador pide una URL, PHP genera el HTML completo y el navegador reemplaza la página entera.
+
+```text
+┌──────────┐  1. GET /cartelera.php    ┌──────────┐
+│          │ ────────────────────────▶ │          │
+│ NAVEGADOR│                           │ SERVIDOR │
+│          │ ◀──────────────────────── │  (PHP)   │
+└──────────┘  2. Página HTML completa  └──────────┘
+
+        Modelo clásico: cada clic = página nueva
+```
+
+Este modelo es simple y robusto, pero tiene un límite visible: cualquier interacción, por pequeña que sea, obliga a regenerar y retransmitir toda la página. Marcar una película como favorita, filtrar la cartelera por género o comprobar si un nombre de usuario está libre no deberían costar una recarga completa.
+
+Un ejemplo con números lo hace tangible. Supongamos que la página de la cartelera pesa 45 KB y el usuario solo quiere ver las comedias:
+
+| | Ciclo clásico | Modelo híbrido |
+|---------------------|:------------------:|:------------------:|
+| Qué viaja por la red | Página completa (45 KB) | Solo los datos (2 KB de JSON) |
+| Qué hace el servidor | Regenerar todo el HTML | Ejecutar una consulta y serializar |
+| Qué ve el usuario | Pantalla en blanco + página nueva | La lista cambia al instante, sin parpadeo |
+
+## El modelo híbrido: ventajas de unir ambas tecnologías
+
+En el modelo híbrido, el servidor genera la página inicial y, a partir de ahí, el JavaScript de esa página solicita al servidor únicamente los datos que necesita (habitualmente en JSON) y actualiza solo la parte afectada del documento.
+
+```text
+┌──────────┐  1. GET /cartelera.php    ┌──────────┐
+│          │ ────────────────────────▶ │          │
+│ NAVEGADOR│ ◀──────────────────────── │ SERVIDOR │
+│  (HTML + │  2. Página inicial        │ PHP /    │
+│   JS)    │                           │ Laravel  │
+│          │  3. fetch /api/peliculas  │          │
+│          │ ────────────────────────▶ │          │
+│          │ ◀──────────────────────── │          │
+└──────────┘  4. Solo datos (JSON)     └──────────┘
+
+   Modelo híbrido: la página se actualiza sin recargarse
+```
+
+Las ventajas de unir ambas tecnologías son concretas y medibles:
+
+- **Experiencia de usuario:** la página responde al instante y no parpadea; solo cambia lo que debe cambiar.
+- **Eficiencia de red y de servidor:** se transmiten datos (unos pocos KB de JSON) en lugar de páginas completas; el servidor deja de regenerar HTML repetido.
+- **Separación de responsabilidades:** el servidor se especializa en exponer datos y aplicar reglas de negocio; el cliente, en presentarlos. Es la misma filosofía de separación que motivó el MVC en la UD5, ahora aplicada entre máquinas.
+- **Reutilización:** el mismo endpoint que alimenta la página puede alimentar una app móvil o a un tercero. La API de la UD7 es el ejemplo perfecto: ya existe y esta unidad la convierte en el motor de una interfaz web.
+- **Defensa en profundidad:** el cliente puede validar y filtrar para mejorar la usabilidad, mientras el servidor mantiene la última palabra sobre seguridad e integridad.
+
+::: {.callout-warning title="Errores frecuentes"}
+Convertirlo todo en JavaScript. No todo debe ser híbrido: páginas de contenido esencialmente estático, formularios sencillos de un solo envío o procesos donde la recarga es natural (un pago, un cierre de sesión) funcionan mejor y son más robustos con el ciclo clásico. El criterio profesional no es "usar la técnica más moderna", sino asignar cada responsabilidad al lugar donde aporta más y cuesta menos.
+:::
+
+::: {#exr-UD8-1}
+**E8.1 · ¿Clásico o híbrido?** *(individual, en cuaderno)*
+
+Para cada una de las siguientes funcionalidades, indica razonadamente si la resolverías con el ciclo clásico (recarga) o con el modelo híbrido (`fetch`):
+
+a. Autocompletar el buscador de películas mientras se escribe.
+b. Procesar el pago de una entrada.
+c. Mostrar u ocultar la sinopsis de una película.
+d. Comprobar en el registro si un correo ya está en uso.
+e. Cerrar la sesión del usuario.
+:::
+
+## Actividad evaluable E1
+
+::: {#exr-UD8-e1}
+**E1 · Análisis comparativo servidor/cliente** — CE8.a, CE8.b · 1,0 h en clase
+
+A partir de la cartelera clásica proporcionada por el docente (`cartelera.php`, versión UD3), elabora un informe breve de dos partes:
+
+**Parte 1.** Tabla comparativa propia de los dos modelos de ejecución, identificando en el código real de la aplicación **tres fragmentos que solo pueden ejecutarse en el servidor** y justificando por qué.
+
+**Parte 2.** Propuesta razonada de **tres mejoras concretas** de la cartelera que justificarían pasar al modelo híbrido, indicando para cada una qué ventaja del apartado anterior la sustenta.
+
+**Entrega:** documento PDF al aula virtual al finalizar la sesión. Calificación: apto / no apto.
+:::
