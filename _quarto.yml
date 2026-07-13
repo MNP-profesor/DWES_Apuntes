@@ -1,6 +1,7 @@
 project:
   type: book
   output-dir: _book
+  #pre-render: python scripts/renumera_ejercicios.py # RENUMERADOR automático de ejercicios
 
 lang: es
 

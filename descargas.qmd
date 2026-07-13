@@ -1,5 +1,9 @@
 # Descargas {.unnumbered}
 
+:::: {.content-visible unless-format="pdf"}
+
+::: {.content-visible unless-format="epub"}
+
 Todos los materiales se regeneran automáticamente con cada actualización de los apuntes.
 
 ## Módulo completo {.unnumbered}
@@ -22,3 +26,23 @@ Todos los materiales se regeneran automáticamente con cada actualización de lo
 | 7 | Servicios Web: API REST con Laravel (Resources y Sanctum) | [Descargar](download/DWES-UD7.pdf) |
 | 8 | Generación dinámica de páginas Web | [Descargar](download/DWES-UD8.pdf) |
 | 9 | Aplicaciones web híbridas: librerías y repositorios heterogéneos (Composer) | [Descargar](download/DWES-UD9.pdf) |
+
+:::
+
+::::
+
+::: {.content-visible when-format="pdf"}
+
+Esta sección solo tiene sentido en la versión web de los apuntes. Todas las descargas — libro completo y unidades individuales, en formato PDF y EPUB — están siempre disponibles y actualizadas en:
+
+<https://mnp-profesor.github.io/DWES_Apuntes/descargas.html>
+
+:::
+
+::: {.content-visible when-format="epub"}
+
+Esta sección solo tiene sentido en la versión web de los apuntes. Todas las descargas — libro completo y unidades individuales, en formato PDF y EPUB — están siempre disponibles y actualizadas en:
+
+<https://mnp-profesor.github.io/DWES_Apuntes/descargas.html>
+
+:::
