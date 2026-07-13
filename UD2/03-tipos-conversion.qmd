@@ -112,7 +112,7 @@ $corregido = str_replace("téxto", "texto", $errores); // Aquí corregido vale "
 ```
 
 ::: {#exr-UD2-5}
-### E2.5 — Catálogo con cálculo de inventario
+### Practica con cadenas
 
 Crea una página llamada `manejo_textos.php.` Realiza en ella las siguientes operaciones:
 
@@ -330,3 +330,35 @@ $cantidad_texto = "3";
 //    Muestra los dos resultados con var_dump()
 ```
 :::
+
+
+::: {#exr-UD2-EXTRA-STRINGS}
+**Ejercicios extras de Funciones de Strings**
+
+Crea un fichero PHP llamado `cadenas.php` y resuelve las siguientes tareas utilizando las funciones de manejo de cadenas nativas de PHP:
+
+* **Eliminación de caracteres:** Muestra el valor de un parámetro llamado `nombre` recibido por *querystring* eliminando los caracteres `/` del principio y del final si los hubiera (función `trim`). Si no se recibe dicho parámetro, se asignará tu nombre de pila por defecto.
+* **Longitud del texto:** Muestra la longitud del parámetro `nombre` (función `strlen`).
+* **Conversión a mayúsculas:** Muestra el nombre completamente en mayúsculas (función `strtoupper`).
+* **Conversión a minúsculas:** Muestra el nombre completamente en minúsculas (función `strtolower`).
+* **Comprobación de prefijo:** Recibe un segundo parámetro por *querystring* llamado `prefijo` (recuerda separar los parámetros utilizando el carácter `&`). Indica si el nombre comienza por dicho prefijo o no (función `strpos`), distinguiendo entre mayúsculas y minúsculas. Si no se pasa el parámetro `prefijo`, no se realizará esta comprobación.
+* **Contar caracteres:** Muestra el número de veces que aparece la letra 'a' (tanto mayúscula como minúscula) en el parámetro `nombre` (combinando `substr_count` con `strtoupper` o `strtolower`).
+* **Buscar posición:** Muestra la posición de la primera 'a' existente en el nombre (sea mayúscula o minúscula). Si no contiene ninguna, muestra un texto alternativo indicándolo (función `stripos`).
+* **Sustitución de texto:** Muestra el nombre sustituyendo todas las letras 'o' (mayúsculas o minúsculas) por el número cero `0` (función `str_ireplace`).
+
+---
+
+### Análisis de URLs con `parse_url`
+
+La función `parse_url` permite trocear y extraer los distintos componentes que forman una URL. A partir de una variable que contenga una dirección de ejemplo:
+
+```php
+$url = 'http://username:password@hostname:9090/path?arg=value';
+```
+
+Utiliza la función parse_url para extraer y mostrar por pantalla las siguientes partes de la variable url del ejemplo:
+
+* El protocolo utilizado (en el ejemplo http).
+* El nombre de usuario (en el ejemplo username).
+* El path de la url (en el ejemplo /path)
+* El querystring de la url (en el ejemplo arg=value)

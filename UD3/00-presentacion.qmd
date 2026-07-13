@@ -2,7 +2,9 @@
 title: "UD3. Estructuras de control en PHP: Condicionales, bucles, funciones y formularios"
 ---
 
-## Qué aprenderás
+## Presentación de la unidad
+
+### Qué aprenderás
 
 Al terminar la unidad sabrás:
 
@@ -12,7 +14,7 @@ Al terminar la unidad sabrás:
 - Organizar tu código en funciones reutilizables.
 - Crear formularios HTML y recoger los datos que envía el usuario.
 
-## Resultados de Aprendizaje y Criterios de Evaluación
+### Resultados de Aprendizaje y Criterios de Evaluación
 
 > **RA3.** Escribe bloques de sentencias embebidos en lenguajes de marcas, seleccionando y utilizando las estructuras de programación.
 
@@ -26,13 +28,13 @@ Al terminar la unidad sabrás:
 | CE3.f | Recogida de datos del formulario |
 | CE3.g | Comentarios en el código *(transversal)* |
 
-## Materiales
+### Materiales
 
 - Servidor local PHP (XAMPP, MAMP o equivalente) y VS Code.
 - Navegador con herramientas de desarrollador (F12).
 - [Documentación oficial de PHP](https://www.php.net/manual/es/)
 
-## Contenidos
+### Contenidos
 
 ```
 Bloque 1 · Condicionales
@@ -43,7 +45,7 @@ Bloque 5 · Formularios HTML
 Bloque 6 · Recogida y validación de datos
 ```
 
-## Secuencia didáctica
+### Secuencia didáctica
 
 | Sesión | Duración | Contenido | Actividad |
 |---|---|---|---|
@@ -58,9 +60,9 @@ Bloque 6 · Recogida y validación de datos
 | 9 | 2 h | Superglobales y validación de datos | E3.9 — Procesador de inscripción |
 | 10 | 1 h | Repaso e integración | Sin entregable |
 
-## Evaluación
+### Evaluación
 
-### Ejercicios de práctica
+#### Ejercicios de práctica
 
 Los ejercicios se evalúan como **apto / no apto** y representan un porcentaje pequeño de la nota final. Su objetivo es practicar y consolidar los contenidos sesión a sesión.
 
@@ -74,26 +76,9 @@ Para obtener el **apto** es necesario:
 Los comentarios (**CE3.g**) son obligatorios en todos los ejercicios: como mínimo un bloque PHPDoc en cada función y comentarios de línea en la lógica más compleja.
 :::
 
-### Prueba objetiva de la unidad
+#### Prueba objetiva de la unidad
 
 El grueso de la calificación recae en la **prueba objetiva**, que cubre todos los bloques de la unidad.
-
-
-
-
-
-
-
-## Evaluación
-
-Los ejercicios de esta unidad se califican **apto / no apto** y tienen un peso conjunto reducido. El grueso de la nota corresponde a la prueba objetiva de la unidad.
-
-| Instrumento | Calificación | Peso |
-|---|---|---|
-| Ejercicios | Apto / No apto | 20 % |
-| Prueba objetiva de la unidad | Numérica (0–10) | 80 % |
-
-: {.striped}
 
 ::: {.callout-important title="Normativa · RA-CE"}
 Para poder realizar la prueba objetiva de la unidad es necesario obtener **apto en los ejercicios**.

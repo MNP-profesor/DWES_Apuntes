@@ -63,12 +63,13 @@ book:
         - UD4/01-ambito-y-clases.qmd
         - UD4/02-constructores-y-encapsulacion.qmd
         - UD4/03-herencia-namespaces-excepciones.qmd
-        - UD4/04-sesiones.qmd
-        - UD4/05-cookies.qmd
-        - UD4/06-autenticacion.qmd
-        - UD4/07-login-registro.qmd
-        - UD4/08-recordarme-y-roles.qmd
-        - UD4/09-depuracion-y-cierre.qmd
+        - UD4/04-poo-avanzada.qmd
+        - UD4/05-sesiones.qmd
+        - UD4/06-cookies.qmd
+        - UD4/07-autenticacion.qmd
+        - UD4/08-login-registro.qmd
+        - UD4/09-recordarme-y-roles.qmd
+        - UD4/10-depuracion-y-cierre.qmd
 
     - part: UD5/00-presentacion.qmd
       chapters:

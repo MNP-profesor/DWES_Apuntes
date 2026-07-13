@@ -43,6 +43,38 @@ echo "Inscrito: $nombre en $curso";
 
 ---
 
+## Recogida de archivos: `$_FILES`
+
+Cuando el formulario envía un archivo a través de un `input` de tipo `file` (y con el `enctype` adecuado), este **no** se aloja en `$_POST`. PHP procesa el archivo de forma independiente y rellena de forma automática un array bidimensional global llamado `$_FILES`.
+
+A través de `$_FILES['nombre_input']`, tenemos acceso a 5 datos cruciales sobre el archivo subido:
+
+```php
+<?php
+// Suponiendo un <input type="file" name="avatar">
+
+$nombreArchivo =$_FILES['avatar']['name'];     // Nombre original (ej: "foto.png")
+$tipoMime      =$_FILES['avatar']['type'];     // Tipo de archivo (ej: "image/png")
+$tamano        =$_FILES['avatar']['size'];     // Tamaño en bytes (ej: 24512)
+$rutaTemporal  =$_FILES['avatar']['tmp_name']; // Ubicación temporal en el servidor
+$error         =$_FILES['avatar']['error'];    // Código de error (0 si todo es correcto)
+
+// Guardar el archivo de forma definitiva en nuestro servidor
+if ($error === UPLOAD_ERR_OK) {
+    $directorioDestino = "subidas/" . basename($nombreArchivo);
+    
+    // Mueve el archivo desde la carpeta temporal a su destino real
+    if (move_uploaded_file($rutaTemporal,$directorioDestino)) {
+        echo "¡Archivo subido con éxito!";
+    } else {
+        echo "Error al mover el archivo de espacio temporal.";
+    }
+}
+?>
+```
+
+---
+
 ## Leer con seguridad: el operador `??`
 
 Si un campo no llega (porque el usuario manipuló el formulario o por un error), acceder directamente lanza un aviso:
@@ -124,6 +156,32 @@ var_dump(filter_var("999.0.0.1",   FILTER_VALIDATE_IP)); // false
 $entrada  = "<script>alert('xss')</script> Hola";
 $limpia   = filter_var($entrada, FILTER_SANITIZE_SPECIAL_CHARS);
 echo $limpia; // &#60;script&#62;alert(&#39;xss&#39;)&#60;/script&#62; Hola
+?>
+```
+
+---
+
+## Validación con Expresiones Regulares (`preg_match`)
+
+Cuando los filtros por defecto de `filter_var()` no son suficientes para reglas de negocio específicas (como un código postal o un teléfono), recurrimos a las expresiones regulares mediante `preg_match()`. Esta función devuelve `1` si el texto coincide con el patrón, o `0` si no.
+
+```php
+<?php
+// Validar un Código Postal español (5 números)
+$cp =$_POST['cp'] ?? '';
+$patronCP = '/^[0-9]{5}$/';
+
+if (!preg_match($patronCP,$cp)) {
+    echo "El código postal debe tener exactamente 5 números.";
+}
+
+// Validar un teléfono (9 dígitos, empieza por 6, 7, 8 o 9)
+$telefono =$_POST['telefono'] ?? '';
+$patronTelefono = '/^[6-9][0-9]{8}$/';
+
+if (preg_match($patronTelefono,$telefono)) {
+    echo "¡Teléfono válido!";
+}
 ?>
 ```
 
@@ -244,6 +302,30 @@ if (empty($resultado['errores'])) {
 }
 ?>
 ```
+
+---
+
+## Seguridad: Introducción a la Inyección SQL
+
+La regla de oro de cualquier programador web es: **"Nunca confíes en los datos que introduce un usuario"**. 
+
+Si recoges una variable de un formulario directo y la concatenas a pelo dentro de una consulta a la base de datos, abres una brecha de seguridad crítica conocida como **Inyección SQL**. Un atacante podría escribir sentencias SQL maliciosas dentro de tus cajas de texto para robar datos o borrar tablas de tu sistema.
+
+```php
+<?php
+// ❌ CRÍTICO - VULNERABLE A INYECCIÓN SQL
+// Si el usuario escribe en la caja:  admin' OR '1'='1
+$usuario =$_POST['user'];
+$clave   =$_POST['pass'];
+
+$sql = "SELECT * FROM usuarios WHERE user = '$usuario' AND pass = '$clave'";
+// La consulta se rompería y daría acceso completo sin conocer la contraseña.
+?>
+```
+
+::: {.callout-tip title="¿Cómo lo solucionaremos?"}
+Para protegernos por completo de esto, en la próxima unidad (UD4) aprenderemos a separar siempre los datos de las consultas utilizando Sentencias Preparadas (PDO), haciendo que cualquier carácter malicioso insertado en el formulario sea tratado simplemente como texto plano inofensivo.
+:::
 
 ---
 

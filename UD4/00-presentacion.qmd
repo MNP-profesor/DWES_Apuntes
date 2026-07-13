@@ -1,27 +1,29 @@
 ---
-title: "UD4. POO en PHP + Desarrollo de funcionalidades Web: Autenticación, sesiones y cookies"
+title: "UD4. POO en PHP + Desarrollo de funcionalidades Web: autenticación, sesiones y cookies"
 ---
 
-## Qué aprenderás
+## Presentación de la unidad
+
+### Qué aprenderás
 
 En esta unidad das el salto a la Programación Orientada a Objetos en PHP y la usas para resolver el problema central de cualquier aplicación web: **recordar quién es el usuario** entre una petición y la siguiente. Al terminar, tendrás un sistema de login completo, con sesiones, cookies seguras y control de acceso por roles.
 
-## Resultados de Aprendizaje y Criterios de Evaluación
+### Resultados de Aprendizaje y Criterios de Evaluación
 
 > **RA4.** Desarrolla aplicaciones web embebidas en lenguajes de marcas analizando e incorporando funcionalidades según especificaciones.
 
-| CE | Descripción |
+| CE | Criterio de evaluación |
 |----|-------------------------|
-| CE4.a | Mecanismos disponibles para el mantenimiento de información de un cliente web concreto, y sus ventajas |
-| CE4.b | Mecanismos para mantener el estado de las aplicaciones web |
-| CE4.c | Mecanismos para almacenar información en el cliente web y recuperar su contenido |
-| CE4.d | Mecanismos disponibles para la autentificación de usuarios |
-| CE4.e | Aplicaciones que integren mecanismos de autentificación de usuarios |
-| CE4.f | Herramientas y entornos para facilitar la programación, prueba y depuración del código |
+| CE4.a | Se han identificado los mecanismos disponibles para el mantenimiento de la información que concierne a un cliente web concreto y se han señalado sus ventajas. |
+| CE4.b | Se han utilizado mecanismos para mantener el estado de las aplicaciones web. |
+| CE4.c | Se han utilizado mecanismos para almacenar información en el cliente web y para recuperar su contenido. |
+| CE4.d | Se han identificado y caracterizado los mecanismos disponibles para la autentificación de usuarios. |
+| CE4.e | Se han escrito aplicaciones que integren mecanismos de autentificación de usuarios. |
+| CE4.f | Se han utilizado herramientas y entornos para facilitar la programación, prueba y depuración del código. |
 
-El bloque de POO (capítulos 1-3) no tiene un CE propio: es la base instrumental sin la que no se puede escribir con garantías el código de CE4.e.
+El bloque de POO (capítulos 1-4) no tiene un CE propio: es la base instrumental sin la que no se puede escribir con garantías el código de CE4.e.
 
-## Objetivos
+### Objetivos
 
 - Escribir clases en PHP nativo: propiedades, métodos, constructores, encapsulación, herencia y namespaces.
 - Comparar y elegir entre cookies y sesiones según el caso de uso.
@@ -30,22 +32,22 @@ El bloque de POO (capítulos 1-3) no tiene un CE propio: es la base instrumental
 - Construir un sistema de login y registro con contraseñas cifradas correctamente.
 - Aplicar control de acceso por roles y depurar aplicaciones con estado.
 
-## Mapa de la unidad
+### Mapa de la unidad
 
 | Bloque 1 — POO en PHP | Bloque 2 — Funcionalidades Web |
 |---|---|
 | Ámbito de variables y clases | Sesiones |
 | Constructores y encapsulación | Cookies |
 | Herencia, namespaces, excepciones | Autenticación y redirecciones |
-| | Login y registro |
+| Clases estáticas, clonado, abstractas e interfaces | Login y registro |
 | | Recordarme y roles |
 | | Depuración |
 
-## Evaluación
+### Evaluación
 
-Los ejercicios de esta unidad se califican **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
+Los ejercicios se evalúan como **apto / no apto** y representan un porcentaje pequeño de la nota final. Su objetivo es practicar y consolidar los contenidos sesión a sesión.
 
-No todos los ejercicios requieren entrega: los de análisis/comparación son de autoevaluación (te sirven para preparar la prueba objetiva, pero no se entregan), y el resto sí requiere entrega.
+No todos los ejercicios requieren entrega: los de análisis/comparación son de autoevaluación (sirven para preparar la prueba, pero no se entregan), y el resto sí requiere entrega.
 
 | Ejercicio | Tema | ¿Entrega? |
 |---|---|---|
@@ -60,3 +62,5 @@ No todos los ejercicios requieren entrega: los de análisis/comparación son de 
 | E4.9 | «Recordarme» con cookie persistente | Sí |
 | E4.10 | Control de acceso por roles | Sí |
 | E4.11 | Depuración de sesión/cookie | Sí |
+| E4.12 | Figuras con clase abstracta e interfaz | No — autoevaluación |
+| E4.13 | Contador estático y clonado | No — autoevaluación |

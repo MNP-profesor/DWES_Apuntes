@@ -54,8 +54,8 @@ echo duplicar("5");   // TypeError: sin strict_types PHP convertiría "5" a 5 au
                       // con strict_types lanza excepción
 ```
 
-::: {#exr-UD2-7}
-### E2.7 — Desarrollo vs. producción
+::: {#exr-UD2-8}
+### E2.8 — Desarrollo vs. producción
 
 Crea `errores.php` con este código de partida:
 
@@ -178,7 +178,26 @@ echo $nombre;  // Anónimo   ← "" es falsy, usa el valor de la derecha
 
 ## Precedencia y la trampa de `and`/`or`
 
-PHP resuelve los operadores por precedencia. Ante cualquier duda, usa paréntesis:
+Como en cualquier lenguaje de programación, PHP resuelve los operadores por precedencia. 
+
+| Operadores | Tipo / Información adicional |
+| :--- | :--- |
+| `**` | Potencia (Aritmética) |
+| `++` `--` | Incremento y decremento |
+| `*` `/` `%` | Multiplicación, división y resto (Módulo) |
+| `+` `-` `.` | Suma, resta y **Concatenación de strings** (`.`) |
+| `<` `<=` `>` `>=` | Comparaciones relacionales |
+| `==` `!=` `===` `!==` | Igualdad e identidad (compara valor y tipo) |
+| `&&` | Lógico Y (AND con mayor precedencia) |
+| `\\` | Lógico O (OR con mayor precedencia) |
+| `??` | Coalescencia nula (básico para recibir datos de formularios) |
+| `? :` | Operador ternario (condicional compacto) |
+| `=` `+=` `-=` `.=` | Asignación directa y asignaciones combinadas |
+| `and` `or` | Lógicos con muy baja precedencia |
+
+: {.striped}
+
+Ante cualquier duda, usa paréntesis:
 
 ```php
 <?php

@@ -54,13 +54,40 @@ if (!isset($_SESSION['usuario_id'])) {
 
 ## Inclusiones
 
-`include`/`require` dividen el código en ficheros reutilizables. La diferencia es la gravedad si el fichero no existe: `include` avisa y continúa; `require` detiene el script con error fatal. Las variantes `_once` evitan duplicados.
+### `include` e `include_once`
+
+* Si el archivo **no existe**, PHP lanza un aviso (`Warning`), pero **el script principal continúa ejecutándose**.
+* Es ideal para elementos visuales de la web que no rompen la lógica de la aplicación (como un menú de navegación `nav.php` o un pie de página `footer.php`).
 
 ```php
-require_once __DIR__ . '/Modelo/Usuario.php'; // clase imprescindible: si falta, no tiene sentido seguir
-require_once __DIR__ . '/config.php';
-include 'cabecera.php'; // vista: si falla, seguimos con un aviso
+<?php
+include "vistas/nav.php";
+
+echo "El sitio web se sigue cargando aunque no existiera el menú de navegación.";
+?>
 ```
+
+### `require` e `require_once`
+
+* Si el archivo **no existe**, PHP considera que es un fallo importante, por lo que lanza un `Fatal Error` y **detiene la ejecución del servidor de inmediato**.
+* Se utiliza para importar aquellos archivos que son absolutamente vitales para que el script pueda funcionar.
+
+```php
+<?php
+// Si no existe, se detiene el script por seguridad
+require "librerias/libreria_validacion.php"; 
+
+$emailValido = validarDNI($_POST['dni']);
+?>
+```
+
+::: {.callout-important title="¿Por qué preferir la variante _once?"}
+Las directivas `include_once` y `require_once` funcionan igual que sus hermanas, pero con una capa de control inteligente: comprueban si el fichero ya ha sido importado previamente en el flujo del script. Si ya se incluyó, PHP lo ignora de forma silenciosa.
+
+**¿Por qué es crucial?** Si importas dos veces un archivo que contiene la declaración de una función estándar (por ejemplo, por un bucle o una mala organización de código), PHP lanzará un Fatal Error indicando que no puedes redeclarar una función que ya existe. Usar `require_once` evita este problema.
+:::
+
+---
 
 ::: {#exr-UD4-6}
 ## E4.6 — Comparativa de mecanismos de autenticación (autoevaluación, no se entrega)

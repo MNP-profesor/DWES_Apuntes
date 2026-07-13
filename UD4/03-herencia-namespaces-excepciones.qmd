@@ -63,7 +63,44 @@ foreach ($formas as $f) {
 ```
 
 ::: {.callout-note title="Concepto clave"}
-El segundo ejemplo usa **promoción de propiedades en el constructor** (`private float $radio` directamente en la firma), una forma abreviada disponible desde PHP 8 que evita escribir la propiedad y la asignación por separado.
+El segundo ejemplo usa **promoción de propiedades en el constructor** (`private float $radio` directamente en la firma), una forma abreviada disponible desde PHP 8 que evita escribir la propiedad y la asignación por separado. Antes de PHP 8, había que declarar la propiedad aparte y asignarla a mano dentro de `__construct()`.
+:::
+
+## Polimorfismo y sobreescritura
+
+Cuando varias subclases implementan el mismo método heredado cada una a su manera, y una función que solo conoce la clase padre puede llamarlas indistintamente, eso es **polimorfismo**.
+
+```php
+class Animal {
+    public function hacerSonido(): string {
+        return 'Sonido genérico';
+    }
+}
+
+class Perro extends Animal {
+    public function hacerSonido(): string {
+        return 'Guau Guau';
+    }
+}
+
+class Gato extends Animal {
+    public function hacerSonido(): string {
+        return 'Miau Miau';
+    }
+}
+
+function reproducirSonido(Animal $animal): string {
+    return $animal->hacerSonido(); // no sabe si es Perro o Gato, y no le hace falta
+}
+
+echo reproducirSonido(new Perro()); // Guau Guau
+echo reproducirSonido(new Gato());  // Miau Miau
+```
+
+Redefinir en la subclase un método que ya existe en el padre, como `hacerSonido()` arriba, se llama **sobreescritura** (en inglés, *override*). En PHP, "sobreescritura" y "redefinición" son sinónimos: es lo mismo que ya hiciste con `permisos()` en el ejemplo de `Administrador` más arriba, solo que allí combinabas el resultado del padre con `parent::`, y aquí lo sustituyes por completo.
+
+::: {.callout-tip title="Analogía Java"}
+Java permite además la **sobrecarga** (*overloading*): varios métodos con el mismo nombre pero distinta lista de parámetros. **PHP no tiene sobrecarga de métodos.** Si declaras dos métodos con el mismo nombre en la misma clase, es un error fatal, no una sobrecarga válida. Si necesitas comportamientos distintos según los argumentos, usa parámetros opcionales (`function mostrar($nombre, $apellido = null)`) o comprueba `func_num_args()`.
 :::
 
 ## Namespaces
@@ -136,4 +173,4 @@ try {
 // Error matemático: No se puede dividir entre 0
 ```
 
-Gracias a la herencia, crear excepciones propias es tan simple como extender `Exception`, lo que te permite capturar de forma selectiva solo el error que te interesa — esto es justo lo que usarás en el login del capítulo 7.
+Gracias a la herencia, crear excepciones propias es tan simple como extender `Exception`, lo que te permite capturar de forma selectiva solo el error que te interesa — esto es justo lo que usarás en el login del capítulo 8.

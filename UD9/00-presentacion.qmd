@@ -2,7 +2,9 @@
 title: "UD9. Aplicaciones Web híbridas: librerías y repositorios heterogéneos (Composer)"
 ---
 
-## Qué aprenderás
+## Presentación de la unidad
+
+### Qué aprenderás
 
 Esta unidad cierra el módulo con un cambio de enfoque: hasta ahora habéis construido cada pieza desde cero; aquí el objetivo es **reutilizar**. Una **aplicación Web híbrida** combina código propio, librerías de terceros e información procedente de repositorios heterogéneos (APIs, datos abiertos, ficheros CSV/JSON, bases de datos propias o ajenas).
 
@@ -16,7 +18,7 @@ La aplicación Laravel de las unidades anteriores es la base de trabajo, y la AP
 - Construir un cuadro de mando con indicadores calculados sobre datos reales (analítica e inteligencia de negocios).
 - Probar, depurar y documentar aplicaciones que dependen de fuentes externas.
 
-## Resultados de Aprendizaje y Criterios de Evaluación
+### Resultados de Aprendizaje y Criterios de Evaluación
 
 > **RA9.** Desarrolla aplicaciones web híbridas seleccionando y utilizando tecnologías, frameworks servidor y repositorios heterogéneos de información.
 
@@ -31,7 +33,7 @@ La aplicación Laravel de las unidades anteriores es la base de trabajo, y la AP
 | CE9.g | Se han analizado y utilizado librerías de código relacionadas con Big Data e inteligencia de negocios, para incorporar análisis e inteligencia de datos proveniente de repositorios. |
 | CE9.h | Se han probado, depurado y documentado las aplicaciones generadas. |
 
-## Mapa de contenidos
+### Mapa de contenidos
 
 | Capítulo | Contenido |
 |---|---|
@@ -44,15 +46,15 @@ La aplicación Laravel de las unidades anteriores es la base de trabajo, y la AP
 | Probar, depurar y documentar | Fuentes caídas, logs, PHPDoc y README |
 | Evaluación | Modelo de evaluación de la unidad |
 
-## El proyecto de la unidad
+### El proyecto de la unidad
 
 Los ejercicios de proyecto (E9.7 a E9.11) encadenan sobre una misma aplicación: la fuente que consumes alimenta tu repositorio propio, que a su vez es la base del PDF, del QR y del cuadro de mando final. Cada capítulo deja el punto de partida listo para el siguiente.
 
-## Evaluación
+### Evaluación
 
 Los ejercicios se evalúan como **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
 
-### Ejercicios de aprendizaje
+#### Ejercicios de aprendizaje
 
 Se resuelven en clase o en casa; no requieren entrega salvo indicación del docente):
 
@@ -63,7 +65,7 @@ Se resuelven en clase o en casa; no requieren entrega salvo indicación del doce
 - @exr-UD9-5 — QR embebido en el PDF
 - @exr-UD9-6 — Agregaciones sobre municipios
 
-### Ejercicios de proyecto
+#### Ejercicios de proyecto
 
 Encadenados sobre la misma aplicación; se entregan por el aula virtual al cerrar el capítulo correspondiente:
 
@@ -73,7 +75,7 @@ Encadenados sobre la misma aplicación; se entregan por el aula virtual al cerra
 - @exr-UD9-10 — Dos funcionalidades de terceros
 - @exr-UD9-11 — Cuadro de mando
 
-### Criterios de apto en los ejercicios de proyecto
+#### Criterios de apto en los ejercicios de proyecto
 
 Un ejercicio de proyecto es **apto** cuando:
 
@@ -84,6 +86,6 @@ Un ejercicio de proyecto es **apto** cuando:
 
 Las entregas que no ejecutan no pueden ser aptas; la copia entre entregas supone no apto para todas las partes implicadas.
 
-### La prueba objetiva
+#### La prueba objetiva
 
 Combina cuestiones teóricas y ejercicios prácticos de código sobre un supuesto **distinto** al trabajado en clase. Todo lo que aparece en los capítulos de esta unidad (Composer y semver, consumo de repositorios, ETL, librerías de terceros, analítica y documentación) es contenido de esta prueba.

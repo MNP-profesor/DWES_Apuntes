@@ -264,6 +264,41 @@ echo precioBueno(100, 0.21); // 121
 ?>
 ```
 :::
+---
+
+## Funciones anónimas y Closures
+
+Una **función anónima** es aquella a la que no se le asigna un nombre. Puede almacenarse en variables, pasarse como argumento (callbacks) o devolverse desde otra función.
+
+```php
+<?php
+// Asignación de una función anónima a una variable
+$saludo = function(string$nombre): string {
+    return "Hola, $nombre";
+}; // Nota el punto y coma obligatorio al final de la asignación
+
+echo $saludo("Aisha"); // Hola, Aisha
+?>
+```
+
+Un **Closure (o clausura)** *es una función anónima* con la capacidad de heredar variables del entorno exterior (ámbito del script contenedor) mediante la estructura use.
+
+```php
+<?php
+$iva = 0.21; // Variable en el ámbito local/global externo
+
+// El closure "atrapa" el valor de $iva en el momento de su definición
+$calcularTotal = function(float $base) use ($impuesto): float {
+    return $base * (1 +$impuesto);
+};
+
+echo $calcularTotal(100); // 121
+?>
+```
+
+::: {.callout-note title="Concepto clave"}
+Técnicamente en PHP, todas las funciones anónimas son objetos instanciados de la clase interna nativa Closure. El uso de use es la alternativa limpia a la palabra clave global cuando se trabaja con funciones en línea, aislando de forma segura el comportamiento.
+:::
 
 ---
 
@@ -390,4 +425,41 @@ intercambiar($x, $y);
 echo "x=$x y=$y\n"; // x=20 y=10
 ?>
 ```
+:::
+
+::: {#exr-UD3-EXTRA-FUNCIONES}
+**Ejercicios extras de funciones**
+
+En el proyecto de ejemplo creado en la actividad anterior, crea un fichero PHP llamado `funciones.php` y resuelve los siguientes ejercicios:
+
+### 1. Generador de consultas `INSERT INTO` (Paso por valor)
+Queremos crear una función llamada `insert` que nos genere una sentencia `INSERT INTO` en SQL de forma dinámica. Para ello, la función recibirá dos parámetros: el nombre de la tabla y un array asociativo que contendrá los nombres de los campos (claves) y sus respectivos valores. 
+
+La sentencia resultante devuelta por la función debe tener la siguiente estructura:
+`"INSERT INTO nombre_tabla (campos, separados, por, comas) VALUES (:campos, :separados, :por, :comas)"`
+
+* *Nota:* De momento no operaremos con los valores del array, solo con sus claves para preparar los *named placeholders* de PDO.
+* *Ayuda:* Utiliza las funciones nativas `sprintf`, `implode` y `array_keys`.
+
+### 2. Generador de consultas SQL (Paso por referencia)
+Repite el ejercicio anterior aplicando una lógica diferente basada en plantillas y paso por referencia:
+* La función recibirá la cadena base por referencia inicializada de la siguiente forma: 
+  `$sql = "INSERT INTO tabla (campos) VALUES (valores)";`
+* Dentro de la función, deberás buscar y sustituir los textos comodín:
+    * El texto `tabla` por el nombre real de la tabla.
+    * El texto `campos` por los nombres de los campos del array separados por comas.
+    * El texto `valores` por los nombres de los campos separados por comas con el carácter `:` delante.
+
+### 3. Calculadora flexible mediante Funciones Anónimas (*Callbacks*)
+Queremos crear una función genérica que calcule y muestre por pantalla el resultado de una operación matemática entre dos operandos.
+
+La salida impresa debe seguir estrictamente este formato:  
+`[Primer operando] [Símbolo] [Segundo operando] = [Resultado]`  
+*(Por ejemplo: `5 + 3 = 8`)*
+
+Para lograr la máxima flexibilidad, la función debe recibir cuatro parámetros:
+1. El primer operando numérico.
+2. El segundo operando numérico.
+3. El símbolo de la operación en formato string (ej: `"+"`, `"-"`, `"*"`).
+4. Una **función anónima** (*clousure / callback*) que se encargará de realizar internamente la operación aritmética correspondiente y devolver el resultado.
 :::

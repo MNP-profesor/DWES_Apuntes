@@ -2,7 +2,9 @@
 title: "UD8. Generación dinámica de páginas Web"
 ---
 
-## Qué aprenderás
+## Presentación de la unidad
+
+### Qué aprenderás
 
 Esta unidad cierra el ciclo técnico del módulo integrando las dos mitades del desarrollo web: el código que se ejecuta en el servidor y el que se ejecuta en el navegador. Hasta ahora, todas las aplicaciones construidas siguen el ciclo clásico de petición-respuesta: el navegador solicita una página, el servidor la genera completa y el navegador la sustituye por entero. En esta unidad se aprende a romper ese ciclo cuando conviene, generando páginas que, una vez cargadas, obtienen información remota del servidor y modifican su propio contenido y estructura sin recargarse.
 
@@ -12,7 +14,7 @@ El enfoque tecnológico es continuista con el resto del módulo: PHP nativo como
 El JavaScript empleado en esta unidad tiene carácter instrumental y se limita a lo imprescindible: peticiones `fetch`, tratamiento de JSON y manipulación básica del DOM. El estudio en profundidad del lenguaje JavaScript y sus frameworks corresponde al módulo DWEC, con el que esta unidad se coordina. Aquí el foco permanece en el servidor: qué genera, qué expone y cómo se combina con el cliente.
 :::
 
-## Resultados de Aprendizaje y Criterios de Evaluación
+### Resultados de Aprendizaje y Criterios de Evaluación
 
 > **RA8.** Genera páginas web dinámicas analizando y utilizando tecnologías y frameworks del servidor web que añadan código al lenguaje de marcas.
 
@@ -26,7 +28,7 @@ El JavaScript empleado en esta unidad tiene carácter instrumental y se limita a
 | CE8.f | Se han utilizado estas tecnologías y frameworks para generar páginas web que incluyan modificación dinámica de su contenido y su estructura. |
 | CE8.g | Se han aplicado estas tecnologías y frameworks en la programación de aplicaciones web. |
 
-## Objetivos
+### Objetivos
 
 Al finalizar la unidad serás capaz de:
 
@@ -38,7 +40,7 @@ Al finalizar la unidad serás capaz de:
 - Modificar dinámicamente el contenido y la estructura de una página (filtrado, ordenación, inserción y eliminación de elementos) a partir de datos servidos por el servidor.
 - Integrar todas las técnicas anteriores en una aplicación web híbrida completa, probada y documentada.
 
-## Mapa de contenidos
+### Mapa de contenidos
 
 La unidad se organiza en seis bloques que progresan desde el análisis conceptual hasta la integración final:
 
@@ -55,7 +57,7 @@ La unidad se organiza en seis bloques que progresan desde el análisis conceptua
 **Hilo conductor.** Todos los ejemplos y actividades giran en torno a una misma aplicación: una cartelera de cine que muestra películas y sesiones. Se empieza analizándola como página estática generada por PHP (B1), se le añade la obtención remota de la lista de películas (B3), un formulario de valoración verificado en dos capas (B4) y filtrado y ordenación sin recargar (B5), hasta desembocar en el proyecto integrador (B6), donde cada estudiante construye su propia versión completa conectada a la API de la UD7.
 :::
 
-## Recursos y materiales
+### Recursos y materiales
 
 - Equipo con XAMPP (Apache + PHP 8.2 o superior) operativo, el mismo entorno empleado desde la UD2.
 - Proyecto Laravel de la UD7 con la API REST y Sanctum funcionando en local (requisito imprescindible a partir del bloque 3).
@@ -64,7 +66,7 @@ La unidad se organiza en seis bloques que progresan desde el análisis conceptua
 - Postman o Thunder Client para inspeccionar las respuestas de los endpoints antes de consumirlos.
 - Documentación de referencia: [php.net](https://www.php.net/manual/es/) (`json_encode`/`json_decode`), [MDN Web Docs](https://developer.mozilla.org/es/) (`fetch`, DOM) y la documentación OpenAPI generada por ti en la UD7.
 
-## Evaluación
+### Evaluación
 
 Los ejercicios se evalúan como **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
 

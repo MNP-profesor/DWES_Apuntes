@@ -65,10 +65,24 @@ El atributo **`name`** (no `id`) de cada control es la clave con la que PHP reci
 <input type="checkbox" name="condiciones" value="1" id="ck1">
 <label for="ck1">Acepto las condiciones</label>
 
+<!-- Subida de archivos -->
+<input type="file" name="avatar">
+
 <!-- Envío -->
 <button type="submit">Enviar</button>
 <button type="reset">Limpiar</button>
 ```
+
+::: {.callout-important title="¡Obligatorio para subir archivos!"}
+Para que el navegador pueda empaquetar y enviar un archivo binario (como una imagen o un PDF), el elemento `<form>` **debe** incluir obligatoriamente el atributo `enctype="multipart/form-data"` y utilizar el método `POST`. Si se te olvida, PHP jamás recibirá el archivo.
+
+```html
+<form action="subir.php" method="post" enctype="multipart/form-data">
+    <input type="file" name="documento">
+    <button type="submit">Subir archivo</button>
+</form>
+```
+:::
 
 ---
 

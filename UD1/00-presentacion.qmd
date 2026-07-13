@@ -2,7 +2,9 @@
 title: "UD1. Arquitecturas y tecnologías de programación Web en entorno servidor"
 ---
 
-## Qué aprenderás
+## Presentación de la unidad
+
+### Qué aprenderás
 
 En esta unidad verás qué ocurre entre que el usuario escribe una URL y el navegador muestra la página: qué software interviene, dónde se ejecuta el código y con qué tecnologías se construyen las aplicaciones web del lado del servidor. No escribirás código todavía — eso empieza en UD2 — pero sin este mapa conceptual todo lo que viene después carece de contexto.
 
@@ -15,7 +17,7 @@ Al terminar esta unidad serás capaz de:
 - Identificar los delimitadores que separan el código de servidor del HTML en un documento mixto.
 - Poner en marcha un entorno de desarrollo PHP local (XAMPP o Docker).
 
-## Resultados de Aprendizaje y Criterios de Evaluación
+### Resultados de Aprendizaje y Criterios de Evaluación
 
 > **RA1.** Selecciona las arquitecturas y tecnologías de programación web en entorno servidor, analizando sus capacidades y características propias.
 
@@ -29,7 +31,7 @@ Al terminar esta unidad serás capaz de:
 | CE1.f | Se han verificado los mecanismos de integración de los lenguajes de marcas con los lenguajes de programación en entorno servidor. |
 | CE1.g | Se han reconocido y evaluado las herramientas de programación en entorno servidor. |
 
-## Objetivos de la unidad
+### Objetivos de la unidad
 
 Al finalizar esta unidad, el alumnado será capaz de:
 
@@ -42,7 +44,7 @@ Al finalizar esta unidad, el alumnado será capaz de:
 - Aplicar los mecanismos de integración entre código de servidor y lenguajes de marcas, reconociendo etiquetas y delimitadores propios de cada tecnología.
 - Seleccionar y configurar las herramientas básicas de un entorno de desarrollo Web en servidor (distribuciones empaquetadas, contenedores, IDE).
 
-## Contenidos
+### Contenidos
 
 | Bloque | Título |
 |---|---|
@@ -53,7 +55,7 @@ Al finalizar esta unidad, el alumnado será capaz de:
 | 5 | Integración con lenguajes de marcas |
 | 6 | Herramientas de desarrollo |
 
-## Evaluación
+### Evaluación
 
 Los ejercicios de esta unidad se califican **apto / no apto** y tienen un peso conjunto reducido. El grueso de la nota corresponde a la prueba objetiva de la unidad.
 

@@ -2,11 +2,13 @@
 title: "UD6. Acceso a BBDD con PDO: Seguridad e integridad"
 ---
 
-## Qué aprenderás
+## Presentación de la unidad
+
+### Qué aprenderás
 
 En esta unidad las aplicaciones dejan de trabajar con datos efímeros y aprenden a **persistirlos** en una base de datos relacional y a recuperarlos de forma segura. Todo el acceso a datos se hace con **PDO** (PHP Data Objects), la capa de acceso a bases de datos de PHP.
 
-## Resultados de Aprendizaje y Criterios de Evaluación
+### Resultados de Aprendizaje y Criterios de Evaluación
 
 > **RA6.** Desarrolla aplicaciones web de acceso a almacenes de datos, aplicando medidas para mantener la seguridad y la integridad de la información.
 
@@ -20,7 +22,7 @@ En esta unidad las aplicaciones dejan de trabajar con datos efímeros y aprenden
 | CE6.f | Crea aplicaciones que actualizan y eliminan información. |
 | CE6.g | Prueba y documenta las aplicaciones web. |
 
-## Objetivos
+### Objetivos
 
 - Comparar las tecnologías de acceso a datos y justificar el uso de PDO.
 - Conectar con MySQL/MariaDB mediante PDO, configurando el DSN y la gestión de errores por excepciones.
@@ -30,7 +32,7 @@ En esta unidad las aplicaciones dejan de trabajar con datos efímeros y aprenden
 - Crear operaciones completas (CRUD) protegiendo la integridad con transacciones.
 - Probar y documentar el código de acceso a datos.
 
-## Mapa de contenidos
+### Mapa de contenidos
 
 | Fase | De qué trata | CE |
 |------|--------------|----|
@@ -44,7 +46,7 @@ En esta unidad las aplicaciones dejan de trabajar con datos efímeros y aprenden
 Trabajaremos con **PDO nativo**, que es la API que de verdad hay que dominar. PDO es además la base sobre la que Laravel construye su ORM Eloquent (que viste en la UD5): al final de la unidad entenderás "qué ocurre por debajo" de ese ORM.
 :::
 
-## Base de datos de prácticas
+### Base de datos de prácticas
 
 Todos los ejemplos usan una base de datos `agenda` con dos tablas. Impórtala antes de empezar para que las salidas de los ejemplos coincidan con las tuyas.
 
@@ -72,7 +74,7 @@ INSERT INTO contactos (nombre, telefono, email) VALUES
 
 Los ejemplos de esta unidad asumen estos tres contactos; por eso puedes comparar sus salidas con las que muestran los apuntes.
 
-## Evaluación
+### Evaluación
 
 Los ejercicios se evalúan como **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
 

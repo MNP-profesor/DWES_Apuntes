@@ -1,5 +1,9 @@
 # Constructores y encapsulación
 
+::: {.callout-note title="Concepto clave"}
+Convención de orden dentro de una clase, para que cualquier compañero la lea de un vistazo: primero las propiedades, después el constructor, después getters/setters, y al final el resto de métodos.
+:::
+
 ## Constructores y `$this`
 
 `__construct()` se ejecuta automáticamente al crear el objeto con `new`. `$this` es la referencia al objeto actual dentro de un método.
@@ -114,3 +118,54 @@ echo $p->getPrecio(); // 19.99
 ::: {.callout-note title="Concepto clave"}
 Regla práctica: si un dato es sensible (contraseñas) o necesita validación (precios, edades), hazlo `private` y expón getters/setters. Si es un dato simple sin restricciones, `public` es suficiente.
 :::
+
+## Getters y setters mágicos
+
+Además de escribir un método por propiedad (`getNombre()`, `setNombre()`...), PHP ofrece dos métodos especiales, `__get()` y `__set()`, que se disparan automáticamente al leer o escribir una propiedad que no es accesible directamente. Con uno solo de cada cubres todas las propiedades de la clase.
+
+```php
+class Persona {
+    private $nombre = 'Alicia';
+    private $edad = 18;
+
+    public function __get($propiedad) {
+        if (property_exists($this, $propiedad)) {
+            return $this->$propiedad;
+        }
+        return "Propiedad '$propiedad' no encontrada.";
+    }
+}
+
+$persona = new Persona();
+echo $persona->nombre;    // "Alicia"  (dispara __get automáticamente)
+echo $persona->edad;      // 18
+echo $persona->direccion; // "Propiedad 'direccion' no encontrada."
+```
+
+`__set()` funciona igual, pero para asignaciones, y es el lugar natural para validar antes de guardar:
+
+```php
+class Producto {
+    private $precio;
+
+    public function __set($propiedad, $valor) {
+        if ($propiedad === 'precio' && $valor < 0) {
+            throw new InvalidArgumentException('El precio no puede ser negativo');
+        }
+        $this->$propiedad = $valor;
+    }
+
+    public function __get($propiedad) {
+        return $this->$propiedad ?? null;
+    }
+}
+
+$p = new Producto();
+$p->precio = 19.99;
+echo $p->precio; // 19.99
+```
+
+::: {.callout-tip title="Analogía Java"}
+Java no tiene equivalente directo a `__get`/`__set`: cada getter/setter es un método explícito. En PHP puedes elegir: métodos explícitos (`getPrecio()`), más claros y fáciles de rastrear con el IDE, o mágicos (`__get`/`__set`), más compactos cuando hay muchas propiedades similares. En clases pequeñas, prefiere los explícitos: son más fáciles de depurar porque el IDE puede saltar directamente a la definición.
+:::
+

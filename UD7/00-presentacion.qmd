@@ -2,13 +2,15 @@
 title: "UD7. Servicios Web: API REST con Laravel (Resources y Sanctum)"
 ---
 
-## Qué aprenderás
+## Presentación de la unidad
+
+### Qué aprenderás
 
 Hasta ahora tus aplicaciones Laravel producían páginas HTML para un navegador. En esta unidad el servidor deja de producir HTML para producir **datos**: construirás una **API REST** completa que cualquier cliente —una app móvil, una SPA en JavaScript u otro servidor— podrá consumir sin conocer nada de su interior.
 
 El hilo conductor es la **API de una tienda de videojuegos**. La construiremos, le daremos forma con Resources, la haremos robusta con validación, la protegeremos con tokens, la verificaremos con Postman, la consumiremos desde otra aplicación PHP y la documentaremos con OpenAPI. El proyecto integrador (@exr-UD7-9) replica ese ciclo completo sobre un dominio que elegirás tú.
 
-## Resultados de Aprendizaje y Criterios de Evaluación
+### Resultados de Aprendizaje y Criterios de Evaluación
 
 > **RA7.** Desarrolla servicios web reutilizables y accesibles mediante protocolos web, verificando su funcionamiento.
 
@@ -24,7 +26,7 @@ El hilo conductor es la **API de una tienda de videojuegos**. La construiremos, 
 | CE7.h | Documentar un servicio web |
 :::
 
-## Objetivos
+### Objetivos
 
 Al terminar la unidad sabrás:
 
@@ -37,7 +39,7 @@ Al terminar la unidad sabrás:
 - Consumir APIs propias y de terceros con el cliente HTTP de Laravel.
 - Documentar el contrato con OpenAPI 3 y Swagger UI.
 
-## Recursos
+### Recursos
 
 - PHP 8.2+, Composer y tu proyecto Laravel 12.x de las unidades anteriores (o uno nuevo).
 - MySQL/MariaDB con la base de datos de prácticas.
@@ -47,7 +49,7 @@ Al terminar la unidad sabrás:
 - [Documentación de Laravel](https://laravel.com/docs): *Routing*, *Eloquent: API Resources*, *Validation*, *Sanctum*, *HTTP Client*.
 - [Editor Swagger](https://editor.swagger.io) para la documentación OpenAPI.
 
-## Mapa de la unidad
+### Mapa de la unidad
 
 | Capítulo | Contenido | CE |
 |:---------|:----------|:---|
@@ -61,7 +63,7 @@ Al terminar la unidad sabrás:
 | Proyecto integrador | API completa sobre tu dominio | CE7.b·e·f·g |
 | Documentación con OpenAPI | El contrato publicado | CE7.h |
 
-## Evaluación
+### Evaluación
 
 La unidad tiene diez actividades, **E7.1 a E7.10** y se intercalan entre los contenidos de las secciones:
 
