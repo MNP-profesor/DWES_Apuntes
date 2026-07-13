@@ -25,3 +25,14 @@
 \AtBeginDocument{%
   \renewcommand{\pagenumbering}[1]{}%
 }
+
+% Encabezado y pie de página (KOMA scrlayer-scrpage)
+\usepackage[automark]{scrlayer-scrpage}
+\pagestyle{scrheadings}
+\clearpairofpagestyles
+%\ihead{\headmark}            % capítulo: solo páginas interiores
+\ihead*{DWES - 2º DAW}       
+%\ohead*{DWES - 2º DAW}       % texto fijo: todas las páginas
+\ohead*{Manel Navarro Pérez}  
+\ofoot*{\pagemark}            % pie exterior: número de página
+\addtokomafont{pageheadfoot}{\small\color{MidnightNavy}}

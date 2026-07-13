@@ -1,5 +1,5 @@
 ---
-title: "Aplicaciones Web híbridas: librerías y repositorios heterogéneos (Composer)"
+title: "UD9. Aplicaciones Web híbridas: librerías y repositorios heterogéneos (Composer)"
 ---
 
 ## Qué aprenderás
@@ -15,6 +15,21 @@ La aplicación Laravel de las unidades anteriores es la base de trabajo, y la AP
 - Incorporar funcionalidades completas mediante librerías de terceros: generación de PDF y códigos QR.
 - Construir un cuadro de mando con indicadores calculados sobre datos reales (analítica e inteligencia de negocios).
 - Probar, depurar y documentar aplicaciones que dependen de fuentes externas.
+
+## Resultados de Aprendizaje y Criterios de Evaluación
+
+> **RA9.** Desarrolla aplicaciones web híbridas seleccionando y utilizando tecnologías, frameworks servidor y repositorios heterogéneos de información.
+
+| CE | Descripción |
+|------|-----------------------------------------------------------|
+| CE9.a | Se han reconocido las ventajas que proporciona la reutilización de código y el aprovechamiento de información ya existente. |
+| CE9.b | Se han identificado tecnologías y frameworks aplicables en la creación de aplicaciones web híbridas. |
+| CE9.c | Se ha creado una aplicación web que recupere y procese repositorios de información ya existentes. |
+| CE9.d | Se han creado repositorios específicos a partir de información existente en almacenes de información. |
+| CE9.e | Se han utilizado librerías de código y frameworks para incorporar funcionalidades específicas a una aplicación web. |
+| CE9.f | Se han programado servicios y aplicaciones web utilizando como base información y código generados por terceros. |
+| CE9.g | Se han analizado y utilizado librerías de código relacionadas con Big Data e inteligencia de negocios, para incorporar análisis e inteligencia de datos proveniente de repositorios. |
+| CE9.h | Se han probado, depurado y documentado las aplicaciones generadas. |
 
 ## Mapa de contenidos
 

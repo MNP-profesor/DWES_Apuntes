@@ -64,7 +64,7 @@ La unidad se organiza en seis bloques que progresan desde el análisis conceptua
 - Postman o Thunder Client para inspeccionar las respuestas de los endpoints antes de consumirlos.
 - Documentación de referencia: [php.net](https://www.php.net/manual/es/) (`json_encode`/`json_decode`), [MDN Web Docs](https://developer.mozilla.org/es/) (`fetch`, DOM) y la documentación OpenAPI generada por ti en la UD7.
 
-## Evaluación de la unidad
+## Evaluación
 
 Los ejercicios se evalúan como **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
 

@@ -41,22 +41,22 @@ book:
         - UD1/05-integracion-marcas.qmd
         - UD1/06-herramientas.qmd        
 
-    - part: UD2/01-presentacion.qmd
+    - part: UD2/00-presentacion.qmd
       chapters:
-        - UD2/02-generacion-embebida.qmd
-        - UD2/03-sintaxis-variables.qmd
-        - UD2/04-tipos-conversion.qmd
-        - UD2/05-directivas-operadores.qmd
-        - UD2/06-ambito.qmd
+        - UD2/01-generacion-embebida.qmd
+        - UD2/02-sintaxis-variables.qmd
+        - UD2/03-tipos-conversion.qmd
+        - UD2/04-directivas-operadores.qmd
+        - UD2/05-ambito.qmd
 
-    - part: UD3/01-presentacion.qmd
+    - part: UD3/00-presentacion.qmd
       chapters:
-        - UD3/02-condicionales.qmd
-        - UD3/03-bucles.qmd
-        - UD3/04-arrays.qmd
-        - UD3/05-funciones.qmd
-        - UD3/06-formularios.qmd
-        - UD3/07-recogida-datos.qmd
+        - UD3/01-condicionales.qmd
+        - UD3/02-bucles.qmd
+        - UD3/03-arrays.qmd
+        - UD3/04-funciones.qmd
+        - UD3/05-formularios.qmd
+        - UD3/06-recogida-datos.qmd
 
     - part: UD4/00-presentacion.qmd
       chapters:
@@ -131,7 +131,7 @@ format:
       dark: [darkly, theme/midnight-dark.scss]
     toc: true
     toc-depth: 3
-    number-sections: false # true <-- antes
+    number-sections: false # true <-- antes # Numeración automática de páginas
     #number-depth: 2
     number-chapters: false # <-- MANEL: Esto quita el número autoincremental de todo el sitio
     code-copy: true

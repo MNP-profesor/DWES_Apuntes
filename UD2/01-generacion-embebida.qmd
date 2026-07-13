@@ -6,12 +6,12 @@ title: "Generación embebida, tecnologías y delimitadores"
 
 El servidor recorre el archivo de arriba a abajo. Cuando encuentra HTML lo envía tal cual; cuando encuentra un bloque PHP lo ejecuta y envía el resultado. El navegador nunca ve código PHP.
 
-```php
+```html
 <!-- archivo.php -->
 <!DOCTYPE html>
 <html>
 <body>
-  <p>Son las <?php echo date("H:i:s");" ?>.</p>
+  <p>Son las <?php echo date("H:i:s"); ?>.</p>
   <p>El servidor tiene PHP <?php echo PHP_VERSION; ?>.</p>
 </body>
 </html>
@@ -23,7 +23,7 @@ Lo que recibe el navegador:
 <!DOCTYPE html>
 <html>
 <body>
-  <p>Son las 18:35:42.</p>
+  <p>Son las 11:44:33.</p>
   <p>El servidor tiene PHP 8.2.12.</p>
 </body>
 </html>
