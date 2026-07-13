@@ -1,5 +1,5 @@
 ---
-title: "🗂️ UD4. POO en PHP + Desarrollo de funcionalidades Web: Autenticación, sesiones y cookies"
+title: "UD4. POO en PHP + Desarrollo de funcionalidades Web: Autenticación, sesiones y cookies"
 ---
 
 ## Qué aprenderás

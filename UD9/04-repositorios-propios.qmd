@@ -1,0 +1,185 @@
+---
+title: "Crear repositorios propios: ETL"
+---
+
+El segundo pilar es el inverso del anterior: en lugar de consultar la fuente ajena en cada petición, **construyes un repositorio propio** a partir de su información. Es el proceso **ETL**: *Extract* (extraer de la fuente), *Transform* (limpiar y normalizar) y *Load* (cargar en tu almacén).
+
+::: {.callout-note title="Concepto clave"}
+Tres razones para tener repositorio propio: **rendimiento** (consultar tu base de datos es órdenes de magnitud más rápido que una API remota), **disponibilidad** (la fuente puede caer o desaparecer) y **análisis** (sobre datos propios puedes indexar, agregar y cruzar a voluntad).
+:::
+
+## Las tres fases, por separado
+
+**Extract** — obtener los datos crudos (lo aprendido en el capítulo anterior):
+
+```php
+$r = $cliente->get('/search.json', ['query' => ['q' => 'php']]);
+$docs = json_decode($r->getBody(), true)['docs'] ?? [];
+echo count($docs) . ' registros extraídos';
+```
+
+```text
+100 registros extraídos
+```
+
+**Transform** — los datos externos siempre llegan sucios. Limpiezas típicas sobre un registro:
+
+```php
+$doc = ['title' => '  El PHP definitivo   ', 'first_publish_year' => '2019', 'author_name' => []];
+
+$titulo = mb_substr(trim($doc['title']), 0, 255);   // recortar espacios y longitud
+$anyo   = (int) ($doc['first_publish_year'] ?? 0) ?: null;  // tipar, null si falta
+$autor  = $doc['author_name'][0] ?? 'Desconocido';  // valor por defecto
+
+var_dump($titulo, $anyo, $autor);
+```
+
+```text
+string(17) "El PHP definitivo"
+int(2019)
+string(11) "Desconocido"
+```
+
+**Load** — cargar sin duplicar. La clave es guardar el identificador de origen y usar `updateOrCreate`:
+
+```php
+Libro::updateOrCreate(
+    ['clave_externa' => $doc['key']],          // si ya existe, actualiza
+    ['titulo' => $titulo, 'anyo' => $anyo, 'autor' => $autor]
+);
+```
+
+## El comando Artisan de importación
+
+La forma idiomática de empaquetar un ETL en Laravel es un comando de consola:
+
+```bash
+php artisan make:command ImportarLibros
+```
+
+```php
+<?php
+
+namespace App\Console\Commands;
+
+use App\Models\Libro;
+use GuzzleHttp\Client;
+use Illuminate\Console\Command;
+
+class ImportarLibros extends Command
+{
+    protected $signature   = 'importar:libros {tema}';
+    protected $description = 'Extrae libros de Open Library y los carga en la BD local';
+
+    public function handle(): int
+    {
+        $cliente = new Client(['base_uri' => 'https://openlibrary.org', 'timeout' => 10]);
+        $r    = $cliente->get('/search.json', ['query' => ['q' => $this->argument('tema')]]);
+        $docs = json_decode($r->getBody(), true)['docs'] ?? [];
+
+        $n = 0;
+        foreach ($docs as $doc) {
+            if (empty($doc['title'])) {          // TRANSFORM: descartar incompletos
+                continue;
+            }
+            Libro::updateOrCreate(
+                ['clave_externa' => $doc['key']],
+                [
+                    'titulo' => mb_substr($doc['title'], 0, 255),
+                    'anyo'   => $doc['first_publish_year'] ?? null,
+                    'autor'  => $doc['author_name'][0] ?? 'Desconocido',
+                ]
+            );
+            $n++;
+        }
+
+        $this->info("{$n} registros procesados.");
+        return self::SUCCESS;
+    }
+}
+```
+
+La prueba decisiva es ejecutarlo **dos veces**:
+
+```bash
+php artisan importar:libros php
+```
+
+```text
+97 registros procesados.
+```
+
+```bash
+php artisan importar:libros php
+php artisan tinker --execute="echo App\Models\Libro::count();"
+```
+
+```text
+97 registros procesados.
+97
+```
+
+La segunda ejecución procesa los mismos registros pero la tabla sigue teniendo 97 filas: la importación es **idempotente** gracias a `updateOrCreate` sobre la clave externa.
+
+::: {.callout-warning title="Errores frecuentes"}
+Usar `create()` en lugar de `updateOrCreate()` duplica todo el repositorio en cada reejecución. El segundo clásico: no guardar la clave del origen (`clave_externa`), con lo que no hay forma fiable de saber si un registro ya se importó.
+:::
+
+## Cuando la fuente es un fichero: league/csv
+
+Los portales de datos abiertos suelen publicar CSV. `league/csv` lee en *streaming* (procesa ficheros enormes sin cargarlos enteros en memoria):
+
+```bash
+composer require league/csv
+```
+
+```php
+use League\Csv\Reader;
+
+$csv = Reader::createFromPath(storage_path('app/municipios.csv'));
+$csv->setHeaderOffset(0);                       // la fila 0 son las cabeceras
+
+foreach ($csv->getRecords() as $fila) {
+    echo $fila['municipio'] . ' → ' . $fila['poblacion'] . PHP_EOL;
+}
+```
+
+Con un `municipios.csv` como este:
+
+```text
+municipio;provincia;poblacion
+Novelda;Alicante;26016
+Elda;Alicante;52551
+Aspe;Alicante;20941
+```
+
+la salida es:
+
+```text
+Novelda → 26016
+Elda → 52551
+Aspe → 20941
+```
+
+(Si tu CSV usa `;` como separador, añade `$csv->setDelimiter(';');` antes de leer.) La transformación y la carga son idénticas a las del caso API: la fase *Extract* es lo único que cambia.
+
+::: {#exr-UD9-4}
+#### E9.4 · Comando importar:municipios
+
+Implementa un comando `importar:municipios` que lea un CSV de datos abiertos con las columnas `municipio`, `provincia` y `poblacion`, descarte las filas sin población, convierta la población a entero y cargue los datos en una tabla propia. La reejecución no debe duplicar registros.
+
+Resultado esperado de dos ejecuciones seguidas:
+
+```text
+$ php artisan importar:municipios
+141 municipios cargados.
+$ php artisan importar:municipios
+141 municipios cargados.        # y la tabla sigue con 141 filas
+```
+:::
+
+::: {#exr-UD9-9}
+#### E9.9 · Proyecto — tu repositorio específico
+
+Diseña la migración y el modelo de un repositorio propio para tu proyecto y aliméntalo con un comando Artisan que extraiga datos reales de la fuente que trabajaste en E9.8 (API u open data en CSV). Aplica al menos **tres transformaciones** de limpieza documentadas con comentarios en el código, garantiza la idempotencia y haz que el comando informe por consola del número de registros procesados.
+:::

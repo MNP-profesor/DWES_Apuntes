@@ -1,5 +1,5 @@
 ---
-title: Tipos de datos y conversión"
+title: Tipos de datos y conversión
 ---
 
 ## Tipos simples

@@ -1,0 +1,58 @@
+---
+title: "Aplicaciones Web híbridas"
+---
+
+::: {.callout-note title="Concepto clave"}
+Una **aplicación Web híbrida** combina en una misma solución tres piezas de origen distinto: **código propio** (lo que escribe tu equipo), **código de terceros** (librerías y frameworks) e **información de repositorios heterogéneos** (APIs, portales de datos abiertos, ficheros CSV/JSON, bases de datos). "Heterogéneo" significa que las fuentes no comparten formato ni protocolo: integrarlas es tu trabajo.
+:::
+
+En realidad llevas todo el curso construyendo una aplicación híbrida sin llamarla así: tu proyecto combina Laravel (código de terceros), tus controladores y modelos (código propio) y tu base de datos (información). Esta unidad hace explícito ese enfoque y lo abre hacia fuera: consumir información ajena, importarla a repositorios propios e incorporar librerías especializadas.
+
+## Por qué reutilizar: un caso concreto
+
+Supón que el cliente pide "exportar el listado a PDF". Generar un PDF a mano implica implementar el formato binario del estándar: cabeceras, objetos, flujos comprimidos, fuentes… miles de líneas. Con una librería:
+
+```bash
+composer require barryvdh/laravel-dompdf
+```
+
+```php
+use Barryvdh\DomPDF\Facade\Pdf;
+
+Route::get('/informe', function () {
+    return Pdf::loadHTML('<h1>Informe</h1><p>Generado en 3 líneas.</p>')
+              ->download('informe.pdf');
+});
+```
+
+Resultado: un PDF descargable, funcional, en menos de cinco minutos. Ese contraste resume las ventajas de la reutilización:
+
+- **Coste y tiempo**: funcionalidades complejas en minutos, no en semanas.
+- **Calidad**: código probado por miles de proyectos y corregido continuamente por la comunidad.
+- **Mantenimiento**: los parches de seguridad llegan con `composer update`.
+- **Información existente**: los portales de datos abiertos y las APIs públicas ofrecen datos ya recopilados, listos para procesar.
+- **Interoperabilidad**: los formatos estándar (JSON, CSV, XML) hacen cooperar sistemas construidos con tecnologías distintas.
+
+## Reutilizar información: fuentes reales
+
+No solo se reutiliza código. Ejemplos de repositorios de información que puedes consumir hoy mismo:
+
+```text
+Open Library      https://openlibrary.org/search.json?q=laravel   (libros, JSON, sin clave)
+datos.gob.es      catálogo estatal de datos abiertos (CSV, JSON)
+dades.gva.es      datos abiertos de la Generalitat Valenciana
+Tu API de la UD7  http://api-ud7.test/api/...  (¡también es un repositorio!)
+```
+
+Prueba la primera en el navegador: es una petición GET normal que devuelve JSON, exactamente como las respuestas que tu propia API generaba en la UD7.
+
+## El ecosistema del desarrollo híbrido en PHP
+
+| Pieza | Herramienta | Para qué |
+|---|---|---|
+| Gestión de dependencias | Composer + Packagist | declarar, instalar y actualizar paquetes |
+| Cliente HTTP | Guzzle (o el wrapper `Http` de Laravel) | consumir APIs desde el servidor |
+| Fuentes de información | APIs REST, open data, CSV/JSON | datos de terceros |
+| Librerías funcionales | dompdf, endroid/qr-code, league/csv… | funcionalidades completas listas para usar |
+
+Cuando el valor de una aplicación nace precisamente de **cruzar varias fuentes**, se habla de *mashup*: por ejemplo, combinar la previsión meteorológica con la agenda cultural de una ciudad para recomendar planes.

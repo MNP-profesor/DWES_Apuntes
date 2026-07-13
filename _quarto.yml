@@ -114,9 +114,15 @@ book:
         - UD8/05-dom-dinamico.qmd
         - UD8/06-proyecto.qmd
 
-    # - part: "UD9 · Aplicaciones web híbridas: Composer y repositorios heterogéneos"
-    #   chapters:
-    #     - UD9/01-tema.qmd
+    - part: "UD9/00-presentacion.qmd"
+      chapters:
+        - UD9/01-aplicaciones-hibridas.qmd
+        - UD9/02-composer.qmd
+        - UD9/03-consumo-repositorios.qmd
+        - UD9/04-repositorios-propios.qmd
+        - UD9/05-librerias-terceros.qmd
+        - UD9/06-analitica-bigdata.qmd
+        - UD9/07-prueba-documentacion.qmd
 
 format:
   html:
@@ -133,8 +139,6 @@ format:
     code-line-numbers: true # Numeración de líneas en código incrustado
     smooth-scroll: true
     link-external-newwindow: true
-
-
 
   pdf:
     documentclass: scrreprt

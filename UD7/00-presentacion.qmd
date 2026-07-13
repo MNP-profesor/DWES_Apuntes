@@ -1,5 +1,5 @@
 ---
-title: "🗂️ UD7. Servicios Web: API REST con Laravel (Resources y Sanctum)"
+title: "UD7. Servicios Web: API REST con Laravel (Resources y Sanctum)"
 ---
 
 ## Qué aprenderás

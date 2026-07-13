@@ -1,5 +1,5 @@
 ---
-title: "🗂️ UD1. Arquitecturas y tecnologías de programación Web en entorno servidor"
+title: "UD1. Arquitecturas y tecnologías de programación Web en entorno servidor"
 ---
 
 ## Qué aprenderás

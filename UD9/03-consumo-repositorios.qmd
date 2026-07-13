@@ -1,0 +1,159 @@
+---
+title: "Consumir repositorios existentes"
+---
+
+El primer pilar de una aplicación híbrida es **recuperar y procesar información ya existente**. En la UD8 el navegador consumía APIs con `fetch`; aquí el consumo se hace **desde el servidor**, lo que permite ocultar claves, cachear, combinar fuentes antes de responder y almacenar lo recuperado. La herramienta estándar es **Guzzle**:
+
+```bash
+composer require guzzlehttp/guzzle
+```
+
+## La primera petición
+
+```php
+use GuzzleHttp\Client;
+
+$cliente = new Client(['base_uri' => 'https://openlibrary.org']);
+
+$respuesta = $cliente->get('/search.json', [
+    'query' => ['q' => 'laravel', 'limit' => 3],
+]);
+
+echo $respuesta->getStatusCode() . PHP_EOL;
+echo $respuesta->getHeaderLine('Content-Type') . PHP_EOL;
+```
+
+```text
+200
+application/json
+```
+
+Guzzle construye la URL final (`/search.json?q=laravel&limit=3`) y codifica los parámetros por ti.
+
+## Procesar la respuesta JSON
+
+```php
+$datos = json_decode($respuesta->getBody(), true);
+
+echo 'Total de resultados: ' . $datos['numFound'] . PHP_EOL;
+foreach ($datos['docs'] as $libro) {
+    echo '- ' . $libro['title'] . ' (' . ($libro['first_publish_year'] ?? '—') . ')' . PHP_EOL;
+}
+```
+
+Salida (recortada; los datos reales varían con el tiempo):
+
+```text
+Total de resultados: 519
+- Laravel: Up & Running (2016)
+- Laravel: Up and Running (2019)
+- Beginning Laravel (2017)
+```
+
+Con `true` como segundo argumento, `json_decode()` devuelve arrays asociativos: las mismas estructuras que recorréis desde la UD3. Fíjate en el operador `??` para campos que la fuente no siempre rellena: los datos ajenos **nunca** son tan regulares como los tuyos.
+
+## Timeout y control de errores: obligatorios
+
+Una fuente externa caída o lenta no puede colgar tu aplicación. Configura siempre un tiempo máximo y captura el fallo:
+
+```php
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\Log;
+
+$cliente = new Client([
+    'base_uri' => 'https://openlibrary.org',
+    'timeout'  => 5.0,
+]);
+
+try {
+    $r = $cliente->get('/search.json', ['query' => ['q' => 'laravel']]);
+    $datos = json_decode($r->getBody(), true);
+} catch (RequestException $e) {
+    Log::error('Fallo al consultar Open Library: ' . $e->getMessage());
+    abort(503, 'El repositorio externo no está disponible.');
+}
+```
+
+Si la fuente no responde en 5 segundos, en `storage/logs/laravel.log` aparece:
+
+```text
+[2026-09-14 10:32:07] local.ERROR: Fallo al consultar Open Library: cURL error 28:
+Operation timed out after 5001 milliseconds
+```
+
+…y el usuario recibe un error 503 digno en lugar de una página colgada.
+
+::: {.callout-note title="Concepto clave"}
+El trío `timeout` + `try/catch` + registro en el log es el contrato mínimo de calidad al consumir cualquier fuente externa. Sin él, la disponibilidad de tu aplicación pasa a depender de la de un servidor que no controlas.
+:::
+
+## En un controlador Laravel
+
+El patrón completo, con el parámetro de búsqueda llegando del formulario:
+
+```php
+public function buscar(Request $request)
+{
+    $q = $request->string('q', 'valencia');
+
+    $cliente = new Client(['base_uri' => 'https://openlibrary.org', 'timeout' => 5]);
+    try {
+        $r = $cliente->get('/search.json', ['query' => ['q' => (string) $q, 'limit' => 20]]);
+        $docs = json_decode($r->getBody(), true)['docs'] ?? [];
+        $error = null;
+    } catch (RequestException $e) {
+        Log::warning('Open Library caída: ' . $e->getMessage());
+        [$docs, $error] = [[], 'Fuente no disponible, inténtalo más tarde.'];
+    }
+
+    return view('busqueda', compact('docs', 'error'));
+}
+```
+
+Laravel trae además un wrapper propio sobre Guzzle, más compacto y válido en todos los ejercicios:
+
+```php
+use Illuminate\Support\Facades\Http;
+
+$docs = Http::timeout(5)
+    ->get('https://openlibrary.org/search.json', ['q' => 'laravel', 'limit' => 20])
+    ->json('docs', []);
+```
+
+::: {#exr-UD9-3}
+#### E9.3 · Buscador sobre una API pública
+
+Crea un controlador con una acción que consulte Open Library (u otra API pública sin clave que prefieras), filtre por un parámetro recibido de un formulario de búsqueda y muestre en una vista Blade el título, el año y el primer autor de cada resultado. Gestiona el caso de fuente caída con un mensaje amigable en la misma vista. Diseño libre de la vista.
+:::
+
+## Repositorios autenticados: tu API de la UD7
+
+Cuando el repositorio exige autenticación, el token viaja en la cabecera `Authorization`. Así consume otra aplicación la API que construisteis con Sanctum:
+
+```php
+$r = $cliente->get('http://api-ud7.test/api/productos', [
+    'headers' => [
+        'Authorization' => 'Bearer ' . config('services.ud7.token'),
+        'Accept'        => 'application/json',
+    ],
+]);
+```
+
+El token se guarda en configuración (`config/services.php` leyendo de `.env`), nunca en el código. Comprueba primero con tu cliente HTTP (Postman/Thunder Client) que el token es válido:
+
+```text
+GET http://api-ud7.test/api/productos
+Authorization: Bearer 3|kD8s...
+
+200 OK
+[{"id":1,"nombre":"Teclado mecánico","precio":89.9}, ...]
+```
+
+En la UD7 construisteis el servicio; en la UD8 lo consumió el navegador; aquí lo consume **otro servidor**. Sois a la vez proveedores y consumidores: el doble papel de cualquier empresa real.
+
+::: {#exr-UD9-8}
+#### E9.8 · Proyecto — buscador de fuentes heterogéneas
+
+Amplía tu proyecto con un buscador que consulte **dos fuentes a la vez**: la API pública de E9.3 y tu API de la UD7 (autenticada con Bearer). Unifica los resultados en una estructura común y preséntalos en una vista indicando la procedencia de cada dato. Requisitos: gestión de errores independiente por fuente (si una cae, la otra sigue mostrándose), registro en el log y PHPDoc en el servicio que encapsule las consultas.
+:::

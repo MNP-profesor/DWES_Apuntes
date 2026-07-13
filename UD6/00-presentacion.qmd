@@ -1,5 +1,5 @@
 ---
-title: "🗂️ UD6. Acceso a BBDD con PDO: Seguridad e integridad"
+title: "UD6. Acceso a BBDD con PDO: Seguridad e integridad"
 ---
 
 ## Qué aprenderás

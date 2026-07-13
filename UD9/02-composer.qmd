@@ -1,0 +1,157 @@
+---
+title: "Composer en profundidad"
+---
+
+Composer se ha usado como herramienta desde que instalasteis Laravel. Ahora pasa a ser objeto de estudio: qué declara `composer.json`, cómo se resuelven las versiones y cómo funciona la carga automática de clases.
+
+## composer.json: el contrato del proyecto
+
+```json
+{
+    "name": "iesnovelda/hibridas",
+    "require": {
+        "php": "^8.2",
+        "guzzlehttp/guzzle": "^7.9",
+        "league/csv": "^9.16"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": { "App\\": "src/" }
+    }
+}
+```
+
+- `require`: dependencias necesarias en producción.
+- `require-dev`: solo en desarrollo (pruebas, análisis). En el servidor se instalan sin ellas con `composer install --no-dev`.
+- `autoload`: dónde vive tu propio código (lo vemos más abajo).
+
+Los tres comandos del día a día:
+
+```bash
+composer require league/csv     # añade la dependencia y la instala
+composer install                # instala EXACTAMENTE lo que dice composer.lock
+composer update                 # recalcula versiones dentro de las restricciones y reescribe el lock
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+En un equipo recién clonado, el primer comando es **siempre** `composer install`, nunca `composer update`: `install` reproduce las versiones exactas que el resto del equipo ya ha probado; `update` podría introducir versiones nuevas sin probar.
+:::
+
+## Versionado semántico (semver)
+
+Las versiones siguen el esquema `MAYOR.MENOR.PARCHE` (por ejemplo, `7.9.2`). Las restricciones más habituales:
+
+| Restricción | Acepta | Rechaza | Uso |
+|---|---|---|---|
+| `^7.9` | `7.9.0` … `7.99.99` | `8.0.0` | la habitual: menores y parches compatibles |
+| `~7.9.1` | `7.9.1` … `7.9.99` | `7.10.0` | solo parches de la rama 7.9 |
+| `7.9.2` | solo `7.9.2` | todo lo demás | exacta; bloquea parches de seguridad, evítala |
+
+Comprueba lo que Composer resolvería sin instalar nada:
+
+```bash
+composer why-not guzzlehttp/guzzle 8.0
+```
+
+```text
+guzzlehttp/guzzle 8.0 conflicts with iesnovelda/hibridas (requires guzzlehttp/guzzle ^7.9)
+```
+
+::: {.callout-tip title="Analogía Java"}
+En Maven, `pom.xml` suele fijar versiones exactas y no existe fichero de bloqueo. Composer funciona al revés: `composer.json` declara **rangos** flexibles y `composer.lock` congela las versiones exactas resueltas. Por eso el `lock` **se versiona en Git**: es lo que garantiza que todo el equipo (y el servidor) instale lo mismo.
+:::
+
+::: {#exr-UD9-1}
+#### E9.1 · Restricciones de versión
+
+Dado un `composer.json` con las restricciones `^2.4`, `~3.1.5` y `5.0.1`, indica razonadamente cuáles de estas versiones aceptaría cada una: `2.3.9`, `2.4.1`, `2.9.7`, `3.0.0`, `3.1.6`, `3.1.12`, `3.2.0`, `5.0.1`, `5.0.2`. Explica después qué diferencia práctica hay entre ejecutar `composer install` y `composer update` en un equipo recién clonado.
+:::
+
+## Autoload PSR-4: adiós a los require
+
+El estándar PSR-4 establece la correspondencia entre **espacio de nombres y ruta de fichero**: si el prefijo `App\` vive en `src/`, la clase `App\Servicios\ClienteApi` debe estar en `src/Servicios/ClienteApi.php`. Composer genera el cargador en `vendor/autoload.php`; con incluir ese único fichero, cualquier clase se carga sola al usarla.
+
+Montémoslo desde cero, sin Laravel:
+
+```bash
+mkdir psr4-demo && cd psr4-demo
+composer init --no-interaction --name=demo/psr4
+```
+
+Añade a `composer.json` la sección de autoload:
+
+```json
+{
+    "autoload": {
+        "psr-4": { "Biblioteca\\": "src/" }
+    }
+}
+```
+
+Crea la clase en la ruta que dicta la convención:
+
+```php
+<?php
+// src/Util/Saludo.php
+namespace Biblioteca\Util;
+
+class Saludo
+{
+    public static function hola(string $nombre): string
+    {
+        return "Hola, {$nombre}";
+    }
+}
+```
+
+Regenera el cargador y consume la clase:
+
+```bash
+composer dump-autoload
+```
+
+```php
+<?php
+// index.php
+require __DIR__ . '/vendor/autoload.php';
+
+echo \Biblioteca\Util\Saludo::hola('DAW2');
+```
+
+```bash
+php index.php
+```
+
+```text
+Hola, DAW2
+```
+
+Ni un solo `require` de la clase: el cargador la localiza por su namespace.
+
+::: {.callout-warning title="Errores frecuentes"}
+Tras tocar la sección `autoload` de `composer.json`, la clase "no existe" hasta que ejecutes `composer dump-autoload`. Es el despiste clásico de esta unidad. El segundo: que el `namespace` del fichero no coincida exactamente (mayúsculas incluidas) con la ruta.
+:::
+
+::: {#exr-UD9-2}
+#### E9.2 · Autoload PSR-4 propio
+
+Reproduce el proyecto anterior con un cambio: la clase debe ser `Biblioteca\Texto\Invertidor`, con un método estático `invertir(string $s): string` que devuelva la cadena invertida (pista: `strrev()`). Consúmela desde `index.php` incluyendo únicamente `vendor/autoload.php`.
+
+Resultado esperado:
+
+```bash
+php index.php
+```
+
+```text
+2WAD ,aloH
+```
+:::
+
+::: {#exr-UD9-7}
+#### E9.7 · Proyecto — dependencias con criterio
+
+Necesitas para el proyecto de la unidad: un cliente HTTP, un lector de CSV y un generador de códigos QR. Busca en [Packagist](https://packagist.org) los paquetes adecuados y, para cada uno, justifica la elección con cuatro datos: descargas, fecha del último mantenimiento, licencia y compatibilidad con tu versión de PHP. Decláralos con restricciones de versión razonadas en un proyecto nuevo y añade una clase propia cargada por PSR-4. Cierra con un párrafo: ¿qué te habría costado desarrollar cada una de esas tres piezas desde cero?
+:::

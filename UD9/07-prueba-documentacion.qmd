@@ -1,0 +1,80 @@
+---
+title: "Probar, depurar y documentar"
+---
+
+Probar, depurar y documentar no tiene capítulo de teoría extensa: se ejerce dentro de cada ejercicio de proyecto. En el contexto híbrido, eso sí, adquiere matices propios que conviene fijar.
+
+## Probar contra fuentes externas
+
+Tu aplicación debe comportarse bien en **tres escenarios**: fuente disponible, fuente lenta y fuente caída. Los dos últimos se simulan fácilmente:
+
+```php
+// Fuente "lenta": baja el timeout a un valor imposible
+$cliente = new Client(['base_uri' => 'https://openlibrary.org', 'timeout' => 0.001]);
+```
+
+```php
+// Fuente "caída": apunta a un host inexistente
+$cliente = new Client(['base_uri' => 'https://no-existe.invalid', 'timeout' => 3]);
+```
+
+En ambos casos la comprobación es doble: el log registra el fallo y la vista muestra el mensaje amigable **sin** excepción visible. Así se ve el log tras la prueba de host caído:
+
+```text
+[2026-09-21 09:15:44] local.WARNING: Open Library caída: cURL error 6:
+Could not resolve host: no-existe.invalid
+```
+
+Para inspeccionar las respuestas reales de una API antes de programar contra ella, usa Postman o Thunder Client: verás el código de estado, las cabeceras y la estructura exacta del JSON.
+
+## Depurar estructuras remotas
+
+El JSON ajeno nunca tiene la forma que imaginas. Antes de recorrerlo, míralo:
+
+```php
+$datos = json_decode($r->getBody(), true);
+dd(array_keys($datos), $datos['docs'][0] ?? null);
+```
+
+```text
+array:4 [ 0 => "numFound", 1 => "start", 2 => "numFoundExact", 3 => "docs" ]
+array:12 [ "key" => "/works/OL20472W", "title" => "Laravel: Up & Running", ... ]
+```
+
+`dd()` corta la ejecución y muestra la estructura; `dump()` hace lo mismo sin cortar. Y `storage/logs/laravel.log` es la caja negra de todos los fallos de integración: acostúmbrate a tenerlo abierto en una pestaña del terminal con `tail -f`.
+
+## Documentar
+
+**PHPDoc** en cada servicio y comando que toque fuentes externas:
+
+```php
+/**
+ * Recupera la cartelera desde la fuente externa filtrada por género.
+ *
+ * @param  Request $request  Petición con el parámetro opcional "genero".
+ * @return \Illuminate\View\View  Vista con los resultados o mensaje de error.
+ */
+public function cartelera(Request $request)
+```
+
+**README** del proyecto con lo mínimo que otro desarrollador (o tú en tres meses) necesita:
+
+```text
+## Dependencias
+- guzzlehttp/guzzle  — consumo de las fuentes externas
+- league/csv         — importación de datos abiertos
+- barryvdh/laravel-dompdf — exportación a PDF
+
+## Importaciones
+php artisan importar:libros {tema}    # repositorio propio desde Open Library
+```
+
+Por último, la trazabilidad de terceros: `composer.lock` versionado en Git y un ojo en los avisos de seguridad de tus dependencias (`composer audit` los lista).
+
+```bash
+composer audit
+```
+
+```text
+No security vulnerability advisories found.
+```

@@ -1,0 +1,114 @@
+---
+title: "Librerías de terceros: PDF y QR"
+---
+
+El tercer pilar es incorporar **funcionalidades completas** mediante librerías especializadas. El patrón es siempre el mismo: localizar el paquete en Packagist, evaluar su calidad, instalarlo con `composer require`, leer su documentación y programar contra su API pública. Lo practicamos con dos casos representativos.
+
+## PDF con dompdf
+
+```bash
+composer require barryvdh/laravel-dompdf
+```
+
+La librería renderiza una **vista Blade normal** a PDF: todo lo que sabes de plantillas se reutiliza tal cual.
+
+```php
+// routes/web.php
+Route::get('/libros/{libro}/ficha', [LibroController::class, 'ficha'])->name('libros.ficha');
+```
+
+```php
+// app/Http/Controllers/LibroController.php
+use Barryvdh\DomPDF\Facade\Pdf;
+
+public function ficha(Libro $libro)
+{
+    $pdf = Pdf::loadView('libros.ficha', ['libro' => $libro]);
+    return $pdf->download('ficha-' . $libro->id . '.pdf');
+}
+```
+
+```php
+{{-- resources/views/libros/ficha.blade.php --}}
+<h1>{{ $libro->titulo }}</h1>
+<p><strong>Autor:</strong> {{ $libro->autor }}</p>
+<p><strong>Año:</strong> {{ $libro->anyo ?? 'desconocido' }}</p>
+```
+
+Visita `/libros/1/ficha` y el navegador descarga `ficha-1.pdf` con el contenido maquetado. Para un listado completo, la misma idea con una colección:
+
+```php
+public function programa()
+{
+    $libros = Libro::orderBy('titulo')->get();
+    return Pdf::loadView('libros.programa', compact('libros'))->download('programa.pdf');
+}
+```
+
+Piensa en lo que acaba de pasar: tu funcionalidad ("fichas imprimibles") se apoya en un motor de renderizado de miles de líneas **que no has escrito**. Eso es programar sobre código de terceros.
+
+## Códigos QR con endroid/qr-code
+
+```bash
+composer require endroid/qr-code
+```
+
+```php
+use Endroid\QrCode\Builder\Builder;
+
+public function qr(Libro $libro)
+{
+    $qr = Builder::create()
+        ->data(route('libros.show', $libro))   // el QR apunta a la ficha pública
+        ->size(240)
+        ->build();
+
+    return response($qr->getString())
+        ->header('Content-Type', $qr->getMimeType());
+}
+```
+
+La respuesta es una imagen PNG servida directamente: en una vista basta `<img src="{{ route('libros.qr', $libro) }}">` y cada libro muestra su código escaneable.
+
+¿Y un QR **dentro** del PDF? dompdf no puede pedir la imagen a otra ruta, así que se incrusta en base64:
+
+```php
+public function ficha(Libro $libro)
+{
+    $qr = Builder::create()->data(route('libros.show', $libro))->size(160)->build();
+    $qrBase64 = 'data:' . $qr->getMimeType() . ';base64,' . base64_encode($qr->getString());
+
+    return Pdf::loadView('libros.ficha', compact('libro', 'qrBase64'))
+              ->download('ficha-' . $libro->id . '.pdf');
+}
+```
+
+```php
+{{-- en la vista de la ficha --}}
+<img src="{{ $qrBase64 }}" width="120">
+```
+
+## Elegir librería con criterio
+
+Antes de instalar un paquete desconocido, evalúa en su página de Packagist/GitHub:
+
+| Criterio | Dónde mirar | Qué indica |
+|---|---|---|
+| Descargas y estrellas | cabecera de Packagist | adopción real |
+| Fecha del último commit | pestaña del repositorio | mantenimiento vivo |
+| Licencia | `composer.json` del paquete | MIT/Apache permiten uso comercial |
+| Compatibilidad | sección `require` | que soporte tu versión de PHP |
+
+Caso práctico: buscas "pdf" en Packagist y dudas entre `dompdf/dompdf` (última versión hace 2 meses, 190 M de descargas, LGPL) y un paquete con 4.000 descargas y último commit hace 3 años. El segundo puede funcionar hoy, pero instalar dependencias abandonadas es contraer **deuda técnica**: nadie corregirá sus fallos de seguridad.
+
+::: {#exr-UD9-5}
+#### E9.5 · QR embebido en el PDF
+
+Partiendo del controlador de la ficha PDF mostrado arriba, añade el código QR embebido y documenta el método resultante con PHPDoc completo (descripción, `@param`, `@return`). Comprueba escaneando el QR del PDF descargado que enlaza a la ficha correcta.
+:::
+
+::: {#exr-UD9-10}
+#### E9.10 · Proyecto — dos funcionalidades de terceros
+
+Incorpora a tu proyecto dos funcionalidades completas basadas en librerías: la **exportación a PDF** de un listado de tu repositorio de E9.9 y un **código QR por registro** que enlace a su ficha pública. Justifica por escrito la elección de cada paquete aplicando los cuatro criterios de la tabla, gestiona los errores y documenta los métodos añadidos.
+:::

@@ -1,0 +1,173 @@
+---
+title: "Analítica, Big Data e inteligencia de negocios"
+---
+
+**Big Data** designa los conjuntos de datos cuyo volumen, velocidad de generación y variedad (las "3 V") desbordan las herramientas convencionales; su procesamiento real se apoya en plataformas distribuidas como Hadoop y Spark. La **inteligencia de negocios** (*Business Intelligence*, BI) es la disciplina que convierte datos en decisiones: indicadores clave (KPI), agregaciones, series temporales y cuadros de mando.
+
+::: {.callout-important title="Normativa · RA-CE"}
+El criterio de esta unidad pide analizar y utilizar librerías de código **relacionadas con** Big Data e inteligencia de negocios. PHP no es una plataforma de Big Data y este capítulo no finge serlo: lo que se trabaja y evalúa es el análisis de datos con librerías PHP (colecciones de Laravel, `league/csv`) sobre repositorios reales, más el conocimiento conceptual del ecosistema. Las plataformas distribuidas se tratan solo a nivel conceptual.
+:::
+
+## Agregaciones con colecciones
+
+Sobre el repositorio propio del capítulo anterior, las colecciones de Laravel calculan indicadores con una expresividad notable. Cada ejemplo es independiente; pruébalos en `php artisan tinker`.
+
+**Contar y promediar:**
+
+```php
+$libros = Libro::all();
+
+echo $libros->count();
+echo round($libros->avg('anyo'), 1);
+```
+
+```text
+97
+1998.4
+```
+
+**Agrupar por una propiedad derivada** (libros por década):
+
+```php
+$porDecada = $libros
+    ->filter(fn ($l) => $l->anyo !== null)
+    ->groupBy(fn ($l) => intdiv($l->anyo, 10) * 10)
+    ->map->count()
+    ->sortKeys();
+
+print_r($porDecada->toArray());
+```
+
+```text
+Array
+(
+    [1970] => 4
+    [1980] => 9
+    [1990] => 21
+    [2000] => 38
+    [2010] => 22
+    [2020] => 3
+)
+```
+
+**Ranking** (los cinco autores con más libros):
+
+```php
+$topAutores = $libros->countBy('autor')->sortDesc()->take(5);
+print_r($topAutores->toArray());
+```
+
+```text
+Array
+(
+    [Desconocido] => 12
+    [Rasmus Lerdorf] => 5
+    [Kevin Tatroe] => 4
+    [Luke Welling] => 3
+    [Laura Thomson] => 3
+)
+```
+
+**Porcentaje sobre el total:**
+
+```php
+$antiguos = $libros->where('anyo', '<', 2000)->count();
+echo round($antiguos / max($libros->count(), 1) * 100, 1) . ' %';
+```
+
+```text
+35.1 %
+```
+
+Las salidas mostradas corresponden a un repositorio de ejemplo; con tus datos importados los números serán otros, pero la forma de las estructuras será exactamente esta.
+
+## Datasets grandes en fichero
+
+Cuando la fuente es un CSV voluminoso, `league/csv` lee en *streaming* y las colecciones hacen el resto:
+
+```php
+use League\Csv\Reader;
+
+$csv = Reader::createFromPath(storage_path('app/municipios.csv'));
+$csv->setHeaderOffset(0);
+
+$municipios = collect($csv->getRecords())
+    ->map(fn ($f) => ['provincia' => $f['provincia'], 'poblacion' => (int) $f['poblacion']]);
+
+$porProvincia = $municipios->groupBy('provincia')->map->sum('poblacion')->sortDesc();
+print_r($porProvincia->take(3)->toArray());
+```
+
+```text
+Array
+(
+    [Valencia] => 2589312
+    [Alicante] => 1881762
+    [Castellón] => 587064
+)
+```
+
+## Del cálculo al cuadro de mando
+
+Un *dashboard* presenta los KPI en tarjetas y gráficas. La regla de oro: **la analítica vive en el servidor**; el controlador calcula y serializa, y el navegador solo dibuja. Con Chart.js, la gráfica necesita dos arrays:
+
+```php
+public function dashboard()
+{
+    $libros = Libro::all();
+
+    $porDecada = $libros->filter(fn ($l) => $l->anyo !== null)
+        ->groupBy(fn ($l) => intdiv($l->anyo, 10) * 10)
+        ->map->count()->sortKeys();
+
+    return view('dashboard', [
+        'total'      => $libros->count(),
+        'anyoMedio'  => round($libros->avg('anyo'), 1),
+        'topAutores' => $libros->countBy('autor')->sortDesc()->take(5),
+        'grafica'    => [
+            'labels' => $porDecada->keys(),
+            'data'   => $porDecada->values(),
+        ],
+    ]);
+}
+```
+
+En la vista, los datos llegan ya listos:
+
+```php
+{{-- resources/views/dashboard.blade.php (fragmento) --}}
+<canvas id="decadas"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+new Chart(document.getElementById('decadas'), {
+    type: 'bar',
+    data: {
+        labels: @json($grafica['labels']),
+        datasets: [{ label: 'Libros por década', data: @json($grafica['data']) }]
+    }
+});
+</script>
+```
+
+El fragmento JavaScript se usa tal cual está: lo evaluable en este módulo es la preparación de los datos en el servidor, no el código de dibujo (que pertenece al módulo de entorno cliente).
+
+::: {#exr-UD9-6}
+#### E9.6 · Agregaciones sobre municipios
+
+Sobre la tabla de municipios de E9.4, calcula con colecciones: población total, media por provincia (redondeada), las cinco provincias más pobladas y el porcentaje de municipios con menos de 1.000 habitantes. Prepara además la estructura `['labels' => ..., 'data' => ...]` que consumiría una gráfica de barras por provincia.
+
+Resultado esperado (con el dataset de ejemplo del aula virtual):
+
+```text
+Población total: 5058138
+Media Alicante: 13298
+Top-1: Valencia (2589312)
+Municipios < 1000 hab.: 42.3 %
+```
+:::
+
+::: {#exr-UD9-11}
+#### E9.11 · Proyecto — cuadro de mando
+
+Construye la pantalla "Cuadro de mando" de tu proyecto: al menos **cuatro KPI** calculados con colecciones sobre tu repositorio de E9.9, una tabla resumen agrupada y una gráfica alimentada desde el controlador. Acompáñala de media página que **interprete** los indicadores en términos de negocio (¿qué decisión tomaría alguien mirando tu dashboard?) y documenta con PHPDoc el servicio de analítica.
+:::

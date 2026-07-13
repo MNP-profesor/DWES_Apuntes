@@ -1,0 +1,74 @@
+---
+title: "Aplicaciones Web híbridas: librerías y repositorios heterogéneos (Composer)"
+---
+
+## Qué aprenderás
+
+Esta unidad cierra el módulo con un cambio de enfoque: hasta ahora habéis construido cada pieza desde cero; aquí el objetivo es **reutilizar**. Una **aplicación Web híbrida** combina código propio, librerías de terceros e información procedente de repositorios heterogéneos (APIs, datos abiertos, ficheros CSV/JSON, bases de datos propias o ajenas).
+
+La aplicación Laravel de las unidades anteriores es la base de trabajo, y la API REST que construisteis en la UD7 se consume aquí como una fuente más: cerráis el círculo del módulo actuando a la vez como proveedores y consumidores.
+
+- Valorar las ventajas de reutilizar código e información existente frente a desarrollar desde cero.
+- Gestionar dependencias con Composer: `composer.json`, versionado semántico y autoload PSR-4.
+- Consumir repositorios de información existentes desde el servidor con Guzzle, incluidas APIs autenticadas.
+- Crear repositorios propios a partir de fuentes externas con un proceso ETL (extraer, transformar, cargar).
+- Incorporar funcionalidades completas mediante librerías de terceros: generación de PDF y códigos QR.
+- Construir un cuadro de mando con indicadores calculados sobre datos reales (analítica e inteligencia de negocios).
+- Probar, depurar y documentar aplicaciones que dependen de fuentes externas.
+
+## Mapa de contenidos
+
+| Capítulo | Contenido |
+|---|---|
+| Aplicaciones Web híbridas | Concepto, ventajas de la reutilización y ecosistema |
+| Composer en profundidad | Dependencias, semver, `composer.lock` y autoload PSR-4 |
+| Consumir repositorios existentes | Guzzle, APIs públicas y API autenticada de la UD7 |
+| Crear repositorios propios | Proceso ETL con comandos Artisan y `league/csv` |
+| Librerías de terceros | PDF con dompdf y códigos QR con endroid/qr-code |
+| Analítica, Big Data y BI | Agregaciones con colecciones y cuadro de mando |
+| Probar, depurar y documentar | Fuentes caídas, logs, PHPDoc y README |
+| Evaluación | Modelo de evaluación de la unidad |
+
+## El proyecto de la unidad
+
+Los ejercicios de proyecto (E9.7 a E9.11) encadenan sobre una misma aplicación: la fuente que consumes alimenta tu repositorio propio, que a su vez es la base del PDF, del QR y del cuadro de mando final. Cada capítulo deja el punto de partida listo para el siguiente.
+
+## Evaluación
+
+Los ejercicios se evalúan como **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
+
+### Ejercicios de aprendizaje
+
+Se resuelven en clase o en casa; no requieren entrega salvo indicación del docente):
+
+- @exr-UD9-1 — Restricciones de versión
+- @exr-UD9-2 — Autoload PSR-4 propio
+- @exr-UD9-3 — Buscador sobre una API pública
+- @exr-UD9-4 — Comando `importar:municipios`
+- @exr-UD9-5 — QR embebido en el PDF
+- @exr-UD9-6 — Agregaciones sobre municipios
+
+### Ejercicios de proyecto
+
+Encadenados sobre la misma aplicación; se entregan por el aula virtual al cerrar el capítulo correspondiente:
+
+- @exr-UD9-7 — Dependencias con criterio
+- @exr-UD9-8 — Buscador de fuentes heterogéneas
+- @exr-UD9-9 — Tu repositorio específico
+- @exr-UD9-10 — Dos funcionalidades de terceros
+- @exr-UD9-11 — Cuadro de mando
+
+### Criterios de apto en los ejercicios de proyecto
+
+Un ejercicio de proyecto es **apto** cuando:
+
+- El código funciona: se ejecuta sin errores y cumple lo pedido en el enunciado.
+- Las fuentes externas se consumen con timeout, control de errores y registro en el log.
+- Las importaciones son idempotentes (reejecutar no duplica).
+- Los métodos añadidos llevan PHPDoc y el proyecto mantiene su README al día.
+
+Las entregas que no ejecutan no pueden ser aptas; la copia entre entregas supone no apto para todas las partes implicadas.
+
+### La prueba objetiva
+
+Combina cuestiones teóricas y ejercicios prácticos de código sobre un supuesto **distinto** al trabajado en clase. Todo lo que aparece en los capítulos de esta unidad (Composer y semver, consumo de repositorios, ETL, librerías de terceros, analítica y documentación) es contenido de esta prueba.
