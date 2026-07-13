@@ -132,9 +132,8 @@ Podrías montar MVC a mano, pero un **framework** te lo da hecho y con las decis
 - Creer que MVC es cosa del framework: es una disciplina; el framework solo te ayuda a mantenerla.
 :::
 
-::: {#exr-UD5-1}
-
-### E5.1 · De espagueti a capas
+::: {.ejercicio}
+**EJ1 · De espagueti a capas**
 
 Se te entrega el fichero `tienda_espagueti.php`:
 

@@ -284,8 +284,8 @@ try {
 
 ## Actividades
 
-::: {#exr-UD3-1}
-**E3.1 — Clasificador de tarifas**
+::: {.ejercicio}
+**EJ1 · Clasificador de tarifas**
 
 Completa la función para que produzca el resultado indicado:
 
@@ -313,8 +313,8 @@ juvenil (con descuento)
 ```
 :::
 
-::: {#exr-UD3-2}
-**E3.2 — Selector de plan de hosting**
+::: {.ejercicio}
+**EJ2 · Selector de plan de hosting**
 
 Implementa `obtenerPlan()` usando `match`. Añade un comentario de una línea explicando por qué `match` es más adecuado que `switch` aquí:
 

@@ -175,8 +175,8 @@ HTTP/1.1 201 Created
 
 ## Actividades
 
-::: {#exr-UD7-6}
-#### E7.6 · Protección de la API con Sanctum
+::: {.ejercicio}
+**EJ6 · Protección de la API con Sanctum**
 
 1. Implementa `/api/login` con emisión de token y *abilities* diferenciadas (`juegos:leer` para usuarios normales, `juegos:escribir` para administradores; necesitarás un campo `es_admin` en la migración de usuarios) y `/api/logout` con revocación del token actual.
 2. Deja `index()` y `show()` públicos y protege `store()`, `update()` y `destroy()` con `auth:sanctum`, exigiendo la *ability* `juegos:escribir` en las tres.

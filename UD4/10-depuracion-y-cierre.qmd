@@ -42,8 +42,8 @@ $_SESSION['usuario_id'] = 1; // ahora sí persiste
 Cualquier salida antes de `session_start()`, `setcookie()` o `header()` — incluido un simple espacio en blanco antes de `<?php` — provoca el error "headers already sent". Es la primera sospecha cuando una sesión o cookie "no funciona".
 :::
 
-::: {#exr-UD4-11}
-## E4.11 — Depuración de una aplicación con errores en sesión/cookie
+::: {.ejercicio}
+**EJ13 · Depuración de una aplicación con errores en sesión/cookie**
 
 Se te entrega una aplicación en la que la sesión del usuario se pierde tras el login. Localiza el error usando `var_dump()`/Xdebug y documenta brevemente el proceso de depuración seguido (qué comprobaste, qué encontraste, cómo lo corregiste).
 :::

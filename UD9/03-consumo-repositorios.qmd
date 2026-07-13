@@ -121,8 +121,8 @@ $docs = Http::timeout(5)
     ->json('docs', []);
 ```
 
-::: {#exr-UD9-3}
-#### E9.3 · Buscador sobre una API pública
+::: {.ejercicio}
+**EJ4 · Buscador sobre una API pública**
 
 Crea un controlador con una acción que consulte Open Library (u otra API pública sin clave que prefieras), filtre por un parámetro recibido de un formulario de búsqueda y muestre en una vista Blade el título, el año y el primer autor de cada resultado. Gestiona el caso de fuente caída con un mensaje amigable en la misma vista. Diseño libre de la vista.
 :::
@@ -152,8 +152,8 @@ Authorization: Bearer 3|kD8s...
 
 En la UD7 construisteis el servicio; en la UD8 lo consumió el navegador; aquí lo consume **otro servidor**. Sois a la vez proveedores y consumidores: el doble papel de cualquier empresa real.
 
-::: {#exr-UD9-8}
-#### E9.8 · Proyecto — buscador de fuentes heterogéneas
+::: {.ejercicio}
+**EJ5 · Proyecto — buscador de fuentes heterogéneas**
 
 Amplía tu proyecto con un buscador que consulte **dos fuentes a la vez**: la API pública de E9.3 y tu API de la UD7 (autenticada con Bearer). Unifica los resultados en una estructura común y preséntalos en una vista indicando la procedencia de cada dato. Requisitos: gestión de errores independiente por fuente (si una cae, la otra sigue mostrándose), registro en el log y PHPDoc en el servicio que encapsule las consultas.
 :::

@@ -169,8 +169,8 @@ Comedia · 97 min · nota 5.9
 
 Obsérvese la división de trabajo que define toda la unidad: PHP genera la página con un contenedor vacío y expone los datos; JavaScript los obtiene y los presenta. Si mañana la fuente pasa de un array a PDO o a Eloquent, la página no cambia una sola línea.
 
-::: {#exr-UD8-3}
-**E8.3 · Endpoint de géneros y fallos provocados** *(individual, en equipo local)*
+::: {.ejercicio}
+**EJ5 · Endpoint de géneros y fallos provocados** *(individual, en equipo local)*
 
 Crea el endpoint `api/generos.php` que devuelva el array de géneros disponibles y una página `generos.html` cuyo JavaScript los obtenga con `fetch` y los muestre como lista (`ul`).
 
@@ -179,8 +179,8 @@ Provoca después **dos fallos a propósito** (renombra el endpoint; elimina la c
 
 ## Actividad evaluable E3
 
-::: {#exr-UD8-e3}
-**E3 · Endpoint propio + pintado en página** — CE8.d · 1,25 h en clase
+::: {.ejercicio}
+**EJ6 · E3 · Endpoint propio + pintado en página** — CE8.d · 1,25 h en clase
 
 Construye el par completo endpoint + página para las sesiones de cine:
 
@@ -238,8 +238,8 @@ Laravel trae el middleware CORS configurable en `config/cors.php`; en clase se a
 
 ## Actividad evaluable E4
 
-::: {#exr-UD8-e4}
-**E4 · Cliente web de la propia API (UD7)** — CE8.b, CE8.d · 1,5 h en clase
+::: {.ejercicio}
+**EJ7 · E4 · Cliente web de la propia API (UD7)** — CE8.b, CE8.d · 1,5 h en clase
 
 Con tu proyecto Laravel de la UD7 arrancado en local, construye una página PHP nativa (fuera de Laravel) que:
 

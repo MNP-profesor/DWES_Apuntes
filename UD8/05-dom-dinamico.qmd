@@ -105,8 +105,8 @@ document.querySelector('#cartelera').appendChild(ficha);
 La regla de higiene es la misma del bloque anterior: cualquier dato de origen externo que se inyecte con `innerHTML` debe haberse escapado en el servidor, o insertarse con `textContent`, para no reabrir la puerta al XSS estudiado en la UD4. Un título de película que contuviera `<script>` o un `<img onerror=...>` se ejecutaría al inyectarse con `innerHTML` sin escapar. En caso de duda: `textContent`, siempre.
 :::
 
-::: {#exr-UD8-5}
-**E8.5 · Ocultar, contar, restaurar** *(individual, en equipo local)*
+::: {.ejercicio}
+**EJ10 · Ocultar, contar, restaurar** *(individual, en equipo local)*
 
 Añade a la cartelera del primer listado de este bloque:
 
@@ -119,8 +119,8 @@ c. Un botón "Restaurar" que repinte el estado completo.
 
 ## Actividad evaluable E6
 
-::: {#exr-UD8-e6}
-**E6 · Cartelera interactiva: filtrado y ordenación sin recarga** — CE8.f · 1,25 h en clase
+::: {.ejercicio}
+**EJ11 · E6 · Cartelera interactiva: filtrado y ordenación sin recarga** — CE8.f · 1,25 h en clase
 
 Partiendo de tu página de la actividad E3 (o de la versión de referencia), incorpora:
 

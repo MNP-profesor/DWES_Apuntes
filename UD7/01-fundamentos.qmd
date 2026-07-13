@@ -160,16 +160,16 @@ Como mención: **GraphQL** (el cliente decide qué campos quiere) y **gRPC** (bi
 
 ## Actividades
 
-::: {#exr-UD7-1}
-#### E7.1 · Estudio comparativo de servicios web
+::: {.ejercicio}
+**EJ1 · Estudio comparativo de servicios web**
 
 1. Elige dos aplicaciones reales que uses a diario (por ejemplo, una app de transporte y una tienda *online*) e identifica, con las herramientas de red del navegador o razonándolo, qué funcionalidades consumen de una API.
 2. Redacta una tabla comparativa REST vs SOAP con al menos cinco criterios (formato, contrato, verbosidad, ámbito de uso actual, curva de aprendizaje).
 3. Argumenta en un máximo de 300 palabras qué ventajas obtendría el instituto si expusiera la gestión de reservas de aulas como servicio web en lugar de como aplicación web tradicional.
 :::
 
-::: {#exr-UD7-2}
-#### E7.2 · Disección de peticiones HTTP reales
+::: {.ejercicio}
+**EJ2 · Disección de peticiones HTTP reales**
 
 1. Abre la pestaña Red del navegador sobre una web pública que cargue datos dinámicamente y captura tres peticiones XHR/fetch distintas.
 2. Documenta cada una con esta plantilla:

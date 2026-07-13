@@ -198,9 +198,8 @@ El término buscado se conserva en el campo gracias a `value="{{ $q }}"`. Un for
 - Usar POST para la búsqueda: rompe el botón "atrás", impide compartir la URL del resultado y no aporta nada.
 :::
 
-::: {#exr-UD5-5}
-
-### E5.5 · Alta y búsqueda con validación completa
+::: {.ejercicio}
+**EJ5 · Alta y búsqueda con validación completa**
 
 1. Implementa el ciclo completo de alta de contacto: formulario (`GET /contactos/create`), procesado con validación (`POST /contactos`) y redirección con mensaje flash de éxito visible en el layout.
 2. Reglas mínimas: nombre obligatorio (máx. 50), teléfono móvil español válido por expresión regular, email opcional pero con formato correcto si se envía. Personaliza al menos **dos mensajes** de error en castellano.

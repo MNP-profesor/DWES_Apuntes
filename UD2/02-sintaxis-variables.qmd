@@ -152,8 +152,10 @@ if (isset($_POST['email']) && !empty($_POST['email'])) {
 // → El email está vacío o no se ha enviado.
 ```
 
-::: {#exr-UD2-3}
-### E2.3 — Depurador: caza de errores
+::: {.ejercicio}
+**EJ3 · Depurador: caza de errores**
+
+### E2.3 — 
 
 Corrige los cuatro fragmentos siguientes. Cada uno tiene entre 1 y 2 errores. Para cada fragmento, añade un comentario indicando la línea del error y la causa.
 
@@ -199,8 +201,8 @@ echo "Área: $area";
 ```
 :::
 
-::: {#exr-UD2-4}
-### E2.4 — Panel de configuración
+::: {.ejercicio}
+**EJ4 · Panel de configuración**
 
 Crea `config.php`. Declara al menos 6 variables (nombre de la tienda, moneda, descuento activo, número de productos, email de contacto, modo mantenimiento) y 2 constantes (`IVA_GENERAL` e `IVA_REDUCIDO`). Muéstralas en una tabla HTML con columnas «Variable», «Valor» y «Tipo» usando `gettype()`.
 

@@ -4,8 +4,8 @@ title: "Proyecto integrador y evaluación"
 
 ## Proyecto integrador
 
-::: {#exr-UD6-9}
-**E6.9 — CRUD completo seguro y documentado**
+::: {.ejercicio}
+**EJ9 · CRUD completo seguro y documentado**
 
 Desarrolla una aplicación completa de gestión de la agenda que integre todo lo anterior:
 

@@ -55,8 +55,8 @@ setcookie('sesion_pref', 'compacta', [
 Poner `secure: true` en un entorno de desarrollo local sin HTTPS hace que la cookie nunca se guarde, y el fallo es silencioso (no hay ningún error visible). Si una cookie "desaparece" en local, revisa primero este flag.
 :::
 
-::: {#exr-UD4-4}
-## E4.4 — Preferencias de usuario con cookie
+::: {.ejercicio}
+**EJ6 · Preferencias de usuario con cookie**
 
 Crea una página que guarde el idioma elegido por el usuario ('es'/'en') en una cookie de 30 días y lo recupere en visitas posteriores, con 'es' como valor por defecto si no existe la cookie.
 
@@ -73,8 +73,8 @@ echo "Idioma actual: $idiomaActual";
 Resultado esperado la primera vez (sin cookie previa): `Idioma actual: es`. Tras enviar el formulario eligiendo "en" y recargar: `Idioma actual: en`.
 :::
 
-::: {#exr-UD4-5}
-## E4.5 — Cookie con flags de seguridad
+::: {.ejercicio}
+**EJ7 · Cookie con flags de seguridad**
 
 Reescribe la cookie del ejercicio anterior aplicando `httponly`, `secure` y `samesite`, y añade un comentario junto a cada flag explicando qué mitiga.
 :::

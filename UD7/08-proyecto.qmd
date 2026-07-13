@@ -12,8 +12,8 @@ El proyecto integrador recorre el ciclo de vida completo de un servicio web sobr
 El proyecto es una **actividad transversal con desarrollo autónomo**: el enunciado se entrega hacia la mitad de la unidad, se trabaja fuera del aula con tutorización en las últimas sesiones, y la entrega se cierra antes de la sesión de repaso previa al examen. Requiere entre 6 y 10 horas de dedicación: planifícalo desde el primer día, no es una actividad de última semana.
 :::
 
-::: {#exr-UD7-9}
-#### E7.9 · Proyecto integrador: API REST completa
+::: {.ejercicio}
+**EJ9 · Proyecto integrador: API REST completa**
 
 Sobre el dominio elegido, entrega una API que cumpla los cinco requisitos:
 
@@ -23,7 +23,7 @@ Sobre el dominio elegido, entrega una API que cumpla los cinco requisitos:
 4. **Consumo.** Un pequeño cliente PHP (con `Http::`) que se autentique y realice al menos tres operaciones sobre la API.
 5. **Memoria justificativa** (máximo dos páginas): ventajas de haber expuesto la lógica de negocio como servicio para tu dominio concreto, decisiones de diseño del contrato y problemas encontrados.
 
-La documentación OpenAPI del proyecto se entrega como actividad @exr-UD7-10, en el capítulo siguiente.
+La documentación OpenAPI del proyecto se entrega como actividad en el capítulo siguiente.
 :::
 
 ## Consejos de planificación

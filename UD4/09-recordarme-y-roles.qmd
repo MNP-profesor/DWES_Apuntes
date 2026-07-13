@@ -75,14 +75,14 @@ foreach ($roles as $u) {
 // Administrador: ver_perfil, gestionar_usuarios
 ```
 
-::: {#exr-UD4-9}
-## E4.9 — «Recordarme» con cookie persistente
+::: {.ejercicio}
+**EJ11 · «Recordarme» con cookie persistente**
 
 Añade a tu `login.php` la casilla «recordarme»: si se marca, el usuario debe reconectar automáticamente en su siguiente visita sin volver a pedir contraseña, usando el patrón de token visto arriba.
 :::
 
-::: {#exr-UD4-10}
-## E4.10 — Control de acceso por roles
+::: {.ejercicio}
+**EJ12 · Control de acceso por roles**
 
 Crea la clase `Administrador` (extiende `Usuario`, amplía `permisos()`) y una página `panel_admin.php` accesible solo para administradores, devolviendo código HTTP 403 al resto.
 

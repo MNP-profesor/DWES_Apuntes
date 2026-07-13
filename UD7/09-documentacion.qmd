@@ -86,7 +86,7 @@ El flujo de trabajo:
 2. Cuando el editor no marque **ningún error**, el contrato es válido.
 3. Desde Swagger UI puedes incluso probar los *endpoints* con el botón *Try it out* apuntando a tu servidor local.
 
-En proyectos reales existen herramientas que generan la especificación desde el propio código Laravel (Scramble, L5-Swagger); en esta unidad redactamos el YAML a mano porque la especificación es lo que perdura entre herramientas. La colección Postman que exportaste en @exr-UD7-7 es documentación ejecutable complementaria, pero no sustituye al contrato OpenAPI.
+En proyectos reales existen herramientas que generan la especificación desde el propio código Laravel (Scramble, L5-Swagger); en esta unidad redactamos el YAML a mano porque la especificación es lo que perdura entre herramientas. La colección Postman que exportaste en la sección de verificación es documentación ejecutable complementaria, pero no sustituye al contrato OpenAPI.
 
 ::: {.callout-warning title="Errores frecuentes"}
 - Documentar solo las respuestas de éxito. Los `401`, `403`, `404` y `422` son parte del contrato: el consumidor programa sus ramas de error leyendo tu documentación.
@@ -96,10 +96,10 @@ En proyectos reales existen herramientas que generan la especificación desde el
 
 ## Actividades
 
-::: {#exr-UD7-10}
-#### E7.10 · Documentación OpenAPI de la API final
+::: {.ejercicio}
+**EJ10 · Documentación OpenAPI de la API final**
 
-Documenta la API de tu proyecto integrador (@exr-UD7-9):
+Documenta la API de tu proyecto integrador:
 
 1. Redacta el documento OpenAPI 3 completo: los cinco *endpoints* del CRUD, *login* y *logout*, con sus parámetros, cuerpos, esquemas en `components` y todos los códigos de estado del contrato (`200`, `201`, `204`, `401`, `403`, `404`, `422`).
 2. Declara el esquema de seguridad *bearer* y márcalo en los *endpoints* protegidos.

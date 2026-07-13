@@ -228,9 +228,8 @@ HTML resultante para el primer contacto:
 - Olvidar `{{ $slot }}` en el layout: las páginas saldrán vacías.
 :::
 
-::: {#exr-UD5-4}
-
-### E5.4 · Identidad visual de la agenda
+::: {.ejercicio}
+**EJ4 · Identidad visual de la agenda**
 
 1. Crea el componente `<x-layout>` con cabecera, menú de navegación (Inicio, Contactos, Acerca de) y pie, y migra a él todas las vistas que ya tienes.
 2. Crea un componente `<x-tarjeta>` que reciba `nombre` y `tlf` como props y úsalo en el listado de contactos.

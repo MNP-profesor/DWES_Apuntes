@@ -33,8 +33,8 @@ foreach ($st as $c) {
 `LIMIT` y `OFFSET` **no** admiten valores entrecomillados. Hay que enlazarlos con `bindValue(..., PDO::PARAM_INT)` y castear a entero con `(int)`. Pasarlos como cadena dentro de `execute([...])` produce un error de sintaxis SQL.
 :::
 
-::: {#exr-UD6-4}
-**E6.4 — Listado web con búsqueda segura**
+::: {.ejercicio}
+**EJ4 · Listado web con búsqueda segura**
 
 Construye una página que muestre los contactos en una tabla HTML, con:
 
@@ -70,8 +70,8 @@ $st->execute([':q' => '%' . $q . '%']);
 ```
 :::
 
-::: {#exr-UD6-5}
-**E6.5 — Ficha de detalle y paginación (con pruebas)**
+::: {.ejercicio}
+**EJ5 · Ficha de detalle y paginación (con pruebas)**
 
 A partir del listado anterior, crea una **ficha de detalle** que muestre un contacto recibido por su `id` (con sentencia preparada) y gestione el caso de que no exista. Completa la paginación del listado con enlaces a página anterior y siguiente.
 

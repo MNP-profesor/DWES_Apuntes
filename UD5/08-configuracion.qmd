@@ -114,9 +114,8 @@ php artisan config:cache
 
 Desde ese momento `.env` **deja de leerse** en cada petición: si cambias algo, vuelve a ejecutar `config:cache` (o `config:clear` en desarrollo). Y esta es la razón de fondo de la regla de @sec-ud5-instalacion: con la caché activa, `env()` fuera de `config/` devuelve `null`.
 
-::: {#exr-UD5-7}
-
-### E5.7 · La agenda configurable
+::: {.ejercicio}
+**EJ7 · La agenda configurable**
 
 1. Crea `config/agenda.php` con al menos **tres parámetros propios** (contactos por página, nombre del centro, activación de favoritos) alimentados desde `.env` y con valores por defecto.
 2. Haz que la aplicación consuma los tres (paginación del listado, pie del layout, menú condicional) usando exclusivamente `config()`.

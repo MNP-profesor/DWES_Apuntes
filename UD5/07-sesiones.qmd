@@ -143,9 +143,8 @@ Secuencia de uso y lo que se ve:
 - Guardar los favoritos en base de datos "porque es más fácil": son preferencias de la sesión del visitante; en BD contaminarías los datos de todos.
 :::
 
-::: {#exr-UD5-6}
-
-### E5.6 · Favoritos en sesión
+::: {.ejercicio}
+**EJ6 · Favoritos en sesión**
 
 1. Añade a tu agenda la funcionalidad de favoritos completa del ejemplo: marcar/desmarcar desde el listado, guardando la marca en sesión.
 2. Crea la ruta `GET /favoritos` con su vista, que muestre solo los contactos marcados, y el contador en el menú del layout visible en toda la aplicación.

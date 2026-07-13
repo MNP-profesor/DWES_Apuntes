@@ -165,14 +165,14 @@ if (method_exists($p, 'mostrarResumen')) {
 Es el equivalente a la API de *Reflection* de Java (`getClass()`, `instanceof`), pero con funciones sueltas en vez de un objeto `Class`. Útil para código genérico que debe adaptarse a distintas clases sin conocerlas de antemano (por ejemplo, un framework que valida formularios a partir de las propiedades de cualquier objeto que le pases).
 :::
 
-::: {#exr-UD4-12}
-## E4.12 — Figuras con clase abstracta e interfaz (autoevaluación, no se entrega)
+::: {.ejercicio}
+**EJ2 · Figuras con clase abstracta e interfaz (autoevaluación, no se entrega)**
 
 Diseña una clase abstracta `Figura` con un método abstracto `area()` y un método concreto `describir()`. Crea dos subclases (`Circulo`, `Rectangulo`) y comprueba `describir()` en ambas. Después, añade una interfaz `Dibujable` con un método `dibujar(): string` e impleméntala en una de las dos figuras.
 :::
 
-::: {#exr-UD4-13}
-## E4.13 — Contador estático y clonado (autoevaluación, no se entrega)
+::: {.ejercicio}
+**EJ3 · Contador estático y clonado (autoevaluación, no se entrega)**
 
 Crea una clase `Contador` con una propiedad estática que cuente cuántos objetos se han creado. Después, crea un objeto, clónalo y comprueba con `instanceof`/`get_class` que ambos son de la misma clase pero que modificar uno no afecta al otro (a diferencia de una simple asignación `$b = $a`).
 :::

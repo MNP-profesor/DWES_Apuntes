@@ -118,9 +118,8 @@ No es burocracia: tu editor usa estos bloques para autocompletar, y quien herede
 - Escribir las pruebas al final "si da tiempo". Escríbelas al terminar cada funcionalidad, cuando aún recuerdas los casos raros.
 :::
 
-::: {#exr-UD5-9}
-
-### E5.9 · Proyecto integrador: la agenda completa
+::: {.ejercicio}
+**EJ9 · Proyecto integrador: la agenda completa**
 
 Entrega final de la unidad. La agenda, completa y funcional:
 

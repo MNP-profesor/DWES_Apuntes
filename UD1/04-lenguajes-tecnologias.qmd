@@ -57,10 +57,8 @@ app.get('/', (req, res) => res.send('Hola, mundo'))
 **¿Por qué PHP en este módulo?** Es la tecnología de servidor más extendida en el mercado laboral español para pequeña y mediana empresa, su modelo de código embebido facilita la transición desde HTML, y dentro de las 200 horas del módulo permite llegar a contenidos avanzados (MVC con Laravel, APIs REST) sin sobrecarga de configuración.
 :::
 
-## Ejercicio E1.4 {#exr-UD1-4}
-
-::: {#exr-UD1-4}
-**Estudio comparativo razonado**
+::: {.ejercicio}
+**EJ4 · Estudio comparativo razonado**
 
 En grupos de tres, cada grupo recibe uno de estos escenarios:
 

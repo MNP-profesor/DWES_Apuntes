@@ -171,8 +171,8 @@ Un formulario de inscripción con varios tipos de control:
 
 ## Actividades
 
-::: {#exr-UD3-8}
-**E3.8 — Formulario de inscripción**
+::: {.ejercicio}
+**EJ10 · Formulario de inscripción**
 
 Crea el fichero `inscripcion.html` con un formulario que cumpla estos requisitos:
 

@@ -56,24 +56,24 @@ Los ejercicios se evalúan como **apto / no apto** y suponen un porcentaje reduc
 
 #### Ejercicios de aprendizaje
 
-Se resuelven en clase o en casa; no requieren entrega salvo indicación del docente):
+Se resuelven en clase o en casa; no requieren entrega salvo indicación del docente:
 
-- @exr-UD9-1 — Restricciones de versión
-- @exr-UD9-2 — Autoload PSR-4 propio
-- @exr-UD9-3 — Buscador sobre una API pública
-- @exr-UD9-4 — Comando `importar:municipios`
-- @exr-UD9-5 — QR embebido en el PDF
-- @exr-UD9-6 — Agregaciones sobre municipios
+- EJ1 — Restricciones de versión
+- EJ2 — Autoload PSR-4 propio
+- EJ3 — Buscador sobre una API pública
+- EJ4 — Comando `importar:municipios`
+- EJ5 — QR embebido en el PDF
+- EJ6 — Agregaciones sobre municipios
 
 #### Ejercicios de proyecto
 
 Encadenados sobre la misma aplicación; se entregan por el aula virtual al cerrar el capítulo correspondiente:
 
-- @exr-UD9-7 — Dependencias con criterio
-- @exr-UD9-8 — Buscador de fuentes heterogéneas
-- @exr-UD9-9 — Tu repositorio específico
-- @exr-UD9-10 — Dos funcionalidades de terceros
-- @exr-UD9-11 — Cuadro de mando
+- EJ7 — Dependencias con criterio
+- EJ8 — Buscador de fuentes heterogéneas
+- EJ9 — Tu repositorio específico
+- EJ10 — Dos funcionalidades de terceros
+- EJ11 — Cuadro de mando
 
 #### Criterios de apto en los ejercicios de proyecto
 

@@ -55,8 +55,8 @@ El RA exige "seguridad **e** integridad":
 - **Integridad** → transacciones (`commit` / `rollBack`) y restricciones del SGBD (claves foráneas, `NOT NULL`, `UNIQUE`), que evitan estados intermedios inconsistentes.
 :::
 
-::: {#exr-UD6-7}
-**E6.7 — Alta de registros con validación en servidor**
+::: {.ejercicio}
+**EJ7 · Alta de registros con validación en servidor**
 
 Implementa el alta de un contacto: formulario, **validación en servidor** (nombre obligatorio de máximo 50 caracteres; teléfono con formato válido; email opcional pero bien formado) e inserción con sentencia preparada. Recupera el id generado con `lastInsertId()`. Ante datos inválidos, vuelve a mostrar el formulario con los valores introducidos y los errores.
 
@@ -80,8 +80,8 @@ if (!$errores) {
 ```
 :::
 
-::: {#exr-UD6-8}
-**E6.8 — Edición y borrado con transacciones (con pruebas)**
+::: {.ejercicio}
+**EJ8 · Edición y borrado con transacciones (con pruebas)**
 
 Añade la **edición** (UPDATE) y el **borrado** (DELETE) de contactos. El borrado debe pedir confirmación y, si el contacto tiene registros asociados en la tabla `llamadas`, eliminarlos **en la misma transacción** para no dejar datos huérfanos.
 

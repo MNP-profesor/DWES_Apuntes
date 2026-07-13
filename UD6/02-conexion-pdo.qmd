@@ -39,8 +39,8 @@ Los tres atributos que nunca deben faltar:
 
 En una aplicación real la conexión no se repite en cada script: se **encapsula** en una clase y se reutiliza.
 
-::: {#exr-UD6-2}
-**E6.2 — Clase de conexión PDO reutilizable**
+::: {.ejercicio}
+**EJ2 · Clase de conexión PDO reutilizable**
 
 Crea una clase `Conexion` con un método estático `getInstancia()` que devuelva un **único** objeto PDO (patrón *singleton*). Los datos del DSN deben leerse de un fichero de configuración externo, no estar escritos en la clase. Gestiona el fallo con `try/catch`, registrando el error con `error_log` y mostrando un mensaje genérico. Demuestra su uso recuperando el número de contactos.
 

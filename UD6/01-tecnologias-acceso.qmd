@@ -17,8 +17,8 @@ Usamos **PDO** porque es independiente del motor, ofrece sentencias preparadas h
 | Estilo de API | Procedimental y OO | Solo OO |
 | Errores | Códigos / excepciones | Excepciones |
 
-::: {#exr-UD6-1}
-**E6.1 — Estudio comparativo de tecnologías de acceso a datos**
+::: {.ejercicio}
+**EJ1 · Estudio comparativo de tecnologías de acceso a datos**
 
 Elabora una tabla comparativa razonada entre `mysqli`, PDO y un ORM (Eloquent). Para cada tecnología indica: motores soportados, si permite portar el código a otro SGBD, cómo gestiona la seguridad frente a inyección y un caso de uso en el que sería la opción preferible. Cierra con un párrafo justificando por qué este módulo adopta PDO.
 

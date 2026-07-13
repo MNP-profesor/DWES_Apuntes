@@ -213,8 +213,8 @@ Sin `with()`, el campo `desarrolladora` **desaparece** de la respuesta: eso es `
 
 ## Actividades
 
-::: {#exr-UD7-4}
-#### E7.4 · Transformación con API Resources
+::: {.ejercicio}
+**EJ4 · Transformación con API Resources**
 
 1. Crea `JuegoResource` publicando `id`, `titulo`, `precio`, `precio_iva` (calculado), `genero` y `disponible`; los *timestamps* no deben aparecer.
 2. Modifica `index()` para devolver la colección paginada de 5 en 5 y `show()` para devolver el Resource individual. Analiza en Postman la estructura `data` / `links` / `meta`.

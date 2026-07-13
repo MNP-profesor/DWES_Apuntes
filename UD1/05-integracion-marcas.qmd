@@ -113,10 +113,8 @@ Resultado (en un servidor local):
 **El navegador nunca recibe código PHP.** Si ves el código `<?php ... ?>` en el código fuente de la página (menú Ver código fuente), el servidor no está procesando el fichero — probablemente el fichero tiene extensión `.html` en lugar de `.php`, o el intérprete PHP no está activo.
 :::
 
-## Ejercicio E1.5 {#exr-UD1-5}
-
-::: {#exr-UD1-5}
-**Trazado manual de la salida**
+::: {.ejercicio}
+**EJ5 · Trazado manual de la salida**
 
 Dado el siguiente documento, escribe el HTML exacto que el navegador recibiría cuando `$usuario = "Ana"` y `$rol = "admin"`.
 

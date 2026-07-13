@@ -134,8 +134,8 @@ Las ventajas de unir ambas tecnologías son concretas y medibles:
 Convertirlo todo en JavaScript. No todo debe ser híbrido: páginas de contenido esencialmente estático, formularios sencillos de un solo envío o procesos donde la recarga es natural (un pago, un cierre de sesión) funcionan mejor y son más robustos con el ciclo clásico. El criterio profesional no es "usar la técnica más moderna", sino asignar cada responsabilidad al lugar donde aporta más y cuesta menos.
 :::
 
-::: {#exr-UD8-1}
-**E8.1 · ¿Clásico o híbrido?** *(individual, en cuaderno)*
+::: {.ejercicio}
+**EJ1 · ¿Clásico o híbrido?** *(individual, en cuaderno)*
 
 Para cada una de las siguientes funcionalidades, indica razonadamente si la resolverías con el ciclo clásico (recarga) o con el modelo híbrido (`fetch`):
 
@@ -148,8 +148,8 @@ e. Cerrar la sesión del usuario.
 
 ## Actividad evaluable E1
 
-::: {#exr-UD8-e1}
-**E1 · Análisis comparativo servidor/cliente** — CE8.a, CE8.b · 1,0 h en clase
+::: {.ejercicio}
+**EJ2 · E1 · Análisis comparativo servidor/cliente** — CE8.a, CE8.b · 1,0 h en clase
 
 A partir de la cartelera clásica proporcionada por el docente (`cartelera.php`, versión UD3), elabora un informe breve de dos partes:
 

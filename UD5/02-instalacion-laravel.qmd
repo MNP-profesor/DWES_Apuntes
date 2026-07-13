@@ -111,9 +111,8 @@ La cadena completa es: `.env` → `config/app.php` (que hace `'name' => env('APP
 - Subir `.env` al repositorio. Contiene credenciales; por eso Laravel lo incluye en `.gitignore`.
 :::
 
-::: {#exr-UD5-2}
-
-### E5.2 · Puesta en marcha del proyecto
+::: {.ejercicio}
+**EJ2 · Puesta en marcha del proyecto**
 
 1. Instala un proyecto Laravel llamado `agenda` con Composer y arráncalo con `php artisan serve`. Captura la pantalla de bienvenida.
 2. Elabora tu propia tabla describiendo la función de **ocho** directorios/ficheros de la estructura, señalando en cuál trabajarás para modelos, vistas, controladores y rutas.

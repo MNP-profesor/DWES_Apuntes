@@ -133,8 +133,8 @@ Fíjate en `getJson()` y `postJson()`: envían automáticamente `Accept: applica
 
 ## Actividades
 
-::: {#exr-UD7-7}
-#### E7.7 · Colección Postman de verificación
+::: {.ejercicio}
+**EJ7 · Colección Postman de verificación**
 
 1. Construye una colección Postman con entorno (`{{base_url}}`, `{{token}}`) que cubra el ciclo completo: *login*, listado, detalle, creación, actualización, borrado y *logout*.
 2. Añade a cada petición al menos dos tests: uno de código de estado y otro de estructura del cuerpo. El *login* debe guardar el token en el entorno automáticamente.

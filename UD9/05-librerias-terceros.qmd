@@ -101,14 +101,14 @@ Antes de instalar un paquete desconocido, evalúa en su página de Packagist/Git
 
 Caso práctico: buscas "pdf" en Packagist y dudas entre `dompdf/dompdf` (última versión hace 2 meses, 190 M de descargas, LGPL) y un paquete con 4.000 descargas y último commit hace 3 años. El segundo puede funcionar hoy, pero instalar dependencias abandonadas es contraer **deuda técnica**: nadie corregirá sus fallos de seguridad.
 
-::: {#exr-UD9-5}
-#### E9.5 · QR embebido en el PDF
+::: {.ejercicio}
+**EJ8 · QR embebido en el PDF**
 
 Partiendo del controlador de la ficha PDF mostrado arriba, añade el código QR embebido y documenta el método resultante con PHPDoc completo (descripción, `@param`, `@return`). Comprueba escaneando el QR del PDF descargado que enlaza a la ficha correcta.
 :::
 
-::: {#exr-UD9-10}
-#### E9.10 · Proyecto — dos funcionalidades de terceros
+::: {.ejercicio}
+**EJ9 · Proyecto — dos funcionalidades de terceros**
 
 Incorpora a tu proyecto dos funcionalidades completas basadas en librerías: la **exportación a PDF** de un listado de tu repositorio de E9.9 y un **código QR por registro** que enlace a su ficha pública. Justifica por escrito la elección de cada paquete aplicando los cuatro criterios de la tabla, gestiona los errores y documenta los métodos añadidos.
 :::

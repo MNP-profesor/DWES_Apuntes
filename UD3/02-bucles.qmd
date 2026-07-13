@@ -283,8 +283,8 @@ for ($fila = 0; $fila < count($matriz); $fila++) {
 
 ## Actividades
 
-::: {#exr-UD3-3}
-**E3.3 — Generador de tablas de multiplicar**
+::: {.ejercicio}
+**EJ3 · Generador de tablas de multiplicar**
 
 Completa las tres funciones. Cada una genera la tabla del número recibido del 1 al 10:
 
@@ -332,8 +332,8 @@ Resultado esperado:
 *(El -1 y el 6 no generan tabla.)*
 :::
 
-::: {#exr-UD3-4}
-**E3.4 — Filtro de inventario**
+::: {.ejercicio}
+**EJ4 · Filtro de inventario**
 
 Dado este inventario, implementa los dos recorridos:
 

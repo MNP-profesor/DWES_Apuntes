@@ -61,8 +61,8 @@ session_start();
 session_regenerate_id(true); // evita fijación de sesión (session fixation)
 ```
 
-::: {#exr-UD4-2}
-## E4.2 — Carrito de la compra con sesión
+::: {.ejercicio}
+**EJ4 · Carrito de la compra con sesión**
 
 Implementa un carrito de la compra: un formulario que añade un producto a `$_SESSION['carrito']` y muestra el número total de artículos añadidos hasta el momento.
 
@@ -86,8 +86,8 @@ Artículos en el carrito: 2
 ```
 :::
 
-::: {#exr-UD4-3}
-## E4.3 — Expiración y regeneración de sesión
+::: {.ejercicio}
+**EJ5 · Expiración y regeneración de sesión**
 
 Modifica el carrito anterior para que la sesión expire tras 10 minutos de inactividad, regenerando el ID de sesión al iniciarse.
 

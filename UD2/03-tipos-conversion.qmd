@@ -111,8 +111,8 @@ $errores = "Un téxto de prueba con acento en la palabra téxto";
 $corregido = str_replace("téxto", "texto", $errores); // Aquí corregido vale "Un texto de prueba con acento en la palabra texto"
 ```
 
-::: {#exr-UD2-5}
-### Practica con cadenas
+::: {.ejercicio}
+**EJ5 · Practica con cadenas**
 
 Crea una página llamada `manejo_textos.php.` Realiza en ella las siguientes operaciones:
 
@@ -304,14 +304,16 @@ var_dump("1"  === true);   // bool(false)  ← string vs bool
 ```
 :::
 
-::: {#exr-UD2-6}
-### E2.6 — Catálogo con cálculo de inventario
+::: {.ejercicio}
+**EJ6**
+
+Catálogo con cálculo de inventario
 
 Crea `catalogo.php`. Declara un array `$catalogo` con 4 productos (nombre, precio, stock, categoría). Muéstralos en una tabla HTML sin usar bucles. Calcula y muestra el valor total del inventario (`precio × stock` sumado para todos los productos).
 :::
 
-::: {#exr-UD2-7}
-### E2.7 — Validación de datos de texto
+::: {.ejercicio}
+**EJ7 · Validación de datos de texto**
 
 Crea `validar.php` con este código de partida y completa los apartados:
 
@@ -332,8 +334,8 @@ $cantidad_texto = "3";
 :::
 
 
-::: {#exr-UD2-EXTRA-STRINGS}
-**Ejercicios extras de Funciones de Strings**
+::: {.ejercicio}
+**EJ8 · Ejercicios extras de Funciones de Strings**
 
 Crea un fichero PHP llamado `cadenas.php` y resuelve las siguientes tareas utilizando las funciones de manejo de cadenas nativas de PHP:
 
@@ -362,3 +364,4 @@ Utiliza la función parse_url para extraer y mostrar por pantalla las siguientes
 * El nombre de usuario (en el ejemplo username).
 * El path de la url (en el ejemplo /path)
 * El querystring de la url (en el ejemplo arg=value)
+:::

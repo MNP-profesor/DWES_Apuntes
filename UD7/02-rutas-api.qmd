@@ -169,8 +169,8 @@ Si pruebas la API desde el navegador (que no envía `Accept: application/json`),
 
 ## Actividades
 
-::: {#exr-UD7-3}
-#### E7.3 · API de lectura de la tienda de videojuegos
+::: {.ejercicio}
+**EJ3 · API de lectura de la tienda de videojuegos**
 
 1. Sobre tu proyecto Laravel, ejecuta `php artisan install:api` y crea el modelo `Juego` con la migración y una *seeder* de al menos ocho juegos (puedes partir del código de este capítulo).
 2. Genera el controlador API y registra la ruta `apiResource` limitada con `->only(['index', 'show'])`. Implementa `index()` y `show()` devolviendo los modelos directamente.

@@ -67,16 +67,16 @@ echo 'Bienvenido, ' . $_SESSION['usuario_id'];
 No confundas `$_SESSION['usuario_id']` con la contraseña: en `$_SESSION` solo se guarda el identificador del usuario ya autenticado. La contraseña, ni en texto plano ni hasheada, se guarda nunca en la sesión.
 :::
 
-::: {#exr-UD4-7}
-## E4.7 — Login básico con clase `Usuario`
+::: {.ejercicio}
+**EJ9 · Login básico con clase `Usuario`**
 
 Usando la clase `Usuario` anterior, escribe un `login.php` completo: recibe email/contraseña por POST, verifica contra un array de usuarios en memoria, y si son correctos, inicia sesión regenerando el ID y redirige a `panel.php`.
 
 Resultado esperado con credenciales correctas: redirección HTTP a `/panel.php` y `$_SESSION['usuario_id']` con el email del usuario. Con credenciales incorrectas: el formulario se vuelve a mostrar con el mensaje `Credenciales incorrectas`.
 :::
 
-::: {#exr-UD4-8}
-## E4.8 — Registro con validación y hash de contraseñas
+::: {.ejercicio}
+**EJ10 · Registro con validación y hash de contraseñas**
 
 Implementa `registro.php`: recoge email y contraseña, comprueba que el email no exista ya, crea el objeto `Usuario` con la contraseña ya hasheada mediante el setter, y lo persiste (un array o fichero es suficiente, sin base de datos).
 

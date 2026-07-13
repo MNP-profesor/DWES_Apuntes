@@ -46,10 +46,8 @@ Nginx devuelve la respuesta al navegador
 En el ecosistema PHP, PHP-FPM hace el papel de servidor de aplicaciones ligero: mantiene procesos activos en un pool y los reutiliza. No ofrece transacciones distribuidas ni servicios empresariales, pero cubre la mayoría de los casos de uso web.
 :::
 
-## Ejercicio E1.3 {#exr-UD1-3}
-
-::: {#exr-UD1-3}
-**Identificación de roles en una arquitectura real**
+::: {.ejercicio}
+**EJ3 · Identificación de roles en una arquitectura real**
 
 La siguiente arquitectura de producción tiene estos componentes:
 

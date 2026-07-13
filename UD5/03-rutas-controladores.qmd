@@ -186,9 +186,8 @@ En Spring las rutas se declaran con anotaciones sobre el método (`@GetMapping("
 - Definir la ruta `/contactos/create` **después** de `/contactos/{id}`: `{id}` captura la palabra `create` y el formulario nunca se muestra. Las rutas fijas van antes que las variables (o se restringe `{id}` con `whereNumber`).
 :::
 
-::: {#exr-UD5-3}
-
-### E5.3 · Enrutado de la agenda
+::: {.ejercicio}
+**EJ3 · Enrutado de la agenda**
 
 1. Crea `ContactoController` con los métodos `index` y `show`. `index` debe pasar a la vista un array de **al menos cinco contactos**; `show` debe recibir `{id}` restringido a numérico y mostrar el contacto correspondiente, o un mensaje claro si no existe.
 2. Define ambas rutas con nombre (`contactos.index`, `contactos.show`) y enlaza el listado con las fichas usando `route()`, nunca URLs escritas a mano.

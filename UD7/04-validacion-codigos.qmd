@@ -188,8 +188,8 @@ HTTP/1.1 404 Not Found
 
 ## Actividades
 
-::: {#exr-UD7-5}
-#### E7.5 · CRUD completo con validación
+::: {.ejercicio}
+**EJ5 · CRUD completo con validación**
 
 1. Completa `store()`, `update()` y `destroy()` en `JuegoController` usando `StoreJuegoRequest` y `UpdateJuegoRequest` (con `unique` ignorando el propio `id`).
 2. Devuelve exactamente los códigos del contrato: `201` al crear, `200` al actualizar, `204` al borrar, `404` con mensaje JSON si el recurso no existe y `422` ante datos inválidos.

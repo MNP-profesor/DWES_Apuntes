@@ -56,10 +56,8 @@ docker compose down
 
 : {.striped}
 
-## Ejercicio E1.6 {#exr-UD1-6}
-
-::: {#exr-UD1-6}
-**Puesta en marcha del entorno**
+::: {.ejercicio}
+**EJ6 · Puesta en marcha del entorno**
 
 1. Instala XAMPP o levanta el contenedor Docker del ejemplo anterior.
 2. Crea el fichero `info.php` con este contenido:

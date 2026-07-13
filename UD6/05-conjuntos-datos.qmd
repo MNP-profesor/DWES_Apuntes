@@ -65,8 +65,8 @@ Marta Gil (600555666)
 En Java construías el objeto y **después** rellenabas sus campos recorriendo el `ResultSet`. PDO con `FETCH_CLASS` hace lo contrario, y esto sorprende: **asigna las propiedades ANTES de ejecutar el constructor**. Si tu constructor pone valores por defecto, los pisará. Para que el constructor corra primero, combina las banderas: `fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Contacto::class)`.
 :::
 
-::: {#exr-UD6-6}
-**E6.6 — Fetch modes y FETCH_CLASS**
+::: {.ejercicio}
+**EJ6 · Fetch modes y FETCH_CLASS**
 
 1. Recupera el listado de contactos con `FETCH_ASSOC`, `FETCH_OBJ` y `FETCH_CLASS` y comenta las diferencias de acceso a los datos.
 2. Reutiliza (o crea) una clase `Contacto` con al menos un método de comportamiento y complétala con `FETCH_CLASS`, comprobando que puedes invocar ese método sobre los objetos recuperados.

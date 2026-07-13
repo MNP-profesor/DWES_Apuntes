@@ -163,8 +163,8 @@ Aspe → 20941
 
 (Si tu CSV usa `;` como separador, añade `$csv->setDelimiter(';');` antes de leer.) La transformación y la carga son idénticas a las del caso API: la fase *Extract* es lo único que cambia.
 
-::: {#exr-UD9-4}
-#### E9.4 · Comando importar:municipios
+::: {.ejercicio}
+**EJ6 · Comando importar:municipios**
 
 Implementa un comando `importar:municipios` que lea un CSV de datos abiertos con las columnas `municipio`, `provincia` y `poblacion`, descarte las filas sin población, convierta la población a entero y cargue los datos en una tabla propia. La reejecución no debe duplicar registros.
 
@@ -178,8 +178,8 @@ $ php artisan importar:municipios
 ```
 :::
 
-::: {#exr-UD9-9}
-#### E9.9 · Proyecto — tu repositorio específico
+::: {.ejercicio}
+**EJ7 · Proyecto — tu repositorio específico**
 
 Diseña la migración y el modelo de un repositorio propio para tu proyecto y aliméntalo con un comando Artisan que extraiga datos reales de la fuente que trabajaste en E9.8 (API u open data en CSV). Aplica al menos **tres transformaciones** de limpieza documentadas con comentarios en el código, garantiza la idempotencia y haz que el comando informe por consola del número de registros procesados.
 :::

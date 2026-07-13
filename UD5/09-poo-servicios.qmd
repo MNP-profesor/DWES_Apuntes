@@ -129,9 +129,8 @@ Ya has usado todos estos; ahora sabes cómo se llaman:
 - Un servicio-cajón (`UtilsService`) donde cae todo: la responsabilidad única también aplica a los servicios.
 :::
 
-::: {#exr-UD5-8}
-
-### E5.8 · Refactorización a servicios
+::: {.ejercicio}
+**EJ8 · Refactorización a servicios**
 
 1. Extrae de tus controladores toda la lógica de negocio no trivial (búsqueda con filtros, gestión de favoritos, detección de duplicados) a una clase `AgendaService` inyectada por el contenedor.
 2. Justifica por escrito qué principio mejora cada extracción y qué patrón interviene en cada pieza (MVC, inyección de dependencias, Active Record).

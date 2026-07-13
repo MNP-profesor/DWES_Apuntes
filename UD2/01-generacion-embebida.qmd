@@ -134,16 +134,18 @@ El servidor solo procesa PHP en archivos `.php`. Un archivo `.html` con bloques 
 **El delimitador corto `<?`** (sin `php`) solo funciona si está habilitado en `php.ini`. Usa siempre `<?php` o `<?=`.
 :::
 
-::: {#exr-UD2-1}
-### E2.1 — Ficha de producto dinámica
+::: {.ejercicio}
+**EJ1**
+
+Ficha de producto dinámica
 
 Crea el archivo `ficha.php`. Declara tres variables con los datos de un producto cualquiera y muéstralas en una tabla HTML usando `<?= ?>`.
 
 Comprueba con «Ver código fuente» en el navegador que el resultado no contiene ninguna etiqueta `<?php` ni el símbolo `$`.
 :::
 
-::: {#exr-UD2-2}
-### E2.2 — Plantilla con cuatro zonas
+::: {.ejercicio}
+**EJ2 · Plantilla con cuatro zonas**
 
 Crea `tienda.php` con cuatro secciones: cabecera, listado de productos, barra lateral y pie. Cada sección debe contener al menos un bloque `<?php ?>` y un bloque `<?= ?>` generando contenido distinto.
 

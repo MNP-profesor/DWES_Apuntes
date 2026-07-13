@@ -43,10 +43,8 @@ Un servidor web (Apache, Nginx) por sí solo solo sabe devolver ficheros estáti
 
 : Mecanismos de ejecución de código en el servidor {.striped}
 
-## Ejercicio E1.1 {#exr-UD1-1}
-
-::: {#exr-UD1-1}
-**Clasificación por lugar de ejecución**
+::: {.ejercicio}
+**EJ1 · Clasificación por lugar de ejecución**
 
 Indica si cada elemento de la lista se ejecuta en el **cliente**, en el **servidor** o en **ambos**. Razona la respuesta en una frase.
 

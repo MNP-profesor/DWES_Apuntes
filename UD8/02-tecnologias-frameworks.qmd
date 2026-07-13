@@ -162,8 +162,8 @@ El mismo fragmento de cartelera, escrito en las dos tecnologías:
 
 Ambos producen exactamente el mismo HTML. En esta unidad se trabaja con **PHP nativo**, que es la pila evaluable del módulo en generación de páginas; Blade se mantiene como referencia comparativa para reconocer que el concepto de framework de plantillas es transversal a todos los ecosistemas.
 
-::: {#exr-UD8-2}
-**E8.2 · Clasificación por capas** *(parejas, oral + cuaderno)*
+::: {.ejercicio}
+**EJ3 · Clasificación por capas** *(parejas, oral + cuaderno)*
 
 Clasifica las siguientes tecnologías en las tres capas del mapa tecnológico (generación en servidor, transporte, interacción en cliente): `Blade`, `fetch`, `JSON`, `Twig`, `DOM`, `HTTP`, `XMLHttpRequest`, `JSP`, `XML`, `PHP nativo`.
 
@@ -172,8 +172,8 @@ Añade una tecnología más por capa que no haya aparecido en la unidad, buscand
 
 ## Actividad evaluable E2
 
-::: {#exr-UD8-e2}
-**E2 · Ficha de tecnologías y frameworks** — CE8.c · 1,0 h en clase
+::: {.ejercicio}
+**EJ4 · E2 · Ficha de tecnologías y frameworks** — CE8.c · 1,0 h en clase
 
 Elabora una ficha técnica (máximo dos caras) del ecosistema de generación dinámica interactiva. Debe contener:
 

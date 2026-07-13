@@ -54,8 +54,8 @@ echo duplicar("5");   // TypeError: sin strict_types PHP convertiría "5" a 5 au
                       // con strict_types lanza excepción
 ```
 
-::: {#exr-UD2-8}
-### E2.8 — Desarrollo vs. producción
+::: {.ejercicio}
+**EJ9 · Desarrollo vs. producción**
 
 Crea `errores.php` con este código de partida:
 
@@ -222,8 +222,8 @@ La segunda línea se parsea como `($b = false) or true`: primero asigna `false` 
 **Regla:** usa siempre `&&` y `||` en condiciones. `and`/`or` solo en construcciones de control de flujo donde la baja precedencia es intencionada.
 :::
 
-::: {#exr-UD2-9}
-### E2.9 — Motor de descuentos
+::: {.ejercicio}
+**EJ10 · Motor de descuentos**
 
 Crea `descuentos.php` con este código de partida y completa los cálculos:
 

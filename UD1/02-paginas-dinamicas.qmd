@@ -51,10 +51,8 @@ print("</body></html>")
 **Ventajas de la generación dinámica.** Puedes mostrar datos actualizados sin tocar el código, personalizar el contenido según el usuario y responder a formularios o parámetros de la URL de forma automática.
 :::
 
-## Ejercicio E1.2 {#exr-UD1-2}
-
-::: {#exr-UD1-2}
-**¿Estático, dinámico embebido o script independiente?**
+::: {.ejercicio}
+**EJ2 · ¿Estático, dinámico embebido o script independiente?**
 
 Clasifica cada fragmento e identifica la pista textual que te ha llevado a esa conclusión.
 

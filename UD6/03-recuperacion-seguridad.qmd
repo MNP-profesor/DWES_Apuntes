@@ -66,8 +66,8 @@ Si vienes de JDBC reconocerás el `PreparedStatement`, pero hay una diferencia q
 - Mostrar `$e->getMessage()` al usuario: filtra información del servidor. Regístralo con `error_log`.
 :::
 
-::: {#exr-UD6-3}
-**E6.3 — Sentencias preparadas y demostración de inyección SQL**
+::: {.ejercicio}
+**EJ3 · Sentencias preparadas y demostración de inyección SQL**
 
 Parte de este script vulnerable, que busca contactos por nombre concatenando el término:
 

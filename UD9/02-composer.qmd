@@ -63,8 +63,8 @@ guzzlehttp/guzzle 8.0 conflicts with iesnovelda/hibridas (requires guzzlehttp/gu
 En Maven, `pom.xml` suele fijar versiones exactas y no existe fichero de bloqueo. Composer funciona al revés: `composer.json` declara **rangos** flexibles y `composer.lock` congela las versiones exactas resueltas. Por eso el `lock` **se versiona en Git**: es lo que garantiza que todo el equipo (y el servidor) instale lo mismo.
 :::
 
-::: {#exr-UD9-1}
-#### E9.1 · Restricciones de versión
+::: {.ejercicio}
+**EJ1 · Restricciones de versión**
 
 Dado un `composer.json` con las restricciones `^2.4`, `~3.1.5` y `5.0.1`, indica razonadamente cuáles de estas versiones aceptaría cada una: `2.3.9`, `2.4.1`, `2.9.7`, `3.0.0`, `3.1.6`, `3.1.12`, `3.2.0`, `5.0.1`, `5.0.2`. Explica después qué diferencia práctica hay entre ejecutar `composer install` y `composer update` en un equipo recién clonado.
 :::
@@ -134,8 +134,8 @@ Ni un solo `require` de la clase: el cargador la localiza por su namespace.
 Tras tocar la sección `autoload` de `composer.json`, la clase "no existe" hasta que ejecutes `composer dump-autoload`. Es el despiste clásico de esta unidad. El segundo: que el `namespace` del fichero no coincida exactamente (mayúsculas incluidas) con la ruta.
 :::
 
-::: {#exr-UD9-2}
-#### E9.2 · Autoload PSR-4 propio
+::: {.ejercicio}
+**EJ2 · Autoload PSR-4 propio**
 
 Reproduce el proyecto anterior con un cambio: la clase debe ser `Biblioteca\Texto\Invertidor`, con un método estático `invertir(string $s): string` que devuelva la cadena invertida (pista: `strrev()`). Consúmela desde `index.php` incluyendo únicamente `vendor/autoload.php`.
 
@@ -150,8 +150,8 @@ php index.php
 ```
 :::
 
-::: {#exr-UD9-7}
-#### E9.7 · Proyecto — dependencias con criterio
+::: {.ejercicio}
+**EJ3 · Proyecto — dependencias con criterio**
 
 Necesitas para el proyecto de la unidad: un cliente HTTP, un lector de CSV y un generador de códigos QR. Busca en [Packagist](https://packagist.org) los paquetes adecuados y, para cada uno, justifica la elección con cuatro datos: descargas, fecha del último mantenimiento, licencia y compatibilidad con tu versión de PHP. Decláralos con restricciones de versión razonadas en un proyecto nuevo y añade una clase propia cargada por PSR-4. Cierra con un párrafo: ¿qué te habría costado desarrollar cada una de esas tres piezas desde cero?
 :::

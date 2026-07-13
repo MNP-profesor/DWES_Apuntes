@@ -129,8 +129,8 @@ El buen consumidor hace tres cosas **siempre**: envía `acceptJson()` para garan
 
 ## Actividades
 
-::: {#exr-UD7-8}
-#### E7.8 · Cliente consumidor en PHP
+::: {.ejercicio}
+**EJ8 · Cliente consumidor en PHP**
 
 El consumo de una API pública se hace en clase como demostración guiada y no forma parte del entregable. Tu entrega es el cliente de **tu propia API**:
 
