@@ -10,6 +10,8 @@ Esta unidad cierra el módulo con un cambio de enfoque: hasta ahora habéis cons
 
 La aplicación Laravel de las unidades anteriores es la base de trabajo, y la API REST que construisteis en la UD7 se consume aquí como una fuente más: cerráis el círculo del módulo actuando a la vez como proveedores y consumidores.
 
+### Objetivos
+
 - Valorar las ventajas de reutilizar código e información existente frente a desarrollar desde cero.
 - Gestionar dependencias con Composer: `composer.json`, versionado semántico y autoload PSR-4.
 - Consumir repositorios de información existentes desde el servidor con Guzzle, incluidas APIs autenticadas.
@@ -33,7 +35,7 @@ La aplicación Laravel de las unidades anteriores es la base de trabajo, y la AP
 | CE9.g | Se han analizado y utilizado librerías de código relacionadas con Big Data e inteligencia de negocios, para incorporar análisis e inteligencia de datos proveniente de repositorios. |
 | CE9.h | Se han probado, depurado y documentado las aplicaciones generadas. |
 
-### Mapa de contenidos
+### Contenidos
 
 | Bloque | Título | Contenido |
 |:------:|---|---|
@@ -48,6 +50,17 @@ La aplicación Laravel de las unidades anteriores es la base de trabajo, y la AP
 ### El proyecto de la unidad
 
 Los ejercicios de proyecto encadenan sobre una misma aplicación: la fuente que consumes alimenta tu repositorio propio, que a su vez es la base del PDF, del QR y del cuadro de mando final. Cada capítulo deja el punto de partida listo para el siguiente.
+
+### Recursos y materiales
+
+## Recursos y materiales
+
+- Equipo con XAMPP (Apache + PHP 8.2 o superior) operativo, el mismo entorno empleado desde la UD2.
+- PHP 8.2+, Composer y tu proyecto Laravel 12.x de las unidades anteriores (o uno nuevo).
+- MySQL/MariaDB con la base de datos de prácticas.
+- Visual Studio Code con las extensiones de PHP y Laravel ya instaladas.
+- Navegador con herramientas de desarrollador.
+- Documentación de referencia: [php.net](https://www.php.net/manual/es/) y [Packagist](https://packagist.org) para localizar librerías de terceros.
 
 ### Evaluación
 
@@ -64,7 +77,7 @@ A continuación, se detallan los ejercicios integrados en esta unidad, indicando
 Se resuelven en clase o en casa:
 
 | Ejercicio | Título | ¿Entrega? |
-|:--:|--------|--------|
+|:---------:|--------|:---------:|
 | EJ1 | Restricciones de versión | No |
 | EJ2 | Autoload PSR-4 propio | No |
 | EJ3 | Proyecto — dependencias con criterio | No |

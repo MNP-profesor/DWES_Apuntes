@@ -6,11 +6,11 @@ Para ejecutar PHP en local necesitas tres componentes: un servidor web (Apache o
 
 ## Opción A — XAMPP (stack tradicional)
 
-XAMPP agrupa Apache, PHP, MariaDB y phpMyAdmin en un único instalador. Es la opción más rápida para empezar.
+**XAMPP** agrupa Apache, PHP, MariaDB y phpMyAdmin en un único instalador. Es la opción más rápida para empezar.
 
 Descarga: [apachefriends.org](https://www.apachefriends.org)
 
-![Imagen XAMPP Windows](./img/01_xampp_cpanel_windows.jpg ){width=75% fig-align="center"}
+![Imagen XAMPP Windows](./img/01_xampp_cpanel_windows.jpg){width=75% fig-align="center"}
 
 Una vez instalado, coloca tus ficheros `.php` en la carpeta `htdocs/` y accede a `http://localhost/` en el navegador. El panel de control de XAMPP te permite arrancar y parar Apache y MySQL con un clic.
 
@@ -52,7 +52,7 @@ docker compose down
 |---|---|---|
 | **Visual Studio Code** + PHP Intelephense | Editor extensible, gratuito | Recomendado para este módulo |
 | **PhpStorm** | IDE específico PHP, de pago | Más completo; recomendado en proyectos grandes |
-| **Eclipse PDT** | IDE genérico con plugin PHP, gratuito | Más pesado que VS Code |
+| **Eclipse PDT (PHP Development Tools)** | IDE genérico con plugin PHP, gratuito | Más pesado que VS Code |
 
 : {.striped}
 

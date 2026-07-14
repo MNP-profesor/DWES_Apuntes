@@ -189,7 +189,7 @@ Como en cualquier lenguaje de programación, PHP resuelve los operadores por pre
 | `<` `<=` `>` `>=` | Comparaciones relacionales |
 | `==` `!=` `===` `!==` | Igualdad e identidad (compara valor y tipo) |
 | `&&` | Lógico Y (AND con mayor precedencia) |
-| `\\` | Lógico O (OR con mayor precedencia) |
+| `||` | Lógico O (OR con mayor precedencia) |
 | `??` | Coalescencia nula (básico para recibir datos de formularios) |
 | `? :` | Operador ternario (condicional compacto) |
 | `=` `+=` `-=` `.=` | Asignación directa y asignaciones combinadas |

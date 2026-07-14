@@ -7,6 +7,18 @@ title: "UD2. Fundamentos de PHP: Variables, operadores y sintaxis embebida"
 
 En esta unidad aprendemos a escribir código PHP dentro de documentos HTML para generar páginas web dinámicas. Cubrimos la sintaxis básica, los tipos de datos, los operadores y el concepto de ámbito de variables.
 
+### Objetivos
+
+Al terminar esta unidad serás capaz de:
+
+1. Integrar PHP en HTML usando los delimitadores correctos.
+2. Declarar variables y constantes con el tipo adecuado.
+3. Usar los principales tipos de datos: enteros, decimales, cadenas, booleanos y arrays.
+4. Convertir valores entre tipos de forma explícita e implícita.
+5. Aplicar directivas de configuración del intérprete.
+6. Construir expresiones con los operadores de PHP.
+7. Controlar el ámbito de las variables con `global` y `static`.
+
 ### Resultados de Aprendizaje y Criterios de Evaluación
 
 > **RA2.** Escribe sentencias ejecutables por un servidor Web reconociendo y aplicando procedimientos de integración del código en lenguajes de marcas.
@@ -22,18 +34,6 @@ En esta unidad aprendemos a escribir código PHP dentro de documentos HTML para 
 | CE2.g | Se han utilizado los distintos tipos de variables y operadores disponibles en el lenguaje. |
 | CE2.h | Se han identificado los ámbitos de utilización de las variables. |
 
-### Objetivos
-
-Al terminar esta unidad serás capaz de:
-
-1. Integrar PHP en HTML usando los delimitadores correctos.
-2. Declarar variables y constantes con el tipo adecuado.
-3. Usar los principales tipos de datos: enteros, decimales, cadenas, booleanos y arrays.
-4. Convertir valores entre tipos de forma explícita e implícita.
-5. Aplicar directivas de configuración del intérprete.
-6. Construir expresiones con los operadores de PHP.
-7. Controlar el ámbito de las variables con `global` y `static`.
-
 ### Contenidos
 
 | Bloque | Tema | CE |
@@ -42,6 +42,13 @@ Al terminar esta unidad serás capaz de:
 | 2 | Sintaxis, variables, constantes y tipos | CE2.d-e-g |
 | 3 | Directivas y operadores | CE2.f-g |
 | 4 | Ámbito de las variables | CE2.h |
+
+### Recursos y materiales
+
+- Servidor local PHP (XAMPP, MAMP o equivalente) o Docker
+- [Documentación oficial de PHP](https://www.php.net/manual/es/)
+- Navegador con herramientas de desarrollador (F12)
+- Editor de código (VS Code recomendado)
 
 ### Evaluación
 
@@ -54,7 +61,7 @@ Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto 
 A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
 
 | Ejercicio | Título | ¿Entrega? |
-|:--:|--------|--------|
+|:---------:|--------|:---------:|
 | EJ1 | Ficha de producto dinámica | Sí |
 | EJ2 | Plantilla con cuatro zonas | Sí |
 | EJ3 | Depurador: caza de errores | Sí |

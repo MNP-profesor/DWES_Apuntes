@@ -128,3 +128,22 @@ a:hover {
   border-radius: .3rem;
   background: rgba(192, 86, 31, 0.06);
 }
+
+
+// ── Título del libro y títulos de UD: forzar legibilidad en dark ──
+.sidebar-title,
+.sidebar-title a,
+#quarto-sidebar .sidebar-title > a {
+  color: $ice !important;
+}
+
+#quarto-sidebar .sidebar-item-section > .sidebar-item-container > a,
+#quarto-sidebar .sidebar-item-section > .sidebar-item-container .sidebar-link {
+  color: $ice !important;
+}
+
+// Título del capítulo/part en el cuerpo de la página (h1 de portada)
+.quarto-title h1.title,
+h1.title {
+  color: $ice !important;
+}

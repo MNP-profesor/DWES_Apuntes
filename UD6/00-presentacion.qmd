@@ -8,6 +8,16 @@ title: "UD6. Acceso a BBDD con PDO: Seguridad e integridad"
 
 En esta unidad las aplicaciones dejan de trabajar con datos efímeros y aprenden a **persistirlos** en una base de datos relacional y a recuperarlos de forma segura. Todo el acceso a datos se hace con **PDO** (PHP Data Objects), la capa de acceso a bases de datos de PHP.
 
+### Objetivos
+
+- Comparar las tecnologías de acceso a datos y justificar el uso de PDO.
+- Conectar con MySQL/MariaDB mediante PDO, configurando el DSN y la gestión de errores por excepciones.
+- Recuperar información con sentencias preparadas y entender por qué evitan la inyección SQL.
+- Publicar los datos en la web con escape de salida y paginación.
+- Usar los distintos modos de recuperación, incluida la hidratación de objetos con `FETCH_CLASS`.
+- Crear operaciones completas (CRUD) protegiendo la integridad con transacciones.
+- Probar y documentar el código de acceso a datos.
+
 ### Resultados de Aprendizaje y Criterios de Evaluación
 
 > **RA6.** Desarrolla aplicaciones web de acceso a almacenes de datos, aplicando medidas para mantener la seguridad y la integridad de la información.
@@ -22,17 +32,7 @@ En esta unidad las aplicaciones dejan de trabajar con datos efímeros y aprenden
 | CE6.f | Se han creado aplicaciones web que permitan la actualización y la eliminación de información disponible en una base de datos. |
 | CE6.g | Se han probado y documentado las aplicaciones web. |
 
-### Objetivos
-
-- Comparar las tecnologías de acceso a datos y justificar el uso de PDO.
-- Conectar con MySQL/MariaDB mediante PDO, configurando el DSN y la gestión de errores por excepciones.
-- Recuperar información con sentencias preparadas y entender por qué evitan la inyección SQL.
-- Publicar los datos en la web con escape de salida y paginación.
-- Usar los distintos modos de recuperación, incluida la hidratación de objetos con `FETCH_CLASS`.
-- Crear operaciones completas (CRUD) protegiendo la integridad con transacciones.
-- Probar y documentar el código de acceso a datos.
-
-### Mapa de contenidos
+### Contenidos
 
 | Fase | De qué trata | CE |
 |------|--------------|----|
@@ -46,7 +46,15 @@ En esta unidad las aplicaciones dejan de trabajar con datos efímeros y aprenden
 Trabajaremos con **PDO nativo**, que es la API que de verdad hay que dominar. PDO es además la base sobre la que Laravel construye su ORM Eloquent (que viste en la UD5): al final de la unidad entenderás "qué ocurre por debajo" de ese ORM.
 :::
 
-### Base de datos de prácticas
+### Recursos y materiales
+
+- Servidor local PHP (XAMPP, MAMP o equivalente) o Docker
+- [Documentación oficial de PHP](https://www.php.net/manual/es/)
+- Navegador con herramientas de desarrollador (F12)
+- phpMyAdmin o equivalente
+- Editor de código (VS Code recomendado)
+
+#### Base de datos de prácticas
 
 Todos los ejemplos usan una base de datos `agenda` con dos tablas. Impórtala antes de empezar para que las salidas de los ejemplos coincidan con las tuyas.
 
@@ -85,7 +93,7 @@ Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto 
 A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
 
 | Ejercicio | Título | ¿Entrega? |
-|:--:|--------|--------|
+|:---------:|--------|:---------:|
 | EJ1 | Estudio comparativo de tecnologías de acceso a datos | Sí |
 | EJ2 | Clase de conexión PDO reutilizable | Sí |
 | EJ3 | Sentencias preparadas y demostración de inyección SQL | Sí |

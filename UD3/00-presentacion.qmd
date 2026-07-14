@@ -6,10 +6,15 @@ title: "UD3. Estructuras de control en PHP: Condicionales, bucles, funciones y f
 
 ### Qué aprenderás
 
-- Tomar decisiones en tu código utilizando estructuras de control (condicionales e iterativas).
-- Almacenar colecciones de datos con arrays indexados, asociativos y multidimensionales.
-- Organizar tu código en funciones reutilizables.
-- Crear formularios HTML y recoger los datos que envía el usuario.
+En esta unidad aprendemos a dar lógica real a tus páginas: condicionales, bucles, funciones, y a recoger y validar datos de un formulario.
+
+### Objetivos
+
+- Aplicar estructuras condicionales para controlar el flujo de un programa PHP.
+- Utilizar bucles para automatizar tareas repetitivas.
+- Diseñar funciones reutilizables con parámetros y valores de retorno.
+- Construir formularios HTML y recoger sus datos desde PHP.
+- Validar y sanear los datos recibidos de un formulario antes de procesarlos.
 
 ### Resultados de Aprendizaje y Criterios de Evaluación
 
@@ -25,20 +30,21 @@ title: "UD3. Estructuras de control en PHP: Condicionales, bucles, funciones y f
 | CE3.f | Se han empleado métodos para recuperar la información introducida en el formulario. |
 | CE3.g | Se han añadido comentarios al código. |
 
-### Materiales
-
-- Servidor local PHP (XAMPP, MAMP o equivalente) y VS Code.
-- Navegador con herramientas de desarrollador (F12).
-- [Documentación oficial de PHP](https://www.php.net/manual/es/)
-
 ### Contenidos
 
 1. Condicionales: `if/elseif/else`, ternario, `??`, `switch` / `match`
 2. Bucles `while`, `do-while`, `for`, `foreach`, `break`/`continue`
 3. Arrays indexados y asociativos, multidimensionales y funciones de orden superior
-4. Bloque 4. Funciones: parámetros, retorno, referencia, ámbito
-5. Bloque 5. Formularios HTML: GET vs POST
+4. Funciones: parámetros, retorno, referencia, ámbito
+5. Formularios HTML: GET vs POST
 6. Recogida y validación de datos
+
+### Recursos y materiales
+
+- Servidor local PHP (XAMPP, MAMP o equivalente) o Docker
+- [Documentación oficial de PHP](https://www.php.net/manual/es/)
+- Navegador con herramientas de desarrollador (F12)
+- Editor de código (VS Code recomendado)
 
 ### Evaluación
 
@@ -51,7 +57,7 @@ Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto 
 A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
 
 | Ejercicio | Título | ¿Entrega? |
-|:--:|--------|--------|
+|:---------:|--------|:---------:|
 | EJ1 | Clasificador de tarifas | Sí |
 | EJ2 | Selector de plan de hosting | Sí |
 | EJ3 | Generador de tablas de multiplicar | Sí |

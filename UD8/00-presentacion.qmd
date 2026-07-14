@@ -14,6 +14,16 @@ El enfoque tecnológico es continuista con el resto del módulo: PHP nativo como
 El JavaScript empleado en esta unidad tiene carácter instrumental y se limita a lo imprescindible: peticiones `fetch`, tratamiento de JSON y manipulación básica del DOM. El estudio en profundidad del lenguaje JavaScript y sus frameworks corresponde al módulo DWEC, con el que esta unidad se coordina. Aquí el foco permanece en el servidor: qué genera, qué expone y cómo se combina con el cliente.
 :::
 
+### Objetivos
+
+- Distinguir con precisión qué código se ejecuta en el servidor y cuál en el navegador, y argumentar las ventajas de combinar ambos modelos en una misma aplicación.
+- Identificar y comparar las tecnologías y frameworks implicados en la generación de páginas dinámicas con guiones embebidos (PHP nativo, motores de plantillas, Blade, fetch/AJAX, JSON).
+- Construir endpoints PHP que expongan información en formato JSON con las cabeceras y códigos de estado adecuados.
+- Generar páginas web que obtengan información remota mediante `fetch`, tanto de endpoints propios como de la API REST autenticada desarrollada en la UD7.
+- Implementar la verificación de formularios en dos capas (cliente y servidor), comprendiendo el papel de cada una y por qué la validación en servidor es irrenunciable.
+- Modificar dinámicamente el contenido y la estructura de una página (filtrado, ordenación, inserción y eliminación de elementos) a partir de datos servidos por el servidor.
+- Integrar todas las técnicas anteriores en una aplicación web híbrida completa, probada y documentada.
+
 ### Resultados de Aprendizaje y Criterios de Evaluación
 
 > **RA8.** Genera páginas web dinámicas analizando y utilizando tecnologías y frameworks del servidor web que añadan código al lenguaje de marcas.
@@ -28,19 +38,7 @@ El JavaScript empleado en esta unidad tiene carácter instrumental y se limita a
 | CE8.f | Se han utilizado estas tecnologías y frameworks para generar páginas web que incluyan modificación dinámica de su contenido y su estructura. |
 | CE8.g | Se han aplicado estas tecnologías y frameworks en la programación de aplicaciones web. |
 
-### Objetivos
-
-Al finalizar la unidad serás capaz de:
-
-- Distinguir con precisión qué código se ejecuta en el servidor y cuál en el navegador, y argumentar las ventajas de combinar ambos modelos en una misma aplicación.
-- Identificar y comparar las tecnologías y frameworks implicados en la generación de páginas dinámicas con guiones embebidos (PHP nativo, motores de plantillas, Blade, fetch/AJAX, JSON).
-- Construir endpoints PHP que expongan información en formato JSON con las cabeceras y códigos de estado adecuados.
-- Generar páginas web que obtengan información remota mediante `fetch`, tanto de endpoints propios como de la API REST autenticada desarrollada en la UD7.
-- Implementar la verificación de formularios en dos capas (cliente y servidor), comprendiendo el papel de cada una y por qué la validación en servidor es irrenunciable.
-- Modificar dinámicamente el contenido y la estructura de una página (filtrado, ordenación, inserción y eliminación de elementos) a partir de datos servidos por el servidor.
-- Integrar todas las técnicas anteriores en una aplicación web híbrida completa, probada y documentada.
-
-### Mapa de contenidos
+### Contenidos
 
 La unidad se organiza en seis bloques que progresan desde el análisis conceptual hasta la integración final:
 
@@ -77,7 +75,7 @@ Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto 
 A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
 
 | Ejercicio | Título | ¿Entrega? |
-|:--:|--------|--------|
+|:---------:|--------|:---------:|
 | EJ1 | ¿Clásico o híbrido? | Sí |
 | EJ2 | Análisis comparativo servidor/cliente | Sí |
 | EJ3 | Clasificación por capas | Sí |

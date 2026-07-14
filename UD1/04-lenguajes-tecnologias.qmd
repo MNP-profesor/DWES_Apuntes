@@ -60,7 +60,7 @@ app.get('/', (req, res) => res.send('Hola, mundo'))
 ::: {.ejercicio}
 **EJ4 · Estudio comparativo razonado**
 
-En grupos de tres, cada grupo recibe uno de estos escenarios:
+Esta actividad se realiza en grupo. A cada grupo se le asigna uno de los siguientes escenarios:
 
 - **A:** tienda online de pequeño volumen, presupuesto ajustado, equipo de dos desarrolladores sin experiencia previa en servidor.
 - **B:** intranet corporativa de una gran empresa cuyo equipo de desarrollo lleva diez años trabajando con Java.
@@ -73,5 +73,5 @@ El grupo debe:
 2. Justificar la elección con **al menos tres argumentos técnicos** (no de preferencia personal).
 3. Citar una alternativa descartada y explicar por qué no encaja en ese escenario.
 
-Defensa oral: 3 minutos por grupo.
+Cada grupo dispondrá de 10 minutos para analizar el escenario. Luego lo defenderá durante 3 minutos. 
 :::

@@ -10,21 +10,6 @@ En las unidades anteriores has escrito PHP donde el HTML, la lógica y los datos
 
 El hilo conductor será una aplicación real: una **agenda de contactos** que irás construyendo bloque a bloque hasta entregarla completa como proyecto integrador.
 
-### Resultados de Aprendizaje y Criterios de Evaluación
-
-> **RA5.** Desarrolla aplicaciones web identificando y aplicando mecanismos para separar el código de presentación de la lógica de negocio.
-
-| CE | Descripción |
-|------|--------------------------------------------------------------|
-| CE5.a | Se han identificado las ventajas de separar la lógica de negocio de los aspectos de presentación de la aplicación. |
-| CE5.b | Se han analizado y utilizado mecanismos y frameworks que permiten realizar esta separación y sus características principales. |
-| CE5.c | Se han utilizado objetos y controles en el servidor para generar el aspecto visual de la aplicación web en el cliente. |
-| CE5.d | Se han utilizado formularios generados de forma dinámica para responder a los eventos de la aplicación web. |
-| CE5.e | Se han identificado y aplicado los parámetros relativos a la configuración de la aplicación web. |
-| CE5.f | Se han escrito aplicaciones web con mantenimiento de estado y separación de la lógica de negocio. |
-| CE5.g | Se han aplicado los principios y patrones de diseño de la programación orientada a objetos. |
-| CE5.h | Se ha probado y documentado el código. |
-
 ### Objetivos
 
 Al terminar la unidad serás capaz de:
@@ -40,6 +25,42 @@ Al terminar la unidad serás capaz de:
 - Aplicar principios y patrones de la POO (servicios, inyección de dependencias) al estructurar la lógica.
 - Probar el código con `artisan test` y documentarlo con PHPDoc.
 
+### Resultados de Aprendizaje y Criterios de Evaluación
+
+> **RA5.** Desarrolla aplicaciones web identificando y aplicando mecanismos para separar el código de presentación de la lógica de negocio.
+
+| CE | Descripción |
+|------|--------------------------------------------------------------|
+| CE5.a | Se han identificado las ventajas de separar la lógica de negocio de los aspectos de presentación de la aplicación. |
+| CE5.b | Se han analizado y utilizado mecanismos y frameworks que permiten realizar esta separación y sus características principales. |
+| CE5.c | Se han utilizado objetos y controles en el servidor para generar el aspecto visual de la aplicación web en el cliente. |
+| CE5.d | Se han utilizado formularios generados de forma dinámica para responder a los eventos de la aplicación web. |
+| CE5.e | Se han identificado y aplicado los parámetros relativos a la configuración de la aplicación web. |
+| CE5.f | Se han escrito aplicaciones web con mantenimiento de estado y separación de la lógica de negocio. |
+| CE5.g | Se han aplicado los principios y patrones de diseño de la programación orientada a objetos. |
+| CE5.h | Se ha probado y documentado el código. |
+
+### Contenidos
+
+1. Separación de capas y patrón MVC
+2. Laravel: instalación y estructura
+3. Rutas y controladores
+4. Vistas con Blade
+5. Formularios dinámicos: CSRF, validación y errores
+6. Eloquent y migraciones (contenido instrumental)
+7. Sesiones y mantenimiento de estado
+8. Configuración de la aplicación por entornos
+9. POO aplicada: servicios e inyección de dependencias
+10. Pruebas, documentación y proyecto integrador
+
+### Recursos y materiales
+
+- Servidor local PHP (XAMPP, MAMP o equivalente) o Docker
+- [Documentación oficial de PHP](https://www.php.net/manual/es/)
+- Navegador con herramientas de desarrollador (F12)
+- Editor de código (VS Code recomendado) con soporte para Blade
+- Laravel Installer (o composer create-project laravel/laravel)
+
 ### Evaluación
 
 Las actividades planteadas sesión a sesión están diseñadas para consolidar el aprendizaje de forma práctica. Por ello, se calificarán como **Apto / No apto** y supondrán un porcentaje menor de la nota final. El grueso de la calificación de la unidad se obtendrá a través de la prueba objetiva.
@@ -51,7 +72,7 @@ Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto 
 A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
 
 | Ejercicio | Título | ¿Entrega? |
-|:--:|--------|--------|
+|:---------:|--------|:---------:|
 | EJ1 | De espagueti a capas | Sí |
 | EJ2 | Puesta en marcha del proyecto | Sí |
 | EJ3 | Enrutado de la agenda | Sí |

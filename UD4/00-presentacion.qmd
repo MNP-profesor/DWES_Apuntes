@@ -8,6 +8,15 @@ title: "UD4. POO en PHP + Desarrollo de funcionalidades Web: autenticación, ses
 
 En esta unidad das el salto a la Programación Orientada a Objetos en PHP y la usas para resolver el problema central de cualquier aplicación web: **recordar quién es el usuario** entre una petición y la siguiente. Al terminar, tendrás un sistema de login completo, con sesiones, cookies seguras y control de acceso por roles.
 
+### Objetivos
+
+- Escribir clases en PHP nativo: propiedades, métodos, constructores, encapsulación, herencia y namespaces.
+- Comparar y elegir entre cookies y sesiones según el caso de uso.
+- Implementar sesiones para mantener el estado de una aplicación (carritos, login).
+- Almacenar y recuperar información en el cliente mediante cookies seguras.
+- Construir un sistema de login y registro con contraseñas cifradas correctamente.
+- Aplicar control de acceso por roles y depurar aplicaciones con estado.
+
 ### Resultados de Aprendizaje y Criterios de Evaluación
 
 > **RA4.** Desarrolla aplicaciones web embebidas en lenguajes de marcas analizando e incorporando funcionalidades según especificaciones.
@@ -23,16 +32,7 @@ En esta unidad das el salto a la Programación Orientada a Objetos en PHP y la u
 
 El bloque de POO (capítulos 1-4) no tiene un CE propio: es la base instrumental sin la que no se puede escribir con garantías el código de CE4.e.
 
-### Objetivos
-
-- Escribir clases en PHP nativo: propiedades, métodos, constructores, encapsulación, herencia y namespaces.
-- Comparar y elegir entre cookies y sesiones según el caso de uso.
-- Implementar sesiones para mantener el estado de una aplicación (carritos, login).
-- Almacenar y recuperar información en el cliente mediante cookies seguras.
-- Construir un sistema de login y registro con contraseñas cifradas correctamente.
-- Aplicar control de acceso por roles y depurar aplicaciones con estado.
-
-### Mapa de la unidad
+### Contenidos
 
 | Bloque 1 — POO en PHP | Bloque 2 — Funcionalidades Web |
 |---|---|
@@ -42,6 +42,13 @@ El bloque de POO (capítulos 1-4) no tiene un CE propio: es la base instrumental
 | Clases estáticas, clonado, abstractas e interfaces | Login y registro |
 | | Recordarme y roles |
 | | Depuración |
+
+### Recursos y materiales
+
+- Servidor local PHP (XAMPP, MAMP o equivalente) o Docker
+- [Documentación oficial de PHP](https://www.php.net/manual/es/)
+- Navegador con herramientas de desarrollador (F12)
+- Editor de código (VS Code recomendado)
 
 ### Evaluación
 
@@ -54,7 +61,7 @@ Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto 
 A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
 
 | Ejercicio | Título | ¿Entrega? |
-|:--:|--------|--------|
+|:---------:|--------|:---------:|
 | EJ1 | Comparativa de mecanismos de mantenimiento de cliente | No |
 | EJ2 | Figuras con clase abstracta e interfaz | No |
 | EJ3 | Contador estático y clonado | No — autoevaluación |

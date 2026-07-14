@@ -23,7 +23,7 @@ book:
     style: docked
     collapse-level: 1
   page-footer:
-    left: "© Manel Navarro Pérez | CC BY-NC-SA 4.0"
+    left: "© Manel Navarro Pérez | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es)"
     right: "DWES | 2º DAW | Módulo 0613"
 
   chapters:

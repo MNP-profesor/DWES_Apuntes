@@ -10,6 +10,17 @@ Hasta ahora tus aplicaciones Laravel producían páginas HTML para un navegador.
 
 El hilo conductor es la **API de una tienda de videojuegos**. La construiremos, le daremos forma con Resources, la haremos robusta con validación, la protegeremos con tokens, la verificaremos con Postman, la consumiremos desde otra aplicación PHP y la documentaremos con OpenAPI. El proyecto integrador de esta unidad replica ese ciclo completo sobre un dominio que elegirás tú.
 
+### Objetivos
+
+- Explicar qué es un servicio web, su ámbito de aplicación y las ventajas de exponer la lógica de negocio como API.
+- Manejar HTTP de forma completa: métodos, cabeceras, códigos de estado y JSON.
+- Aplicar la arquitectura REST y distinguirla de SOAP.
+- Programar una API REST en Laravel: rutas API, controladores `apiResource`, API Resources y validación con respuestas JSON.
+- Proteger la API con tokens y *abilities* de Laravel Sanctum.
+- Verificar el servicio con Postman y con pruebas HTTP automatizadas.
+- Consumir APIs propias y de terceros con el cliente HTTP de Laravel.
+- Documentar el contrato con OpenAPI 3 y Swagger UI.
+
 ### Resultados de Aprendizaje y Criterios de Evaluación
 
 > **RA7.** Desarrolla servicios web reutilizables y accesibles mediante protocolos web, verificando su funcionamiento.
@@ -25,30 +36,7 @@ El hilo conductor es la **API de una tienda de videojuegos**. La construiremos, 
 | CE7.g | Se ha consumido el servicio web. |
 | CE7.h | Se ha documentado un servicio web. |
 
-### Objetivos
-
-Al terminar la unidad sabrás:
-
-- Explicar qué es un servicio web, su ámbito de aplicación y las ventajas de exponer la lógica de negocio como API.
-- Manejar HTTP de forma completa: métodos, cabeceras, códigos de estado y JSON.
-- Aplicar la arquitectura REST y distinguirla de SOAP.
-- Programar una API REST en Laravel: rutas API, controladores `apiResource`, API Resources y validación con respuestas JSON.
-- Proteger la API con tokens y *abilities* de Laravel Sanctum.
-- Verificar el servicio con Postman y con pruebas HTTP automatizadas.
-- Consumir APIs propias y de terceros con el cliente HTTP de Laravel.
-- Documentar el contrato con OpenAPI 3 y Swagger UI.
-
-### Recursos
-
-- PHP 8.2+, Composer y tu proyecto Laravel 12.x de las unidades anteriores (o uno nuevo).
-- MySQL/MariaDB con la base de datos de prácticas.
-- Visual Studio Code con las extensiones de PHP y Laravel.
-- [Postman](https://www.postman.com/downloads/) (escritorio o web).
-- Navegador con herramientas de desarrollador (pestaña Red).
-- [Documentación de Laravel](https://laravel.com/docs): *Routing*, *Eloquent: API Resources*, *Validation*, *Sanctum*, *HTTP Client*.
-- [Editor Swagger](https://editor.swagger.io) para la documentación OpenAPI.
-
-### Mapa de la unidad
+### Contenidos
 
 | Capítulo | Contenido | CE |
 |:---------|:----------|:---|
@@ -62,6 +50,16 @@ Al terminar la unidad sabrás:
 | Proyecto integrador | API completa sobre tu dominio | CE7.b·e·f·g |
 | Documentación con OpenAPI | El contrato publicado | CE7.h |
 
+### Recursos y materiales
+
+- PHP 8.2+, Composer y tu proyecto Laravel 12.x de las unidades anteriores (o uno nuevo).
+- MySQL/MariaDB con la base de datos de prácticas.
+- Visual Studio Code con las extensiones de PHP y Laravel.
+- [Postman](https://www.postman.com/downloads/) (escritorio o web).
+- Navegador con herramientas de desarrollador (pestaña Red).
+- [Documentación de Laravel](https://laravel.com/docs): *Routing*, *Eloquent: API Resources*, *Validation*, *Sanctum*, *HTTP Client*.
+- [Editor Swagger](https://editor.swagger.io) para la documentación OpenAPI.
+
 ### Evaluación
 
 Las actividades planteadas sesión a sesión están diseñadas para consolidar el aprendizaje de forma práctica. Por ello, se calificarán como **Apto / No apto** y supondrán un porcentaje menor de la nota final. El grueso de la calificación de la unidad se obtendrá a través de la prueba objetiva.
@@ -73,7 +71,7 @@ Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto 
 A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
 
 | Ejercicio | Título | CE | ¿Entrega? |
-|:--:|--------|--------|--------|
+|:---------:|--------|:--:|:---------:|
 | EJ1 | Estudio comparativo de servicios web | CE7.a-b | Sí |
 | EJ2 | Disección de peticiones HTTP reales | CE7.c-d | Sí |
 | EJ3 | API de lectura de la tienda | CE7.e | Sí |

@@ -6,9 +6,9 @@ title: "UD1. Arquitecturas y tecnologías de programación Web en entorno servid
 
 ### Qué aprenderás
 
-En esta unidad verás qué ocurre entre que el usuario escribe una URL y el navegador muestra la página: qué software interviene, dónde se ejecuta el código y con qué tecnologías se construyen las aplicaciones web del lado del servidor. No escribirás código todavía — eso empieza en UD2 — pero sin este mapa conceptual todo lo que viene después carece de contexto.
+En esta unidad verás qué ocurre entre que el usuario escribe una URL y el navegador muestra la página: qué software interviene, dónde se ejecuta el código y con qué tecnologías se construyen las aplicaciones web del lado del servidor.
 
-Al terminar esta unidad serás capaz de:
+### Objetivos
 
 - Distinguir si un fragmento de código se ejecuta en el navegador o en el servidor, y explicar por qué importa esa diferencia.
 - Reconocer las distintas formas en que un servidor web puede ejecutar código dinámico (CGI, módulo embebido, FastCGI).
@@ -31,19 +31,6 @@ Al terminar esta unidad serás capaz de:
 | CE1.f | Se han verificado los mecanismos de integración de los lenguajes de marcas con los lenguajes de programación en entorno servidor. |
 | CE1.g | Se han reconocido y evaluado las herramientas de programación en entorno servidor. |
 
-### Objetivos de la unidad
-
-Al finalizar esta unidad, el alumnado será capaz de:
-
-- Diferenciar el modelo de ejecución de código en el servidor del modelo de ejecución en el cliente Web, reconociendo en qué fase del ciclo petición-respuesta interviene cada uno.
-- Distinguir entre páginas Web estáticas y dinámicas, identificando las dos grandes estrategias de generación dinámica: el código embebido en lenguajes de marcas y los guiones o scripts independientes.
-- Identificar los mecanismos por los que un servidor Web ejecuta código (módulos del propio servidor, intérpretes externos vía CGI/FastCGI, gestores de procesos).
-- Diferenciar las funciones de un servidor Web de las de un servidor de aplicaciones, y reconocer escenarios en los que ambos cooperan.
-- Comparar las principales tecnologías y lenguajes de programación en entorno servidor (PHP, Java EE/JSP, ASP.NET, Python, Node.js) según sus características, ámbito de uso y modelo de ejecución.
-- Justificar la elección de un lenguaje de programación en entorno servidor para un proyecto Web dado, argumentando ventajas e inconvenientes.
-- Aplicar los mecanismos de integración entre código de servidor y lenguajes de marcas, reconociendo etiquetas y delimitadores propios de cada tecnología.
-- Seleccionar y configurar las herramientas básicas de un entorno de desarrollo Web en servidor (distribuciones empaquetadas, contenedores, IDE).
-
 ### Contenidos
 
 | Bloque | Título |
@@ -54,6 +41,13 @@ Al finalizar esta unidad, el alumnado será capaz de:
 | 4 | Lenguajes y tecnologías en entorno servidor |
 | 5 | Integración con lenguajes de marcas |
 | 6 | Herramientas de desarrollo |
+
+### Recursos y materiales
+
+- Servidor local PHP (XAMPP, MAMP o equivalente) o Docker
+- [Documentación oficial de PHP](https://www.php.net/manual/es/)
+- Navegador con herramientas de desarrollador (F12)
+- Editor de código (VS Code recomendado)
 
 ### Evaluación
 
@@ -66,7 +60,7 @@ Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto 
 A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
 
 | Ejercicio | Título | ¿Entrega? |
-|:--:|--------|--------|
+|:---------:|--------|:---------:|
 | EJ1 | Clasificación por lugar de ejecución | Sí |
 | EJ2 | ¿Estático, dinámico embebido o script independiente? | Sí |
 | EJ3 | Identificación de roles en una arquitectura real | Sí |
