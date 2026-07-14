@@ -1,5 +1,15 @@
 /* Exclusivo del EPUB: ajuste de línea en código, sin scroll horizontal */
-pre code {
+/*pre code {
   white-space: pre-wrap;
   word-break: break-word;
+}*/
+
+/* Exclusivo del EPUB: ajuste de línea en código, sin scroll horizontal */
+pre.sourceCode,
+pre.sourceCode code,
+pre code,
+pre {
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
 }

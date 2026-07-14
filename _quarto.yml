@@ -1,7 +1,11 @@
 project:
   type: book
   output-dir: _book
-  pre-render: python scripts/renumera_ejercicios.py # RENUMERADOR automático de ejercicios
+  pre-render:
+    - python scripts/renumera_ejercicios.py  # RENUMERADOR automático de ejercicios
+    - python scripts/aplica_descargas.py
+
+descargas-activas: false # Switch para habilitar o deshabilitar las descargas PDF y EPUB
 
 lang: es
 
