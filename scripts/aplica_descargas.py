@@ -36,7 +36,7 @@ INACTIVAS = ROOT / "theme" / "descargas-inactivas.md"
 
 TITULO = "# Descargas {.unnumbered}"
 
-RE_FLAG = re.compile(r"^descargas-activas:\s*(true|false)\s*$", re.MULTILINE)
+RE_FLAG = re.compile(r"^descargas-activas:\s*(true|false)\s*(#.*)?$", re.MULTILINE)
 
 
 def lee_flag() -> bool:
