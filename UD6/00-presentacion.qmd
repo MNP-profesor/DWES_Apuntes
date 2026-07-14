@@ -78,7 +78,7 @@ Los ejemplos de esta unidad asumen estos tres contactos; por eso puedes comparar
 
 Las actividades planteadas sesión a sesión están diseñadas para consolidar el aprendizaje de forma práctica. Por ello, se calificarán como **Apto / No apto** y supondrán un porcentaje menor de la nota final. El grueso de la calificación de la unidad se obtendrá a través de la prueba objetiva.
 
-::: {.callout-important title="Normativa · RA-CE"}
+::: {.callout-important title="Importante"}
 Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto en los ejercicios**.
 :::
 

@@ -137,7 +137,7 @@ format:
     #number-depth: 2
     number-chapters: false # <-- MANEL: Esto quita el número autoincremental de todo el sitio
     code-copy: true
-    code-overflow: scroll # wrap <-- antes
+    code-overflow: scroll # wrap <-- antes Fuerza scroll horizontal en código fuente
     code-line-numbers: true # Numeración de líneas en código incrustado
     smooth-scroll: true
     link-external-newwindow: true
@@ -166,3 +166,5 @@ format:
     toc: true
     number-sections: false # true <-- antes
     epub-cover-image: theme/cover.png
+    css: theme/epub-extra.css #
+    

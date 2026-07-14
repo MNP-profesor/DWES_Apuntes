@@ -1,0 +1,5 @@
+/* Exclusivo del EPUB: ajuste de línea en código, sin scroll horizontal */
+pre code {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
