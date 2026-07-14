@@ -173,7 +173,7 @@ Añade una tecnología más por capa que no haya aparecido en la unidad, buscand
 ## Actividad evaluable E2
 
 ::: {.ejercicio}
-**EJ4 · E2 · Ficha de tecnologías y frameworks** — CE8.c · 1,0 h en clase
+**EJ4 · Ficha de tecnologías y frameworks** — CE8.c · 1,0 h en clase
 
 Elabora una ficha técnica (máximo dos caras) del ecosistema de generación dinámica interactiva. Debe contener:
 

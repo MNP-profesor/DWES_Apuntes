@@ -305,9 +305,7 @@ var_dump("1"  === true);   // bool(false)  ← string vs bool
 :::
 
 ::: {.ejercicio}
-**EJ6**
-
-Catálogo con cálculo de inventario
+**EJ6 · Catálogo con cálculo de inventario**
 
 Crea `catalogo.php`. Declara un array `$catalogo` con 4 productos (nombre, precio, stock, categoría). Muéstralos en una tabla HTML sin usar bucles. Calcula y muestra el valor total del inventario (`precio × stock` sumado para todos los productos).
 :::
@@ -332,7 +330,6 @@ $cantidad_texto = "3";
 //    Muestra los dos resultados con var_dump()
 ```
 :::
-
 
 ::: {.ejercicio}
 **EJ8 · Ejercicios extras de Funciones de Strings**

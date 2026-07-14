@@ -7,7 +7,6 @@ title: "UD2. Fundamentos de PHP: Variables, operadores y sintaxis embebida"
 
 En esta unidad aprendemos a escribir código PHP dentro de documentos HTML para generar páginas web dinámicas. Cubrimos la sintaxis básica, los tipos de datos, los operadores y el concepto de ámbito de variables.
 
-
 ### Resultados de Aprendizaje y Criterios de Evaluación
 
 > **RA2.** Escribe sentencias ejecutables por un servidor Web reconociendo y aplicando procedimientos de integración del código en lenguajes de marcas.
@@ -22,9 +21,6 @@ En esta unidad aprendemos a escribir código PHP dentro de documentos HTML para 
 | CE2.f | Se han utilizado directivas para modificar el comportamiento predeterminado. |
 | CE2.g | Se han utilizado los distintos tipos de variables y operadores disponibles en el lenguaje. |
 | CE2.h | Se han identificado los ámbitos de utilización de las variables. |
-
-: {.striped}
-:::
 
 ### Objetivos
 
@@ -42,23 +38,31 @@ Al terminar esta unidad serás capaz de:
 
 | Bloque | Tema | CE |
 |---|---|---|
-| 1 | Generación embebida, tecnologías y delimitadores | CE2.a · CE2.b · CE2.c |
-| 2 | Sintaxis, variables, constantes y tipos | CE2.d · CE2.e · CE2.g |
-| 3 | Directivas y operadores | CE2.f · CE2.g |
+| 1 | Generación embebida, tecnologías y delimitadores | CE2.a-b-c |
+| 2 | Sintaxis, variables, constantes y tipos | CE2.d-e-g |
+| 3 | Directivas y operadores | CE2.f-g |
 | 4 | Ámbito de las variables | CE2.h |
-
-: {.striped}
-
-### Instrumentos de evaluación
-
-Esta unidad se evalúa mediante dos instrumentos:
 
 ### Evaluación
 
-Los ejercicios de esta unidad se califican **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
-
-: {.striped}
+Las actividades planteadas sesión a sesión están diseñadas para consolidar el aprendizaje de forma práctica. Por ello, se calificarán como **Apto / No apto** y supondrán un porcentaje menor de la nota final. El grueso de la calificación de la unidad se obtendrá a través de la prueba objetiva.
 
 ::: {.callout-important title="Normativa · RA-CE"}
-Para poder realizar la prueba objetiva de la unidad es necesario obtener **apto en los ejercicios**.
+Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto en los ejercicios**.
 :::
+
+A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
+
+| Ejercicio | Título | ¿Entrega? |
+|:--:|--------|--------|
+| EJ1 | *(sin título)* | Sí |
+| EJ2 | Plantilla con cuatro zonas | Sí |
+| EJ3 | Depurador: caza de errores | Sí |
+| EJ4 | Panel de configuración | Sí |
+| EJ5 | Practica con cadenas | Sí |
+| EJ6 | *(sin título)* | Sí |
+| EJ7 | Validación de datos de texto | Sí |
+| EJ8 | Ejercicios extras de Funciones de Strings | Sí |
+| EJ9 | Desarrollo vs. producción | Sí |
+| EJ10 | Motor de descuentos | Sí |
+| EJ11 | Sistema de tickets | Sí |

@@ -6,10 +6,7 @@ title: "UD3. Estructuras de control en PHP: Condicionales, bucles, funciones y f
 
 ### Qué aprenderás
 
-Al terminar la unidad sabrás:
-
-- Tomar decisiones en tu código con `if`, `switch` y `match`.
-- Repetir operaciones con `while`, `for` y `foreach`.
+- Tomar decisiones en tu código utilizando estructuras de control (condicionales e iterativas).
 - Almacenar colecciones de datos con arrays indexados, asociativos y multidimensionales.
 - Organizar tu código en funciones reutilizables.
 - Crear formularios HTML y recoger los datos que envía el usuario.
@@ -18,15 +15,15 @@ Al terminar la unidad sabrás:
 
 > **RA3.** Escribe bloques de sentencias embebidos en lenguajes de marcas, seleccionando y utilizando las estructuras de programación.
 
-| CE | Qué se evalúa |
+| CE | Descripción |
 |---|---|
-| CE3.a | Uso de estructuras condicionales |
-| CE3.b | Uso de bucles |
-| CE3.c | Uso de arrays |
-| CE3.d | Creación y uso de funciones |
-| CE3.e | Uso de formularios web |
-| CE3.f | Recogida de datos del formulario |
-| CE3.g | Comentarios en el código *(transversal)* |
+| CE3.a | Se han utilizado mecanismos de decisión en la creación de bloques de sentencias. |
+| CE3.b | Se han utilizado bucles y se ha verificado su funcionamiento. |
+| CE3.c | Se han utilizado matrices (arrays) para almacenar y recuperar conjuntos de datos. |
+| CE3.d | Se han creado y utilizado funciones. |
+| CE3.e | Se han utilizado formularios web para interactuar con el usuario del navegador web. |
+| CE3.f | Se han empleado métodos para recuperar la información introducida en el formulario. |
+| CE3.g | Se han añadido comentarios al código. |
 
 ### Materiales
 
@@ -36,35 +33,36 @@ Al terminar la unidad sabrás:
 
 ### Contenidos
 
-```
-Bloque 1 · Condicionales
-Bloque 2 · Bucles
-Bloque 3 · Arrays
-Bloque 4 · Funciones
-Bloque 5 · Formularios HTML
-Bloque 6 · Recogida y validación de datos
-```
-
-### Secuencia didáctica
-
-| Sesión | Duración | Contenido | Actividad |
-|---|---|---|---|
-| 1 | 2 h | Condicionales: `if/elseif/else`, ternario, `??` | E3.1 — Clasificador de tarifas |
-| 2 | 2 h | `switch` / `match` | E3.2 — Selector de plan de hosting |
-| 3 | 2 h | Bucles `while`, `do-while`, `for` | E3.3 — Generador de tablas de multiplicar |
-| 4 | 2 h | `foreach`, `break`/`continue` | E3.4 — Filtro de inventario |
-| 5 | 2 h | Arrays indexados y asociativos | E3.5 — Catálogo de cursos |
-| 6 | 2 h | Arrays multidimensionales y funciones de orden superior | E3.6 — Inventario multinivel de almacén |
-| 7 | 2 h | Funciones: parámetros, retorno, referencia, ámbito | E3.7 — Librería de funciones de validación |
-| 8 | 2 h | Formularios HTML: GET vs POST | E3.8 — Formulario de inscripción |
-| 9 | 2 h | Superglobales y validación de datos | E3.9 — Procesador de inscripción |
-| 10 | 1 h | Repaso e integración | Sin entregable |
+1. Condicionales: `if/elseif/else`, ternario, `??`, `switch` / `match`
+2. Bucles `while`, `do-while`, `for`, `foreach`, `break`/`continue`
+3. Arrays indexados y asociativos, multidimensionales y funciones de orden superior
+4. Bloque 4. Funciones: parámetros, retorno, referencia, ámbito
+5. Bloque 5. Formularios HTML: GET vs POST
+6. Recogida y validación de datos
 
 ### Evaluación
 
-#### Ejercicios de práctica
+Las actividades planteadas sesión a sesión están diseñadas para consolidar el aprendizaje de forma práctica. Por ello, se calificarán como **Apto / No apto** y supondrán un porcentaje menor de la nota final. El grueso de la calificación de la unidad se obtendrá a través de la prueba objetiva.
 
-Los ejercicios se evalúan como **apto / no apto** y representan un porcentaje pequeño de la nota final. Su objetivo es practicar y consolidar los contenidos sesión a sesión.
+::: {.callout-important title="Normativa · RA-CE"}
+Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto en los ejercicios**.
+:::
+
+A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
+
+| Ejercicio | Título | ¿Entrega? |
+|:--:|--------|--------|
+| EJ1 | Clasificador de tarifas | Sí |
+| EJ2 | Selector de plan de hosting | Sí |
+| EJ3 | Generador de tablas de multiplicar | Sí |
+| EJ4 | Filtro de inventario | Sí | 
+| EJ5 | Catálogo de cursos | Sí | 
+| EJ6 | Inventario multinivel de almacén | Sí | 
+| EJ7 | Ejercicios extras de Arrays | Sí |
+| EJ8 | Librería de funciones de validación | Sí |
+| EJ9 | Ejercicios extras de funciones | Sí |
+| EJ10 | Formulario de inscripción | Sí |
+| EJ11 | Procesador de inscripción con validación | Sí |
 
 Para obtener el **apto** es necesario:
 
@@ -74,12 +72,4 @@ Para obtener el **apto** es necesario:
 
 ::: {.callout-note title="Concepto clave"}
 Los comentarios (**CE3.g**) son obligatorios en todos los ejercicios: como mínimo un bloque PHPDoc en cada función y comentarios de línea en la lógica más compleja.
-:::
-
-#### Prueba objetiva de la unidad
-
-El grueso de la calificación recae en la **prueba objetiva**, que cubre todos los bloques de la unidad.
-
-::: {.callout-important title="Normativa · RA-CE"}
-Para poder realizar la prueba objetiva de la unidad es necesario obtener **apto en los ejercicios**.
 :::

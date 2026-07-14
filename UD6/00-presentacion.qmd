@@ -14,13 +14,13 @@ En esta unidad las aplicaciones dejan de trabajar con datos efímeros y aprenden
 
 | CE | Descripción |
 |----|----------|
-| CE6.a | Analiza las tecnologías de acceso por programación a los almacenes de datos. |
-| CE6.b | Crea aplicaciones que establecen conexiones con bases de datos. |
-| CE6.c | Recupera información almacenada en bases de datos. |
-| CE6.d | Publica en la web la información recuperada. |
-| CE6.e | Utiliza conjuntos de datos para almacenar la información. |
-| CE6.f | Crea aplicaciones que actualizan y eliminan información. |
-| CE6.g | Prueba y documenta las aplicaciones web. |
+| CE6.a | Se han analizado las tecnologías que permiten el acceso mediante programación a la información disponible en almacenes de datos. |
+| CE6.b | Se han creado aplicaciones que establezcan conexiones con bases de datos. |
+| CE6.c | Se ha recuperado información almacenada en bases de datos. |
+| CE6.d | Se ha publicado en aplicaciones web la información recuperada. |
+| CE6.e | Se han utilizado conjuntos de datos para almacenar la información. |
+| CE6.f | Se han creado aplicaciones web que permitan la actualización y la eliminación de información disponible en una base de datos. |
+| CE6.g | Se han probado y documentado las aplicaciones web. |
 
 ### Objetivos
 
@@ -36,11 +36,11 @@ En esta unidad las aplicaciones dejan de trabajar con datos efímeros y aprenden
 
 | Fase | De qué trata | CE |
 |------|--------------|----|
-| ① Conectar | Tecnologías de acceso · conexión PDO · DSN · excepciones | a, b |
-| ② Consultar | Sentencias preparadas · inyección SQL · publicación web | c, d |
-| ③ Recorrer | Modos de fetch · `FETCH_CLASS` · hidratación de objetos | e |
-| ④ Modificar | INSERT · UPDATE · DELETE · transacciones · integridad | f |
-| ⑤ Asegurar | Pruebas · documentación | g |
+| Conectar | Tecnologías de acceso · conexión PDO · DSN · excepciones | a, b |
+| Consultar | Sentencias preparadas · inyección SQL · publicación web | c, d |
+| Recorrer | Modos de fetch · `FETCH_CLASS` · hidratación de objetos | e |
+| Modificar | INSERT · UPDATE · DELETE · transacciones · integridad | f |
+| Asegurar | Pruebas · documentación | g |
 
 ::: {.callout-note title="Concepto clave"}
 Trabajaremos con **PDO nativo**, que es la API que de verdad hay que dominar. PDO es además la base sobre la que Laravel construye su ORM Eloquent (que viste en la UD5): al final de la unidad entenderás "qué ocurre por debajo" de ese ORM.
@@ -76,8 +76,26 @@ Los ejemplos de esta unidad asumen estos tres contactos; por eso puedes comparar
 
 ### Evaluación
 
-Los ejercicios se evalúan como **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
+Las actividades planteadas sesión a sesión están diseñadas para consolidar el aprendizaje de forma práctica. Por ello, se calificarán como **Apto / No apto** y supondrán un porcentaje menor de la nota final. El grueso de la calificación de la unidad se obtendrá a través de la prueba objetiva.
+
+::: {.callout-important title="Normativa · RA-CE"}
+Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto en los ejercicios**.
+:::
+
+A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
+
+| Ejercicio | Título | ¿Entrega? |
+|:--:|--------|--------|
+| EJ1 | Estudio comparativo de tecnologías de acceso a datos | Sí |
+| EJ2 | Clase de conexión PDO reutilizable | Sí |
+| EJ3 | Sentencias preparadas y demostración de inyección SQL | Sí |
+| EJ4 | Listado web con búsqueda segura | Sí |
+| EJ5 | Ficha de detalle y paginación (con pruebas) | Sí |
+| EJ6 | Fetch modes y FETCH_CLASS | Sí |
+| EJ7 | Alta de registros con validación en servidor | Sí |
+| EJ8 | Edición y borrado con transacciones (con pruebas) | Sí |
+| EJ9 | CRUD completo seguro y documentado | Sí |
 
 ::: {.callout-note title="Concepto clave"}
-Para llegar a la prueba objetiva en buenas condiciones, lo importante es tener **todos los ejercicios en apto**: cada uno cubre una pieza del recorrido (conectar, consultar, publicar, recorrer, modificar) que la prueba objetiva combina.
+Para llegar a la prueba objetiva en buenas condiciones, lo importante es haber asimilado bien los conceptos clave de cada ejercicio, ya que cubren todos los aspectos que la prueba objetiva combina (conectar, consultar, publicar, recorrer, modificar).
 :::

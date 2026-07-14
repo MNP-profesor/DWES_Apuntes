@@ -139,7 +139,7 @@ def escribe_indice(datos: dict[str, tuple[str, list[tuple[int, str, str]]]]) -> 
         total += len(registros)
         lineas.append(f"## {titulo_ud} ({len(registros)} ejercicios)")
         lineas.append("")
-        lineas.append("| Nº | Título | Fichero |")
+        lineas.append("| Ejercicio | Título | Fichero |")
         lineas.append("|:--:|--------|---------|")
         for n, titulo, fichero in registros:
             lineas.append(f"| EJ{n} | {titulo} | `{fichero}` |")

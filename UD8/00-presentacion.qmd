@@ -51,7 +51,7 @@ La unidad se organiza en seis bloques que progresan desde el análisis conceptua
 | B3 | Obtención remota de información: fetch, JSON y consumo de APIs | CE8.b, CE8.d |
 | B4 | Verificación de formularios en dos capas | CE8.e |
 | B5 | Modificación dinámica del contenido y la estructura | CE8.f |
-| B6 | Proyecto integrador: aplicación web híbrida | CE8.g (+d, e, f) |
+| B6 | Proyecto integrador: aplicación web híbrida | CE8.g (d, e, f) |
 
 ::: {.callout-note title="Concepto clave"}
 **Hilo conductor.** Todos los ejemplos y actividades giran en torno a una misma aplicación: una cartelera de cine que muestra películas y sesiones. Se empieza analizándola como página estática generada por PHP (B1), se le añade la obtención remota de la lista de películas (B3), un formulario de valoración verificado en dos capas (B4) y filtrado y ordenación sin recargar (B5), hasta desembocar en el proyecto integrador (B6), donde cada estudiante construye su propia versión completa conectada a la API de la UD7.
@@ -68,7 +68,28 @@ La unidad se organiza en seis bloques que progresan desde el análisis conceptua
 
 ### Evaluación
 
-Los ejercicios se evalúan como **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
+Las actividades planteadas sesión a sesión están diseñadas para consolidar el aprendizaje de forma práctica. Por ello, se calificarán como **Apto / No apto** y supondrán un porcentaje menor de la nota final. El grueso de la calificación de la unidad se obtendrá a través de la prueba objetiva.
+
+::: {.callout-important title="Normativa · RA-CE"}
+Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto en los ejercicios**.
+:::
+
+A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
+
+| Ejercicio | Título | ¿Entrega? |
+|:--:|--------|--------|
+| EJ1 | ¿Clásico o híbrido? | Sí |
+| EJ2 | Análisis comparativo servidor/cliente | Sí |
+| EJ3 | Clasificación por capas | Sí |
+| EJ4 | Ficha de tecnologías y frameworks | Sí |
+| EJ5 | Endpoint de géneros y fallos provocados | Sí |
+| EJ6 | Endpoint propio + pintado en página | Sí |
+| EJ7 | Cliente web de la propia API (UD7) | Sí |
+| EJ8 | La capa cliente no basta | Sí |
+| EJ9 | Formulario de valoraciones con verificación en dos capas | Sí |
+| EJ10 | Ocultar, contar, restaurar | Sí |
+| EJ11 | Cartelera interactiva: filtrado y ordenación sin recarga | Sí |
+| EJ12 | Proyecto integrador: "Mi cartelera conectada" | Sí |
 
 ::: {.callout-important title="Normativa · RA-CE"}
 Cada bloque de contenidos indica al comienzo qué criterios de evaluación del RA8 desarrolla. El proyecto integrador es la actividad de mayor peso del bloque de actividades porque es la única que acredita CE8.g: aplicar todas las tecnologías juntas en una aplicación web completa.

@@ -120,7 +120,7 @@ c. Un botón "Restaurar" que repinte el estado completo.
 ## Actividad evaluable E6
 
 ::: {.ejercicio}
-**EJ11 · E6 · Cartelera interactiva: filtrado y ordenación sin recarga** — CE8.f · 1,25 h en clase
+**EJ11 · Cartelera interactiva: filtrado y ordenación sin recarga** — CE8.f · 1,25 h en clase
 
 Partiendo de tu página de la actividad E3 (o de la versión de referencia), incorpora:
 

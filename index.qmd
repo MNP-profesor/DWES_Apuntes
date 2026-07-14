@@ -15,7 +15,7 @@ Bienvenido/a a los apuntes del módulo **Desarrollo Web en Entorno Servidor** (D
 : Ficha del módulo {tbl-colwidths="[30,70]"}
 
 ::: {.callout-important title="Marco normativo"}
-- Los Resultados de Aprendizaje (RA) y Criterios de Evaluación (CE) del módulo están fijados por el [**RD 686/2010, de 20 de mayo**](https://www.boe.es/buscar/doc.php?id=BOE-A-2010-9269). Su posterior modificación en el [**RD 405/2023, de 29 de mayo**](https://www.boe.es/eli/es/rd/2023/05/29/405) **no modificó** este módulo.
+- Los Resultados de Aprendizaje (RA) y Criterios de Evaluación (CE) del módulo están fijados por el [**RD 686/2010, de 20 de mayo**](https://www.boe.es/buscar/doc.php?id=BOE-A-2010-9269). Su posterior actualización en el [**RD 405/2023, de 29 de mayo**](https://www.boe.es/eli/es/rd/2023/05/29/405) **no modificó este módulo**.
 - El currículo vigente en la Comunitat Valenciana se establece en el [**Decreto 114/2025, de 29 de julio** (DOGV)](https://dogv.gva.es/es/eli/es-vc/d/2025/07/29/114/dof/spa/html).
 :::
 

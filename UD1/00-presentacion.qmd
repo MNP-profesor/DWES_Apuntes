@@ -57,10 +57,19 @@ Al finalizar esta unidad, el alumnado será capaz de:
 
 ### Evaluación
 
-Los ejercicios de esta unidad se califican **apto / no apto** y tienen un peso conjunto reducido. El grueso de la nota corresponde a la prueba objetiva de la unidad.
-
-: {.striped}
+Las actividades planteadas sesión a sesión están diseñadas para consolidar el aprendizaje de forma práctica. Por ello, se calificarán como **Apto / No apto** y supondrán un porcentaje menor de la nota final. El grueso de la calificación de la unidad se obtendrá a través de la prueba objetiva.
 
 ::: {.callout-important title="Normativa · RA-CE"}
-Para poder realizar la prueba objetiva de la unidad es necesario obtener **apto en los ejercicios**.
+Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto en los ejercicios**.
 :::
+
+A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
+
+| Ejercicio | Título | ¿Entrega? |
+|:--:|--------|--------|
+| EJ1 | Clasificación por lugar de ejecución | Sí |
+| EJ2 | ¿Estático, dinámico embebido o script independiente? | Sí |
+| EJ3 | Identificación de roles en una arquitectura real | Sí |
+| EJ4 | Estudio comparativo razonado | Sí |
+| EJ5 | Trazado manual de la salida | Sí |
+| EJ6 | Puesta en marcha del entorno | Sí |

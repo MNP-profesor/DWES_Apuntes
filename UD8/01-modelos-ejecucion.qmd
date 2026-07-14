@@ -149,7 +149,7 @@ e. Cerrar la sesión del usuario.
 ## Actividad evaluable E1
 
 ::: {.ejercicio}
-**EJ2 · E1 · Análisis comparativo servidor/cliente** — CE8.a, CE8.b · 1,0 h en clase
+**EJ2 · Análisis comparativo servidor/cliente** — CE8.a, CE8.b · 1,0 h en clase
 
 A partir de la cartelera clásica proporcionada por el docente (`cartelera.php`, versión UD3), elabora un informe breve de dos partes:
 

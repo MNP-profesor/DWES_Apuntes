@@ -45,22 +45,26 @@ El bloque de POO (capítulos 1-4) no tiene un CE propio: es la base instrumental
 
 ### Evaluación
 
-Los ejercicios se evalúan como **apto / no apto** y representan un porcentaje pequeño de la nota final. Su objetivo es practicar y consolidar los contenidos sesión a sesión.
+Las actividades planteadas sesión a sesión están diseñadas para consolidar el aprendizaje de forma práctica. Por ello, se calificarán como **Apto / No apto** y supondrán un porcentaje menor de la nota final. El grueso de la calificación de la unidad se obtendrá a través de la prueba objetiva.
 
-No todos los ejercicios requieren entrega: los de análisis/comparación son de autoevaluación (sirven para preparar la prueba, pero no se entregan), y el resto sí requiere entrega.
+::: {.callout-important title="Normativa · RA-CE"}
+Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto en los ejercicios**.
+:::
 
-| Ejercicio | Tema | ¿Entrega? |
-|---|---|---|
-| E4.1 | Comparativa de mecanismos de mantenimiento de cliente | No — autoevaluación |
-| E4.2 | Carrito de la compra con sesión | Sí |
-| E4.3 | Expiración y regeneración de sesión | Sí |
-| E4.4 | Preferencias con cookie | Sí |
-| E4.5 | Cookie con flags de seguridad | Sí |
-| E4.6 | Comparativa de mecanismos de autenticación | No — autoevaluación |
-| E4.7 | Login con clase `Usuario` | Sí |
-| E4.8 | Registro con validación | Sí |
-| E4.9 | «Recordarme» con cookie persistente | Sí |
-| E4.10 | Control de acceso por roles | Sí |
-| E4.11 | Depuración de sesión/cookie | Sí |
-| E4.12 | Figuras con clase abstracta e interfaz | No — autoevaluación |
-| E4.13 | Contador estático y clonado | No — autoevaluación |
+A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
+
+| Ejercicio | Título | ¿Entrega? |
+|:--:|--------|--------|
+| EJ1 | Comparativa de mecanismos de mantenimiento de cliente | No |
+| EJ2 | Figuras con clase abstracta e interfaz | No |
+| EJ3 | Contador estático y clonado | No — autoevaluación |
+| EJ4 | Carrito de la compra con sesión | Sí |
+| EJ5 | Expiración y regeneración de sesión | Sí |
+| EJ6 | Preferencias con cookie | Sí |
+| EJ7 | Cookie con flags de seguridad | Sí |
+| EJ8 | Comparativa de mecanismos de autenticación | No |
+| EJ9 | Login básico con clase `Usuario` | Sí |
+| EJ10 | Registro con validación | Sí |
+| EJ11 | «Recordarme» con cookie persistente | Sí |
+| EJ12 | Control de acceso por roles | Sí |
+| EJ13 | Depuración de sesión/cookie | Sí |

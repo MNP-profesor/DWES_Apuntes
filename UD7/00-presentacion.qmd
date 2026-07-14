@@ -16,15 +16,14 @@ El hilo conductor es la **API de una tienda de videojuegos**. La construiremos, 
 
 | CE | Descripción |
 |:---|:---------|
-| CE7.a | Reconocer las características propias y el ámbito de aplicación de los servicios web |
-| CE7.b | Reconocer las ventajas de utilizar servicios web para dar acceso a la lógica de negocio |
-| CE7.c | Identificar las tecnologías y los protocolos implicados en el consumo de servicios web |
-| CE7.d | Utilizar los estándares y arquitecturas más difundidos en el desarrollo de servicios web |
-| CE7.e | Programar un servicio web |
-| CE7.f | Verificar el funcionamiento del servicio web |
-| CE7.g | Consumir el servicio web |
-| CE7.h | Documentar un servicio web |
-:::
+| CE7.a | Se han reconocido las características propias y el ámbito de aplicación de los servicios web. |
+| CE7.b | Se han reconocido las ventajas de utilizar servicios web para proporcionar acceso a funcionalidades incorporadas a la lógica de negocio de una aplicación. |
+| CE7.c | Se han identificado las tecnologías y los protocolos implicados en el consumo de servicios web. |
+| CE7.d | Se han utilizado los estándares y arquitecturas más difundidos e implicados en el desarrollo de servicios web. |
+| CE7.e | Se ha programado un servicio web. |
+| CE7.f | Se ha verificado el funcionamiento del servicio web. |
+| CE7.g | Se ha consumido el servicio web. |
+| CE7.h | Se ha documentado un servicio web. |
 
 ### Objetivos
 
@@ -65,19 +64,23 @@ Al terminar la unidad sabrás:
 
 ### Evaluación
 
-La unidad tiene diez actividades, **E7.1 a E7.10** y se intercalan entre los contenidos de las secciones:
+Las actividades planteadas sesión a sesión están diseñadas para consolidar el aprendizaje de forma práctica. Por ello, se calificarán como **Apto / No apto** y supondrán un porcentaje menor de la nota final. El grueso de la calificación de la unidad se obtendrá a través de la prueba objetiva.
 
-| Actividad | Qué entregas | CE |
-|:----------|:-------------|:---|
-| E7.1 | Estudio comparativo de servicios web | CE7.a-b |
-| E7.2 | Disección de peticiones HTTP reales | CE7.c-d |
-| E7.3 | API de lectura de la tienda | CE7.e |
-| E7.4 | Transformación con API Resources | CE7-e |
-| E7.5 | CRUD completo con validación | CE7.e-f |
-| E7.6 | Protección con Sanctum | CE7.d-e |
-| E7.7 | Colección Postman de verificación | CE7.c-f |
-| E7.8 | Cliente consumidor en PHP | CE7.g |
-| E7.9 | Proyecto integrador (transversal) | CE7.b-e-f-g |
-| E7.10 | Documentación OpenAPI del proyecto | CE7.h |
+::: {.callout-important title="Normativa · RA-CE"}
+Para poder realizar la prueba objetiva de la unidad es necesario obtener **Apto en los ejercicios**.
+:::
 
-Las actividades se califican como **apto / no apto** y suponen un porcentaje reducido de la calificación total. Su objetivo es practicar y consolidar los contenidos sesión a sesión. El grueso de la nota corresponde a la prueba objetiva de la unidad.
+A continuación, se detallan los ejercicios integrados en esta unidad, indicando en la tabla cuáles de ellos son de entrega obligatoria.
+
+| Ejercicio | Título | CE | ¿Entrega? |
+|:--:|--------|--------|--------|
+| EJ1 | Estudio comparativo de servicios web | CE7.a-b | Sí |
+| EJ2 | Disección de peticiones HTTP reales | CE7.c-d | Sí |
+| EJ3 | API de lectura de la tienda | CE7.e | Sí |
+| EJ4 | Transformación con API Resources | CE7.e | Sí |
+| EJ5 | CRUD completo con validación | CE7.e-f | Sí |
+| EJ6 | Protección con Sanctum | CE7.d-e | Sí |
+| EJ7 | Colección Postman de verificación | CE7.c-f | Sí |
+| EJ8 | Cliente consumidor en PHP | CE7.g | Sí |
+| EJ9 | Proyecto integrador (transversal) | CE7.b-e-f-g | Sí |
+| EJ10 | Documentación OpenAPI del proyecto | CE7.h | Sí |

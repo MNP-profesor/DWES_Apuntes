@@ -180,7 +180,7 @@ Provoca después **dos fallos a propósito** (renombra el endpoint; elimina la c
 ## Actividad evaluable E3
 
 ::: {.ejercicio}
-**EJ6 · E3 · Endpoint propio + pintado en página** — CE8.d · 1,25 h en clase
+**EJ6 · Endpoint propio + pintado en página** — CE8.d · 1,25 h en clase
 
 Construye el par completo endpoint + página para las sesiones de cine:
 
@@ -239,7 +239,7 @@ Laravel trae el middleware CORS configurable en `config/cors.php`; en clase se a
 ## Actividad evaluable E4
 
 ::: {.ejercicio}
-**EJ7 · E4 · Cliente web de la propia API (UD7)** — CE8.b, CE8.d · 1,5 h en clase
+**EJ7 · Cliente web de la propia API (UD7)** — CE8.b, CE8.d · 1,5 h en clase
 
 Con tu proyecto Laravel de la UD7 arrancado en local, construye una página PHP nativa (fuera de Laravel) que:
 

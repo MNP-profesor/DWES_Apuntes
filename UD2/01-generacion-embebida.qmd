@@ -135,9 +135,7 @@ El servidor solo procesa PHP en archivos `.php`. Un archivo `.html` con bloques 
 :::
 
 ::: {.ejercicio}
-**EJ1**
-
-Ficha de producto dinámica
+**EJ1 · Ficha de producto dinámica**
 
 Crea el archivo `ficha.php`. Declara tres variables con los datos de un producto cualquiera y muéstralas en una tabla HTML usando `<?= ?>`.
 

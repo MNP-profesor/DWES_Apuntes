@@ -158,7 +158,7 @@ Anota en el cuaderno **qué capa detiene cada intento** y redacta una conclusió
 ## Actividad evaluable E5
 
 ::: {.ejercicio}
-**EJ9 · E5 · Formulario de valoraciones con verificación en dos capas** — CE8.e · 3,25 h en clase (dos sesiones)
+**EJ9 · Formulario de valoraciones con verificación en dos capas** — CE8.e · 3,25 h en clase (dos sesiones)
 
 **Parte 1 (1,25 h):** construye el formulario de valoración de películas con validación declarativa HTML5 completa, interceptación del envío con `preventDefault` y comprobación con la Constraint Validation API, mostrando los mensajes junto a cada campo.
 

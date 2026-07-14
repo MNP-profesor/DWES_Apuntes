@@ -2,11 +2,11 @@
 
 > Generado automáticamente por `scripts/renumera_ejercicios.py` en cada render — **no editar a mano**.
 >
-> Última actualización: 2026-07-13
+> Última actualización: 2026-07-14
 
 ## UD1. Arquitecturas y tecnologías de programación Web en entorno servidor (6 ejercicios)
 
-| Nº | Título | Fichero |
+| Ejercicio | Título | Fichero |
 |:--:|--------|---------|
 | EJ1 | Clasificación por lugar de ejecución | `01-modelo-ejecucion.qmd` |
 | EJ2 | ¿Estático, dinámico embebido o script independiente? | `02-paginas-dinamicas.qmd` |
@@ -17,14 +17,14 @@
 
 ## UD2. Fundamentos de PHP: Variables, operadores y sintaxis embebida (11 ejercicios)
 
-| Nº | Título | Fichero |
+| Ejercicio | Título | Fichero |
 |:--:|--------|---------|
-| EJ1 | *(sin título)* | `01-generacion-embebida.qmd` |
+| EJ1 | Ficha de producto dinámica | `01-generacion-embebida.qmd` |
 | EJ2 | Plantilla con cuatro zonas | `01-generacion-embebida.qmd` |
 | EJ3 | Depurador: caza de errores | `02-sintaxis-variables.qmd` |
 | EJ4 | Panel de configuración | `02-sintaxis-variables.qmd` |
 | EJ5 | Practica con cadenas | `03-tipos-conversion.qmd` |
-| EJ6 | *(sin título)* | `03-tipos-conversion.qmd` |
+| EJ6 | Catálogo con cálculo de inventario | `03-tipos-conversion.qmd` |
 | EJ7 | Validación de datos de texto | `03-tipos-conversion.qmd` |
 | EJ8 | Ejercicios extras de Funciones de Strings | `03-tipos-conversion.qmd` |
 | EJ9 | Desarrollo vs. producción | `04-directivas-operadores.qmd` |
@@ -33,7 +33,7 @@
 
 ## UD3. Estructuras de control en PHP: Condicionales, bucles, funciones y formularios (11 ejercicios)
 
-| Nº | Título | Fichero |
+| Ejercicio | Título | Fichero |
 |:--:|--------|---------|
 | EJ1 | Clasificador de tarifas | `01-condicionales.qmd` |
 | EJ2 | Selector de plan de hosting | `01-condicionales.qmd` |
@@ -49,7 +49,7 @@
 
 ## UD4. POO en PHP + Desarrollo de funcionalidades Web: autenticación, sesiones y cookies (13 ejercicios)
 
-| Nº | Título | Fichero |
+| Ejercicio | Título | Fichero |
 |:--:|--------|---------|
 | EJ1 | Comparativa de mecanismos de mantenimiento de información de cliente (autoevaluación, no se entrega) | `01-ambito-y-clases.qmd` |
 | EJ2 | Figuras con clase abstracta e interfaz (autoevaluación, no se entrega) | `04-poo-avanzada.qmd` |
@@ -67,7 +67,7 @@
 
 ## UD5. Separación de la lógica de negocio: MVC con Laravel (9 ejercicios)
 
-| Nº | Título | Fichero |
+| Ejercicio | Título | Fichero |
 |:--:|--------|---------|
 | EJ1 | De espagueti a capas | `01-mvc.qmd` |
 | EJ2 | Puesta en marcha del proyecto | `02-instalacion-laravel.qmd` |
@@ -81,7 +81,7 @@
 
 ## UD6. Acceso a BBDD con PDO: Seguridad e integridad (9 ejercicios)
 
-| Nº | Título | Fichero |
+| Ejercicio | Título | Fichero |
 |:--:|--------|---------|
 | EJ1 | Estudio comparativo de tecnologías de acceso a datos | `01-tecnologias-acceso.qmd` |
 | EJ2 | Clase de conexión PDO reutilizable | `02-conexion-pdo.qmd` |
@@ -95,7 +95,7 @@
 
 ## UD7. Servicios Web: API REST con Laravel (Resources y Sanctum) (10 ejercicios)
 
-| Nº | Título | Fichero |
+| Ejercicio | Título | Fichero |
 |:--:|--------|---------|
 | EJ1 | Estudio comparativo de servicios web | `01-fundamentos.qmd` |
 | EJ2 | Disección de peticiones HTTP reales | `01-fundamentos.qmd` |
@@ -110,24 +110,24 @@
 
 ## UD8. Generación dinámica de páginas Web (12 ejercicios)
 
-| Nº | Título | Fichero |
+| Ejercicio | Título | Fichero |
 |:--:|--------|---------|
 | EJ1 | ¿Clásico o híbrido? | `01-modelos-ejecucion.qmd` |
-| EJ2 | E1 · Análisis comparativo servidor/cliente | `01-modelos-ejecucion.qmd` |
+| EJ2 | Análisis comparativo servidor/cliente | `01-modelos-ejecucion.qmd` |
 | EJ3 | Clasificación por capas | `02-tecnologias-frameworks.qmd` |
-| EJ4 | E2 · Ficha de tecnologías y frameworks | `02-tecnologias-frameworks.qmd` |
+| EJ4 | Ficha de tecnologías y frameworks | `02-tecnologias-frameworks.qmd` |
 | EJ5 | Endpoint de géneros y fallos provocados | `03-interaccion-fetch.qmd` |
-| EJ6 | E3 · Endpoint propio + pintado en página | `03-interaccion-fetch.qmd` |
-| EJ7 | E4 · Cliente web de la propia API (UD7) | `03-interaccion-fetch.qmd` |
+| EJ6 | Endpoint propio + pintado en página | `03-interaccion-fetch.qmd` |
+| EJ7 | Cliente web de la propia API (UD7) | `03-interaccion-fetch.qmd` |
 | EJ8 | La capa cliente no basta | `04-verificacion-formularios.qmd` |
-| EJ9 | E5 · Formulario de valoraciones con verificación en dos capas | `04-verificacion-formularios.qmd` |
+| EJ9 | Formulario de valoraciones con verificación en dos capas | `04-verificacion-formularios.qmd` |
 | EJ10 | Ocultar, contar, restaurar | `05-dom-dinamico.qmd` |
-| EJ11 | E6 · Cartelera interactiva: filtrado y ordenación sin recarga | `05-dom-dinamico.qmd` |
-| EJ12 | E7 · Proyecto integrador: "Mi cartelera conectada" | `06-proyecto.qmd` |
+| EJ11 | Cartelera interactiva: filtrado y ordenación sin recarga | `05-dom-dinamico.qmd` |
+| EJ12 | Proyecto integrador: "Mi cartelera conectada" | `06-proyecto.qmd` |
 
 ## UD9. Aplicaciones Web híbridas: librerías y repositorios heterogéneos (Composer) (11 ejercicios)
 
-| Nº | Título | Fichero |
+| Ejercicio | Título | Fichero |
 |:--:|--------|---------|
 | EJ1 | Restricciones de versión | `02-composer.qmd` |
 | EJ2 | Autoload PSR-4 propio | `02-composer.qmd` |

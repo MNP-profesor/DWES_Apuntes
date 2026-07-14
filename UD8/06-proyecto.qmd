@@ -25,7 +25,7 @@ El bloque final no introduce técnicas nuevas: exige **aplicarlas juntas**. El p
 ## Actividad evaluable E7
 
 ::: {.ejercicio}
-**EJ12 · E7 · Proyecto integrador: "Mi cartelera conectada"** — CE8.d, CE8.e, CE8.f, CE8.g · 2 h en clase + 4 h de trabajo autónomo
+**EJ12 · Proyecto integrador: "Mi cartelera conectada"** — CE8.d, CE8.e, CE8.f, CE8.g · 2 h en clase + 4 h de trabajo autónomo
 
 Construye una aplicación web híbrida completa, en PHP nativo más JavaScript instrumental, conectada a tu API de la UD7, que cumpla los cuatro requisitos siguientes:
 
