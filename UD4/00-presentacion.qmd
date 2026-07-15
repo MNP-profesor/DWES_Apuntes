@@ -64,7 +64,7 @@ A continuación, se detallan los ejercicios integrados en esta unidad, indicando
 |:---------:|--------|:---------:|
 | EJ1 | Comparativa de mecanismos de mantenimiento de cliente | No |
 | EJ2 | Figuras con clase abstracta e interfaz | No |
-| EJ3 | Contador estático y clonado | No — autoevaluación |
+| EJ3 | Contador estático y clonado | No |
 | EJ4 | Carrito de la compra con sesión | Sí |
 | EJ5 | Expiración y regeneración de sesión | Sí |
 | EJ6 | Preferencias con cookie | Sí |

@@ -90,7 +90,7 @@ Las directivas `include_once` y `require_once` funcionan igual que sus hermanas,
 ---
 
 ::: {.ejercicio}
-**EJ8 · Comparativa de mecanismos de autenticación (autoevaluación, no se entrega)**
+**EJ8 · Comparativa de mecanismos de autenticación**
 
 Escribe un script que compare, con ejemplos ejecutados, el resultado de guardar una contraseña en texto plano frente a aplicarle `password_hash()`, y demuestra la verificación con `password_verify()`. Este ejercicio te prepara para el examen; no hace falta que lo entregues.
 :::

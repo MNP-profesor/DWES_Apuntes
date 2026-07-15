@@ -134,7 +134,7 @@ Secuencia de uso y lo que se ve:
 | Pulsar ☆ en Júlia | Menú: `Favoritos (2)` |
 | Visitar `/favoritos` | Listado con Aitana y Júlia |
 | Pulsar `★ Quitar` en Aitana | Menú: `Favoritos (1)` |
-| Pulsar "Vaciar favoritos" | `✔ Favoritos vaciados` y menú: `Favoritos (0)` |
+| Pulsar "Vaciar favoritos" | `Favoritos vaciados` y menú: `Favoritos (0)` |
 | Cerrar el navegador y volver | Favoritos vacíos: la sesión expiró o es nueva |
 
 ::: {.callout-warning title="Errores frecuentes"}

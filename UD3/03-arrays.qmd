@@ -2,7 +2,7 @@
 title: "Arrays"
 ---
 
-El lenguaje PHP dispone de una gran cantidad de funciones de tratamiento de arrays, puedes consultarlas [**aquí**](https://www.php.net/manual/es/ref.array.php)
+El lenguaje PHP dispone de una gran cantidad de funciones de tratamiento de arrays, puedes consultarlas [**aquí**](https://www.php.net/manual/es/ref.array.php).
 
 ::: {.callout-important title="Normativa · RA-CE"}
 **CE3.c** — Se han utilizado matrices (arrays) para almacenar y recuperar conjuntos de datos.
@@ -116,7 +116,7 @@ print_r($config);
 ```
 
 ::: {.callout-warning title="Errores frecuentes"}
-Acceder a una clave que no existe lanza un aviso en PHP 8. Usa `??` para dar un valor por defecto seguro:
+Acceder a una clave que no existe lanza un aviso en PHP 8. Siempre usa `??` para dar un valor por defecto seguro para los casos en los que no exista la `key` del array:
 
 ```php
 <?php
@@ -142,16 +142,17 @@ $alumnos = [
     ["nombre" => "Aisha", "nota" => 9.2, "aprobado" => true],
 ];
 
-echo $alumnos[0]["nombre"]; // Laura
-echo $alumnos[1]["nota"];   // 4.0
+echo $alumnos[0]["nombre"] . "<br>"; // Laura
+echo $alumnos[1]["nota"] . "<br>";   // 4
 
 foreach ($alumnos as $a) {
-    $estado = $a["aprobado"] ? "✅" : "❌";
-    echo "$estado {$a['nombre']}: {$a['nota']}\n";
+    $estado = $a["aprobado"] ? "Aprobado" : "Suspendido";
+    echo "{$a['nombre']}: {$a['nota']} ({$estado})<br>";
 }
-// ✅ Laura: 8.5
-// ❌ Marc: 4.0
-// ✅ Aisha: 9.2
+
+// Laura: 8.5 (Aprobado)
+// Marc: 4 (Suspendido)
+// Aisha: 9.2 (Aprobado)
 ?>
 ```
 
@@ -209,12 +210,12 @@ $conEstado = array_map(function($a) {
 }, $alumnos);
 
 foreach ($conEstado as $a) {
-    $s = $a["aprobado"] ? "✅" : "❌";
-    echo "$s {$a['nombre']}\n";
+    $s = $a["aprobado"] ? "Aprobado" : "Suspendido";
+    echo "{$a['nombre']}: $s<br>";
 }
-// ✅ Laura
-// ❌ Marc
-// ✅ Aisha
+// Laura: Aprobado
+// Marc: Suspendido
+// Aisha: Aprobado
 ?>
 ```
 
@@ -437,16 +438,16 @@ Array
 ::: {.ejercicio}
 **EJ7 · Ejercicios extras de Arrays**
 
-Crea un fichero php llamado arrays.php y resuelve los siguientes ejercicios:
+Crea un fichero php llamado `arrays.php` y resuelve los siguientes ejercicios:
 
-- Crea un array llamado nombres que contenga varios nombres
-- Muestra el número de elementos que tiene el array (función count)
-- Crea una cadena que contenga los nombres de los alumnos existentes en el array separados por un espacio y muéstrala (función de strings implode)
-- Muestra el array ordenado alfabéticamente (función asort)
-- Muestra el array en el orden inverso al que se creó (función array_reverse)
-- Muestra la posición que tiene tu nombre en el array (función array_search)
+- Crea un array llamado nombres que contenga varios nombres.
+- Muestra el número de elementos que tiene el array (función `count`).
+- Crea una cadena que contenga los nombres de los alumnos existentes en el array separados por un espacio y muéstrala (función de strings `implode`).
+- Muestra el array ordenado alfabéticamente (función `asort`).
+- Muestra el array en el orden inverso al que se creó (función `array_reverse`).
+- Muestra la posición que tiene tu nombre en el array (función `array_search`).
 - Crea un array de alumnos donde cada elemento sea otro array que contenga el id, nombre y edad del alumno.
-- Crea una tabla html en la que se muestren todos los datos de los alumnos.
-- Utiliza la función array_column para obtener un array indexado que contenga únicamente los nombres de los alumnos y muéstralo por pantalla.
-- Crea un array con 10 números y utiliza la función array_sum para obtener la suma de los 10 números.
+- Crea una **tabla html** en la que se muestren todos los datos de los alumnos.
+- Utiliza la función `array_column` para obtener un array indexado que contenga únicamente los nombres de los alumnos y muéstralo por pantalla.
+- Crea un array con 10 números y utiliza la función `array_sum` para obtener la suma de los 10 números.
 :::

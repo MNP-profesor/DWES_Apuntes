@@ -133,3 +133,27 @@ a:hover {
   border-radius: .3rem;
   background: rgba(192, 86, 31, 0.06);
 }
+
+// ── Pies de imagen y de tabla: mismo estilo, centrados ──────
+figcaption,
+caption {
+  text-align: center;
+  font-size: 0.9em;
+  font-style: italic;
+  color: #5A6584;      // en midnight-dark.scss ya existe esta variable;
+                         // en midnight-light.scss usa: color: #5A6584;
+  margin-top: 0.5rem;
+  caption-side: bottom;  // por si algún día Bootstrap cambia el default de <caption>
+}
+
+// ── Citas (blockquote) ──────────────────────────────────────
+div.content blockquote,
+main blockquote,
+blockquote {
+  border-left: 4px solid $coral !important;
+  background: rgba(192, 86, 31, 0.06) !important;
+  color: $coral !important;
+  padding: .8rem 1.2rem !important;
+  margin: 1.2rem 0 !important;
+  border-radius: .3rem !important;
+}

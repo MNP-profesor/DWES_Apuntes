@@ -121,7 +121,7 @@ echo $c->velocidad; // 50
 ```
 
 ::: {.ejercicio}
-**EJ1 · Comparativa de mecanismos de mantenimiento de información de cliente (autoevaluación, no se entrega)**
+**EJ1 · Comparativa de mecanismos de mantenimiento de información de cliente**
 
 Elabora tu propia tabla comparando cookies, sesiones y "otros mecanismos" (URL, campos ocultos): dónde se almacena el dato, capacidad, persistencia y un caso de uso típico para cada uno. Este ejercicio te prepara para el examen; no hace falta que lo entregues.
 :::

@@ -15,3 +15,6 @@ _ud-pdfs/
 Thumbs.db
 
 **/*.quarto_ipynb
+
+# Pruebas individuales de Quarto
+PRUEBAS.*

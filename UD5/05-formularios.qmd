@@ -90,7 +90,7 @@ public function store(Request $request)
 3. Redirección `302` al listado con el mensaje flash. El usuario ve:
 
 ```
-✔ Contacto creado correctamente
+¡Contacto creado correctamente!
 ```
 
 **Escenario B — datos incorrectos** (`nombre` vacío, `tlf=12345`):
@@ -151,7 +151,7 @@ $request->validate([
 ```php
 {{-- dentro de components/layout.blade.php, antes de {{ $slot }} --}}
 @if (session('exito'))
-    <p class="flash">✔ {{ session('exito') }}</p>
+    <p class="flash">OK {{ session('exito') }}</p>
 @endif
 ```
 

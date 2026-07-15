@@ -52,7 +52,7 @@ echo $texto;
 
 ### Operaciones con cadenas (strings)
 
-El lenguaje PHP dispone de una gran cantidad de funciones de tratamiento de cadenas (strings), puedes consultarlas [**aquí**](https://www.php.net/manual/es/ref.strings.php)
+El lenguaje PHP dispone de una gran cantidad de funciones de tratamiento de cadenas (strings), puedes consultarlas [**aquí**](https://www.php.net/manual/es/ref.strings.php).
 
 ```php
 <?php

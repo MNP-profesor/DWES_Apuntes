@@ -160,9 +160,13 @@ class Producto {
     }
 }
 
-$p = new Producto();
-$p->precio = 19.99;
-echo $p->precio; // 19.99
+try {
+    $p = new Producto();
+    $p->precio = 19.95; // Si asignamos un negativo, lanzaría excepción
+    echo $p->precio; // 19.95
+} catch (InvalidArgumentException $e) {
+    echo "Error: " . $e->getMessage();
+} 
 ```
 
 ::: {.callout-tip title="Analogía Java"}

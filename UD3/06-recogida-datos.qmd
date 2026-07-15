@@ -120,10 +120,10 @@ if ($edad === null || !is_numeric($edad) || (int)$edad < 0 || (int)$edad > 120) 
 }
 
 if (empty($errores)) {
-    echo "Datos válidos ✅";
+    echo "Datos válidos";
 } else {
     foreach ($errores as $e) {
-        echo "❌ $e\n";
+        echo "Datos inválidos $e\n";
     }
 }
 ?>
@@ -313,7 +313,7 @@ Si recoges una variable de un formulario directo y la concatenas a pelo dentro d
 
 ```php
 <?php
-// ❌ CRÍTICO - VULNERABLE A INYECCIÓN SQL
+// CRÍTICO - VULNERABLE A INYECCIÓN SQL
 // Si el usuario escribe en la caja:  admin' OR '1'='1
 $usuario =$_POST['user'];
 $clave   =$_POST['pass'];
@@ -358,7 +358,7 @@ $condiciones = $_POST['condiciones']      ?? null;
 
 Resultado si todos los datos son correctos:
 ```
-Inscripción registrada ✅
+Inscripción registrada
 Nombre: Laura García
 Email: laura@example.com
 Curso: daw2
@@ -367,7 +367,7 @@ Importe de matrícula: 45,00 €
 
 Resultado si email y curso son incorrectos:
 ```
-❌ El email no tiene un formato válido.
-❌ Debe seleccionar un curso válido.
+El email no tiene un formato válido.
+Debe seleccionar un curso válido.
 ```
 :::

@@ -5,7 +5,7 @@ project:
     - python scripts/renumera_ejercicios.py  # RENUMERADOR automático de ejercicios
     - python scripts/aplica_descargas.py
 
-descargas-activas: false # Switch para habilitar o deshabilitar las descargas PDF y EPUB
+descargas-activas: true # Switch para habilitar o deshabilitar las descargas PDF y EPUB
 
 lang: es
 
@@ -149,6 +149,9 @@ format:
   pdf:
     documentclass: scrreprt
     papersize: a4
+    mainfont: "Segoe UI"
+    #mainfont: "Libertinus Serif"
+    #mainfont: "Fira Sans"
     geometry:
       - top=2.5cm
       - bottom=2.5cm

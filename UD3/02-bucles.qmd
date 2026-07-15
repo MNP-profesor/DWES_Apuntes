@@ -146,7 +146,7 @@ echo "¡Ya!";
 
 ## `foreach`
 
-La forma más natural de recorrer arrays en PHP:
+La forma más natural de **recorrer arrays** en PHP.
 
 ```php
 <?php
@@ -286,7 +286,7 @@ for ($fila = 0; $fila < count($matriz); $fila++) {
 ::: {.ejercicio}
 **EJ3 · Generador de tablas de multiplicar**
 
-Completa las tres funciones. Cada una genera la tabla del número recibido del 1 al 10:
+Completa las tres funciones. Las dos primeras generan la tabla del número recibido del 1 al 10. La tercera recibe un array de números entre 1 y 10 y va generando sus tablas, pero la función se detiene cuando se encuentre un valor -1.
 
 ```php
 <?php
@@ -300,7 +300,8 @@ function tablaWhile(int $n): void {
 
 function tablasCentinela(array $numeros): void {
     // Usa do-while. Genera la tabla de cada número del array
-    // hasta encontrar -1 (centinela); -1 y los siguientes no se procesan.
+    // hasta encontrar -1 (condición de parada), por tanto -1 y 
+    // los siguientes no se procesan.
 }
 
 tablaFor(3);
@@ -335,7 +336,7 @@ Resultado esperado:
 ::: {.ejercicio}
 **EJ4 · Filtro de inventario**
 
-Dado este inventario, implementa los dos recorridos:
+Dado este inventario, implementa los dos recorridos indicados en los comentarios:
 
 ```php
 <?php
@@ -346,15 +347,15 @@ $inventario = [
     ["nombre" => "Cable USB", "precio" => 5.0,   "stock" => 30],
 ];
 
-// a) Con break: lista productos hasta encontrar el primero con stock === 0
+// a) Con BREAK: lista productos hasta encontrar el primero con stock === 0
 //    Al encontrarlo, muestra "Agotado: {nombre}" y para.
-echo "--- Con break ---\n";
+echo "--- Con BREAK ---\n";
 foreach ($inventario as $p) {
     // Tu código aquí
 }
 
-// b) Con continue: muestra solo los productos con precio <= 50 €
-echo "--- Con continue (precio <= 50 €) ---\n";
+// b) Con CONTINUE: muestra solo los productos con precio <= 50 €
+echo "--- Con CONTINUE (precio <= 50 €) ---\n";
 foreach ($inventario as $p) {
     // Tu código aquí
 }

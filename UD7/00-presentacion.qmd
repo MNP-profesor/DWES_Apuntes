@@ -53,8 +53,8 @@ El hilo conductor es la **API de una tienda de videojuegos**. La construiremos, 
 ### Recursos y materiales
 
 - PHP 8.2+, Composer y tu proyecto Laravel 12.x de las unidades anteriores (o uno nuevo).
-- MySQL/MariaDB con la base de datos de prácticas.
-- Visual Studio Code con las extensiones de PHP y Laravel.
+- MySQL/MariaDB/PostreSQL/AmazonRDS con la base de datos de prácticas.
+- VS Code con las extensiones de PHP y Laravel.
 - [Postman](https://www.postman.com/downloads/) (escritorio o web).
 - Navegador con herramientas de desarrollador (pestaña Red).
 - [Documentación de Laravel](https://laravel.com/docs): *Routing*, *Eloquent: API Resources*, *Validation*, *Sanctum*, *HTTP Client*.

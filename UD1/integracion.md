@@ -71,7 +71,7 @@ Las siguientes construcciones son correctas en Quarto ≥ 1.4 pero conviene veri
 
 | Construcción | Estado | Qué comprobar |
 |---|---|---|
-| `::: {#exr-UD1-n}` con `## Ejercicio E1.n {#exr-UD1-n}` | ✅ Estándar Quarto | El ancla está tanto en el heading como en el div; si Quarto duplica el número en el PDF, elimina el `{#exr-UD1-n}` del heading y conserva solo el del div. |
-| `{.striped}` en tablas | ✅ Bootstrap/HTML | Solo aplica en formato `html`; en PDF se ignora sin error. |
-| Callouts (`::: {.callout-*}`) | ✅ Estándar Quarto ≥ 1.3 | Verificar que `title=` usa comillas dobles en el YAML del callout. |
-| `[php.net/manual/es](https://...)` en `00-presentacion.qmd` | ✅ Markdown estándar | Enlace externo, sin dependencias internas. |
+| `::: {#exr-UD1-n}` con `## Ejercicio E1.n {#exr-UD1-n}` | ✔ Estándar Quarto | El ancla está tanto en el heading como en el div; si Quarto duplica el número en el PDF, elimina el `{#exr-UD1-n}` del heading y conserva solo el del div. |
+| `{.striped}` en tablas | ✔ Bootstrap/HTML | Solo aplica en formato `html`; en PDF se ignora sin error. |
+| Callouts (`::: {.callout-*}`) | ✔ Estándar Quarto ≥ 1.3 | Verificar que `title=` usa comillas dobles en el YAML del callout. |
+| `[php.net/manual/es](https://...)` en `00-presentacion.qmd` | ✔ Markdown estándar | Enlace externo, sin dependencias internas. |

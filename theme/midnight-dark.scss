@@ -147,3 +147,27 @@ a:hover {
 h1.title {
   color: $ice !important;
 }
+
+// ── Pies de imagen y de tabla: mismo estilo, centrados ──────
+figcaption,
+caption {
+  text-align: center;
+  font-size: 0.9em;
+  font-style: italic;
+  color: $ice-dim;      // en midnight-dark.scss ya existe esta variable;
+                         // en midnight-light.scss usa: color: #5A6584;
+  margin-top: 0.5rem;
+  caption-side: bottom;  // por si algún día Bootstrap cambia el default de <caption>
+}
+
+// ── Citas (blockquote) ──────────────────────────────────────
+div.content blockquote,
+main blockquote,
+blockquote {
+  border-left: 4px solid $coral-lit !important;
+  background: $ice-dim !important;
+  color: #1E2761 !important;
+  padding: .8rem 1.2rem !important;
+  margin: 1.2rem 0 !important;
+  border-radius: .3rem !important;
+}

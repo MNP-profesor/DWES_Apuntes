@@ -51,7 +51,8 @@ Trabajaremos con **PDO nativo**, que es la API que de verdad hay que dominar. PD
 - Servidor local PHP (XAMPP, MAMP o equivalente) o Docker
 - [Documentación oficial de PHP](https://www.php.net/manual/es/)
 - Navegador con herramientas de desarrollador (F12)
-- phpMyAdmin o equivalente
+- En local phpMyAdmin (para MySQL o MariaDB) o pgAdmin (para PostgreSQL)
+- Opcionalmente en la nube se puede utilizar Amazon RDS
 - Editor de código (VS Code recomendado)
 
 #### Base de datos de prácticas

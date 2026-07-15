@@ -11,6 +11,8 @@ title: "Estructuras condicionales"
 
 ## `if` / `elseif` / `else`
 
+Ejemplo de uso:
+
 ```php
 <?php
 $edad = 17;
@@ -26,7 +28,7 @@ if ($edad < 18) {
 ?>
 ```
 
-Varios casos encadenados:
+Uso de varios casos encadenados:
 
 ```php
 <?php
@@ -50,7 +52,9 @@ echo $calificacion;
 ```
 
 ::: {.callout-warning title="Errores frecuentes"}
-PHP convierte cualquier valor a booleano al evaluarlo en un `if`. Son **`false`**: `0`, `""`, `"0"`, `[]`, `null`. Todo lo demás es `true`.
+PHP convierte cualquier valor a booleano al evaluarlo en un `if`. 
+* Devolverían **`false`** los siguientes: `0`, `""`, `"0"`, `[]`, `null`. 
+* Cualquier otro sería `true`.
 
 ```php
 <?php
@@ -66,7 +70,7 @@ var_dump((bool) [0]);  // true  (array no vacío)
 ?>
 ```
 
-Al comparar con `0`, `""` o `null`, usa siempre **`===`**:
+Al comparar con `0`, `""` o `null`, como buena práctica usa siempre **`===`**:
 
 ```php
 <?php
@@ -83,6 +87,8 @@ var_dump("" === false); // false
 
 ## Operador ternario `? :`
 
+Ejemplo de uso:
+
 ```php
 <?php
 $edad = 20;
@@ -92,7 +98,7 @@ echo $tarifa;
 ?>
 ```
 
-Ternarios encadenados:
+Varios ternarios encadenados:
 
 ```php
 <?php
@@ -107,9 +113,13 @@ echo $nivel;
 
 ---
 
-## Operador `??` (null coalescing)
+## Operador `??` (null coalescing o fusión nula)
 
-Devuelve el valor de la izquierda si existe y no es `null`; si no, el de la derecha:
+Devuelve el valor de la izquierda si existe y no es `null`; si no, devuelve el de la derecha.
+
+Equivaldría a hacer lo siguiente con un ternario: `isset(a) ? a : b`.
+
+En el siguiente ejemplo, suponemos que desde un formulario recuperamos el atributo 'nombre'.
 
 ```php
 <?php
@@ -118,6 +128,8 @@ echo $nombre;
 // Invitado   (si no viene el parámetro en la URL)
 ?>
 ```
+
+Ejemplo con un supuesto array de configuración:
 
 ```php
 <?php
@@ -211,6 +223,8 @@ Si el valor puede ser `0` o cadenas, usa `match`.
 
 `match` es una expresión que devuelve un valor, usa comparación estricta (`===`) y no tiene *fallthrough*:
 
+Es una alternativa más moderna, limpia y segura que el clásico `switch`.
+
 ```php
 <?php
 $plan = 'B';
@@ -229,21 +243,21 @@ echo $precio;
 
 ```php
 <?php
-$estado = "pendiente";
+$estado = "pen";
 
 $etiqueta = match($estado) {
-    "pendiente"  => "⏳ Pendiente",
-    "pagado"     => "✅ Pagado",
-    "cancelado"  => "❌ Cancelado",
-    default      => "❓ Desconocido",
+    "pend"    => "Pendiente",
+    "pag"     => "Pagado",
+    "canc"    => "Cancelado",
+    default   => "Desconocido",
 };
 
 echo $etiqueta;
-// ⏳ Pendiente
+// Pendiente
 ?>
 ```
 
-`match(true)` para evaluar rangos, equivale a una cadena de `elseif`:
+Utilizar `match(true)` para evaluar rangos equivale a una cadena de `elseif`:
 
 ```php
 <?php
@@ -262,7 +276,7 @@ echo $descripcion;
 ?>
 ```
 
-Si ningún caso coincide y no hay `default`, `match` lanza `UnhandledMatchError`:
+Si ningún caso coincide y no hay `default`, `match` lanza una excepción `UnhandledMatchError`:
 
 ```php
 <?php
@@ -273,7 +287,7 @@ try {
         "rojo"  => "#FF0000",
         "azul"  => "#0000FF",
     };
-} catch (\UnhandledMatchError $e) {
+} catch (UnhandledMatchError $e) {
     echo "Color no reconocido: $color";
 }
 // Color no reconocido: verde
@@ -316,7 +330,7 @@ juvenil (con descuento)
 ::: {.ejercicio}
 **EJ2 · Selector de plan de hosting**
 
-Implementa `obtenerPlan()` usando `match`. Añade un comentario de una línea explicando por qué `match` es más adecuado que `switch` aquí:
+Implementa `obtenerPlan()` usando `match`. Añade un comentario de una línea en el código explicando por qué `match` es más adecuado que `switch` aquí:
 
 ```php
 <?php

@@ -28,7 +28,7 @@ Nunca concatenes datos del usuario en el SQL:
 
 ```php
 <?php
-// ❌ VULNERABLE — jamás en producción
+// VULNERABLE — jamás en producción
 $id = $_GET['id'];
 $pdo->query("SELECT * FROM contactos WHERE id = $id");
 ```
@@ -41,7 +41,7 @@ El valor viaja **separado** del SQL; el motor nunca lo interpreta como código:
 
 ```php
 <?php
-// ✅ SEGURO — sentencia preparada con marcador con nombre
+// SEGURO — sentencia preparada con marcador con nombre
 $sql = 'SELECT id, nombre, telefono FROM contactos WHERE id = :id';
 $sentencia = $pdo->prepare($sql);
 $sentencia->execute([':id' => $_GET['id']]);

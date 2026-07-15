@@ -2,6 +2,7 @@
 title: "Funciones"
 ---
 
+El lenguaje PHP dispone de una gran cantidad de funciones bien categorizadas, puedes consultarlas [**aquí**](https://www.php.net/manual/es/funcref.php).
 
 ::: {.callout-important title="Normativa · RA-CE"}
 **CE3.d** — Se han creado y utilizado funciones.
@@ -36,6 +37,7 @@ var_dump(esPar(4));  // true
 var_dump(esPar(7));  // false
 ?>
 ```
+Típico ejemplo de calcular un factorial utilizando `recursividad`:
 
 ```php
 <?php
@@ -53,6 +55,8 @@ echo factorial(0);  // 1
 
 ## Parámetros con valor por defecto
 
+**Ejemplo 1**
+
 ```php
 <?php
 function formatearPrecio(float $valor, int $decimales = 2, string $moneda = "€"): string {
@@ -65,6 +69,7 @@ echo formatearPrecio(1234.5);        // 1.234,50 €
 echo formatearPrecio(99.99, 2, "$"); // 99,99 $
 ?>
 ```
+**Ejemplo 2**
 
 ```php
 <?php
@@ -75,6 +80,31 @@ function repetir(string $texto, int $veces = 3, string $separador = " "): string
 echo repetir("PHP");          // PHP PHP PHP
 echo repetir("PHP", 5);       // PHP PHP PHP PHP PHP
 echo repetir("eco", 4, "-");  // eco-eco-eco-eco
+?>
+```
+**Ejemplo 3**
+
+```php
+<?php
+// Declaramos la función con valores por defecto para $rol y $pais
+function crearPerfil($nombre, $rol = "Lector", $pais = "España") {
+    return "Usuario: $nombre | Rol: $rol | País: $pais\n";
+}
+
+// CASO 1: Solo pasamos el nombre (parámetro obligatorio)
+// PHP usará automáticamente los valores por defecto para el rol y el país.
+echo crearPerfil("Ana"); 
+// Imprime: Usuario: Ana | Rol: Lector | País: España
+
+// CASO 2: Queremos cambiar el rol, pero mantener el país por defecto
+// El segundo argumento sobrescribe a "Lector", pero el tercero se mantiene.
+echo crearPerfil("Carlos", "Administrador"); 
+// Imprime: Usuario: Carlos | Rol: Administrador | País: España
+
+// CASO 3: Queremos cambiar absolutamente todo
+// Al pasar todos los argumentos, ignoramos por completo los valores por defecto.
+echo crearPerfil("Sofía", "Editor", "México"); 
+// Imprime: Usuario: Sofía | Rol: Editor | País: México
 ?>
 ```
 
@@ -268,7 +298,7 @@ echo precioBueno(100, 0.21); // 121
 
 ## Funciones anónimas y Closures
 
-Una **función anónima** es aquella a la que no se le asigna un nombre. Puede almacenarse en variables, pasarse como argumento (callbacks) o devolverse desde otra función.
+Una `**función anónima**` es aquella a la que **no se le asigna un nombre**. Puede almacenarse en variables, pasarse como argumento (callbacks) o devolverse desde otra función.
 
 ```php
 <?php
@@ -281,18 +311,18 @@ echo $saludo("Aisha"); // Hola, Aisha
 ?>
 ```
 
-Un **Closure (o clausura)** *es una función anónima* con la capacidad de heredar variables del entorno exterior (ámbito del script contenedor) mediante la estructura use.
+Un `**Closure (o clausura)**` *es una función anónima* con la capacidad de heredar variables del entorno exterior (ámbito del script contenedor) mediante la estructura use.
 
 ```php
 <?php
 $iva = 0.21; // Variable en el ámbito local/global externo
 
 // El closure "atrapa" el valor de $iva en el momento de su definición
-$calcularTotal = function(float $base) use ($impuesto): float {
-    return $base * (1 +$impuesto);
+$calcularTotal = function(float $base) use ($iva): float {
+    return $base * (1 + $iva);
 };
 
-echo $calcularTotal(100); // 121
+echo "Total con impuestos: " . $calcularTotal(100); // Total con impuestos: 121
 ?>
 ```
 
@@ -341,7 +371,7 @@ echo maximo(3, 7, 2, 9);  // 9
 
 ## PHPDoc
 
-Documenta tus funciones con bloques PHPDoc — los IDEs los leen y ofrecen autocompletado y validación:
+Documenta tus funciones con bloques [PHPDoc](https://phpdoc.org/) — los IDEs los leen y ofrecen autocompletado y validación.
 
 ```php
 <?php
@@ -378,7 +408,7 @@ Crea un fichero `libreria_validacion.php` con estas cuatro funciones. Todas llev
  * @return bool
  */
 function validarDNI(string $dni): bool {
-    // Usa preg_match con /^[0-9]{8}[A-Z]$/
+    // Usa preg_match con la RegEx adecuada
 }
 
 /**
@@ -432,7 +462,7 @@ echo "x=$x y=$y\n"; // x=20 y=10
 
 En el proyecto de ejemplo creado en la actividad anterior, crea un fichero PHP llamado `funciones.php` y resuelve los siguientes ejercicios:
 
-### 1. Generador de consultas `INSERT INTO` (Paso por valor)
+#### 1. Generador de consultas `INSERT INTO` (Paso por valor)
 Queremos crear una función llamada `insert` que nos genere una sentencia `INSERT INTO` en SQL de forma dinámica. Para ello, la función recibirá dos parámetros: el nombre de la tabla y un array asociativo que contendrá los nombres de los campos (claves) y sus respectivos valores. 
 
 La sentencia resultante devuelta por la función debe tener la siguiente estructura:
@@ -441,7 +471,7 @@ La sentencia resultante devuelta por la función debe tener la siguiente estruct
 * *Nota:* De momento no operaremos con los valores del array, solo con sus claves para preparar los *named placeholders* de PDO.
 * *Ayuda:* Utiliza las funciones nativas `sprintf`, `implode` y `array_keys`.
 
-### 2. Generador de consultas SQL (Paso por referencia)
+#### 2. Generador de consultas SQL (Paso por referencia)
 Repite el ejercicio anterior aplicando una lógica diferente basada en plantillas y paso por referencia:
 * La función recibirá la cadena base por referencia inicializada de la siguiente forma: 
   `$sql = "INSERT INTO tabla (campos) VALUES (valores)";`
@@ -450,7 +480,7 @@ Repite el ejercicio anterior aplicando una lógica diferente basada en plantilla
     * El texto `campos` por los nombres de los campos del array separados por comas.
     * El texto `valores` por los nombres de los campos separados por comas con el carácter `:` delante.
 
-### 3. Calculadora flexible mediante Funciones Anónimas (*Callbacks*)
+#### 3. Calculadora flexible mediante Funciones Anónimas (*Callbacks*)
 Queremos crear una función genérica que calcule y muestre por pantalla el resultado de una operación matemática entre dos operandos.
 
 La salida impresa debe seguir estrictamente este formato:  

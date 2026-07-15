@@ -63,7 +63,7 @@ echo 'Vivo en $ciudad, $pais.';
 
 Reglas de nomenclatura:
 
-- Empieza por letra o `_`, nunca por número: `$_config`, `$nombre`, `$precio2` ✓ — `$2precio` ✗
+- Empieza por letra o `_`, nunca por número: `$_config`, `$nombre`, `$precio2` Correcto — `$2precio` Incorrecto
 - Sensible a mayúsculas: `$Precio` y `$precio` son variables distintas.
 - Convención: `snake_case` — `$precio_con_iva`, `$nombre_usuario`.
 

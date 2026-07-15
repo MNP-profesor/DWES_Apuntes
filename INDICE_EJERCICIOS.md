@@ -2,7 +2,7 @@
 
 > Generado automáticamente por `scripts/renumera_ejercicios.py` en cada render — **no editar a mano**.
 >
-> Última actualización: 2026-07-14
+> Última actualización: 2026-07-15
 
 ## UD1. Arquitecturas y tecnologías de programación Web en entorno servidor (6 ejercicios)
 
@@ -51,14 +51,14 @@
 
 | Ejercicio | Título | Fichero |
 |:--:|--------|---------|
-| EJ1 | Comparativa de mecanismos de mantenimiento de información de cliente (autoevaluación, no se entrega) | `01-ambito-y-clases.qmd` |
-| EJ2 | Figuras con clase abstracta e interfaz (autoevaluación, no se entrega) | `04-poo-avanzada.qmd` |
-| EJ3 | Contador estático y clonado (autoevaluación, no se entrega) | `04-poo-avanzada.qmd` |
+| EJ1 | Comparativa de mecanismos de mantenimiento de información de cliente | `01-ambito-y-clases.qmd` |
+| EJ2 | Figuras con clase abstracta e interfaz | `04-poo-avanzada.qmd` |
+| EJ3 | Contador estático y clonado | `04-poo-avanzada.qmd` |
 | EJ4 | Carrito de la compra con sesión | `05-sesiones.qmd` |
 | EJ5 | Expiración y regeneración de sesión | `05-sesiones.qmd` |
 | EJ6 | Preferencias de usuario con cookie | `06-cookies.qmd` |
 | EJ7 | Cookie con flags de seguridad | `06-cookies.qmd` |
-| EJ8 | Comparativa de mecanismos de autenticación (autoevaluación, no se entrega) | `07-autenticacion.qmd` |
+| EJ8 | Comparativa de mecanismos de autenticación | `07-autenticacion.qmd` |
 | EJ9 | Login básico con clase `Usuario` | `08-login-registro.qmd` |
 | EJ10 | Registro con validación y hash de contraseñas | `08-login-registro.qmd` |
 | EJ11 | «Recordarme» con cookie persistente | `09-recordarme-y-roles.qmd` |

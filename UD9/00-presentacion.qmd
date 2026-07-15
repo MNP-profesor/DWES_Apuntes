@@ -53,11 +53,10 @@ Los ejercicios de proyecto encadenan sobre una misma aplicación: la fuente que 
 
 ### Recursos y materiales
 
-## Recursos y materiales
-
-- Equipo con XAMPP (Apache + PHP 8.2 o superior) operativo, el mismo entorno empleado desde la UD2.
+- XAMPP (Apache + PHP 8.2 o superior) operativo, el mismo entorno empleado desde la UD2.
+- MySQL/MariaDB/PostreSQL/AmazonRDS con la base de datos de prácticas.
 - PHP 8.2+, Composer y tu proyecto Laravel 12.x de las unidades anteriores (o uno nuevo).
-- MySQL/MariaDB con la base de datos de prácticas.
+- MySQL/MariaDB/PostreSQL/AmazonRDS con la base de datos de prácticas.
 - Visual Studio Code con las extensiones de PHP y Laravel ya instaladas.
 - Navegador con herramientas de desarrollador.
 - Documentación de referencia: [php.net](https://www.php.net/manual/es/) y [Packagist](https://packagist.org) para localizar librerías de terceros.
