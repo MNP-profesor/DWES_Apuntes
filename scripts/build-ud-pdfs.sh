@@ -59,6 +59,7 @@ format:
   pdf:
     documentclass: scrreprt
     papersize: a4
+    mainfont: "Fira Sans"
     geometry:
       - top=2.5cm
       - bottom=2.5cm

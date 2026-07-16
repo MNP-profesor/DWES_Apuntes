@@ -150,8 +150,6 @@ format:
     documentclass: scrreprt
     papersize: a4
     mainfont: "Fira Sans"
-    #mainfont: "Segoe UI" --> Falla en GitHub Actions
-    #mainfont: "Libertinus Serif"
     geometry:
       - top=2.5cm
       - bottom=2.5cm
