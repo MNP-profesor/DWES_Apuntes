@@ -1,6 +1,6 @@
-# «Recordarme» y control de acceso por roles
+# Cookies persistentes y control de acceso por roles
 
-## Recordarme (cookies persistentes)
+## Cookies persistentes
 
 Combina cookies y sesiones: se genera un token aleatorio, se guarda asociado al usuario en el servidor y se envía como cookie de larga duración. Si no hay sesión activa pero existe esa cookie válida, se reinicia la sesión sin pedir contraseña.
 

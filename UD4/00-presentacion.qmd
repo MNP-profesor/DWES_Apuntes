@@ -34,14 +34,23 @@ El bloque de POO (capítulos 1-4) no tiene un CE propio: es la base instrumental
 
 ### Contenidos
 
-| Bloque 1 — POO en PHP | Bloque 2 — Funcionalidades Web |
-|---|---|
-| Ámbito de variables y clases | Sesiones |
-| Constructores y encapsulación | Cookies |
-| Herencia, namespaces, excepciones | Autenticación y redirecciones |
-| Clases estáticas, clonado, abstractas e interfaces | Login y registro |
-| | Recordarme y roles |
-| | Depuración |
+Se divide en dos bloques bien diferenciados:
+
+| POO en PHP | Título | CE |
+|:----------:|--------|:--:|
+| 1 | Ámbito de variables y clases | CE5.g |
+| 2 | Constructores y encapsulación | CE5.g |
+| 3 | Herencia, namespaces, excepciones | CE5.g |
+| 4 | Clases estáticas, clonado, abstractas e interfaces | CE5.g |
+
+| Funcionalidades Web | Título | CE |
+|:-------------------:|--------|:--:|
+| 1 | Sesiones | CE4.a-b |
+| 2 | Cookies | CE4.a-c |
+| 3 | Autenticación, redirecciones e inclusiones | CE4.a-d |
+| 4 | Login y registro | CE4.e |
+| 5 | Cookies persistentes y control de acceso por roles | CE4.c-e |
+| 6 | Depuración | CE4.g |
 
 ### Recursos y materiales
 

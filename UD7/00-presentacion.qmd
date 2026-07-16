@@ -38,17 +38,17 @@ El hilo conductor es la **API de una tienda de videojuegos**. La construiremos, 
 
 ### Contenidos
 
-| Capítulo | Contenido | CE |
-|:---------|:----------|:---|
-| Fundamentos de servicios web | HTTP, JSON, REST vs SOAP | CE7.a·b·c·d |
-| Rutas API y controladores | `install:api`, `apiResource` | CE7.e |
-| API Resources | Transformación de modelos en JSON | CE7.e |
-| Validación y códigos de estado | Form Requests, contrato de errores | CE7.e·f |
-| Autenticación con Sanctum | Tokens y *abilities* | CE7.d·e |
-| Verificación del servicio | Postman y pruebas HTTP | CE7.c·f |
-| Consumo desde PHP | Cliente `Http::` | CE7.g |
-| Proyecto integrador | API completa sobre tu dominio | CE7.b·e·f·g |
-| Documentación con OpenAPI | El contrato publicado | CE7.h |
+| Bloque | Título | CE |
+|:------:|--------|:--:|
+| 1 | Fundamentos de servicios web: HTTP, JSON, REST vs SOAP | CE7.a-b-c-d |
+| 2 | Rutas API y controladores: `install:api`, `apiResource` | CE7-e |
+| 3 | API Resources: Transformación de modelos en JSON | CE7.e |
+| 4 | Validación y códigos de estado: Form Requests, contrato de errores | CE7.e-f |
+| 5 | Autenticación con Sanctum: Tokens y *abilities* | CE7.d-e |
+| 6 | Verificación del servicio: Postman y pruebas HTTP | CE7.c-f |
+| 7 | Consumo desde PHP: Cliente `Http::` | CE7.g |
+| 8 | Proyecto integrador: API completa sobre tu dominio | CE7.b-e-f-g |
+| 9 | Documentación con OpenAPI: El contrato publicado | CE7.h |
 
 ### Recursos y materiales
 

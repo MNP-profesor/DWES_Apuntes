@@ -34,13 +34,13 @@ En esta unidad las aplicaciones dejan de trabajar con datos efímeros y aprenden
 
 ### Contenidos
 
-| Fase | De qué trata | CE |
-|------|--------------|----|
-| Conectar | Tecnologías de acceso · conexión PDO · DSN · excepciones | a, b |
-| Consultar | Sentencias preparadas · inyección SQL · publicación web | c, d |
-| Recorrer | Modos de fetch · `FETCH_CLASS` · hidratación de objetos | e |
-| Modificar | INSERT · UPDATE · DELETE · transacciones · integridad | f |
-| Asegurar | Pruebas · documentación | g |
+| Bloque | Título | CE |
+|:------:|--------|:--:|
+| 1 | Conexiones: Tecnologías de acceso - conexión PDO - DSN - excepciones | CE6.a-b |
+| 2 | Consultar: Sentencias preparadas - inyección SQL - publicación web | CE6.c-d |
+| 3 | Recorrer: Modos de fetch - `FETCH_CLASS` | CE6.c-e |
+| 4 | Modificar: INSERT - UPDATE - DELETE - transacciones - integridad | CE6.f-g |
+| 5 | Pruebas y documentación | CE6.h |
 
 ::: {.callout-note title="Concepto clave"}
 Trabajaremos con **PDO nativo**, que es la API que de verdad hay que dominar. PDO es además la base sobre la que Laravel construye su ORM Eloquent (que viste en la UD5): al final de la unidad entenderás "qué ocurre por debajo" de ese ORM.

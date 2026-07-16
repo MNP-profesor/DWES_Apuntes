@@ -32,12 +32,14 @@ En esta unidad aprendemos a dar lógica real a tus páginas: condicionales, bucl
 
 ### Contenidos
 
-1. Condicionales: `if/elseif/else`, ternario, `??`, `switch` / `match`
-2. Bucles `while`, `do-while`, `for`, `foreach`, `break`/`continue`
-3. Arrays indexados y asociativos, multidimensionales y funciones de orden superior
-4. Funciones: parámetros, retorno, referencia, ámbito
-5. Formularios HTML: GET vs POST
-6. Recogida y validación de datos
+| Bloque | Título | CE |
+|:------:|--------|:--:|
+| 1 | Condicionales: `if/elseif/else`, ternario, `??`, `switch` / `match` | CE3.a |
+| 2 | Bucles `while`, `do-while`, `for`, `foreach`, `break`/`continue` | CE3.b |
+| 3 | Arrays indexados y asociativos, multidimensionales y funciones de orden superior | CE3.c |
+| 4 | Funciones: parámetros, retorno, referencia, ámbito | CE3.d |
+| 5 | Formularios HTML: GET vs POST | CE3.e |
+| 6 | Recogida y validación de datos | CE3.e-f |
 
 ### Recursos y materiales
 

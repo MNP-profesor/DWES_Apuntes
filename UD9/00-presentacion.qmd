@@ -37,15 +37,15 @@ La aplicación Laravel de las unidades anteriores es la base de trabajo, y la AP
 
 ### Contenidos
 
-| Bloque | Título | Contenido |
-|:------:|---|---|
-| B1 | Aplicaciones Web híbridas | Concepto, ventajas de la reutilización y ecosistema |
-| B2 | Composer en profundidad | Dependencias, semver, `composer.lock` y autoload PSR-4 |
-| B3 | Consumir repositorios existentes | Guzzle, APIs públicas y API autenticada de la UD7 |
-| B4 | Crear repositorios propios | Proceso ETL con comandos Artisan y `league/csv` |
-| B5 | Librerías de terceros | PDF con dompdf y códigos QR con endroid/qr-code |
-| B6 | Analítica, Big Data y BI | Agregaciones con colecciones y cuadro de mando |
-| B7 | Probar, depurar y documentar | Fuentes caídas, logs, PHPDoc y README |
+| Bloque | Título | CE |
+|:------:|--------|:--:|
+| 1 | Aplicaciones Web híbridas: Concepto, ventajas de la reutilización y ecosistema | CE9.a-b |
+| 2 | Composer en profundidad: Dependencias, semver, `composer.lock` y autoload PSR-4 | CE9.b |
+| 3 | Consumir repositorios existentes: APIs públicas y API autenticada de la UD7 | CE9.c-f |
+| 4 | Crear repositorios propios: Proceso ETL con comandos Artisan y `league/csv` | CE9.d |
+| 5 | Librerías de terceros: PDF con dompdf y códigos QR con endroid/qr-code | CE9.e-f |
+| 6 | Analítica, Big Data y BI: Agregaciones con colecciones y cuadro de mando | CE9.c-f |
+| 7 | Probar, depurar y documentar: Fuentes caídas, logs, PHPDoc y README | CE9.g |
 
 ### El proyecto de la unidad
 
@@ -89,7 +89,7 @@ Se resuelven en clase o en casa:
 Relacionados con la misma aplicación:
 
 | Ejercicio | Título | ¿Entrega? |
-|:--:|--------|--------|
+|:---------:|--------|:---------:|
 | EJ7 | Proyecto — tu repositorio específico | Sí |
 | EJ8 | QR embebido en el PDF | Sí |
 | EJ9 | Proyecto — dos funcionalidades de terceros | Sí |

@@ -36,12 +36,13 @@ Al terminar esta unidad serás capaz de:
 
 ### Contenidos
 
-| Bloque | Tema | CE |
-|---|---|---|
+| Bloque | Título | CE |
+|:------:|--------|:--:|
 | 1 | Generación embebida, tecnologías y delimitadores | CE2.a-b-c |
-| 2 | Sintaxis, variables, constantes y tipos | CE2.d-e-g |
-| 3 | Directivas y operadores | CE2.f-g |
-| 4 | Ámbito de las variables | CE2.h |
+| 2 | Sintaxis, variables y constantes | CE2.d-e |
+| 3 | Tipos de datos y conversión | CE2.g |
+| 4 | Directivas y operadores | CE2.f-g |
+| 5 | Ámbito de las variables | CE2.h |
 
 ### Recursos y materiales
 

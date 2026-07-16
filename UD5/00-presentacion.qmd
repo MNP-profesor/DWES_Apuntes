@@ -42,16 +42,18 @@ Al terminar la unidad serás capaz de:
 
 ### Contenidos
 
-1. Separación de capas y patrón MVC
-2. Laravel: instalación y estructura
-3. Rutas y controladores
-4. Vistas con Blade
-5. Formularios dinámicos: CSRF, validación y errores
-6. Eloquent y migraciones (contenido instrumental)
-7. Sesiones y mantenimiento de estado
-8. Configuración de la aplicación por entornos
-9. POO aplicada: servicios e inyección de dependencias
-10. Pruebas, documentación y proyecto integrador
+| Bloque | Título | CE |
+|:------:|--------|:--:|
+| 1 | Separación de capas y patrón MVC | CE5.a-b |
+| 2 | Laravel: instalación y estructura | CE5.b |
+| 3 | Rutas y controladores | CE5.b-c |
+| 4 | Vistas con Blade | CE5.c |
+| 5 | Formularios dinámicos: CSRF, validación y errores | CE5.d |
+| 6 | Eloquent y migraciones (contenido instrumental) | CE5.f |
+| 7 | Sesiones y mantenimiento de estado | CE5.f |
+| 8 | Configuración de la aplicación por entornos | CE5.e |
+| 9 | POO aplicada: servicios e inyección de dependencias | CE5.g |
+| 10 | Pruebas, documentación y proyecto integrador | CE5.f-h |
 
 ### Recursos y materiales
 

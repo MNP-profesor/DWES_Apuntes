@@ -33,14 +33,14 @@ En esta unidad verás qué ocurre entre que el usuario escribe una URL y el nave
 
 ### Contenidos
 
-| Bloque | Título |
-|---|---|
-| 1 | Modelos de ejecución: cliente y servidor |
-| 2 | Páginas estáticas y dinámicas |
-| 3 | Servidor web y servidor de aplicaciones |
-| 4 | Lenguajes y tecnologías en entorno servidor |
-| 5 | Integración con lenguajes de marcas |
-| 6 | Herramientas de desarrollo |
+| Bloque | Título | CE |
+|:------:|--------|:--:|
+| 1 | Modelos de ejecución: cliente y servidor | CE1.a |
+| 2 | Páginas estáticas y dinámicas | CE1.b |
+| 3 | Servidor web y servidor de aplicaciones | CE1.c-d |
+| 4 | Lenguajes y tecnologías en entorno servidor | CE1.e |
+| 5 | Integración con lenguajes de marcas | CE1.f |
+| 6 | Herramientas de desarrollo | CE1.c-e |
 
 ### Recursos y materiales
 

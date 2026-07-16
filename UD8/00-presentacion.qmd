@@ -42,14 +42,14 @@ El JavaScript empleado en esta unidad tiene carácter instrumental y se limita a
 
 La unidad se organiza en seis bloques que progresan desde el análisis conceptual hasta la integración final:
 
-| Bloque | Contenido | CE |
-|:------:|-------------------------------------------------------|:-----------:|
-| B1 | Servidor y cliente: dos modelos de ejecución, una sola aplicación | CE8.a, CE8.b |
-| B2 | Tecnologías y frameworks de generación dinámica interactiva | CE8.c |
-| B3 | Obtención remota de información: fetch, JSON y consumo de APIs | CE8.b, CE8.d |
-| B4 | Verificación de formularios en dos capas | CE8.e |
-| B5 | Modificación dinámica del contenido y la estructura | CE8.f |
-| B6 | Proyecto integrador: aplicación web híbrida | CE8.g (d, e, f) |
+| Bloque | Título | CE |
+|:------:|--------|:--:|
+| 1 | Servidor y cliente: dos modelos de ejecución, una sola aplicación | CE8.a-b |
+| 2 | Tecnologías y frameworks de generación dinámica interactiva | CE8.c |
+| 3 | Obtención remota de información: fetch, JSON y consumo de APIs | CE8.b-d |
+| 4 | Verificación de formularios en dos capas | CE8.e |
+| 5 | Modificación dinámica del contenido y la estructura | CE8.f |
+| 6 | Proyecto integrador: aplicación web híbrida | CE8.d-e-f-g |
 
 ::: {.callout-note title="Concepto clave"}
 **Hilo conductor.** Todos los ejemplos y actividades giran en torno a una misma aplicación: una cartelera de cine que muestra películas y sesiones. Se empieza analizándola como página estática generada por PHP (B1), se le añade la obtención remota de la lista de películas (B3), un formulario de valoración verificado en dos capas (B4) y filtrado y ordenación sin recargar (B5), hasta desembocar en el proyecto integrador (B6), donde cada estudiante construye su propia versión completa conectada a la API de la UD7.
