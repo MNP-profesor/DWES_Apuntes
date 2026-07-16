@@ -22,30 +22,77 @@ error_log('Fallo al verificar el usuario: ' . $email);
 `var_dump()`/`print_r()` son la primera herramienta: rápidas y sin instalar nada. Xdebug, integrado en el editor, permite poner puntos de ruptura e inspeccionar variables paso a paso cuando el problema no es evidente con un simple `var_dump()`.
 :::
 
-Ejemplo de bug típico y su diagnóstico:
+## Un caso con varios fallos a la vez
+
+En una aplicación real, los bugs rara vez vienen solos. Este fragmento de una página de login tiene **tres** fallos distintos — la depuración eficaz consiste en aislarlos uno a uno, no en cambiar cosas al azar hasta que "parezca" que funciona:
 
 ```php
-// bug.php — la sesión "se pierde" tras el login
-echo "Bienvenido"; // ← esta línea envía salida ANTES de session_start()
-session_start();   // demasiado tarde: PHP avisa "headers already sent"
-$_SESSION['usuario_id'] = 1; // esto no llega a guardarse correctamente
+// login.php — versión con errores
+echo "<h1>Iniciar sesión</h1>"; // (1)
+
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $usuario = $repositorio->buscarPorEmail($_POST['email']);
+
+    if ($usuario->verificarPassword($_POST['password'])) { // (2)
+        $_SESSION['usuario_id'] = $usuario->getEmail();
+        header('Location: /panel.php'); // (3)
+        echo 'Redirigiendo...';
+    } else {
+        echo 'Credenciales incorrectas';
+    }
+}
 ```
 
+Proceso de diagnóstico, paso a paso:
+
+1. **Síntoma**: nada más cargar la página, PHP muestra un aviso "headers already sent" y la sesión no se guarda. **Causa**: el `echo "<h1>..."` en la línea (1) envía salida antes de `session_start()`. **Corrección**: mover `session_start()` a la primera línea del script.
+2. **Síntoma**: con un email que no existe, la página da un error fatal en vez de mostrar "Credenciales incorrectas". **Causa**: en la línea (2), si `buscarPorEmail()` devuelve `null`, llamar a `$usuario->verificarPassword()` sobre `null` revienta el script. **Corrección**: comprobar `$usuario !== null` antes de usarlo, exactamente como en el capítulo de login y registro.
+3. **Síntoma**: tras un login correcto, el navegador no redirige, y además puede aparecer un error "headers already sent" en la línea del `header()`. **Causa**: falta `exit;` después del `header()` en la línea (3), y además el `echo 'Redirigiendo...'` intenta escribir salida después de haber llamado a `header()`. **Corrección**: añadir `exit;` justo después del `header()` y quitar ese `echo`.
+
 ```php
-// corregido.php
-session_start(); // siempre lo primero, sin nada antes
-echo "Bienvenido";
-$_SESSION['usuario_id'] = 1; // ahora sí persiste
+// login.php — corregido
+session_start(); // (1) corregido: primera línea, sin salida antes
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $usuario = $repositorio->buscarPorEmail($_POST['email']);
+
+    if ($usuario !== null && $usuario->verificarPassword($_POST['password'])) { // (2) corregido
+        $_SESSION['usuario_id'] = $usuario->getEmail();
+        header('Location: /panel.php');
+        exit; // (3) corregido
+    } else {
+        echo 'Credenciales incorrectas';
+    }
+}
 ```
 
 ::: {.callout-warning title="Errores frecuentes"}
-Cualquier salida antes de `session_start()`, `setcookie()` o `header()` — incluido un simple espacio en blanco antes de `<?php` — provoca el error "headers already sent". Es la primera sospecha cuando una sesión o cookie "no funciona".
+Cuando encuentres un bug, resiste la tentación de arreglar el primer síntoma y dar por cerrado el caso. Vuelve a probar el flujo completo (usuario correcto, usuario inexistente, contraseña incorrecta) después de cada corrección: es habitual que un mismo script tenga más de un fallo independiente, como en el ejemplo anterior.
 :::
 
 ::: {.ejercicio}
-**EJ13 · Depuración de una aplicación con errores en sesión/cookie**
+**EJ15 · Depuración de una aplicación con varios fallos**
 
-Se te entrega una aplicación en la que la sesión del usuario se pierde tras el login. Localiza el error usando `var_dump()`/Xdebug y documenta brevemente el proceso de depuración seguido (qué comprobaste, qué encontraste, cómo lo corregiste).
+Se te entrega el siguiente fragmento de una página de "recordarme" con **dos** fallos independientes. Localízalos con `var_dump()`/Xdebug (no te limites a leer el código: ejecútalo y observa el comportamiento real) y documenta, para cada uno, el síntoma que provocó, la causa y la corrección — igual que en la tabla de diagnóstico de este capítulo.
+
+```php
+session_start();
+
+if (isset($_POST['recordarme'])) {
+    $token = bin2hex(random_bytes(32));
+    setcookie('recordarme', $token, time() + 86400 * 30);
+    guardarTokenParaUsuario($usuario->getEmail(), $token);
+}
+
+if (!isset($_SESSION['usuario_id'])) {
+    $email = buscarUsuarioPorToken($_COOKIE['recordarme']);
+    $_SESSION['usuario_id'] = $email;
+}
+```
+
+Pista: uno de los fallos es de seguridad (falta algo en la cookie que ya viste en el capítulo de cookies), y el otro provoca un error si la cookie `recordarme` no existe.
 :::
 
 ## Cierre de la unidad

@@ -166,13 +166,13 @@ Es el equivalente a la API de *Reflection* de Java (`getClass()`, `instanceof`),
 :::
 
 ::: {.ejercicio}
-**EJ2 · Figuras con clase abstracta e interfaz**
+**EJ4 · Figuras con clase abstracta e interfaz**
 
 Diseña una clase abstracta `Figura` con un método abstracto `area()` y un método concreto `describir()`. Crea dos subclases (`Circulo`, `Rectangulo`) y comprueba `describir()` en ambas. Después, añade una interfaz `Dibujable` con un método `dibujar(): string` e impleméntala en una de las dos figuras.
 :::
 
 ::: {.ejercicio}
-**EJ3 · Contador estático y clonado**
+**EJ5 · Contador estático y clonado**
 
 Crea una clase `Contador` con una propiedad estática que cuente cuántos objetos se han creado. Después, crea un objeto, clónalo y comprueba con `instanceof`/`get_class` que ambos son de la misma clase pero que modificar uno no afecta al otro (a diferencia de una simple asignación `$b = $a`).
 :::

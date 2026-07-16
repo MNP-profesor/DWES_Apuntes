@@ -30,74 +30,104 @@ session_start();
 echo $_SESSION['nombre']; // Ana
 ```
 
-Contador de visitas con sesión:
+## Sesiones con objetos: un carrito real
+
+Guardar datos sueltos en `$_SESSION` funciona para casos triviales, pero en cuanto el carrito necesita cantidades, quitar artículos o calcular un total, conviene envolverlo en una clase (enlazando con lo visto en el bloque de POO) y guardar **el objeto serializado** en la sesión:
 
 ```php
-session_start();
-$_SESSION['visitas'] = ($_SESSION['visitas'] ?? 0) + 1;
-echo "Visitas: " . $_SESSION['visitas'];
-// 1ª carga → Visitas: 1
-// 2ª carga → Visitas: 2
-// 3ª carga → Visitas: 3
+class Carrito {
+    private array $lineas = []; // ['sku' => ['nombre' => ..., 'precio' => ..., 'cantidad' => ...]]
+
+    public function añadir(string $sku, string $nombre, float $precio, int $cantidad = 1): void {
+        if (isset($this->lineas[$sku])) {
+            $this->lineas[$sku]['cantidad'] += $cantidad;
+        } else {
+            $this->lineas[$sku] = ['nombre' => $nombre, 'precio' => $precio, 'cantidad' => $cantidad];
+        }
+    }
+
+    public function quitar(string $sku): void {
+        unset($this->lineas[$sku]);
+    }
+
+    public function total(): float {
+        $total = 0;
+        foreach ($this->lineas as $linea) {
+            $total += $linea['precio'] * $linea['cantidad'];
+        }
+        return $total;
+    }
+
+    public function lineas(): array {
+        return $this->lineas;
+    }
+}
 ```
 
-Cerrar sesión (logout):
-
 ```php
 session_start();
-session_unset();   // borra todas las variables de sesión
-session_destroy(); // destruye la sesión en el servidor
+
+// PHP no guarda objetos "vivos" entre peticiones: hay que reconstruirlo cada vez
+$carrito = $_SESSION['carrito'] ?? new Carrito();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $carrito->añadir($_POST['sku'], $_POST['nombre'], (float) $_POST['precio']);
+}
+
+$_SESSION['carrito'] = $carrito; // PHP serializa el objeto automáticamente al guardarlo en $_SESSION
+
+echo 'Total: ' . number_format($carrito->total(), 2) . ' €';
 ```
 
 ::: {.callout-warning title="Errores frecuentes"}
-`session_start()` debe ser la primera instrucción del script, antes de cualquier `echo`, espacio en blanco o salida HTML. Si ves el error "headers already sent", casi siempre hay algo (aunque sea una línea en blanco) antes de `<?php`.
+Si cambias la definición de la clase `Carrito` (por ejemplo, renombras una propiedad) mientras hay sesiones activas con carritos ya guardados, `unserialize()` puede fallar o dejar el objeto en un estado incoherente al recuperarlo. En producción, versiona los cambios de estructura o limpia las sesiones activas tras un despliegue que toque estas clases.
 :::
 
-Por seguridad, tras un login conviene regenerar el ID de sesión:
+## Mensajes flash: datos de un solo uso
 
-```php
-session_start();
-// ... validar credenciales ...
-session_regenerate_id(true); // evita fijación de sesión (session fixation)
-```
-
-::: {.ejercicio}
-**EJ4 · Carrito de la compra con sesión**
-
-Implementa un carrito de la compra: un formulario que añade un producto a `$_SESSION['carrito']` y muestra el número total de artículos añadidos hasta el momento.
-
-Código de partida:
+Un patrón muy común: mostrar un mensaje ("Producto añadido") solo en la siguiente carga de página, y que desaparezca después.
 
 ```php
 session_start();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto'])) {
-    // añade $_POST['producto'] a $_SESSION['carrito']
+function mensajeFlash(string $texto): void {
+    $_SESSION['flash'] = $texto;
 }
 
-$total = count($_SESSION['carrito'] ?? []);
-echo "Artículos en el carrito: $total";
+function leerFlash(): ?string {
+    if (!isset($_SESSION['flash'])) {
+        return null;
+    }
+    $texto = $_SESSION['flash'];
+    unset($_SESSION['flash']); // se borra en cuanto se lee: solo se muestra una vez
+    return $texto;
+}
 ```
 
-Resultado esperado tras añadir "Teclado" y "Ratón" en dos envíos sucesivos:
-
+```php
+// Tras procesar el formulario:
+mensajeFlash('Producto añadido al carrito');
+header('Location: /carrito.php');
+exit;
 ```
-Artículos en el carrito: 2
+
+```php
+// carrito.php
+$mensaje = leerFlash();
+if ($mensaje !== null) {
+    echo "<p>$mensaje</p>";
+}
+// Si recargas carrito.php de nuevo, el mensaje ya no aparece
 ```
-:::
 
-::: {.ejercicio}
-**EJ5 · Expiración y regeneración de sesión**
+## Expiración y regeneración de sesión
 
-Modifica el carrito anterior para que la sesión expire tras 10 minutos de inactividad, regenerando el ID de sesión al iniciarse.
-
-Código de partida:
+Por seguridad, tras un login conviene regenerar el ID de sesión, y toda sesión debería caducar tras un tiempo de inactividad:
 
 ```php
 session_start();
-session_regenerate_id(true);
 
-$limite = 600; // 10 minutos en segundos
+$limite = 600; // 10 minutos de inactividad
 if (isset($_SESSION['ultimo_acceso']) && (time() - $_SESSION['ultimo_acceso']) > $limite) {
     session_unset();
     session_destroy();
@@ -106,5 +136,65 @@ if (isset($_SESSION['ultimo_acceso']) && (time() - $_SESSION['ultimo_acceso']) >
 $_SESSION['ultimo_acceso'] = time();
 ```
 
-Resultado esperado si accedes tras 11 minutos de inactividad: el carrito guardado en el ejercicio anterior aparece vacío (la sesión se ha reiniciado).
+```php
+// Tras validar credenciales en un login:
+session_regenerate_id(true); // evita fijación de sesión (session fixation)
+$_SESSION['usuario_id'] = $usuario->getId();
+```
+
+::: {.callout-warning title="Errores frecuentes"}
+`session_start()` debe ser la primera instrucción del script, antes de cualquier `echo`, espacio en blanco o salida HTML. Si ves el error "headers already sent", casi siempre hay algo (aunque sea una línea en blanco) antes de `<?php`.
+:::
+
+::: {.ejercicio}
+**EJ6 · Carrito de la compra con clase y sesión**
+
+Implementa una versión completa del carrito: debe permitir añadir un producto (sumando cantidad si ya existe), quitar un producto por completo, y calcular el total en euros. La página debe mostrar la lista de líneas del carrito (nombre, cantidad, precio, subtotal) y el total general.
+
+No se te da la clase resuelta — parte de este esqueleto y complétalo tú:
+
+```php
+class Carrito {
+    private array $lineas = [];
+
+    public function añadir(string $sku, string $nombre, float $precio, int $cantidad = 1): void {
+        // TODO
+    }
+
+    public function quitar(string $sku): void {
+        // TODO
+    }
+
+    public function cantidadTotal(): int {
+        // TODO: suma de todas las cantidades (no el número de líneas distintas)
+    }
+
+    public function total(): float {
+        // TODO
+    }
+
+    public function lineas(): array {
+        // TODO
+    }
+}
+```
+
+Traza de ejecución esperada (añadir SKU "A" x2, SKU "B" x1, precio A=10, precio B=5, luego añadir otra vez SKU "A" x1, luego quitar "B"):
+
+```
+Líneas: A (cantidad 3, subtotal 30.00 €)
+Cantidad total de artículos: 3
+Total del carrito: 30.00 €
+```
+:::
+
+::: {.ejercicio}
+**EJ7 · Sesión con expiración, regeneración y protección básica de fijación**
+
+Amplía el mecanismo de expiración anterior con dos capas adicionales de seguridad:
+
+1. Al iniciar sesión (login simulado), regenera el ID y guarda también un "fingerprint" ligero calculado a partir de `$_SERVER['HTTP_USER_AGENT']` (por ejemplo, un hash corto).
+2. En cada petición posterior, antes de confiar en la sesión, recalcula el fingerprint actual y compáralo con el guardado. Si no coincide, destruye la sesión y trata al usuario como no autenticado (alguien podría haber robado la cookie de sesión desde otro dispositivo).
+
+No hay código de partida para este ejercicio: documenta primero, en pseudocódigo o en una lista de pasos, qué comprobaciones haces y en qué orden, y después impleméntalo en PHP.
 :::

@@ -1,90 +1,154 @@
 # Cookies persistentes y control de acceso por roles
 
-## Cookies persistentes
+## Recordarme, con rotación de token
 
-Combina cookies y sesiones: se genera un token aleatorio, se guarda asociado al usuario en el servidor y se envía como cookie de larga duración. Si no hay sesión activa pero existe esa cookie válida, se reinicia la sesión sin pedir contraseña.
+La versión mínima de "recordarme" (un token fijo guardado en cookie) tiene un problema: si alguien roba esa cookie, tiene acceso indefinido. Una versión más robusta **rota el token en cada uso**: cada vez que se usa para reconectar, se genera uno nuevo y se invalida el anterior. Así, si el usuario legítimo y un atacante tienen copias del mismo token y uno de los dos lo usa, el otro deja de servir — una señal detectable de robo.
 
 ```php
-// Al marcar "recordarme" en el login:
-if (isset($_POST['recordarme'])) {
-    $token = bin2hex(random_bytes(32));
-    guardarTokenParaUsuario($usuario->getEmail(), $token);
-    setcookie('recordarme', $token, [
-        'expires'  => time() + 86400 * 30,
-        'httponly' => true,
-        'secure'   => true,
-        'samesite' => 'Strict',
-    ]);
+class TokenRepository {
+    private string $rutaFichero;
+
+    public function __construct(string $rutaFichero) {
+        $this->rutaFichero = $rutaFichero;
+        if (!file_exists($rutaFichero)) {
+            file_put_contents($rutaFichero, json_encode([]));
+        }
+    }
+
+    private function cargar(): array {
+        return json_decode(file_get_contents($this->rutaFichero), true) ?? [];
+    }
+
+    private function guardar(array $datos): void {
+        file_put_contents($this->rutaFichero, json_encode($datos));
+    }
+
+    public function crear(string $email): string {
+        $token = bin2hex(random_bytes(32));
+        $datos = $this->cargar();
+        $datos[$token] = $email;
+        $this->guardar($datos);
+        return $token;
+    }
+
+    public function consumir(string $token): ?string {
+        $datos = $this->cargar();
+        if (!isset($datos[$token])) {
+            return null; // token inválido o ya usado: posible robo
+        }
+        $email = $datos[$token];
+        unset($datos[$token]); // se invalida: de un solo uso
+        $this->guardar($datos);
+        return $email;
+    }
 }
+```
+
+```php
+// Al marcar "recordarme" en el login, tras autenticar correctamente:
+$repoTokens = new TokenRepository(__DIR__ . '/datos/tokens.json');
+$token = $repoTokens->crear($usuario->getEmail());
+setcookie('recordarme', $token, [
+    'expires'  => time() + 86400 * 30,
+    'httponly' => true,
+    'secure'   => true,
+    'samesite' => 'Strict',
+]);
 ```
 
 ```php
 // Al inicio de cualquier página protegida, si no hay sesión activa:
 session_start();
 if (!isset($_SESSION['usuario_id']) && isset($_COOKIE['recordarme'])) {
-    $email = buscarUsuarioPorToken($_COOKIE['recordarme']);
+    $email = $repoTokens->consumir($_COOKIE['recordarme']);
     if ($email !== null) {
+        session_regenerate_id(true);
         $_SESSION['usuario_id'] = $email;
+
+        // Rotación: el token usado ya no vale, se emite uno nuevo para la próxima vez
+        $nuevoToken = $repoTokens->crear($email);
+        setcookie('recordarme', $nuevoToken, [
+            'expires' => time() + 86400 * 30, 'httponly' => true, 'secure' => true, 'samesite' => 'Strict',
+        ]);
+    } else {
+        // El token no existía: podría ser un robo. Por seguridad, borra la cookie.
+        setcookie('recordarme', '', time() - 3600);
     }
 }
 ```
 
 ::: {.callout-note title="Concepto clave"}
-El token de "recordarme" nunca es la contraseña ni un hash de ella: es un valor aleatorio independiente que se puede invalidar en cualquier momento (por ejemplo, al hacer clic en "cerrar sesión en todos los dispositivos") sin afectar a la contraseña real.
+El token de "recordarme" nunca es la contraseña ni un hash de ella: es un valor aleatorio independiente que se puede invalidar en cualquier momento sin afectar a la contraseña real.
 :::
 
-## Control de acceso por roles
+## Control de acceso por roles, con varios niveles
 
-Se apoya en la herencia del capítulo 3: una subclase amplía los permisos heredados.
+Con más de dos roles conviene un mapa explícito de permisos por rol en lugar de ir acumulando `array_merge()` en cada subclase, que se vuelve difícil de leer a partir de tres niveles:
 
 ```php
-class Administrador extends Usuario {
+abstract class Usuario {
+    protected string $email;
+
+    public function __construct(string $email) {
+        $this->email = $email;
+    }
+
+    abstract public function rol(): string;
+
     public function permisos(): array {
-        return array_merge(parent::permisos(), ['gestionar_usuarios']);
+        $mapaPermisos = [
+            'usuario'       => ['ver_perfil'],
+            'editor'        => ['ver_perfil', 'editar_contenido'],
+            'administrador' => ['ver_perfil', 'editar_contenido', 'gestionar_usuarios', 'ver_informes'],
+        ];
+        return $mapaPermisos[$this->rol()] ?? [];
+    }
+
+    public function tienePermiso(string $permiso): bool {
+        return in_array($permiso, $this->permisos(), true);
     }
 }
-```
 
-```php
-// panel_admin.php
-session_start();
-$usuario = obtenerUsuarioActual(); // reconstruye el objeto (Usuario o Administrador)
-
-if (!$usuario || !in_array('gestionar_usuarios', $usuario->permisos())) {
-    http_response_code(403);
-    exit('Acceso denegado');
+class UsuarioNormal extends Usuario {
+    public function rol(): string { return 'usuario'; }
 }
-echo 'Panel de administración';
-```
 
-Otro ejemplo con tres niveles de rol:
-
-```php
 class Editor extends Usuario {
-    public function permisos(): array {
-        return array_merge(parent::permisos(), ['editar_contenido']);
+    public function rol(): string { return 'editor'; }
+}
+
+class Administrador extends Usuario {
+    public function rol(): string { return 'administrador'; }
+}
+```
+
+```php
+function requierePermiso(Usuario $usuario, string $permiso): void {
+    if (!$usuario->tienePermiso($permiso)) {
+        http_response_code(403);
+        exit('Acceso denegado');
     }
 }
 
-$roles = [new Usuario('ana@x.com'), new Editor('luis@x.com'), new Administrador('eva@x.com')];
-foreach ($roles as $u) {
-    echo get_class($u) . ': ' . implode(', ', $u->permisos()) . "\n";
-}
-// Usuario: ver_perfil
-// Editor: ver_perfil, editar_contenido
-// Administrador: ver_perfil, gestionar_usuarios
+$actual = new Editor('luis@x.com');
+requierePermiso($actual, 'editar_contenido');    // pasa
+requierePermiso($actual, 'gestionar_usuarios');  // 403 Acceso denegado
 ```
 
-::: {.ejercicio}
-**EJ11 · «Recordarme» con cookie persistente**
-
-Añade a tu `login.php` la casilla «recordarme»: si se marca, el usuario debe reconectar automáticamente en su siguiente visita sin volver a pedir contraseña, usando el patrón de token visto arriba.
+::: {.callout-warning title="Errores frecuentes"}
+Comprobar el rol con `if ($usuario->rol() === 'administrador')` en cada página protegida se vuelve inmanejable en cuanto hay varias combinaciones de permisos por rol (por ejemplo, "editor o administrador pueden hacer X"). Centraliza los permisos en un único mapa, como arriba, y comprueba siempre el **permiso**, no el **rol**, en cada página.
 :::
 
 ::: {.ejercicio}
-**EJ12 · Control de acceso por roles**
+**EJ13 · «Recordarme» con rotación de token**
 
-Crea la clase `Administrador` (extiende `Usuario`, amplía `permisos()`) y una página `panel_admin.php` accesible solo para administradores, devolviendo código HTTP 403 al resto.
+Implementa el flujo completo de "recordarme" con rotación de token: crear token al marcar la casilla, consumirlo (invalidándolo) al reconectar automáticamente, y emitir uno nuevo tras cada uso. Comprueba que, si intentas reutilizar un token ya consumido (simula guardarte una copia de la cookie antes de que se rote y vuelve a usarla), el sistema lo rechaza y borra la cookie.
+:::
 
-Resultado esperado: un usuario normal que accede a `panel_admin.php` recibe `403 Acceso denegado`; un administrador ve `Panel de administración`.
+::: {.ejercicio}
+**EJ14 · Tres roles con mapa de permisos**
+
+Crea `UsuarioNormal`, `Editor` y `Administrador` con el patrón de mapa de permisos visto arriba (no repitas `array_merge()` con `parent::` en cada subclase). Crea tres páginas protegidas (`editar.php`, `admin.php`, `informes.php`), cada una exigiendo un permiso distinto con `requierePermiso()`.
+
+Resultado esperado: un `UsuarioNormal` que accede a `editar.php` recibe `403 Acceso denegado`; un `Editor` accede a `editar.php` pero no a `informes.php`; un `Administrador` accede a las tres.
 :::

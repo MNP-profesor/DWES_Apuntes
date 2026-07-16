@@ -16,20 +16,35 @@ $tema = $_COOKIE['tema'] ?? 'claro';
 echo $tema; // oscuro
 ```
 
-Más ejemplos:
+## Varias preferencias en una sola cookie
+
+Cuando hay más de un valor que guardar, en vez de crear una cookie por cada preferencia, es más limpio agrupar todo en una sola cookie con un valor JSON:
 
 ```php
-// Contador de visitas con cookie (persiste aunque se cierre el navegador)
-$visitas = (int) ($_COOKIE['visitas'] ?? 0);
-$visitas++;
-setcookie('visitas', (string) $visitas, time() + 86400 * 365);
-echo "Visitas totales: $visitas";
+$preferencias = [
+    'tema'    => 'oscuro',
+    'idioma'  => 'es',
+    'moneda'  => 'EUR',
+];
+
+setcookie('preferencias', json_encode($preferencias), [
+    'expires'  => time() + 86400 * 30,
+    'path'     => '/',
+    'httponly' => true,
+    'samesite' => 'Lax',
+]);
 ```
 
 ```php
-// Eliminar una cookie: fijar expiración en el pasado
-setcookie('tema', '', time() - 3600);
+// En la siguiente petición:
+$preferencias = json_decode($_COOKIE['preferencias'] ?? '{}', true);
+$tema = $preferencias['tema'] ?? 'claro';
+$idioma = $preferencias['idioma'] ?? 'es';
 ```
+
+::: {.callout-warning title="Errores frecuentes"}
+`json_decode()` devuelve `null` si la cadena no es JSON válido (por ejemplo, si el usuario ha manipulado la cookie a mano desde las herramientas del navegador). Usa siempre `?? []` o `?? '{}'` como respaldo, y no asumas que la cookie tiene el formato que esperas: valídala antes de usarla.
+:::
 
 ## Flags de seguridad
 
@@ -55,26 +70,50 @@ setcookie('sesion_pref', 'compacta', [
 Poner `secure: true` en un entorno de desarrollo local sin HTTPS hace que la cookie nunca se guarde, y el fallo es silencioso (no hay ningún error visible). Si una cookie "desaparece" en local, revisa primero este flag.
 :::
 
-::: {.ejercicio}
-**EJ6 · Preferencias de usuario con cookie**
+## Banner de consentimiento con categorías
 
-Crea una página que guarde el idioma elegido por el usuario ('es'/'en') en una cookie de 30 días y lo recupere en visitas posteriores, con 'es' como valor por defecto si no existe la cookie.
-
-Código de partida:
+Un caso realista y algo más complejo: distintas categorías de cookies (necesarias, analíticas, marketing), donde solo se crean las cookies de una categoría si el usuario la ha aceptado explícitamente.
 
 ```php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    setcookie('idioma', $_POST['idioma'], time() + 86400 * 30, '/');
+session_start();
+
+$consentimiento = $_SESSION['consentimiento'] ?? null;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['consentimiento'])) {
+    // $_POST['consentimiento'] llega como array, ej.: ['analiticas', 'marketing']
+    $consentimiento = $_POST['consentimiento'];
+    $_SESSION['consentimiento'] = $consentimiento;
+
+    if (in_array('analiticas', $consentimiento)) {
+        setcookie('analytics_id', bin2hex(random_bytes(8)), time() + 86400 * 365, '/');
+    }
+    if (in_array('marketing', $consentimiento)) {
+        setcookie('marketing_id', bin2hex(random_bytes(8)), time() + 86400 * 90, '/');
+    }
+    // Las cookies "necesarias" (p. ej. la de sesión) no piden consentimiento: son imprescindibles
 }
-$idiomaActual = $_COOKIE['idioma'] ?? 'es';
-echo "Idioma actual: $idiomaActual";
+
+$mostrarBanner = $consentimiento === null;
 ```
 
-Resultado esperado la primera vez (sin cookie previa): `Idioma actual: es`. Tras enviar el formulario eligiendo "en" y recargar: `Idioma actual: en`.
+::: {.callout-note title="Concepto clave"}
+Las cookies estrictamente necesarias (sesión, carrito) no requieren consentimiento porque el sitio no puede funcionar sin ellas. Las demás categorías (analíticas, marketing) sí, y **no deben crearse hasta que el usuario las acepte explícitamente** — crearlas antes y luego "respetar" el rechazo no cumple.
 :::
 
 ::: {.ejercicio}
-**EJ7 · Cookie con flags de seguridad**
+**EJ8 · Preferencias combinadas en una cookie JSON**
 
-Reescribe la cookie del ejercicio anterior aplicando `httponly`, `secure` y `samesite`, y añade un comentario junto a cada flag explicando qué mitiga.
+Crea una página con un formulario que permita elegir idioma ('es'/'en') **y** tamaño de fuente ('normal'/'grande'), guardando ambos valores en una única cookie `preferencias` codificada en JSON, con 30 días de expiración. En cada carga de página, decodifica la cookie y aplica ambos valores, usando 'es' y 'normal' como valores por defecto si la cookie no existe o está corrupta.
+
+No se da código de partida: a partir de lo visto en la sección de preferencias combinadas, diseña tú la estructura del array y el formulario.
+
+Resultado esperado la primera vez (sin cookie): `Idioma: es | Tamaño: normal`. Tras elegir "en" y "grande": `Idioma: en | Tamaño: grande`. Si manipulas la cookie a mano dejándola con un JSON inválido: la página debe seguir funcionando con los valores por defecto, sin errores visibles.
+:::
+
+::: {.ejercicio}
+**EJ9 · Banner de consentimiento de cookies**
+
+Implementa un banner de consentimiento con tres categorías (necesarias, analíticas, marketing). Las necesarias no son opcionales y no requieren cookie de consentimiento propia. Las otras dos se activan de forma independiente según lo que marque el usuario, y las cookies asociadas a cada categoría **solo se crean si esa categoría fue aceptada**. Añade también un botón "rechazar todo" que no cree ninguna cookie de analítica ni marketing, y una forma de que el usuario pueda cambiar su decisión más adelante (por ejemplo, un enlace "gestionar cookies" que vuelva a mostrar el banner).
+
+Aplica también los flags de seguridad vistos en la sección anterior a cualquier cookie que crees.
 :::

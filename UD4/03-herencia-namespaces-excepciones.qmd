@@ -174,3 +174,11 @@ try {
 ```
 
 Gracias a la herencia, crear excepciones propias es tan simple como extender `Exception`, lo que te permite capturar de forma selectiva solo el error que te interesa — esto es justo lo que usarás en el login del capítulo 8.
+
+::: {.ejercicio}
+**EJ3 · Jerarquía de empleados con excepción propia**
+
+Crea una clase `Empleado` con un método `calcularNomina(): float` que devuelva un salario base fijo. Crea una subclase `Gerente extends Empleado` que sobreescriba `calcularNomina()` añadiendo un plus sobre el salario base (polimorfismo: una función `mostrarNomina(Empleado $e)` debe funcionar igual para ambas clases sin necesidad de comprobar de qué clase es cada objeto).
+
+Añade una excepción propia `NominaInvalidaException extends Exception`, y lanza esa excepción desde `calcularNomina()` si, por error, el salario base configurado es negativo o cero. Captura esa excepción específicamente (no una `Exception` genérica) al llamar a `mostrarNomina()`.
+:::

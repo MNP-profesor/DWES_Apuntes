@@ -2,7 +2,7 @@
 
 > Generado automáticamente por `scripts/renumera_ejercicios.py` en cada render — **no editar a mano**.
 >
-> Última actualización: 2026-07-15
+> Última actualización: 2026-07-16
 
 ## UD1. Arquitecturas y tecnologías de programación Web en entorno servidor (6 ejercicios)
 
@@ -47,23 +47,25 @@
 | EJ10 | Formulario de inscripción | `05-formularios.qmd` |
 | EJ11 | Procesador de inscripción con validación | `06-recogida-datos.qmd` |
 
-## UD4. POO en PHP + Desarrollo de funcionalidades Web: autenticación, sesiones y cookies (13 ejercicios)
+## UD4. POO en PHP + Desarrollo de funcionalidades Web: autenticación, sesiones y cookies (15 ejercicios)
 
 | Ejercicio | Título | Fichero |
 |:--:|--------|---------|
-| EJ1 | Comparativa de mecanismos de mantenimiento de información de cliente | `01-ambito-y-clases.qmd` |
-| EJ2 | Figuras con clase abstracta e interfaz | `04-poo-avanzada.qmd` |
-| EJ3 | Contador estático y clonado | `04-poo-avanzada.qmd` |
-| EJ4 | Carrito de la compra con sesión | `05-sesiones.qmd` |
-| EJ5 | Expiración y regeneración de sesión | `05-sesiones.qmd` |
-| EJ6 | Preferencias de usuario con cookie | `06-cookies.qmd` |
-| EJ7 | Cookie con flags de seguridad | `06-cookies.qmd` |
-| EJ8 | Comparativa de mecanismos de autenticación | `07-autenticacion.qmd` |
-| EJ9 | Login básico con clase `Usuario` | `08-login-registro.qmd` |
-| EJ10 | Registro con validación y hash de contraseñas | `08-login-registro.qmd` |
-| EJ11 | «Recordarme» con cookie persistente | `09-recordarme-y-roles.qmd` |
-| EJ12 | Control de acceso por roles | `09-recordarme-y-roles.qmd` |
-| EJ13 | Depuración de una aplicación con errores en sesión/cookie | `10-depuracion-y-cierre.qmd` |
+| EJ1 | Registro de libros con contador global | `01-ambito-y-clases.qmd` |
+| EJ2 | Cuenta bancaria con validación en el constructor | `02-constructores-y-encapsulacion.qmd` |
+| EJ3 | Jerarquía de empleados con excepción propia | `03-herencia-namespaces-excepciones.qmd` |
+| EJ4 | Figuras con clase abstracta e interfaz | `04-poo-avanzada.qmd` |
+| EJ5 | Contador estático y clonado | `04-poo-avanzada.qmd` |
+| EJ6 | Carrito de la compra con clase y sesión | `05-sesiones.qmd` |
+| EJ7 | Sesión con expiración, regeneración y protección básica de fijación | `05-sesiones.qmd` |
+| EJ8 | Preferencias combinadas en una cookie JSON | `06-cookies.qmd` |
+| EJ9 | Banner de consentimiento de cookies | `06-cookies.qmd` |
+| EJ10 | Sistema de bloqueo tras intentos fallidos | `07-autenticacion.qmd` |
+| EJ11 | Login con repositorio real | `08-login-registro.qmd` |
+| EJ12 | Registro con validación completa | `08-login-registro.qmd` |
+| EJ13 | «Recordarme» con rotación de token | `09-recordarme-y-roles.qmd` |
+| EJ14 | Tres roles con mapa de permisos | `09-recordarme-y-roles.qmd` |
+| EJ15 | Depuración de una aplicación con varios fallos | `10-depuracion-y-cierre.qmd` |
 
 ## UD5. Separación de la lógica de negocio: MVC con Laravel (9 ejercicios)
 
@@ -141,4 +143,4 @@
 | EJ10 | Agregaciones sobre municipios | `06-analitica-bigdata.qmd` |
 | EJ11 | Proyecto — cuadro de mando | `06-analitica-bigdata.qmd` |
 
-**Nº Ejercicios totales del módulo: 92**
+**Nº Ejercicios totales del módulo: 94**

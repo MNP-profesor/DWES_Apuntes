@@ -160,16 +160,20 @@ class Producto {
     }
 }
 
-try {
-    $p = new Producto();
-    $p->precio = 19.95; // Si asignamos un negativo, lanzaría excepción
-    echo $p->precio; // 19.95
-} catch (InvalidArgumentException $e) {
-    echo "Error: " . $e->getMessage();
-} 
+$p = new Producto();
+$p->precio = 19.99;
+echo $p->precio; // 19.99
 ```
 
 ::: {.callout-tip title="Analogía Java"}
 Java no tiene equivalente directo a `__get`/`__set`: cada getter/setter es un método explícito. En PHP puedes elegir: métodos explícitos (`getPrecio()`), más claros y fáciles de rastrear con el IDE, o mágicos (`__get`/`__set`), más compactos cuando hay muchas propiedades similares. En clases pequeñas, prefiere los explícitos: son más fáciles de depurar porque el IDE puede saltar directamente a la definición.
+:::
+
+::: {.ejercicio}
+**EJ2 · Cuenta bancaria con validación en el constructor**
+
+Diseña una clase `CuentaBancaria` con un constructor que reciba el titular y un saldo inicial. El constructor debe rechazar un saldo inicial negativo: decide tú cómo (por ejemplo, ajustándolo a 0 con un aviso, o usando el patrón de `InvalidArgumentException` visto en este capítulo). Añade un método `ingresar(float $cantidad)` que también rechace cantidades negativas, y un getter para consultar el saldo actual sin exponer la propiedad como `public`.
+
+Comprueba con al menos tres casos: saldo inicial válido, saldo inicial negativo, e ingreso de una cantidad negativa.
 :::
 

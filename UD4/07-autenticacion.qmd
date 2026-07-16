@@ -17,8 +17,6 @@ var_dump(password_verify('MiClave123', $hash)); // true
 var_dump(password_verify('otraClave', $hash));  // false
 ```
 
-Comparación rápida de enfoques:
-
 ```php
 // MAL — nunca hagas esto
 if ($_POST['password'] === $passwordGuardadaEnTextoPlano) { /* ... */ }
@@ -32,6 +30,54 @@ if (password_verify($_POST['password'], $hashGuardado)) { /* ... */ }
 
 ::: {.callout-warning title="Errores frecuentes"}
 `password_hash()` devuelve un hash distinto cada vez que lo llamas con la misma contraseña (el salt es aleatorio). Esto es correcto: nunca compares dos hashes entre sí, compara siempre con `password_verify()`.
+:::
+
+## Protección frente a fuerza bruta
+
+Verificar contraseñas no es suficiente si un atacante puede probar miles de combinaciones seguidas. Un mecanismo básico de limitación de intentos, guardado en sesión:
+
+```php
+session_start();
+
+function intentosFallidos(): int {
+    return $_SESSION['intentos_login'] ?? 0;
+}
+
+function registrarIntentoFallido(): void {
+    $_SESSION['intentos_login'] = intentosFallidos() + 1;
+    $_SESSION['bloqueado_hasta'] = intentosFallidos() >= 5
+        ? time() + 300 // 5 minutos de bloqueo tras 5 fallos
+        : null;
+}
+
+function loginBloqueado(): bool {
+    return isset($_SESSION['bloqueado_hasta'])
+        && $_SESSION['bloqueado_hasta'] !== null
+        && time() < $_SESSION['bloqueado_hasta'];
+}
+
+function reiniciarIntentos(): void {
+    unset($_SESSION['intentos_login'], $_SESSION['bloqueado_hasta']);
+}
+```
+
+```php
+if (loginBloqueado()) {
+    $segundosRestantes = $_SESSION['bloqueado_hasta'] - time();
+    exit("Demasiados intentos fallidos. Inténtalo de nuevo en {$segundosRestantes}s.");
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (/* credenciales correctas */ false) {
+        reiniciarIntentos();
+    } else {
+        registrarIntentoFallido();
+    }
+}
+```
+
+::: {.callout-tip title="Analogía Java"}
+Este contador en `$_SESSION` es una solución mínima pensada para clase. En un sistema real querrás que el bloqueo sobreviva aunque el atacante borre sus cookies (por ejemplo, contando intentos por IP o por cuenta en una base de datos), algo que en Java resolverías con un servicio compartido (caché, base de datos) en lugar de con el estado de sesión de un único cliente.
 :::
 
 ## Redirecciones
@@ -52,45 +98,41 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 ```
 
-## Inclusiones
+## Inclusiones: un pequeño enrutador
 
-### `include` e `include_once`
+`include`/`require` dividen el código en ficheros reutilizables. La diferencia es la gravedad si el fichero no existe: `include` avisa y continúa; `require` detiene el script con error fatal. Las variantes `_once` evitan duplicados.
 
-* Si el archivo **no existe**, PHP lanza un aviso (`Warning`), pero **el script principal continúa ejecutándose**.
-* Es ideal para elementos visuales de la web que no rompen la lógica de la aplicación (como un menú de navegación `nav.php` o un pie de página `footer.php`).
-
-```php
-<?php
-include "vistas/nav.php";
-
-echo "El sitio web se sigue cargando aunque no existiera el menú de navegación.";
-?>
-```
-
-### `require` e `require_once`
-
-* Si el archivo **no existe**, PHP considera que es un fallo importante, por lo que lanza un `Fatal Error` y **detiene la ejecución del servidor de inmediato**.
-* Se utiliza para importar aquellos archivos que son absolutamente vitales para que el script pueda funcionar.
+Más allá de incluir una clase suelta, un patrón habitual es un **front controller**: un único punto de entrada que decide qué página cargar según un parámetro, en vez de tener una URL por fichero `.php`:
 
 ```php
-<?php
-// Si no existe, se detiene el script por seguridad
-require "librerias/libreria_validacion.php"; 
+// index.php — único punto de entrada
+require_once __DIR__ . '/Modelo/Usuario.php';
+require_once __DIR__ . '/config.php';
 
-$emailValido = validarDNI($_POST['dni']);
-?>
+$paginasPermitidas = ['inicio', 'login', 'registro', 'panel'];
+$pagina = $_GET['pagina'] ?? 'inicio';
+
+if (!in_array($pagina, $paginasPermitidas, true)) {
+    http_response_code(404);
+    exit('Página no encontrada');
+}
+
+require __DIR__ . "/paginas/{$pagina}.php";
 ```
 
-::: {.callout-important title="¿Por qué preferir la variante _once?"}
-Las directivas `include_once` y `require_once` funcionan igual que sus hermanas, pero con una capa de control inteligente: comprueban si el fichero ya ha sido importado previamente en el flujo del script. Si ya se incluyó, PHP lo ignora de forma silenciosa.
-
-**¿Por qué es crucial?** Si importas dos veces un archivo que contiene la declaración de una función estándar (por ejemplo, por un bucle o una mala organización de código), PHP lanzará un Fatal Error indicando que no puedes redeclarar una función que ya existe. Usar `require_once` evita este problema.
+::: {.callout-warning title="Errores frecuentes"}
+Si el nombre de la página viniera directamente de `$_GET` sin validarlo contra una lista blanca (`$paginasPermitidas`), un atacante podría intentar incluir ficheros arbitrarios del servidor (`?pagina=../../../../etc/passwd`) — un fallo real llamado *Local File Inclusion*. Nunca construyas la ruta de un `include`/`require` directamente a partir de datos del usuario sin validarla antes.
 :::
 
----
-
 ::: {.ejercicio}
-**EJ8 · Comparativa de mecanismos de autenticación**
+**EJ10 · Sistema de bloqueo tras intentos fallidos**
 
-Escribe un script que compare, con ejemplos ejecutados, el resultado de guardar una contraseña en texto plano frente a aplicarle `password_hash()`, y demuestra la verificación con `password_verify()`. Este ejercicio te prepara para el examen; no hace falta que lo entregues.
+Implementa el mecanismo completo de bloqueo por intentos fallidos, integrado en un login simulado (no hace falta usuarios reales ni base de datos: basta con una contraseña fija para comparar). Debe cumplir:
+
+- Cada intento con contraseña incorrecta incrementa el contador de fallos.
+- Al llegar a 5 fallos consecutivos, el login queda bloqueado 5 minutos (300 segundos), y cualquier intento durante ese tiempo se rechaza sin comprobar siquiera la contraseña.
+- Un login correcto reinicia el contador a 0.
+- Pasado el tiempo de bloqueo, se puede volver a intentar con normalidad.
+
+Escribe también un pequeño script de prueba que simule 6 intentos fallidos seguidos y muestre en pantalla, para cada uno, si se registró como fallo o si fue rechazado por bloqueo — debe verse claramente que el intento 6 ya está bloqueado.
 :::

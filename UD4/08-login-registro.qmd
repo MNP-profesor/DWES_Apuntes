@@ -1,10 +1,12 @@
 # Login y registro
 
-Aquí se junta todo lo anterior: clases, sesiones, cookies-vía-sesión (`PHPSESSID`), hashing y excepciones.
+Aquí se junta todo lo anterior: clases, sesiones, hashing, excepciones y ahora también un **repositorio** que sustituye a las funciones "mágicas" (`buscarUsuarioPorEmail`, `guardarUsuario`...) por una implementación real y completa, para que no quede nada oculto.
 
 ::: {.callout-note title="Concepto clave"}
 El flujo estándar es: (1) el formulario recoge credenciales, (2) se busca el usuario, (3) se verifica la contraseña con `password_verify()`, (4) si es correcta, se regenera el ID de sesión y se guarda el identificador del usuario en `$_SESSION` — nunca la contraseña.
 :::
+
+## La clase `Usuario`
 
 ```php
 class Usuario {
@@ -29,14 +31,99 @@ class Usuario {
 }
 ```
 
+## Un repositorio real, sin funciones mágicas
+
+En vez de dar por hecho que existe una función `buscarUsuarioPorEmail()`, aquí tienes su implementación completa, respaldada por un fichero JSON (sin base de datos, como en el resto de la unidad, pero sin cajas negras):
+
+```php
+class UsuarioRepository {
+    private string $rutaFichero;
+
+    public function __construct(string $rutaFichero) {
+        $this->rutaFichero = $rutaFichero;
+        if (!file_exists($rutaFichero)) {
+            file_put_contents($rutaFichero, json_encode([]));
+        }
+    }
+
+    private function cargarTodos(): array {
+        $contenido = file_get_contents($this->rutaFichero);
+        return json_decode($contenido, true) ?? [];
+    }
+
+    private function guardarTodos(array $datos): void {
+        file_put_contents($this->rutaFichero, json_encode($datos, JSON_PRETTY_PRINT));
+    }
+
+    public function existe(string $email): bool {
+        $datos = $this->cargarTodos();
+        return isset($datos[$email]);
+    }
+
+    public function guardar(Usuario $usuario, string $passwordHash): void {
+        $datos = $this->cargarTodos();
+        $datos[$usuario->getEmail()] = ['passwordHash' => $passwordHash];
+        $this->guardarTodos($datos);
+    }
+
+    public function buscarPorEmail(string $email): ?Usuario {
+        $datos = $this->cargarTodos();
+        if (!isset($datos[$email])) {
+            return null;
+        }
+        $usuario = new Usuario($email);
+        // reconstruimos el objeto con el hash ya guardado, sin volver a hashear
+        $reflexion = new ReflectionClass($usuario);
+        $propiedad = $reflexion->getProperty('passwordHash');
+        $propiedad->setAccessible(true);
+        $propiedad->setValue($usuario, $datos[$email]['passwordHash']);
+        return $usuario;
+    }
+}
+```
+
+::: {.callout-tip title="Analogía Java"}
+`ReflectionClass` es el equivalente PHP de la API de *Reflection* de Java que ya viste en el capítulo 4. Aquí se usa para reconstruir el hash de contraseña ya guardado sin exponer un setter público de `passwordHash` en texto plano — un ejemplo real de para qué sirve la reflexión más allá de la inspección.
+:::
+
+## Validación antes de registrar
+
+Un registro real valida el formato del email y una política mínima de contraseña, no solo si el email ya existe:
+
+```php
+function validarRegistro(string $email, string $password): array {
+    $errores = [];
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errores[] = 'El email no tiene un formato válido';
+    }
+    if (strlen($password) < 8) {
+        $errores[] = 'La contraseña debe tener al menos 8 caracteres';
+    }
+    if (!preg_match('/[A-Z]/', $password)) {
+        $errores[] = 'La contraseña debe contener al menos una mayúscula';
+    }
+    if (!preg_match('/[0-9]/', $password)) {
+        $errores[] = 'La contraseña debe contener al menos un número';
+    }
+
+    return $errores;
+}
+```
+
+## Login completo
+
 ```php
 // login.php
 require_once __DIR__ . '/Modelo/Usuario.php';
+require_once __DIR__ . '/Modelo/UsuarioRepository.php';
 session_start();
+
+$repositorio = new UsuarioRepository(__DIR__ . '/datos/usuarios.json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        $usuario = buscarUsuarioPorEmail($_POST['email']); // función de tu capa de datos
+        $usuario = $repositorio->buscarPorEmail($_POST['email']);
         if ($usuario === null) {
             throw new Exception('Usuario no encontrado');
         }
@@ -53,44 +140,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ```
 
-```php
-// panel.php — página protegida
-session_start();
-if (!isset($_SESSION['usuario_id'])) {
-    header('Location: /login.php');
-    exit;
-}
-echo 'Bienvenido, ' . $_SESSION['usuario_id'];
-```
-
 ::: {.callout-warning title="Errores frecuentes"}
-No confundas `$_SESSION['usuario_id']` con la contraseña: en `$_SESSION` solo se guarda el identificador del usuario ya autenticado. La contraseña, ni en texto plano ni hasheada, se guarda nunca en la sesión.
+Fíjate en que el mensaje de error es genérico ("Credenciales incorrectas") tanto si el usuario no existe como si la contraseña es incorrecta. Si distingues los dos casos en el mensaje ("ese email no existe" vs. "contraseña incorrecta"), estás revelando a un atacante qué emails están registrados en tu sistema — un fallo de seguridad real y frecuente.
 :::
 
 ::: {.ejercicio}
-**EJ9 · Login básico con clase `Usuario`**
+**EJ11 · Login con repositorio real**
 
-Usando la clase `Usuario` anterior, escribe un `login.php` completo: recibe email/contraseña por POST, verifica contra un array de usuarios en memoria, y si son correctos, inicia sesión regenerando el ID y redirige a `panel.php`.
+Usando `Usuario` y `UsuarioRepository` (adáptalos si lo necesitas), escribe un `login.php` completo. Además de lo ya visto, añade: (a) el bloqueo por intentos fallidos del capítulo anterior, integrado con este login; (b) que el mensaje de error no distinga entre "usuario no existe" y "contraseña incorrecta".
 
-Resultado esperado con credenciales correctas: redirección HTTP a `/panel.php` y `$_SESSION['usuario_id']` con el email del usuario. Con credenciales incorrectas: el formulario se vuelve a mostrar con el mensaje `Credenciales incorrectas`.
-:::
-
-::: {.ejercicio}
-**EJ10 · Registro con validación y hash de contraseñas**
-
-Implementa `registro.php`: recoge email y contraseña, comprueba que el email no exista ya, crea el objeto `Usuario` con la contraseña ya hasheada mediante el setter, y lo persiste (un array o fichero es suficiente, sin base de datos).
-
-Código de partida:
+No se da código de partida completo — solo la firma de una función que tendrás que implementar y encajar en el flujo:
 
 ```php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (existeUsuario($_POST['email'])) {
-        $error = 'El email ya está registrado';
-    } else {
-        $u = new Usuario($_POST['email']);
-        $u->setPassword($_POST['password']);
-        guardarUsuario($u);
-    }
+function intentarLogin(UsuarioRepository $repo, string $email, string $password): Usuario {
+    // Debe lanzar una excepción con mensaje genérico si el usuario no existe
+    // o si la contraseña es incorrecta (mismo mensaje en ambos casos).
+    // Debe devolver el objeto Usuario si el login es correcto.
 }
 ```
+:::
+
+::: {.ejercicio}
+**EJ12 · Registro con validación completa**
+
+Implementa `registro.php` usando `UsuarioRepository::existe()` y la función `validarRegistro()` de este capítulo. Si hay errores de validación, se deben mostrar todos a la vez (no solo el primero). Si el email ya existe, añade ese error a la misma lista en vez de cortar el flujo antes de validar el resto.
+
+Resultado esperado si se envía email `"no-es-un-email"` y contraseña `"abc"`: se deben mostrar las 4 líneas de error a la vez (formato de email, longitud, mayúscula, número), no solo la primera que falle.
 :::
