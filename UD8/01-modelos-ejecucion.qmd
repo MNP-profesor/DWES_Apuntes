@@ -84,7 +84,9 @@ F1 y F3 solo pueden ejecutarse en el servidor: el acceso a la base de datos con 
 
 Todo lo construido desde la UD2 sigue el ciclo clásico: el navegador pide una URL, PHP genera el HTML completo y el navegador reemplaza la página entera.
 
-```text
+![](./img/ciclo-basico.png){width=75% fig-align="center"}
+
+<!--```text
 ┌──────────┐  1. GET /cartelera.php    ┌──────────┐
 │          │ ────────────────────────▶ │          │
 │ NAVEGADOR│                           │ SERVIDOR │
@@ -92,7 +94,7 @@ Todo lo construido desde la UD2 sigue el ciclo clásico: el navegador pide una U
 └──────────┘  2. Página HTML completa  └──────────┘
 
         Modelo clásico: cada clic = página nueva
-```
+```-->
 
 Este modelo es simple y robusto, pero tiene un límite visible: cualquier interacción, por pequeña que sea, obliga a regenerar y retransmitir toda la página. Marcar una película como favorita, filtrar la cartelera por género o comprobar si un nombre de usuario está libre no deberían costar una recarga completa.
 
@@ -108,7 +110,9 @@ Un ejemplo con números lo hace tangible. Supongamos que la página de la cartel
 
 En el modelo híbrido, el servidor genera la página inicial y, a partir de ahí, el JavaScript de esa página solicita al servidor únicamente los datos que necesita (habitualmente en JSON) y actualiza solo la parte afectada del documento.
 
-```text
+![](./img/modelo-hibrido.png){width=75% fig-align="center"}
+
+<!--```text
 ┌──────────┐  1. GET /cartelera.php    ┌──────────┐
 │          │ ────────────────────────▶ │          │
 │ NAVEGADOR│ ◀──────────────────────── │ SERVIDOR │
@@ -120,7 +124,7 @@ En el modelo híbrido, el servidor genera la página inicial y, a partir de ahí
 └──────────┘  4. Solo datos (JSON)     └──────────┘
 
    Modelo híbrido: la página se actualiza sin recargarse
-```
+```-->
 
 Las ventajas de unir ambas tecnologías son concretas y medibles:
 
@@ -135,9 +139,9 @@ Convertirlo todo en JavaScript. No todo debe ser híbrido: páginas de contenido
 :::
 
 ::: {.ejercicio}
-**EJ1 · ¿Clásico o híbrido?** *(individual, en cuaderno)*
+**EJ1 · ¿Clásico o híbrido?**
 
-Para cada una de las siguientes funcionalidades, indica razonadamente si la resolverías con el ciclo clásico (recarga) o con el modelo híbrido (`fetch`):
+Para cada una de las siguientes funcionalidades, indica razonadamente si la resolverías con el **ciclo clásico** (`recarga`) o con el **modelo híbrido** (`fetch`):
 
 a. Autocompletar el buscador de películas mientras se escribe.
 b. Procesar el pago de una entrada.
@@ -146,16 +150,12 @@ d. Comprobar en el registro si un correo ya está en uso.
 e. Cerrar la sesión del usuario.
 :::
 
-## Actividad evaluable E1
-
 ::: {.ejercicio}
-**EJ2 · Análisis comparativo servidor/cliente** — CE8.a, CE8.b · 1,0 h en clase
+**EJ2 · Análisis comparativo servidor/cliente** — CE8.a, CE8.b
 
 A partir de la cartelera clásica proporcionada por el docente (`cartelera.php`, versión UD3), elabora un informe breve de dos partes:
 
 **Parte 1.** Tabla comparativa propia de los dos modelos de ejecución, identificando en el código real de la aplicación **tres fragmentos que solo pueden ejecutarse en el servidor** y justificando por qué.
 
 **Parte 2.** Propuesta razonada de **tres mejoras concretas** de la cartelera que justificarían pasar al modelo híbrido, indicando para cada una qué ventaja del apartado anterior la sustenta.
-
-**Entrega:** documento PDF al aula virtual al finalizar la sesión. Calificación: apto / no apto.
 :::

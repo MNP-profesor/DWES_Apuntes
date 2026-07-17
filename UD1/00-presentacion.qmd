@@ -61,9 +61,9 @@ A continuación, se detallan los ejercicios integrados en esta unidad, indicando
 
 | Ejercicio | Título | ¿Entrega? |
 |:---------:|--------|:---------:|
-| EJ1 | Clasificación por lugar de ejecución | Sí |
-| EJ2 | ¿Estático, dinámico embebido o script independiente? | Sí |
-| EJ3 | Identificación de roles en una arquitectura real | Sí |
-| EJ4 | Estudio comparativo razonado | Sí |
-| EJ5 | Trazado manual de la salida | Sí |
+| EJ1 | Clasificación por lugar de ejecución | No |
+| EJ2 | ¿Estático, dinámico embebido o script independiente? | No |
+| EJ3 | Identificación de roles en una arquitectura real | No |
+| EJ4 | Estudio comparativo razonado | No |
+| EJ5 | Trazado manual de la salida | No |
 | EJ6 | Puesta en marcha del entorno | Sí |

@@ -179,6 +179,12 @@ HTTP/1.1 201 Created
 **EJ6 · Protección de la API con Sanctum**
 
 1. Implementa `/api/login` con emisión de token y *abilities* diferenciadas (`juegos:leer` para usuarios normales, `juegos:escribir` para administradores; necesitarás un campo `es_admin` en la migración de usuarios) y `/api/logout` con revocación del token actual.
+
 2. Deja `index()` y `show()` públicos y protege `store()`, `update()` y `destroy()` con `auth:sanctum`, exigiendo la *ability* `juegos:escribir` en las tres.
-3. Demuestra desde Postman los cuatro escenarios del contrato: petición sin token (`401`), token inválido (`401`), token de lector intentando crear (`403`) y token de administrador creando correctamente (`201`).
+
+3. Verifica desde Postman los cuatro escenarios del contrato: 
+- Petición sin token (`401`)
+- Token inválido (`401`)
+- Token de lector intentando crear (`403`)
+- Token de administrador creando correctamente (`201`)
 :::

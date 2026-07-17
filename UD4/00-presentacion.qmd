@@ -76,13 +76,14 @@ A continuación, se detallan los ejercicios integrados en esta unidad, indicando
 | EJ3 | Jerarquía de empleados con excepción propia | No |
 | EJ4 | Figuras con clase abstracta e interfaz | No |
 | EJ5 | Contador estático y clonado | No |
-| EJ6 | Carrito de la compra con clase y sesión | Sí |
-| EJ7 | Sesión con expiración, regeneración y protección básica de fijación | Sí |
-| EJ8 | Preferencias combinadas en cookie JSON | Sí |
-| EJ9 | Banner de consentimiento de cookies | Sí |
-| EJ10 | Sistema de bloqueo tras intentos fallidos | Sí |
-| EJ11 | Login con repositorio real | Sí |
-| EJ12 | Registro con validación completa | Sí |
-| EJ13 | «Recordarme» con rotación de token | Sí |
-| EJ14 | Tres roles con mapa de permisos | Sí |
-| EJ15 | Depuración de una aplicación con varios fallos | Sí |
+| EJ6 | Carrito de la compra con clase y sesión | No |
+| EJ7 | Sesión con expiración, regeneración y protección básica de fijación | No |
+| EJ8 | Preferencias combinadas en cookie JSON | No |
+| EJ9 | Banner de consentimiento de cookies | No |
+| EJ10 | Sistema de bloqueo tras intentos fallidos | No |
+| EJ11 | Login con repositorio real | No |
+| EJ12 | Registro con validación completa | No |
+| EJ13 | «Recordarme» con rotación de token | No |
+| EJ14 | Tres roles con mapa de permisos | No |
+| EJ15 | Depuración de una aplicación con varios fallos | No |
+| EJ16 | PENDIENTE | Sí |

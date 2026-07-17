@@ -63,14 +63,14 @@ A continuación, se detallan los ejercicios integrados en esta unidad, indicando
 
 | Ejercicio | Título | ¿Entrega? |
 |:---------:|--------|:---------:|
-| EJ1 | Ficha de producto dinámica | Sí |
-| EJ2 | Plantilla con cuatro zonas | Sí |
-| EJ3 | Depurador: caza de errores | Sí |
-| EJ4 | Panel de configuración | Sí |
-| EJ5 | Practica con cadenas | Sí |
-| EJ6 | Catálogo con cálculo de inventario | Sí |
-| EJ7 | Validación de datos de texto | Sí |
-| EJ8 | Ejercicios extras de Funciones de Strings | Sí |
-| EJ9 | Desarrollo vs. producción | Sí |
-| EJ10 | Motor de descuentos | Sí |
+| EJ1 | Ficha de producto dinámica | No |
+| EJ2 | Plantilla con cuatro zonas | No |
+| EJ3 | Depurador: caza de errores | No |
+| EJ4 | Panel de configuración | No |
+| EJ5 | Practica con cadenas | No |
+| EJ6 | Catálogo con cálculo de inventario | No |
+| EJ7 | Validación de datos de texto | No |
+| EJ8 | Ejercicios extras de Funciones de Strings | No |
+| EJ9 | Desarrollo vs. producción | No |
+| EJ10 | Motor de descuentos | No |
 | EJ11 | Sistema de tickets | Sí |

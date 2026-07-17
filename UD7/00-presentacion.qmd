@@ -8,7 +8,7 @@ title: "UD7. Servicios Web: API REST con Laravel (Resources y Sanctum)"
 
 Hasta ahora tus aplicaciones Laravel producían páginas HTML para un navegador. En esta unidad el servidor deja de producir HTML para producir **datos**: construirás una **API REST** completa que cualquier cliente —una app móvil, una SPA en JavaScript u otro servidor— podrá consumir sin conocer nada de su interior.
 
-El hilo conductor es la **API de una tienda de videojuegos**. La construiremos, le daremos forma con Resources, la haremos robusta con validación, la protegeremos con tokens, la verificaremos con Postman, la consumiremos desde otra aplicación PHP y la documentaremos con OpenAPI. El proyecto integrador de esta unidad replica ese ciclo completo sobre un dominio que elegirás tú.
+El hilo conductor es la **API de una tienda de videojuegos**. La construiremos, le daremos forma con Resources, la haremos robusta con validación, la protegeremos con tokens, la verificaremos con Postman, la consumiremos desde otra aplicación PHP y la documentaremos con OpenAPI. El proyecto integrador de esta unidad replica ese ciclo completo sobre una temática propuesta, o una elegida por tí.
 
 ### Objetivos
 
@@ -72,13 +72,13 @@ A continuación, se detallan los ejercicios integrados en esta unidad, indicando
 
 | Ejercicio | Título | CE | ¿Entrega? |
 |:---------:|--------|:--:|:---------:|
-| EJ1 | Estudio comparativo de servicios web | CE7.a-b | Sí |
-| EJ2 | Disección de peticiones HTTP reales | CE7.c-d | Sí |
-| EJ3 | API de lectura de la tienda | CE7.e | Sí |
-| EJ4 | Transformación con API Resources | CE7.e | Sí |
-| EJ5 | CRUD completo con validación | CE7.e-f | Sí |
-| EJ6 | Protección con Sanctum | CE7.d-e | Sí |
-| EJ7 | Colección Postman de verificación | CE7.c-f | Sí |
-| EJ8 | Cliente consumidor en PHP | CE7.g | Sí |
+| EJ1 | Estudio comparativo de servicios web | CE7.a-b | No |
+| EJ2 | Análisis de peticiones HTTP reales | CE7.c-d | No |
+| EJ3 | API de lectura de la tienda | CE7.e | No |
+| EJ4 | Transformación con API Resources | CE7.e | No |
+| EJ5 | CRUD completo con validación | CE7.e-f | No |
+| EJ6 | Protección con Sanctum | CE7.d-e | No |
+| EJ7 | Colección Postman de verificación | CE7.c-f | No |
+| EJ8 | Cliente consumidor en PHP | CE7.g | No |
 | EJ9 | Proyecto integrador (transversal) | CE7.b-e-f-g | Sí |
 | EJ10 | Documentación OpenAPI del proyecto | CE7.h | Sí |

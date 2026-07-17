@@ -103,5 +103,9 @@ Documenta la API de tu proyecto integrador:
 
 1. Redacta el documento OpenAPI 3 completo: los cinco *endpoints* del CRUD, *login* y *logout*, con sus parámetros, cuerpos, esquemas en `components` y todos los códigos de estado del contrato (`200`, `201`, `204`, `401`, `403`, `404`, `422`).
 2. Declara el esquema de seguridad *bearer* y márcalo en los *endpoints* protegidos.
-3. Valida el documento en [editor.swagger.io](https://editor.swagger.io) (cero errores) y entrega el fichero `.yaml` junto a una captura de Swagger UI renderizando tu documentación.
+3. Valida el documento en [editor.swagger.io](https://editor.swagger.io) (cero errores)
+
+ ::: {.callout-important title="Evaluación"}
+Entrega el fichero `.yaml` junto a una captura de Swagger UI renderizando tu documentación.
+:::
 :::

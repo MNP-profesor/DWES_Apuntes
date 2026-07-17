@@ -169,9 +169,10 @@ Como mención: **GraphQL** (el cliente decide qué campos quiere) y **gRPC** (bi
 :::
 
 ::: {.ejercicio}
-**EJ2 · Disección de peticiones HTTP reales**
+**EJ2 · Análisis de peticiones HTTP reales**
 
 1. Abre la pestaña Red del navegador sobre una web pública que cargue datos dinámicamente y captura tres peticiones XHR/fetch distintas.
+
 2. Documenta cada una con esta plantilla:
 
 ```text

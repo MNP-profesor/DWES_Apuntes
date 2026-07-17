@@ -77,17 +77,17 @@ A continuación, se detallan los ejercicios integrados en esta unidad, indicando
 
 | Ejercicio | Título | ¿Entrega? |
 |:---------:|--------|:---------:|
-| EJ1 | ¿Clásico o híbrido? | Sí |
-| EJ2 | Análisis comparativo servidor/cliente | Sí |
-| EJ3 | Clasificación por capas | Sí |
-| EJ4 | Ficha de tecnologías y frameworks | Sí |
-| EJ5 | Endpoint de géneros y fallos provocados | Sí |
-| EJ6 | Endpoint propio + pintado en página | Sí |
-| EJ7 | Cliente web de la propia API (UD7) | Sí |
-| EJ8 | La capa cliente no basta | Sí |
-| EJ9 | Formulario de valoraciones con verificación en dos capas | Sí |
-| EJ10 | Ocultar, contar, restaurar | Sí |
-| EJ11 | Cartelera interactiva: filtrado y ordenación sin recarga | Sí |
+| EJ1 | ¿Clásico o híbrido? | No |
+| EJ2 | Análisis comparativo servidor/cliente | No |
+| EJ3 | Clasificación por capas | No |
+| EJ4 | Ficha de tecnologías y frameworks | No |
+| EJ5 | Endpoint de géneros y fallos provocados | No |
+| EJ6 | Endpoint propio + pintado en página | No |
+| EJ7 | Cliente web de la propia API (UD7) | No |
+| EJ8 | La capa cliente no basta | No |
+| EJ9 | Formulario de valoraciones con verificación en dos capas | No |
+| EJ10 | Ocultar, contar, restaurar | No |
+| EJ11 | Cartelera interactiva: filtrado y ordenación sin recarga | No |
 | EJ12 | Proyecto integrador: "Mi cartelera conectada" | Sí |
 
 ::: {.callout-important title="Normativa · RA-CE"}

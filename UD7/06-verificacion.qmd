@@ -137,6 +137,8 @@ Fíjate en `getJson()` y `postJson()`: envían automáticamente `Accept: applica
 **EJ7 · Colección Postman de verificación**
 
 1. Construye una colección Postman con entorno (`{{base_url}}`, `{{token}}`) que cubra el ciclo completo: *login*, listado, detalle, creación, actualización, borrado y *logout*.
+
 2. Añade a cada petición al menos dos tests: uno de código de estado y otro de estructura del cuerpo. El *login* debe guardar el token en el entorno automáticamente.
-3. Ejecuta la colección con el Collection Runner, exporta el fichero `.json` de la colección y adjunta una captura del informe con todas las aserciones en verde. Documenta brevemente qué cabeceras (`Accept`, `Content-Type`, `Authorization`) has necesitado y por qué.
+
+3. Ejecuta la colección con el Collection Runner, exporta el fichero `.json` de la colección, asegurándote de que en el informe parecen todas las aserciones en verde. 
 :::

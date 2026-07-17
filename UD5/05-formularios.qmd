@@ -214,5 +214,7 @@ Añade a tu aplicación el formulario de **solicitud de préstamo** de un equipo
 5. Demuestra la protección CSRF en el formulario de solicitud: elimina `@csrf`, envía y documenta con captura el error 419, explicando qué ataque previene.
 6. **Transversal CE5.h**: tabla de casos de prueba con al menos **seis filas** (entrada → resultado esperado → resultado obtenido) que cubra todas las reglas, incluida una fecha en pasado y un email de dominio ajeno.
 
-*Entrega apto/no apto: las cuatro reglas operativas, filtro GET funcional y justificado, los tres escenarios (éxito, error, 419) con capturas y la tabla completa.*
+::: {.callout-note title="Información"}
+El ejercicio estará correcto si las cuatro reglas están operativas, filtro GET funcional y justificado, los tres escenarios (éxito, error, 419) con capturas y la tabla completa.*
+:::
 :::

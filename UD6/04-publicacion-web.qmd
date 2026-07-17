@@ -7,15 +7,42 @@ Recuperar es media tarea; la otra media es **mostrar** los datos de forma segura
 1. Escapar **siempre** la salida con `htmlspecialchars()` (evita XSS).
 2. **Paginar** los listados grandes.
 
+Además, con una base de datos relacional lo habitual es combinar tablas con `JOIN`. Este listado muestra los préstamos activos con el nombre del socio y el título del libro:
+
+```php
+<?php
+$sql = 'SELECT s.nombre, l.titulo, p.fecha_prestamo
+        FROM prestamos p
+        JOIN socios s ON p.socio_id = s.id
+        JOIN libros l ON p.libro_id = l.id
+        WHERE p.fecha_devolucion IS NULL
+        ORDER BY s.nombre';
+
+foreach ($pdo->query($sql) as $p) {
+    echo htmlspecialchars($p['nombre']) . ' → '
+       . htmlspecialchars($p['titulo']) . "\n";
+}
+```
+
+Salida esperada:
+
+```
+Ana Ruiz → El nombre del viento
+Carlos Vidal → Fundación
+Marta Gil → Fundación
+```
+
+Para listados grandes se añade búsqueda y paginación. `LIMIT` y `OFFSET` recortan el número de filas por página:
+
 ```php
 <?php
 $porPagina = 10;
 $pagina = max(1, (int) ($_GET['p'] ?? 1));
 $offset = ($pagina - 1) * $porPagina;
 
-$sql = 'SELECT id, nombre, telefono FROM contactos
-        WHERE nombre LIKE :q
-        ORDER BY nombre
+$sql = 'SELECT id, titulo, autor FROM libros
+        WHERE titulo LIKE :q
+        ORDER BY titulo
         LIMIT :lim OFFSET :off';
 $st = $pdo->prepare($sql);
 $st->bindValue(':q', '%' . ($_GET['q'] ?? '') . '%');
@@ -23,9 +50,9 @@ $st->bindValue(':lim', $porPagina, PDO::PARAM_INT);
 $st->bindValue(':off', $offset, PDO::PARAM_INT);
 $st->execute();
 
-foreach ($st as $c) {
-    echo '<tr><td>' . htmlspecialchars($c['nombre']) . '</td>'
-       . '<td>' . htmlspecialchars($c['telefono']) . '</td></tr>';
+foreach ($st as $l) {
+    echo '<tr><td>' . htmlspecialchars($l['titulo']) . '</td>'
+       . '<td>' . htmlspecialchars($l['autor']) . '</td></tr>';
 }
 ```
 
@@ -33,70 +60,6 @@ foreach ($st as $c) {
 `LIMIT` y `OFFSET` **no** admiten valores entrecomillados. Hay que enlazarlos con `bindValue(..., PDO::PARAM_INT)` y castear a entero con `(int)`. Pasarlos como cadena dentro de `execute([...])` produce un error de sintaxis SQL.
 :::
 
-::: {.ejercicio}
-**EJ4 · Listado web con búsqueda segura**
-
-Construye una página que muestre los contactos en una tabla HTML, con:
-
-- un campo de búsqueda por nombre (con `LIKE` parametrizado) que **conserve el término** tras enviar,
-- toda la salida escapada con `htmlspecialchars()`,
-- paginación de 10 en 10.
-
-Comprueba que escribir `<script>alert(1)</script>` en el buscador se muestra como texto y **no** se ejecuta.
-
-Código de arranque:
-
-```php
-<?php
-$q = trim($_GET['q'] ?? '');
-$sql = 'SELECT id, nombre, telefono FROM contactos
-        WHERE nombre LIKE :q ORDER BY nombre';
-$st = $pdo->prepare($sql);
-$st->execute([':q' => '%' . $q . '%']);
-?>
-<form method="get">
-  <input name="q" value="<?= htmlspecialchars($q) ?>">
-  <button>Buscar</button>
-</form>
-<table>
-<?php foreach ($st as $c): ?>
-  <tr>
-    <td><?= htmlspecialchars($c['nombre']) ?></td>
-    <td><?= htmlspecialchars($c['telefono']) ?></td>
-  </tr>
-<?php endforeach; ?>
-</table>
-<!-- TODO: añadir la paginación con LIMIT / OFFSET -->
-```
-:::
-
-::: {.ejercicio}
-**EJ5 · Ficha de detalle y paginación (con pruebas)**
-
-A partir del listado anterior, crea una **ficha de detalle** que muestre un contacto recibido por su `id` (con sentencia preparada) y gestione el caso de que no exista. Completa la paginación del listado con enlaces a página anterior y siguiente.
-
-Entrega además una tabla de casos de prueba:
-
-| Caso | Entrada | Resultado esperado |
-|------|---------|--------------------|
-| id existente | `?id=3` | Muestra la ficha del contacto 3 |
-| id inexistente | `?id=9999` | Mensaje "no encontrado" (404) |
-| id no numérico | `?id=abc` | Tratado como 0 → no encontrado, sin error |
-| id malicioso | `?id=0 OR 1=1` | No encontrado (la preparada lo neutraliza) |
-
-Código de arranque:
-
-```php
-<?php
-$id = (int) ($_GET['id'] ?? 0);
-$st = $pdo->prepare('SELECT * FROM contactos WHERE id = :id');
-$st->execute([':id' => $id]);
-$c = $st->fetch();
-
-if ($c === false) {
-    http_response_code(404);
-    exit('Contacto no encontrado.');
-}
-// TODO: mostrar la ficha con la salida escapada
-```
+::: {.callout-note title="Información"}
+El ejercicio de publicación web se plantea al final del bloque siguiente, una vez conozcas también los modos de recuperación: así construirás el listado devolviendo **objetos**, no solo arrays.
 :::

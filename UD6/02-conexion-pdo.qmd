@@ -6,7 +6,7 @@ Conectar es crear un objeto `PDO` pasándole un **DSN** (Data Source Name), el u
 
 ```php
 <?php
-$dsn = 'mysql:host=localhost;dbname=agenda;charset=utf8mb4';
+$dsn = 'mysql:host=localhost;dbname=biblioteca;charset=utf8mb4';
 
 $opciones = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -37,25 +37,23 @@ Los tres atributos que nunca deben faltar:
 - `ATTR_EMULATE_PREPARES => false`: las preparadas se preparan de verdad en el servidor, reforzando la seguridad.
 :::
 
-En una aplicación real la conexión no se repite en cada script: se **encapsula** en una clase y se reutiliza.
+En una aplicación real la conexión no se repite en cada script: se **encapsula** una sola vez y se reutiliza. Diseñar bien ese punto único es el primer ejercicio, porque de él dependerán todos los demás.
 
 ::: {.ejercicio}
-**EJ2 · Clase de conexión PDO reutilizable**
+**EJ1 · Clase de conexión PDO reutilizable**
 
-Crea una clase `Conexion` con un método estático `getInstancia()` que devuelva un **único** objeto PDO (patrón *singleton*). Los datos del DSN deben leerse de un fichero de configuración externo, no estar escritos en la clase. Gestiona el fallo con `try/catch`, registrando el error con `error_log` y mostrando un mensaje genérico. Demuestra su uso recuperando el número de contactos.
+Diseña una clase `Conexion` que centralice el acceso a la base de datos `biblioteca` y que reutilizarás en el resto de ejercicios de la unidad. Requisitos:
+
+- Un método estático `getInstancia()` que devuelva el objeto PDO si ya existe, y en caso contrario, lo crea.
+- Los datos de conexión (host, base, usuario, contraseña) **no** pueden estar escritos dentro de la clase: se leen de un fichero de configuración `config.php` **externo** que tendrás que generar.
+- La conexión se crea con los tres atributos vistos arriba.
+- Si la conexión falla, el error se registra con `error_log` y al usuario solo se le muestra un mensaje genérico (nunca el mensaje interno de la excepción).
+
+Decisiones de diseño que debes tomar tú: qué formato tendrá el fichero de configuración, cómo lo carga la clase, dónde implementas el `try/catch` gestionando el registro del error con `error_log`.
+
+Para comprobar que funciona, tu entrega debe incluir un pequeño script de prueba que obtenga la conexión y muestre cuántos libros hay en el catálogo. Con los datos de prácticas, la salida debe ser:
 
 Código de arranque:
-
-```php
-<?php
-// config.php  (fichero externo, fuera del control de versiones)
-return [
-    'host' => 'localhost',
-    'bd'   => 'agenda',
-    'user' => 'daw',
-    'pass' => 'secreto',
-];
-```
 
 ```php
 <?php
@@ -71,16 +69,21 @@ class Conexion {
         return self::$pdo;
     }
 }
-
-// Uso esperado:
+```
+Prueba a realizar:
+```php
+<?php
 $pdo = Conexion::getInstancia();
-$total = $pdo->query('SELECT COUNT(*) FROM contactos')->fetchColumn();
-echo "Contactos: $total";
+$total = $pdo->query('SELECT COUNT(*) FROM libros')->fetchColumn();
+echo "Libros en catálogo: $total"; 
+```
+Salida esperada:
+
+```
+Libros en catálogo: 3
 ```
 
-Salida esperada (con los 3 contactos de la base de prácticas):
-
-```
-Contactos: 3
-```
+::: {.callout-note title="Información"}
+El ejericio estará correcto si la conexión es única (no se crea una nueva en cada llamada), las credenciales viven fuera de la clase y el fallo se gestiona sin filtrar información al usuario.
+:::
 :::

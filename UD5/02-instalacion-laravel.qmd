@@ -113,7 +113,7 @@ La cadena completa es: `.env` → `config/app.php` (que hace `'name' => env('APP
 
 ## Autocomprobación (sin entrega)
 
-Antes de pasar al siguiente bloque, verifica tu entorno. **Vas a necesitar dos proyectos**: `agenda` para reproducir los ejemplos de la teoría, y `prestamos` donde harás todos los ejercicios de la unidad. Debes poder marcar todo esto:
+Antes de pasar al siguiente bloque, verifica tu entorno. **Vas a necesitar dos proyectos**: `agenda` para reproducir los ejemplos de la teoría, y `prestamos` donde harás todos los ejercicios de la unidad. Debes poder marcar todos los items de la siguiente checklist:
 
 - [ ] `composer create-project laravel/laravel prestamos` termina sin errores y `php artisan serve` muestra la bienvenida.
 - [ ] Sabes decir, sin mirar la tabla, en qué carpeta viven controladores, vistas y rutas.
@@ -121,4 +121,6 @@ Antes de pasar al siguiente bloque, verifica tu entorno. **Vas a necesitar dos p
 - [ ] `php artisan route:list` te resulta legible: método, URI, nombre, acción.
 - [ ] Sabes explicar por qué `env()` solo se usa dentro de `config/`.
 
+::: {.callout-important title="Importante"}
 Si algún punto falla, resuélvelo ahora: los ejercicios EJ2 a EJ6 se construyen sobre el proyecto `prestamos` y asumen todo lo anterior.
+:::

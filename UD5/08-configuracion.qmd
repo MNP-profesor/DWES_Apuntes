@@ -125,5 +125,7 @@ Los profesores preparan su solicitud añadiendo equipos a una cesta ("Mi solicit
 4. Conecta configuración y estado: si la cesta ya tiene `config('prestamos.max_equipos')` equipos, el intento de añadir otro debe rechazarse con un mensaje flash de error. Integra también `dias_max` en la validación de la fecha de EJ3 (la fecha de devolución no puede superar hoy + `dias_max`).
 5. Redacta un breve informe (5–10 líneas): qué viaja en la cookie del navegador, dónde reside la cesta, y por qué el límite de equipos es configuración y no una constante en el código.
 
-*Entrega apto/no apto: cesta completa (añadir, quitar, listar, vaciar) respetando disponibilidad y límite configurable, contador global correcto, `dias_max` integrado en la validación e informe entregado.*
+::: {.callout-note title="Información"}
+El ejercicio estará correcto con la implementación de la cesta completa (añadir, quitar, listar, vaciar) respetando disponibilidad y límite configurable, contador global correcto, `dias_max` integrado en la validación e informe entregado.
+:::
 :::

@@ -6,18 +6,18 @@ Para una consulta **fija**, sin datos externos, vale `query()`:
 
 ```php
 <?php
-$sql = 'SELECT id, nombre FROM contactos ORDER BY nombre';
+$sql = 'SELECT titulo FROM libros ORDER BY titulo';
 foreach ($pdo->query($sql) as $fila) {
-    echo $fila['nombre'] . "\n";
+    echo $fila['titulo'] . "\n";
 }
 ```
 
 Salida esperada:
 
 ```
-Ana Ruiz
-Carlos Vidal
-Marta Gil
+1984
+El nombre del viento
+Fundación
 ```
 
 En cuanto la consulta usa un **valor del usuario** (un id, un término de búsqueda) hay que usar **sentencias preparadas**.
@@ -28,12 +28,12 @@ Nunca concatenes datos del usuario en el SQL:
 
 ```php
 <?php
-// VULNERABLE — jamás en producción
+// VULNERABLE — Prohibido en producción
 $id = $_GET['id'];
-$pdo->query("SELECT * FROM contactos WHERE id = $id");
+$pdo->query("SELECT * FROM libros WHERE id = $id");
 ```
 
-Con `?id=0 OR 1=1` la consulta pasa a ser `... WHERE id = 0 OR 1=1`, que es siempre cierta y **devuelve toda la tabla**. Con `?id=0; DROP TABLE contactos; --` se puede destruir la tabla.
+Con `?id=0 OR 1=1` la consulta pasa a ser `... WHERE id = 0 OR 1=1`, que es siempre cierta y **devuelve todo el catálogo**. Con `?id=0; DROP TABLE libros; --` se puede destruir la tabla.
 
 ## La solución: marcadores
 
@@ -42,19 +42,19 @@ El valor viaja **separado** del SQL; el motor nunca lo interpreta como código:
 ```php
 <?php
 // SEGURO — sentencia preparada con marcador con nombre
-$sql = 'SELECT id, nombre, telefono FROM contactos WHERE id = :id';
+$sql = 'SELECT id, titulo, autor FROM libros WHERE id = :id';
 $sentencia = $pdo->prepare($sql);
 $sentencia->execute([':id' => $_GET['id']]);
-$contacto = $sentencia->fetch();
+$libro = $sentencia->fetch();
 
-if ($contacto === false) {
-    echo 'Contacto no encontrado.';
+if ($libro === false) {
+    echo 'Libro no encontrado.';
 } else {
-    echo $contacto['nombre'];
+    echo $libro['titulo'];
 }
 ```
 
-Ahora `?id=0 OR 1=1` se trata como un id literal que no existe: la consulta **no devuelve filas** y se muestra `Contacto no encontrado.`.
+Ahora `?id=0 OR 1=1` se trata como un id literal que no existe: la consulta **no devuelve filas** y se muestra `Libro no encontrado.`.
 
 ::: {.callout-tip title="Analogía Java"}
 Si vienes de JDBC reconocerás el `PreparedStatement`, pero hay una diferencia que sorprende: en Java enlazabas cada parámetro con un *setter* tipado y posicional (`ps.setInt(1, id)`), mientras que en PHP pasas **todos los parámetros juntos en un array asociativo** (`execute([':id' => $id])`), sin indicar el tipo. PHP lo infiere del valor; por eso conviene castear a entero (`(int)`) los identificadores numéricos importantes.
@@ -67,22 +67,27 @@ Si vienes de JDBC reconocerás el `PreparedStatement`, pero hay una diferencia q
 :::
 
 ::: {.ejercicio}
-**EJ3 · Sentencias preparadas y demostración de inyección SQL**
+**EJ2 · Inyección SQL: Sentencias preparadas**
 
-Parte de este script vulnerable, que busca contactos por nombre concatenando el término:
+Se te entrega un buscador de libros por título **deliberadamente vulnerable**, que concatena el término en el SQL:
 
 ```php
 <?php
-// buscar_inseguro.php  (punto de partida)
+// buscar_inseguro.php  (punto de partida — NO es la solución)
 $q = $_GET['q'] ?? '';
-$sql = "SELECT id, nombre FROM contactos WHERE nombre LIKE '%$q%'";
+$sql = "SELECT id, titulo FROM libros WHERE titulo LIKE '%$q%'";
 foreach ($pdo->query($sql) as $fila) {
-    echo $fila['nombre'] . "<br>";
+    echo htmlspecialchars($fila['titulo']) . "<br>";
 }
 ```
 
-1. Demuestra la inyección con un valor de `q` que devuelva toda la tabla (por ejemplo `%' OR '1'='1`).
-2. Reescribe la consulta con una sentencia preparada y marcador `:q`.
-3. Verifica que el mismo valor malicioso ya no surte efecto.
-4. Explica en dos o tres líneas por qué la preparada neutraliza el ataque.
+Qué hacer:
+
+1. **Explota** la vulnerabilidad: encuentra un valor de `q` que haga que el buscador devuelva **todos** los libros aunque ninguno coincida con el texto buscado, y documenta con una captura qué devuelve.
+2. **Blinda** el buscador reescribiéndolo con una sentencia preparada y un marcador `:q`.
+3. **Verifica** que el mismo valor malicioso ya no altera el resultado.
+
+::: {.callout-note title="Información"}
+El ejericio estará correcto si demuestras la inyección con un caso concreto y la eliminas con una preparada. No basta con reescribir el código: hay que probar el antes y el después.
+:::
 :::

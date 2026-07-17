@@ -36,11 +36,11 @@ En esta unidad las aplicaciones dejan de trabajar con datos efímeros y aprenden
 
 | Bloque | Título | CE |
 |:------:|--------|:--:|
-| 1 | Conexiones: Tecnologías de acceso - conexión PDO - DSN - excepciones | CE6.a-b |
-| 2 | Consultar: Sentencias preparadas - inyección SQL - publicación web | CE6.c-d |
-| 3 | Recorrer: Modos de fetch - `FETCH_CLASS` | CE6.c-e |
-| 4 | Modificar: INSERT - UPDATE - DELETE - transacciones - integridad | CE6.f-g |
-| 5 | Pruebas y documentación | CE6.h |
+| 1 | Conectar: tecnologías de acceso · conexión PDO · DSN · excepciones | CE6.a-b |
+| 2 | Consultar: sentencias preparadas · inyección SQL · publicación web | CE6.c-d |
+| 3 | Recorrer: modos de fetch · `FETCH_CLASS` | CE6.c-e |
+| 4 | Modificar: INSERT · UPDATE · DELETE · transacciones · integridad | CE6.f |
+| 5 | Asegurar: pruebas y documentación | CE6.g |
 
 ::: {.callout-note title="Concepto clave"}
 Trabajaremos con **PDO nativo**, que es la API que de verdad hay que dominar. PDO es además la base sobre la que Laravel construye su ORM Eloquent (que viste en la UD5): al final de la unidad entenderás "qué ocurre por debajo" de ese ORM.
@@ -57,31 +57,60 @@ Trabajaremos con **PDO nativo**, que es la API que de verdad hay que dominar. PD
 
 #### Base de datos de prácticas
 
-Todos los ejemplos usan una base de datos `agenda` con dos tablas. Impórtala antes de empezar para que las salidas de los ejemplos coincidan con las tuyas.
+Trabajaremos con la base de datos `biblioteca`, con tres tablas relacionadas: un socio puede tener varios préstamos, y cada préstamo referencia a un libro. 
+
+##### Diagrama UML
+
+![](./img/uml-biblioteca.png){width=75% fig-align="center"}
+
+##### Sentencias SQL iniciales 
+
+Crea la base de datos antes de empezar.
 
 ```sql
-CREATE TABLE contactos (
-    id       INT AUTO_INCREMENT PRIMARY KEY,
-    nombre   VARCHAR(50)  NOT NULL,
-    telefono VARCHAR(9),
-    email    VARCHAR(120) NULL
+CREATE TABLE socios (
+    id     INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(80)  NOT NULL,
+    email  VARCHAR(120) UNIQUE,
+    alta   DATE NOT NULL
 );
 
-CREATE TABLE llamadas (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    contacto_id INT NOT NULL,
-    fecha       DATE,
-    duracion    INT,
-    FOREIGN KEY (contacto_id) REFERENCES contactos(id)
+CREATE TABLE libros (
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    titulo        VARCHAR(150) NOT NULL,
+    autor         VARCHAR(100),
+    isbn          VARCHAR(13)  UNIQUE,
+    copias_total  INT NOT NULL DEFAULT 1,
+    copias_libres INT NOT NULL DEFAULT 1
 );
 
-INSERT INTO contactos (nombre, telefono, email) VALUES
-  ('Ana Ruiz',     '600111222', 'ana@example.com'),
-  ('Carlos Vidal', '600333444', NULL),
-  ('Marta Gil',    '600555666', 'marta@example.com');
+CREATE TABLE prestamos (
+    id               INT AUTO_INCREMENT PRIMARY KEY,
+    socio_id         INT NOT NULL,
+    libro_id         INT NOT NULL,
+    fecha_prestamo   DATE NOT NULL,
+    fecha_devolucion DATE NULL,
+    FOREIGN KEY (socio_id) REFERENCES socios(id),
+    FOREIGN KEY (libro_id) REFERENCES libros(id)
+);
+
+INSERT INTO socios (nombre, email, alta) VALUES
+  ('Ana Ruiz',     'ana@example.com',    '2024-09-01'),
+  ('Carlos Vidal', 'carlos@example.com', '2024-10-15'),
+  ('Marta Gil',    'marta@example.com',  '2025-01-20');
+
+INSERT INTO libros (titulo, autor, isbn, copias_total, copias_libres) VALUES
+  ('El nombre del viento', 'Patrick Rothfuss', '9788401352836', 3, 2),
+  ('Fundación',            'Isaac Asimov',     '9788497596435', 2, 0),
+  ('1984',                 'George Orwell',    '9788499890944', 4, 4);
+
+INSERT INTO prestamos (socio_id, libro_id, fecha_prestamo, fecha_devolucion) VALUES
+  (1, 1, '2025-02-01', NULL),   -- Ana tiene "El nombre del viento"
+  (2, 2, '2025-01-10', NULL),   -- Carlos tiene "Fundación"
+  (3, 2, '2025-01-15', NULL);   -- Marta tiene "Fundación" (agota las copias)
 ```
 
-Los ejemplos de esta unidad asumen estos tres contactos; por eso puedes comparar sus salidas con las que muestran los apuntes.
+Con estos datos, "Fundación" tiene sus 2 copias prestadas (0 libres) y "1984" está entero disponible: son los casos que usaremos para probar préstamos, devoluciones e integridad.
 
 ### Evaluación
 
@@ -95,16 +124,12 @@ A continuación, se detallan los ejercicios integrados en esta unidad, indicando
 
 | Ejercicio | Título | ¿Entrega? |
 |:---------:|--------|:---------:|
-| EJ1 | Estudio comparativo de tecnologías de acceso a datos | Sí |
-| EJ2 | Clase de conexión PDO reutilizable | Sí |
-| EJ3 | Sentencias preparadas y demostración de inyección SQL | Sí |
-| EJ4 | Listado web con búsqueda segura | Sí |
-| EJ5 | Ficha de detalle y paginación (con pruebas) | Sí |
-| EJ6 | Fetch modes y FETCH_CLASS | Sí |
-| EJ7 | Alta de registros con validación en servidor | Sí |
-| EJ8 | Edición y borrado con transacciones (con pruebas) | Sí |
-| EJ9 | CRUD completo seguro y documentado | Sí |
+| EJ1 | Clase de conexión PDO reutilizable | No |
+| EJ2 | Inyección SQL: Sentencias preparadas | No |
+| EJ3 | Listado, ficha y paginación con objetos | No |
+| EJ4 | CRUD con validación y transacciones | No |
+| EJ5 | Proyecto: gestión de la biblioteca | Sí |
 
 ::: {.callout-note title="Concepto clave"}
-Para llegar a la prueba objetiva en buenas condiciones, lo importante es haber asimilado bien los conceptos clave de cada ejercicio, ya que cubren todos los aspectos que la prueba objetiva combina (conectar, consultar, publicar, recorrer, modificar).
+Para llegar a la prueba objetiva en buenas condiciones, lo importante es haber asimilado los conceptos clave de cada ejercicio, ya que cubren todos los aspectos que la prueba combina: **conectar**, **consultar**, **publicar**, **recorrer** y **modificar** con seguridad e integridad.
 :::

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="640" viewBox="0 0 1180 640" font-family="Segoe UI, Arial, sans-serif">
+<rect width="1180" height="640" fill="white"/>
+<defs>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+  <path d="M 0 0 L 10 5 L 0 10 z" fill="#36454F"/>
+</marker>
+</defs>
+<text x="590.0" y="20" text-anchor="middle" font-size="15" fill="#64748B">Flujo de una petición en MVC — GET /contactos</text>
+<line x1="110" y1="76" x2="110" y2="610" stroke="#64748B" stroke-width="1.2" stroke-dasharray="5,5"/>
+<rect x="25.0" y="30" width="170" height="46" rx="8" fill="#1E2761"/>
+<text x="110" y="58.0" text-anchor="middle" font-size="17" font-weight="bold" fill="white">Navegador</text>
+<line x1="340" y1="76" x2="340" y2="610" stroke="#64748B" stroke-width="1.2" stroke-dasharray="5,5"/>
+<rect x="255.0" y="30" width="170" height="46" rx="8" fill="#1E2761"/>
+<text x="340" y="58.0" text-anchor="middle" font-size="17" font-weight="bold" fill="white">Enrutador</text>
+<line x1="580" y1="76" x2="580" y2="610" stroke="#64748B" stroke-width="1.2" stroke-dasharray="5,5"/>
+<rect x="495.0" y="30" width="170" height="46" rx="8" fill="#1E2761"/>
+<text x="580" y="58.0" text-anchor="middle" font-size="17" font-weight="bold" fill="white">Controlador</text>
+<line x1="820" y1="76" x2="820" y2="610" stroke="#64748B" stroke-width="1.2" stroke-dasharray="5,5"/>
+<rect x="735.0" y="30" width="170" height="46" rx="8" fill="#C0561F"/>
+<text x="820" y="58.0" text-anchor="middle" font-size="17" font-weight="bold" fill="white">Modelo</text>
+<line x1="1050" y1="76" x2="1050" y2="610" stroke="#64748B" stroke-width="1.2" stroke-dasharray="5,5"/>
+<rect x="965.0" y="30" width="170" height="46" rx="8" fill="#C0561F"/>
+<text x="1050" y="58.0" text-anchor="middle" font-size="17" font-weight="bold" fill="white">Vista</text>
+<line x1="110" y1="150" x2="340" y2="150" stroke="#36454F" stroke-width="2" marker-end="url(#ar)"/>
+<text x="225.0" y="140" text-anchor="middle" font-size="15.5" font-weight="600" fill="#1E2761">1. Petición GET /contactos</text>
+<line x1="340" y1="228" x2="580" y2="228" stroke="#36454F" stroke-width="2" marker-end="url(#ar)"/>
+<text x="460.0" y="218" text-anchor="middle" font-size="15.5" font-weight="600" fill="#1E2761">2. Ruta → ContactoController::index()</text>
+<line x1="580" y1="306" x2="820" y2="306" stroke="#36454F" stroke-width="2" marker-end="url(#ar)"/>
+<text x="700.0" y="296" text-anchor="middle" font-size="15.5" font-weight="600" fill="#1E2761">3. Solicita los contactos</text>
+<line x1="820" y1="384" x2="580" y2="384" stroke="#36454F" stroke-width="2" stroke-dasharray="7,5" marker-end="url(#ar)"/>
+<text x="700.0" y="374" text-anchor="middle" font-size="15.5" font-weight="600" fill="#C0561F">4. Devuelve los datos (contactos)</text>
+<line x1="580" y1="462" x2="1050" y2="462" stroke="#36454F" stroke-width="2" marker-end="url(#ar)"/>
+<text x="815.0" y="452" text-anchor="middle" font-size="15.5" font-weight="600" fill="#1E2761">5. Entrega los datos a la vista</text>
+<line x1="1050" y1="540" x2="110" y2="540" stroke="#36454F" stroke-width="2" stroke-dasharray="7,5" marker-end="url(#ar)"/>
+<text x="580.0" y="530" text-anchor="middle" font-size="15.5" font-weight="600" fill="#C0561F">6. HTML generado, de vuelta al navegador</text>
+<line x1="70" y1="614" x2="130" y2="614" stroke="#36454F" stroke-width="2" marker-end="url(#ar)"/>
+<text x="140" y="619" font-size="13.5" fill="#36454F">llamada / petición</text>
+<line x1="300" y1="614" x2="360" y2="614" stroke="#36454F" stroke-width="2" stroke-dasharray="7,5" marker-end="url(#ar)"/>
+<text x="370" y="619" font-size="13.5" fill="#36454F">respuesta (datos / HTML)</text>
+</svg>

@@ -132,8 +132,9 @@ El buen consumidor hace tres cosas **siempre**: envía `acceptJson()` para garan
 ::: {.ejercicio}
 **EJ8 · Cliente consumidor en PHP**
 
-El consumo de una API pública se hace en clase como demostración guiada y no forma parte del entregable. Tu entrega es el cliente de **tu propia API**:
+El consumo de una API pública se hace en clase como demostración guiada y no forma parte del entregable. 
 
 1. Implementa un consumidor de tu API de juegos: *login* programático, listado del catálogo y creación de un juego con el token obtenido, gestionando los códigos `401`, `403` y `422` con mensajes claros.
+
 2. Añade manejo de errores de red y tiempo de espera (`timeout(3)`) y documenta en comentarios qué código de estado provoca cada rama de tu control de errores.
 :::

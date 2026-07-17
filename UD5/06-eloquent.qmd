@@ -108,10 +108,6 @@ Contacto::create($datos);                        // INSERT INTO contactos ...
 $c->delete();                                    // DELETE FROM contactos WHERE id = ?
 ```
 
-::: {.callout-tip title="Analogía Java"}
-Ojo al cambio de estilo respecto a JPA: en Java separas la `@Entity` (datos) del `Repository` (consultas). Eloquent usa el patrón **Active Record**: la propia clase `Contacto` hace las dos cosas, y las consultas son métodos estáticos sobre ella (`Contacto::findOrFail($id)` ≈ `repository.findById(id).orElseThrow()`). No busques el repositorio: no existe.
-:::
-
 ::: {.callout-warning title="Errores frecuentes"}
 - `create()` lanza `MassAssignmentException`: falta el `$fillable` en el modelo. Es una protección, no un capricho: evita que un atacante inyecte campos que no estaban en tu formulario.
 - Nombre de tabla: Eloquent asume el plural del modelo (`Contacto` → `contactos`). Si tu tabla se llama distinto, decláralo con `protected $table = 'mi_tabla';`.
@@ -122,9 +118,9 @@ Ojo al cambio de estilo respecto a JPA: en Java separas la `@Entity` (datos) del
 
 Objetivo: sustituir el array en memoria por `Contacto` **sin tocar ni una línea de las vistas**. Si las capas están bien separadas, la presentación no debe enterarse del cambio.
 
-**1.** Crea modelo y migración como arriba, y ejecútala.
+1. Crea modelo y migración como arriba, y ejecútala.
 
-**2.** En `ContactoController`, elimina la propiedad `$contactos` y cambia cada método:
+2. En `ContactoController`, elimina la propiedad `$contactos` y cambia cada método:
 
 ```php
 use App\Models\Contacto;
@@ -158,7 +154,7 @@ public function store(Request $request)
 }
 ```
 
-**3.** Ajuste mínimo en las vistas: donde antes accedías como array (`$c['nombre']`), ahora es un objeto (`$c->nombre` y `$c->id`).
+3. Ajuste mínimo en las vistas: donde antes accedías como array (`$c['nombre']`), ahora es un objeto (`$c->nombre` y `$c->id`).
 
 **4.** Comprueba: listado, búsqueda, ficha y alta funcionan igual… pero ahora los contactos **sobreviven** al reinicio del servidor.
 

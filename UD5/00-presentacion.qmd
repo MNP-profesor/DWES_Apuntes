@@ -75,11 +75,11 @@ A continuación, se detallan los ejercicios integrados en esta unidad, indicando
 
 | Ejercicio | Título | ¿Entrega? |
 |:---------:|--------|:---------:|
-| EJ1 | De espagueti a capas | Sí |
-| EJ2 | Catálogo de equipos en préstamo | Sí |
-| EJ3 | Solicitud de préstamo con validación | Sí |
-| EJ4 | Mi solicitud: estado en sesión y servicio configurable | Sí |
-| EJ5 | `DisponibilidadService`: la lógica de préstamos como servicio | Sí |
+| EJ1 | De espagueti a capas | No |
+| EJ2 | Catálogo de equipos en préstamo | No |
+| EJ3 | Solicitud de préstamo con validación | No |
+| EJ4 | Mi solicitud: estado en sesión y servicio configurable | No |
+| EJ5 | `DisponibilidadService`: la lógica de préstamos como servicio | No |
 | EJ6 | Proyecto integrador: préstamo de equipos | Sí |
 
 ::: {.callout-note title="Concepto clave"}

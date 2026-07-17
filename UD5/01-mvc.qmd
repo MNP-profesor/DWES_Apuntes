@@ -98,6 +98,8 @@ El flujo de **toda** petición es siempre el mismo. Para `GET /contactos`:
 5. El controlador se los entrega a la **vista**.
 6. La vista genera el HTML, que vuelve al navegador.
 
+![Diagrama de flujo en una arquitectura MVC](./img/mvc-flujo-contactos.svg){width=75% fig-align="center"}
+
 Visto con código orientativo (en el próximo bloque será Laravel real):
 
 ```php
@@ -171,7 +173,8 @@ $ivaTipo = 0.21;
 
 1. Copia el fichero y marca con comentarios `// PRESENTACIÓN`, `// NEGOCIO` o `// DATOS` cada zona del código.
 2. Escribe una tabla con **cinco ventajas** de separar capas, ilustrando cada una con un ejemplo de este fichero concreto (p. ej.: "si cambia el IVA hay que editar un fichero con HTML").
-3. Dibuja el diagrama de flujo de la petición `GET /productos` en una arquitectura MVC, nombrando los componentes y qué viaja entre ellos.
 
-*Entrega apto/no apto: se considera apto si la clasificación de capas es correcta, la tabla tiene los cinco ejemplos anclados al fichero y el diagrama refleja los seis pasos del flujo.*
+::: {.callout-note title="Información"}
+El ejercicio estará correcto si la clasificación de capas es correcta y la tabla tiene los 5 ejemplos anclados al fichero.
+:::
 :::

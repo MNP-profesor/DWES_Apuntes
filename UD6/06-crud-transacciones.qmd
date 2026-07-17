@@ -8,119 +8,123 @@ Hasta aquí solo hemos leído. **Modificar** datos (INSERT, UPDATE, DELETE) usa 
 
 ```php
 <?php
-$sql = 'INSERT INTO contactos (nombre, telefono, email)
-        VALUES (:nombre, :telefono, :email)';
+$sql = 'INSERT INTO socios (nombre, email, alta)
+        VALUES (:nombre, :email, CURDATE())';
 $st = $pdo->prepare($sql);
 $st->execute([
-    ':nombre'   => $_POST['nombre'],
-    ':telefono' => $_POST['telefono'],
-    ':email'    => $_POST['email'] ?: null,
+    ':nombre' => $_POST['nombre'],
+    ':email'  => $_POST['email'] ?: null,
 ]);
 $nuevoId = $pdo->lastInsertId();
-echo "Creado contacto #$nuevoId";
+echo "Alta del socio #$nuevoId";
 ```
 
-Salida esperada (partiendo de los 3 contactos de la base de prácticas):
+Salida esperada (partiendo de los 3 socios de la base de prácticas):
 
 ```
-Creado contacto #4
+Alta del socio #4
 ```
 
 ## Transacciones: todo o nada
 
-Cuando varias operaciones deben tener éxito o fracasar **en bloque**, se envuelven en una transacción:
+Prestar un libro son **dos** operaciones que deben ocurrir juntas: registrar el préstamo y descontar una copia libre. Si una falla, la otra no debe quedar aplicada. Esto es una transacción:
 
 ```php
 <?php
+$socioId = 1;
+$libroId = 3;   // "1984", con copias libres
+
 try {
     $pdo->beginTransaction();
 
-    $pdo->prepare('UPDATE cuentas SET saldo = saldo - :i WHERE id = :o')
-        ->execute([':i' => 100, ':o' => 1]);
-    $pdo->prepare('UPDATE cuentas SET saldo = saldo + :i WHERE id = :d')
-        ->execute([':i' => 100, ':d' => 2]);
+    // 1) Descontar una copia solo si queda alguna libre
+    $ok = $pdo->prepare('UPDATE libros SET copias_libres = copias_libres - 1
+                         WHERE id = :id AND copias_libres > 0');
+    $ok->execute([':id' => $libroId]);
+
+    if ($ok->rowCount() === 0) {
+        throw new RuntimeException('No quedan copias disponibles.');
+    }
+
+    // 2) Registrar el préstamo
+    $pdo->prepare('INSERT INTO prestamos (socio_id, libro_id, fecha_prestamo)
+                   VALUES (:s, :l, CURDATE())')
+        ->execute([':s' => $socioId, ':l' => $libroId]);
 
     $pdo->commit();          // ambas o ninguna
-} catch (PDOException $e) {
+    echo 'Préstamo registrado.';
+} catch (Throwable $e) {
     $pdo->rollBack();        // deshace todo si algo falla
     error_log($e->getMessage());
-    exit('No se pudo completar la operación.');
+    echo 'No se pudo completar el préstamo.';
 }
 ```
+
+Salida esperada (prestando "1984", que tenía copias libres):
+
+```
+Préstamo registrado.
+```
+
+Si intentaras prestar "Fundación" (0 copias libres), el `UPDATE` no afectaría a ninguna fila, se lanzaría la excepción y el `rollBack` dejaría la base de datos **exactamente igual** que antes: ni copia descontada ni préstamo creado.
 
 ::: {.callout-note title="Concepto clave"}
 El RA exige "seguridad **e** integridad":
 
 - **Seguridad** → sentencias preparadas (frente a inyección).
-- **Integridad** → transacciones (`commit` / `rollBack`) y restricciones del SGBD (claves foráneas, `NOT NULL`, `UNIQUE`), que evitan estados intermedios inconsistentes.
+- **Integridad** → transacciones (`commit` / `rollBack`) y restricciones del SGBD (claves foráneas, `NOT NULL`, `UNIQUE`), que evitan estados intermedios inconsistentes (un préstamo sin copia descontada, o al revés).
 :::
 
 ::: {.ejercicio}
-**EJ7 · Alta de registros con validación en servidor**
+**EJ4 · CRUD con validación y transacciones**
 
-Implementa el alta de un contacto: formulario, **validación en servidor** (nombre obligatorio de máximo 50 caracteres; teléfono con formato válido; email opcional pero bien formado) e inserción con sentencia preparada. Recupera el id generado con `lastInsertId()`. Ante datos inválidos, vuelve a mostrar el formulario con los valores introducidos y los errores.
+Implementa la gestión de socios y préstamos de la biblioteca. Parte de la clase `Conexion` de EJ1 y de los patrones de préstamo y transacción vistos en este bloque.
 
-Código de arranque:
+La implementación constará de **tres operaciones**:
 
-```php
-<?php
-$errores = [];
-$nombre = trim($_POST['nombre'] ?? '');
-$tlf    = trim($_POST['telefono'] ?? '');
-$email  = trim($_POST['email'] ?? '');
+1. **Alta de socio** (`alta_socio.php`):
 
-if ($nombre === '' || mb_strlen($nombre) > 50) $errores[] = 'Nombre no válido.';
-if (!preg_match('/^[6-9]\d{8}$/', $tlf))        $errores[] = 'Teléfono no válido.';
-if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) $errores[] = 'Email no válido.';
+- Formulario con validación **en servidor**: nombre obligatorio (máx. 80 caracteres) y email con formato válido y **único** en la tabla.
+- Inserción con sentencia preparada y recuperación del `id` generado.
+- Ante datos inválidos, reaparece el formulario con los valores introducidos y los errores. Decide tú cómo detectas el email duplicado (por consulta previa o capturando la violación de la restricción `UNIQUE`).
 
-if (!$errores) {
-    // TODO: INSERT preparado + lastInsertId()
-}
-// TODO: si hay errores, re-mostrar el formulario con $nombre, $tlf, $email y $errores
-```
+2. **Prestar un libro** (`prestar.php`):
+
+- Recibe un socio y un libro y registra el préstamo **en una transacción**: descuenta una copia libre y crea el registro en `prestamos`, todo o nada.
+- Si el libro no tiene copias libres, no debe cambiar nada y hay que informar del motivo.
+
+3. ***Devolver / borrar*** (`devolver.php`, `baja_socio.php`):
+
+- La devolución marca `fecha_devolucion` y repone una copia libre (de nuevo, en una sola transacción).
+- La baja de un socio debe respetar la integridad: no se permite borrar un socio con préstamos **activos** (sin devolver).
+
+Para evaluar el correcto funcionamiento del ejercicio debes realizar, al menos, las siguientes pruebas:
+
+| Caso | Acción | Resultado |
+|------|--------|-----------|
+| Préstamo correcto | Prestar "1984" (libre) | Copia descontada + registro creado |
+| Préstamo de libro sin copias | Prestar "Fundación" (0 libres) | `rollBack`: nada cambia |
+| Devolución | Devolver un préstamo activo | Fecha marcada + copia repuesta |
+| Baja con préstamo activo | Dar de baja a Carlos | Rechazada |
+| Email duplicado | Alta con email existente | Error de validación, no se inserta |
+
+::: {.callout-note title="Información"}
+El ejercicio estará correcto si el préstamo y la devolución son transaccionales y verificables (una copia mal contada es un fallo), la validación del alta ocurre en servidor y la baja respeta la integridad referencial. Demostrar que un préstamo fallido no deja la base de datos a medias.
 :::
-
-::: {.ejercicio}
-**EJ8 · Edición y borrado con transacciones (con pruebas)**
-
-Añade la **edición** (UPDATE) y el **borrado** (DELETE) de contactos. El borrado debe pedir confirmación y, si el contacto tiene registros asociados en la tabla `llamadas`, eliminarlos **en la misma transacción** para no dejar datos huérfanos.
-
-Documenta con una tabla de casos de prueba el comportamiento ante un fallo forzado a mitad de la transacción, comprobando que el `rollBack` deja la base de datos intacta.
-
-Código de arranque:
-
-```php
-<?php
-// Borrado del contacto y sus llamadas, en una transacción
-try {
-    $pdo->beginTransaction();
-    $pdo->prepare('DELETE FROM llamadas  WHERE contacto_id = :id')->execute([':id' => $id]);
-    $pdo->prepare('DELETE FROM contactos WHERE id = :id')->execute([':id' => $id]);
-    $pdo->commit();
-} catch (PDOException $e) {
-    $pdo->rollBack();
-    error_log($e->getMessage());
-    exit('No se pudo eliminar el contacto.');
-}
-```
-
-| Caso | Acción | Resultado esperado |
-|------|--------|--------------------|
-| Borrado correcto | Eliminar contacto con llamadas | Desaparecen contacto y llamadas |
-| Fallo a mitad | Error forzado tras el 1.er DELETE | `rollBack`: la BD queda intacta |
-| Edición válida | UPDATE de nombre | Cambio persistido (1 fila afectada) |
 :::
 
 ## Eloquent por debajo
 
-Contenido de apoyo, **no evaluable**. En la UD5 escribías `Contacto::find(1)` o `$contacto->save()` sin ver el SQL. Ahora entiendes qué hace Eloquent por debajo: cada método genera una sentencia preparada PDO como las que has escrito a mano.
+En la UD5 escribías `Libro::find(1)` o `$libro->save()` sin ver el SQL. Ahora entiendes qué hace Eloquent por debajo: cada método genera una sentencia preparada PDO como las que has escrito a mano.
+
+::: {.callout-note title="Concepto clave"}
+El ORM aporta comodidad sobre lo que acabas de aprender a hacer manualmente.
+:::
 
 | En Eloquent (UD5) | Por debajo (PDO, esta unidad) |
 |-------------------|-------------------------------|
-| `Contacto::find(1)` | `SELECT * FROM contactos WHERE id = :id` |
-| `Contacto::all()` | `SELECT * FROM contactos` |
-| `$c->save()` (nuevo) | `INSERT INTO contactos (...) VALUES (...)` |
-| `$c->save()` (existente) | `UPDATE contactos SET ... WHERE id = :id` |
-| `$c->delete()` | `DELETE FROM contactos WHERE id = :id` |
-
-El ORM no es magia: es una capa de comodidad sobre exactamente lo que acabas de aprender a hacer manualmente.
+| `Libro::find(1)` | `SELECT * FROM libros WHERE id = :id` |
+| `Libro::all()` | `SELECT * FROM libros` |
+| `$l->save()` (nuevo) | `INSERT INTO libros (...) VALUES (...)` |
+| `$l->save()` (existente) | `UPDATE libros SET ... WHERE id = :id` |
+| `$l->delete()` | `DELETE FROM libros WHERE id = :id` |

@@ -46,10 +46,10 @@ Un servidor web (Apache, Nginx) por sí solo solo sabe devolver ficheros estáti
 ::: {.ejercicio}
 **EJ1 · Clasificación por lugar de ejecución**
 
-Indica si cada elemento de la lista se ejecuta en el **cliente**, en el **servidor** o en **ambos**. Razona la respuesta en una frase.
+Indica si cada elemento de la lista se ejecuta en el **cliente**, en el **servidor** o en **ambos**. Por último, justifica la respuesta.
 
-| # | Elemento |
-|---|---|
+| # | Elemento | Lugar de ejecución | Justificación |
+|---|---|:-:|---|
 | 1 | PHP |
 | 2 | JavaScript en el navegador |
 | 3 | jQuery |
@@ -63,5 +63,7 @@ Indica si cada elemento de la lista se ejecuta en el **cliente**, en el **servid
 | 11 | Validación de formulario con JavaScript |
 | 12 | `fetch()` en el navegador |
 
-Los casos 4, 8 y 9 admiten más de una respuesta válida — lo importante es el razonamiento.
+::: {.callout-note title="Nota"}
+Los casos 4, 8 y 9 admiten más de una respuesta válida, pero lo importante es el razonamiento aplicado.
+:::
 :::

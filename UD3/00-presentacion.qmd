@@ -60,17 +60,18 @@ A continuación, se detallan los ejercicios integrados en esta unidad, indicando
 
 | Ejercicio | Título | ¿Entrega? |
 |:---------:|--------|:---------:|
-| EJ1 | Clasificador de tarifas | Sí |
-| EJ2 | Selector de plan de hosting | Sí |
-| EJ3 | Generador de tablas de multiplicar | Sí |
-| EJ4 | Filtro de inventario | Sí | 
-| EJ5 | Catálogo de cursos | Sí | 
-| EJ6 | Inventario multinivel de almacén | Sí | 
-| EJ7 | Ejercicios extras de Arrays | Sí |
-| EJ8 | Librería de funciones de validación | Sí |
-| EJ9 | Ejercicios extras de funciones | Sí |
-| EJ10 | Formulario de inscripción | Sí |
-| EJ11 | Procesador de inscripción con validación | Sí |
+| EJ1 | Clasificador de tarifas | No |
+| EJ2 | Selector de plan de hosting | No |
+| EJ3 | Generador de tablas de multiplicar | No |
+| EJ4 | Filtro de inventario | No | 
+| EJ5 | Catálogo de cursos | No | 
+| EJ6 | Inventario multinivel de almacén | No | 
+| EJ7 | Ejercicios extras de Arrays | No |
+| EJ8 | Librería de funciones de validación | No |
+| EJ9 | Ejercicios extras de funciones | No |
+| EJ10 | Formulario de inscripción | No |
+| EJ11 | Procesador de inscripción con validación | No |
+| EJ12 | PENDIENTE | Sí |
 
 Para obtener el **apto** es necesario:
 
@@ -78,6 +79,6 @@ Para obtener el **apto** es necesario:
 - La estructura elegida (condicional, bucle, array, función) es adecuada al problema.
 - El código incluye comentarios PHPDoc en cada función y comentarios de línea en la lógica más compleja.
 
-::: {.callout-note title="Concepto clave"}
-Los comentarios (**CE3.g**) son obligatorios en todos los ejercicios: como mínimo un bloque PHPDoc en cada función y comentarios de línea en la lógica más compleja.
+::: {.callout-important title="Importante"}
+Los comentarios (**CE3.g**) son obligatorios la entrega: como mínimo un bloque PHPDoc en cada función y comentarios de línea en la lógica más compleja.
 :::

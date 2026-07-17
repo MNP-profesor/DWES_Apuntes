@@ -11,16 +11,20 @@ Este bloque desarrolla el criterio **CE8.c** del RA8: identificar las tecnologí
 Conviene ordenar el ecosistema en tres capas:
 
 - **Generación en el servidor:** PHP nativo (`echo`, `include`, plantillas propias), motores de plantillas (Blade en Laravel, Twig en Symfony) y equivalentes en otros ecosistemas (JSP/Thymeleaf en Java, EJS en Node.js). Todos comparten el mismo principio ya conocido: lenguaje de marcas con código embebido.
+
 - **Transporte de datos:** el protocolo HTTP y el formato JSON como lengua franca del intercambio, con XML como formato histórico aún presente en sistemas corporativos.
+
 - **Interacción en el cliente:** JavaScript embebido en la página generada, con la API `fetch` como mecanismo estándar de obtención remota (sucesora del histórico objeto `XMLHttpRequest`, origen del término AJAX) y la API del DOM para modificar el documento.
 
-```text
+![](./img/mapa-tecno.png){width=75% fig-align="center"}
+
+<!--```text
    GENERACIÓN (servidor)      TRANSPORTE           INTERACCIÓN (cliente)
  ┌───────────────────────┐  ┌─────────────┐  ┌──────────────────────────┐
- │ PHP nativo · Blade    │  │ HTTP        │  │ JavaScript · fetch       │
+ │ PHP nativo · Blade   │  │ HTTP        │  │ JavaScript · fetch       │
  │ Twig · JSP · EJS      │─▶│ JSON (· XML)│─▶│ DOM · XMLHttpRequest     │
  └───────────────────────┘  └─────────────┘  └──────────────────────────┘
-```
+```-->
 
 ## De XMLHttpRequest a fetch: un poco de historia útil
 
@@ -163,17 +167,15 @@ El mismo fragmento de cartelera, escrito en las dos tecnologías:
 Ambos producen exactamente el mismo HTML. En esta unidad se trabaja con **PHP nativo**, que es la pila evaluable del módulo en generación de páginas; Blade se mantiene como referencia comparativa para reconocer que el concepto de framework de plantillas es transversal a todos los ecosistemas.
 
 ::: {.ejercicio}
-**EJ3 · Clasificación por capas** *(parejas, oral + cuaderno)*
+**EJ3 · Clasificación por capas**
 
 Clasifica las siguientes tecnologías en las tres capas del mapa tecnológico (generación en servidor, transporte, interacción en cliente): `Blade`, `fetch`, `JSON`, `Twig`, `DOM`, `HTTP`, `XMLHttpRequest`, `JSP`, `XML`, `PHP nativo`.
 
 Añade una tecnología más por capa que no haya aparecido en la unidad, buscando en la documentación.
 :::
 
-## Actividad evaluable E2
-
 ::: {.ejercicio}
-**EJ4 · Ficha de tecnologías y frameworks** — CE8.c · 1,0 h en clase
+**EJ4 · Ficha de tecnologías y frameworks** — CE8.c
 
 Elabora una ficha técnica (máximo dos caras) del ecosistema de generación dinámica interactiva. Debe contener:
 
@@ -181,6 +183,4 @@ Elabora una ficha técnica (máximo dos caras) del ecosistema de generación din
 2. Una línea temporal `XMLHttpRequest` → AJAX → `fetch` con las fechas clave.
 3. La comparativa PHP nativo / Blade con **un ejemplo de código propio** (no copiado de los apuntes) por cada fila.
 4. Un párrafo argumentando qué combinación elegirías para un proyecto nuevo y por qué.
-
-**Entrega:** PDF al aula virtual al finalizar la sesión. Calificación: apto / no apto.
 :::

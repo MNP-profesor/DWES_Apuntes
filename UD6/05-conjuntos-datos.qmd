@@ -16,71 +16,118 @@ El mismo dato con dos modos distintos:
 ```php
 <?php
 // FETCH_ASSOC
-$fila = $pdo->query('SELECT nombre FROM contactos LIMIT 1')->fetch(PDO::FETCH_ASSOC);
-echo $fila['nombre'] . "\n";   // acceso por clave
+$fila = $pdo->query('SELECT titulo FROM libros LIMIT 1')->fetch(PDO::FETCH_ASSOC);
+echo $fila['titulo'] . "\n";   // acceso por clave
 
 // FETCH_OBJ
-$fila = $pdo->query('SELECT nombre FROM contactos LIMIT 1')->fetch(PDO::FETCH_OBJ);
-echo $fila->nombre . "\n";     // acceso por propiedad
+$fila = $pdo->query('SELECT titulo FROM libros LIMIT 1')->fetch(PDO::FETCH_OBJ);
+echo $fila->titulo . "\n";     // acceso por propiedad
 ```
 
 Salida esperada:
 
 ```
-Ana Ruiz
-Ana Ruiz
+El nombre del viento
+El nombre del viento
 ```
 
 `FETCH_CLASS` **hidrata objetos** de una clase tuya, asignando cada columna a la propiedad del mismo nombre:
 
 ```php
 <?php
-class Contacto {
+class Libro {
     public int $id;
-    public string $nombre;
-    public string $telefono;
+    public string $titulo;
+    public string $autor;
 
     public function etiqueta(): string {
-        return $this->nombre . ' (' . $this->telefono . ')';
+        return $this->titulo . ' — ' . $this->autor;
     }
 }
 
-$st = $pdo->query('SELECT id, nombre, telefono FROM contactos');
-$contactos = $st->fetchAll(PDO::FETCH_CLASS, Contacto::class);
+$st = $pdo->query('SELECT id, titulo, autor FROM libros ORDER BY titulo');
+$libros = $st->fetchAll(PDO::FETCH_CLASS, Libro::class);
 
-foreach ($contactos as $c) {          // $c es un objeto Contacto
-    echo $c->etiqueta() . "\n";
+foreach ($libros as $l) {          // $l es un objeto Libro
+    echo $l->etiqueta() . "\n";
 }
 ```
 
 Salida esperada:
 
 ```
-Ana Ruiz (600111222)
-Carlos Vidal (600333444)
-Marta Gil (600555666)
+1984 — George Orwell
+El nombre del viento — Patrick Rothfuss
+Fundación — Isaac Asimov
 ```
 
 ::: {.callout-tip title="Analogía Java"}
-En Java construías el objeto y **después** rellenabas sus campos recorriendo el `ResultSet`. PDO con `FETCH_CLASS` hace lo contrario, y esto sorprende: **asigna las propiedades ANTES de ejecutar el constructor**. Si tu constructor pone valores por defecto, los pisará. Para que el constructor corra primero, combina las banderas: `fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Contacto::class)`.
+En Java construías el objeto y **después** rellenabas sus campos recorriendo el `ResultSet`. PDO con `FETCH_CLASS` hace lo contrario, y esto sorprende: **asigna las propiedades ANTES de ejecutar el constructor**. Si tu constructor pone valores por defecto, los pisará. Para que el constructor corra primero, combina las banderas: `fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Libro::class)`.
 :::
 
 ::: {.ejercicio}
-**EJ6 · Fetch modes y FETCH_CLASS**
+**EJ3 · Listado, ficha y paginación con objetos**
 
-1. Recupera el listado de contactos con `FETCH_ASSOC`, `FETCH_OBJ` y `FETCH_CLASS` y comenta las diferencias de acceso a los datos.
-2. Reutiliza (o crea) una clase `Contacto` con al menos un método de comportamiento y complétala con `FETCH_CLASS`, comprobando que puedes invocar ese método sobre los objetos recuperados.
-
-Código de arranque:
+Construye la parte de consulta del catálogo de la biblioteca, devolviendo **objetos** de una clase `Libro` (no arrays). 
 
 ```php
 <?php
-$sql = 'SELECT id, nombre, telefono FROM contactos';
+class Libro {
+    public int $id;
+    public string $titulo;
+    public string $autor;
+    public int $copias_libres;
 
-$asoc = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-$objs = $pdo->query($sql)->fetchAll(PDO::FETCH_CLASS, Contacto::class);
-
-// TODO: recorrer $asoc  (acceso: $fila['nombre'])
-// TODO: recorrer $objs  (acceso: $obj->etiqueta())
+    // TODO: método(s) de comportamiento que necesites en las vistas
+    //       (por ejemplo, saber si hay copias disponibles)
+}
 ```
+
+Constará de dos vistas:
+
+1. **Listado** (`catalogo.php`: listado con búsqueda, paginación y objetos):
+
+- Muestra los libros en una tabla con sú título, autor y número de copias libres.
+- Incluye un buscador por título con `LIKE` **parametrizado** que conserve el término tras enviar.
+- Pagina los resultados de 10 en 10 con `LIMIT`/`OFFSET`.
+- Recupera los libros con `FETCH_CLASS` sobre tu clase `Libro`, y en la tabla usa un método de esa clase (por ejemplo, uno que indique si el libro está disponible).
+- Toda la salida escapada con `htmlspecialchars()`.
+
+```php
+<?php
+    //TODO: parte PHP 
+?>
+
+//TODO: parte HTML
+```
+
+2. **Ficha** (`libro.php?id=...`):
+
+- Muestra un libro concreto recibido por su `id` mediante sentencia preparada.
+- Gestiona el caso de que el `id` no exista (mensaje y código 404).
+
+```php
+<?php
+    // TODO: busca el libro por su `id` mediante sentencia preparada
+?>
+
+// Se muestra el libro
+<h1><?= htmlspecialchars($l['titulo']) ?></h1>
+<p><?= htmlspecialchars($l['autor']) ?></p>
+<p>Copias libres: <?= (int) $l['copias_libres'] ?></p>
+```
+
+Para los siguientes casos, la implementación tener los resultados indicados:
+
+| Caso | Entrada | Resultado esperado |
+|------|---------|--------------------|
+| id existente | `?id=3` | Ficha de "1984" |
+| id inexistente | `?id=9999` | "Libro no encontrado." (404) |
+| id no numérico | `?id=abc` | Tratado como 0 → "Libro no encontrado." |
+| id malicioso | `?id=0 OR 1=1` | "Libro no encontrado."|
+| XSS en buscador | `q=<script>alert(1)</script>` | Se muestra como texto, no se ejecuta |
+
+::: {.callout-note title="Información"}
+El ejericio estará correcto si el catálogo usa objetos `Libro` (no arrays), toda consulta con datos externos va parametrizada, la salida está escapada y la tabla de pruebas cubre los cinco casos, incluido el de XSS.
+:::
 :::

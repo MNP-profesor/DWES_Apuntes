@@ -130,10 +130,10 @@ Secuencia de uso y lo que se ve:
 
 | Acción | Resultado en pantalla |
 |---|---|
-| Pulsar ☆ en Aitana | El botón pasa a `★ Quitar`; el menú muestra `Favoritos (1)` |
-| Pulsar ☆ en Júlia | Menú: `Favoritos (2)` |
+| Pulsar en Aitana | El botón pasa a `Quitar`; el menú muestra `Favoritos (1)` |
+| Pulsar en Júlia | Menú: `Favoritos (2)` |
 | Visitar `/favoritos` | Listado con Aitana y Júlia |
-| Pulsar `★ Quitar` en Aitana | Menú: `Favoritos (1)` |
+| Pulsar `Quitar` en Aitana | Menú: `Favoritos (1)` |
 | Pulsar "Vaciar favoritos" | `✔ Favoritos vaciados` y menú: `Favoritos (0)` |
 | Cerrar el navegador y volver | Favoritos vacíos: la sesión expiró o es nueva |
 
@@ -143,4 +143,6 @@ Secuencia de uso y lo que se ve:
 - Guardar los favoritos en base de datos "porque es más fácil": son preferencias de la sesión del visitante; en BD contaminarías los datos de todos.
 :::
 
-El ejercicio de este bloque es el **E5.4** y lo encontrarás al final del bloque siguiente (@sec-ud5-configuracion): en tu aplicación de préstamos, el estado en sesión y la configuración propia trabajan juntos (el límite de equipos por solicitud es un parámetro configurable), así que se ejercitan en un único ejercicio.
+::: {.callout-note title="Información"}
+El ejercicio de este bloque lo encontrarás al final del bloque siguiente (@sec-ud5-configuracion): en tu aplicación de préstamos, el estado en sesión y la configuración propia trabajan juntos (el límite de equipos por solicitud es un parámetro configurable).
+:::

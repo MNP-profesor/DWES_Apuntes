@@ -151,7 +151,16 @@ var_dump(filter_var("php.net",         FILTER_VALIDATE_URL)); // false
 // Validar IP
 var_dump(filter_var("192.168.1.1", FILTER_VALIDATE_IP)); // string
 var_dump(filter_var("999.0.0.1",   FILTER_VALIDATE_IP)); // false
+```
 
+### `XSS` (o Cross-Site Scripting)
+
+Es uno de los fallos de seguridad web más comunes y peligrosos. Ocurre cuando un atacante consigue inyectar y ejecutar código malicioso (normalmente JavaScript) dentro de una página web.
+
+El nombre "Cross-Site" viene de que el navegador de la víctima ejecuta el script confiando en que proviene del sitio web original, permitiendo al atacante "cruzar" los límites de seguridad de esa web.
+
+```php
+<?php
 // Limpiar una cadena de HTML peligroso
 $entrada  = "<script>alert('xss')</script> Hola";
 $limpia   = filter_var($entrada, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -189,7 +198,7 @@ if (preg_match($patronTelefono,$telefono)) {
 
 ## `htmlspecialchars()` — proteger la salida
 
-Antes de mostrar en HTML cualquier dato del usuario, conviértelo para evitar XSS:
+Antes de mostrar en HTML cualquier dato del usuario, conviértelo para evitar XSS (Cross-Site Scripting):
 
 ```php
 <?php

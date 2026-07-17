@@ -240,5 +240,7 @@ En tu proyecto `prestamos`, construye el catálogo de equipos del centro (portá
 5. Demuestra el escapado automático: añade un equipo cuyo nombre sea `<script>alert(1)</script>`, comprueba que no se ejecuta y localiza en el código fuente de la página las entidades `&lt;script&gt;`. Adjunta captura.
 6. **Transversal CE5.h**: PHPDoc en los métodos del controlador, comentarios en los componentes explicando cada prop, y captura de `php artisan route:list`.
 
-*Entrega apto/no apto: catálogo funcionando con rutas con nombre y restricción, `<x-equipo>` distinguiendo estados, caso "equipo inexistente" cubierto, demo anti-XSS y documentación presentes.*
+::: {.callout-note title="Información"}
+El ejercicio estará correcto si funciona el catálogo con rutas con nombre y restricción, `<x-equipo>` distinguiendo estados, caso "equipo inexistente" cubierto, demo anti-XSS y documentación presentes.*
+:::
 :::

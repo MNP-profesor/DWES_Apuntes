@@ -170,24 +170,21 @@ Comedia · 97 min · nota 5.9
 Obsérvese la división de trabajo que define toda la unidad: PHP genera la página con un contenedor vacío y expone los datos; JavaScript los obtiene y los presenta. Si mañana la fuente pasa de un array a PDO o a Eloquent, la página no cambia una sola línea.
 
 ::: {.ejercicio}
-**EJ5 · Endpoint de géneros y fallos provocados** *(individual, en equipo local)*
+**EJ5 · Endpoint de géneros y fallos provocados**
 
 Crea el endpoint `api/generos.php` que devuelva el array de géneros disponibles y una página `generos.html` cuyo JavaScript los obtenga con `fetch` y los muestre como lista (`ul`).
 
 Provoca después **dos fallos a propósito** (renombra el endpoint; elimina la cabecera `Content-Type`) y anota en el cuaderno qué observas en la pestaña Red y en la Consola en cada caso.
 :::
 
-## Actividad evaluable E3
-
 ::: {.ejercicio}
-**EJ6 · Endpoint propio + pintado en página** — CE8.d · 1,25 h en clase
+**EJ6 · Endpoint propio + pintado en página** — CE8.d
 
 Construye el par completo endpoint + página para las sesiones de cine:
 
 - `api/sesiones.php` debe devolver en JSON las sesiones de una película recibida por parámetro GET (`id`), con **código 404 y mensaje JSON de error** si el `id` no existe.
-- La página `sesiones.php`, generada con PHP, debe obtener los datos con `fetch` al cargarse y mostrarlos en una **tabla generada desde JavaScript**, con tratamiento visible del caso de error.
 
-**Entrega:** carpeta comprimida con ambos ficheros al aula virtual al finalizar la sesión. Calificación: apto / no apto.
+- La página `sesiones.php`, generada con PHP, debe obtener los datos con `fetch` al cargarse y mostrarlos en una **tabla generada desde JavaScript**, con tratamiento visible del caso de error.
 :::
 
 ## Consumir la API REST de la UD7 desde una página web
@@ -236,10 +233,8 @@ Access to fetch at 'http://localhost:8000/api/v1/peliculas' from origin
 Laravel trae el middleware CORS configurable en `config/cors.php`; en clase se autorizará el origen como demostración guiada. Comprender en profundidad CORS excede esta unidad: basta con **reconocer el error en consola y saber dónde se autoriza el origen**.
 :::
 
-## Actividad evaluable E4
-
 ::: {.ejercicio}
-**EJ7 · Cliente web de la propia API (UD7)** — CE8.b, CE8.d · 1,5 h en clase
+**EJ7 · Cliente web de la propia API (UD7)** — CE8.b, CE8.d
 
 Con tu proyecto Laravel de la UD7 arrancado en local, construye una página PHP nativa (fuera de Laravel) que:
 
@@ -248,7 +243,7 @@ Con tu proyecto Laravel de la UD7 arrancado en local, construye una página PHP 
 3. Muestre un mensaje claro y **diferenciado** ante los estados 401 (token inválido) y de error de red.
 4. Incluya al pie un breve párrafo (en la propia página) argumentando **dos ventajas del modelo híbrido** que esta actividad demuestra en la práctica.
 
-**Requisito previo:** API de la UD7 operativa con al menos un token válido. Quien no la conserve funcional dispondrá del proyecto de referencia del docente.
-
-**Entrega:** carpeta comprimida + captura de la pestaña Red mostrando la petición autenticada. Calificación: apto / no apto.
+::: {.callout-important title="Requisito previo"}
+API de la UD7 operativa con al menos un token válido. Quien no la conserve funcional dispondrá del proyecto de referencia del docente.
+:::
 :::

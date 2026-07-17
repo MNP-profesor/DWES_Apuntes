@@ -106,7 +106,7 @@ La regla de higiene es la misma del bloque anterior: cualquier dato de origen ex
 :::
 
 ::: {.ejercicio}
-**EJ10 · Ocultar, contar, restaurar** *(individual, en equipo local)*
+**EJ10 · Ocultar, contar, restaurar**
 
 Añade a la cartelera del primer listado de este bloque:
 
@@ -117,10 +117,8 @@ c. Un botón "Restaurar" que repinte el estado completo.
 **No se permite ninguna petición adicional al servidor.**
 :::
 
-## Actividad evaluable E6
-
 ::: {.ejercicio}
-**EJ11 · Cartelera interactiva: filtrado y ordenación sin recarga** — CE8.f · 1,25 h en clase
+**EJ11 · Cartelera interactiva: filtrado y ordenación sin recarga** — CE8.f
 
 Partiendo de tu página de la actividad E3 (o de la versión de referencia), incorpora:
 
@@ -130,6 +128,4 @@ Partiendo de tu página de la actividad E3 (o de la versión de referencia), inc
 4. El contador de resultados visibles.
 
 Todo **sin ninguna petición al servidor** posterior a la carga inicial.
-
-**Entrega:** carpeta comprimida al aula virtual al finalizar la sesión. Calificación: apto / no apto.
 :::

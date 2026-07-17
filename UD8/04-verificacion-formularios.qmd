@@ -145,26 +145,24 @@ Atención al detalle de `filter_var(..., FILTER_VALIDATE_INT)` devolviendo `fals
 :::
 
 ::: {.ejercicio}
-**EJ8 · La capa cliente no basta** *(individual, en equipo local)*
+**EJ8 · La capa cliente no basta**
 
-Demuestra empíricamente por qué la capa cliente no basta. Con el formulario del primer listado de este bloque funcionando:
+Demuestra (realizando la prueba) por qué la capa cliente no basta. Con el formulario del primer listado de este bloque funcionando:
 
 a. Elimina el atributo `required` desde la pestaña Elementos y envía datos vacíos.
 b. Envía la misma petición POST desde Postman sin pasar por la página.
 
-Anota en el cuaderno **qué capa detiene cada intento** y redacta una conclusión de tres líneas.
+Analiza **qué capa detiene cada intento**.
 :::
 
-## Actividad evaluable E5
-
 ::: {.ejercicio}
-**EJ9 · Formulario de valoraciones con verificación en dos capas** — CE8.e · 3,25 h en clase (dos sesiones)
+**EJ9 · Formulario de valoraciones con verificación en dos capas** — CE8.e
 
-**Parte 1 (1,25 h):** construye el formulario de valoración de películas con validación declarativa HTML5 completa, interceptación del envío con `preventDefault` y comprobación con la Constraint Validation API, mostrando los mensajes junto a cada campo.
+**Parte 1:** construye el formulario de valoración de películas con validación declarativa HTML5 completa, interceptación del envío con `preventDefault` y comprobación con la Constraint Validation API, mostrando los mensajes junto a cada campo.
 
-**Parte 2 (2 h, sesión íntegra de taller):** implementa el endpoint PHP con la validación definitiva de todos los campos (reutilizando `filter_var` y las técnicas de UD3/UD4), respuesta JSON con códigos 201/422, y el tratamiento en cliente que pinte los errores devueltos por el servidor campo a campo.
+**Parte 2:** implementa el endpoint PHP con la validación definitiva de todos los campos (reutilizando `filter_var` y las técnicas de UD3/UD4), respuesta JSON con códigos 201/422, y el tratamiento en cliente que pinte los errores devueltos por el servidor campo a campo.
 
-**Prueba final obligatoria:** demostrar con Postman que el servidor rechaza datos inválidos aunque la página no se use.
-
-**Entrega:** carpeta comprimida + captura de la prueba Postman, al finalizar la segunda sesión. Calificación: apto / no apto.
+::: {.callout-note title="Prueba a realizar "}
+Verificar con Postman que el servidor rechaza datos inválidos aunque la página no se use.
+:::
 :::

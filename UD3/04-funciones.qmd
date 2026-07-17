@@ -488,6 +488,7 @@ La salida impresa debe seguir estrictamente este formato:
 *(Por ejemplo: `5 + 3 = 8`)*
 
 Para lograr la máxima flexibilidad, la función debe recibir cuatro parámetros:
+
 1. El primer operando numérico.
 2. El segundo operando numérico.
 3. El símbolo de la operación en formato string (ej: `"+"`, `"-"`, `"*"`).

@@ -78,26 +78,22 @@
 | EJ5 | `DisponibilidadService`: la lógica de préstamos como servicio | `09-poo-servicios.qmd` |
 | EJ6 | Proyecto integrador: préstamo de equipos | `10-pruebas-proyecto.qmd` |
 
-## UD6. Acceso a BBDD con PDO: Seguridad e integridad (9 ejercicios)
+## UD6. Acceso a BBDD con PDO: Seguridad e integridad (5 ejercicios)
 
 | Ejercicio | Título | Fichero |
 |:--:|--------|---------|
-| EJ1 | Estudio comparativo de tecnologías de acceso a datos | `01-tecnologias-acceso.qmd` |
-| EJ2 | Clase de conexión PDO reutilizable | `02-conexion-pdo.qmd` |
-| EJ3 | Sentencias preparadas y demostración de inyección SQL | `03-recuperacion-seguridad.qmd` |
-| EJ4 | Listado web con búsqueda segura | `04-publicacion-web.qmd` |
-| EJ5 | Ficha de detalle y paginación (con pruebas) | `04-publicacion-web.qmd` |
-| EJ6 | Fetch modes y FETCH_CLASS | `05-conjuntos-datos.qmd` |
-| EJ7 | Alta de registros con validación en servidor | `06-crud-transacciones.qmd` |
-| EJ8 | Edición y borrado con transacciones (con pruebas) | `06-crud-transacciones.qmd` |
-| EJ9 | CRUD completo seguro y documentado | `07-proyecto.qmd` |
+| EJ1 | Clase de conexión PDO reutilizable | `02-conexion-pdo.qmd` |
+| EJ2 | Inyección SQL: Sentencias preparadas | `03-recuperacion-seguridad.qmd` |
+| EJ3 | Listado, ficha y paginación con objetos | `05-conjuntos-datos.qmd` |
+| EJ4 | CRUD con validación y transacciones | `06-crud-transacciones.qmd` |
+| EJ5 | Proyecto: gestión de la biblioteca | `07-proyecto.qmd` |
 
 ## UD7. Servicios Web: API REST con Laravel (Resources y Sanctum) (10 ejercicios)
 
 | Ejercicio | Título | Fichero |
 |:--:|--------|---------|
 | EJ1 | Estudio comparativo de servicios web | `01-fundamentos.qmd` |
-| EJ2 | Disección de peticiones HTTP reales | `01-fundamentos.qmd` |
+| EJ2 | Análisis de peticiones HTTP reales | `01-fundamentos.qmd` |
 | EJ3 | API de lectura de la tienda de videojuegos | `02-rutas-api.qmd` |
 | EJ4 | Transformación con API Resources | `03-api-resources.qmd` |
 | EJ5 | CRUD completo con validación | `04-validacion-codigos.qmd` |
@@ -140,4 +136,4 @@
 | EJ10 | Agregaciones sobre municipios | `06-analitica-bigdata.qmd` |
 | EJ11 | Proyecto — cuadro de mando | `06-analitica-bigdata.qmd` |
 
-**Nº Ejercicios totales del módulo: 91**
+**Nº Ejercicios totales del módulo: 87**

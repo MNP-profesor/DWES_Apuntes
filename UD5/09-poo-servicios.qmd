@@ -142,5 +142,8 @@ Tu aplicación necesita reglas que ningún ejemplo de la teoría resuelve. Disé
 3. Justifica por escrito qué principio mejora cada extracción y qué patrón interviene en cada pieza (MVC, inyección de dependencias, responsabilidad única).
 4. Demuestra la sustituibilidad: crea `DisponibilidadConFestivosService`, que además descuente los festivos definidos en `config('prestamos.festivos')` (array de fechas), y actívala con un binding en el contenedor **sin tocar ningún controlador**. Documenta el antes/después de `fechaLimite()` con un festivo dentro del plazo.
 
-*Entrega apto/no apto: los tres métodos correctos (incluido el salto de fines de semana, verificado con un caso que cruce un fin de semana), controladores sin lógica y binding alternativo demostrado.*
+
+::: {.callout-note title="Información"}
+El ejercicio estará correcto si los tres métodos están correctos (incluido el salto de fines de semana, verificado con un caso que cruce un fin de semana), controladores sin lógica y binding alternativo demostrado.
+:::
 :::

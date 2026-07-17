@@ -186,4 +186,6 @@ En Spring las rutas se declaran con anotaciones sobre el método (`@GetMapping("
 - Definir la ruta `/contactos/create` **después** de `/contactos/{id}`: `{id}` captura la palabra `create` y el formulario nunca se muestra. Las rutas fijas van antes que las variables (o se restringe `{id}` con `whereNumber`).
 :::
 
-El ejercicio de este bloque es el **E5.2** y lo encontrarás al final del bloque siguiente (@sec-ud5-blade): necesita las vistas Blade para poder completarse, así que enrutado, controlador y vistas se ejercitan juntos sobre tu aplicación de préstamos.
+::: {.callout-note title="Información"}
+El ejercicio de este bloque lo encontrarás al final del bloque siguiente (@sec-ud5-blade): necesita las vistas Blade para poder completarse, así que enrutado, controlador y vistas se ejercitan juntos sobre tu aplicación de préstamos.
+:::
