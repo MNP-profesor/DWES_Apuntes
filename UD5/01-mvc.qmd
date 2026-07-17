@@ -98,7 +98,7 @@ El flujo de **toda** petición es siempre el mismo. Para `GET /contactos`:
 5. El controlador se los entrega a la **vista**.
 6. La vista genera el HTML, que vuelve al navegador.
 
-![Diagrama de flujo en una arquitectura MVC](./img/mvc-flujo-contactos.svg){width=75% fig-align="center"}
+![Diagrama de flujo en una arquitectura MVC](./img/mvc-flujo-contactos.jpg){width=75% fig-align="center"}
 
 Visto con código orientativo (en el próximo bloque será Laravel real):
 

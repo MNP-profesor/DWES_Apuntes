@@ -105,7 +105,7 @@ Documenta la API de tu proyecto integrador:
 2. Declara el esquema de seguridad *bearer* y márcalo en los *endpoints* protegidos.
 3. Valida el documento en [editor.swagger.io](https://editor.swagger.io) (cero errores)
 
- ::: {.callout-important title="Evaluación"}
+::: {.callout-important title="Evaluación"}
 Entrega el fichero `.yaml` junto a una captura de Swagger UI renderizando tu documentación.
 :::
 :::
