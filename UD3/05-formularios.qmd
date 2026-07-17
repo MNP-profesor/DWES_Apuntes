@@ -183,5 +183,5 @@ Crea el fichero `inscripcion.html` con un formulario que cumpla estos requisitos
 - Botón de envío con texto "Enviar inscripción".
 - Añade un comentario HTML al inicio explicando por qué se usa POST.
 
-No hace falta que `procesar_inscripcion.php` exista todavía — se crea en E3.9.
+No hace falta que `procesar_inscripcion.php` exista todavía — se crea en EJ11.
 :::

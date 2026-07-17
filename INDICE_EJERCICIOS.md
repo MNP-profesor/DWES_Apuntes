@@ -2,7 +2,7 @@
 
 > Generado automáticamente por `scripts/renumera_ejercicios.py` en cada render — **no editar a mano**.
 >
-> Última actualización: 2026-07-16
+> Última actualización: 2026-07-17
 
 ## UD1. Arquitecturas y tecnologías de programación Web en entorno servidor (6 ejercicios)
 
@@ -67,19 +67,16 @@
 | EJ14 | Tres roles con mapa de permisos | `09-recordarme-y-roles.qmd` |
 | EJ15 | Depuración de una aplicación con varios fallos | `10-depuracion-y-cierre.qmd` |
 
-## UD5. Separación de la lógica de negocio: MVC con Laravel (9 ejercicios)
+## UD5. Separación de la lógica de negocio: MVC con Laravel (6 ejercicios)
 
 | Ejercicio | Título | Fichero |
 |:--:|--------|---------|
 | EJ1 | De espagueti a capas | `01-mvc.qmd` |
-| EJ2 | Puesta en marcha del proyecto | `02-instalacion-laravel.qmd` |
-| EJ3 | Enrutado de la agenda | `03-rutas-controladores.qmd` |
-| EJ4 | Identidad visual de la agenda | `04-blade.qmd` |
-| EJ5 | Alta y búsqueda con validación completa | `05-formularios.qmd` |
-| EJ6 | Favoritos en sesión | `07-sesiones.qmd` |
-| EJ7 | La agenda configurable | `08-configuracion.qmd` |
-| EJ8 | Refactorización a servicios | `09-poo-servicios.qmd` |
-| EJ9 | Proyecto integrador: la agenda completa | `10-pruebas-proyecto.qmd` |
+| EJ2 | Catálogo de equipos en préstamo | `04-blade.qmd` |
+| EJ3 | Solicitud de préstamo con validación | `05-formularios.qmd` |
+| EJ4 | Mi solicitud: estado en sesión y servicio configurable | `08-configuracion.qmd` |
+| EJ5 | `DisponibilidadService`: la lógica de préstamos como servicio | `09-poo-servicios.qmd` |
+| EJ6 | Proyecto integrador: préstamo de equipos | `10-pruebas-proyecto.qmd` |
 
 ## UD6. Acceso a BBDD con PDO: Seguridad e integridad (9 ejercicios)
 
@@ -143,4 +140,4 @@
 | EJ10 | Agregaciones sobre municipios | `06-analitica-bigdata.qmd` |
 | EJ11 | Proyecto — cuadro de mando | `06-analitica-bigdata.qmd` |
 
-**Nº Ejercicios totales del módulo: 94**
+**Nº Ejercicios totales del módulo: 91**

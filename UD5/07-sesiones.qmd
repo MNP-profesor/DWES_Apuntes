@@ -134,7 +134,7 @@ Secuencia de uso y lo que se ve:
 | Pulsar ☆ en Júlia | Menú: `Favoritos (2)` |
 | Visitar `/favoritos` | Listado con Aitana y Júlia |
 | Pulsar `★ Quitar` en Aitana | Menú: `Favoritos (1)` |
-| Pulsar "Vaciar favoritos" | `Favoritos vaciados` y menú: `Favoritos (0)` |
+| Pulsar "Vaciar favoritos" | `✔ Favoritos vaciados` y menú: `Favoritos (0)` |
 | Cerrar el navegador y volver | Favoritos vacíos: la sesión expiró o es nueva |
 
 ::: {.callout-warning title="Errores frecuentes"}
@@ -143,13 +143,4 @@ Secuencia de uso y lo que se ve:
 - Guardar los favoritos en base de datos "porque es más fácil": son preferencias de la sesión del visitante; en BD contaminarías los datos de todos.
 :::
 
-::: {.ejercicio}
-**EJ6 · Favoritos en sesión**
-
-1. Añade a tu agenda la funcionalidad de favoritos completa del ejemplo: marcar/desmarcar desde el listado, guardando la marca en sesión.
-2. Crea la ruta `GET /favoritos` con su vista, que muestre solo los contactos marcados, y el contador en el menú del layout visible en toda la aplicación.
-3. Añade el botón "Vaciar favoritos" que limpie la clave de sesión y confirme con un mensaje flash.
-4. Redacta un breve informe (5–10 líneas): qué viaja exactamente en la cookie del navegador, dónde reside el estado, y compáralo con la implementación manual de la UD4.
-
-*Entrega apto/no apto: las cuatro operaciones funcionando (marcar, desmarcar, listar, vaciar), contador correcto en todas las páginas e informe entregado.*
-:::
+El ejercicio de este bloque es el **E5.4** y lo encontrarás al final del bloque siguiente (@sec-ud5-configuracion): en tu aplicación de préstamos, el estado en sesión y la configuración propia trabajan juntos (el límite de equipos por solicitud es un parámetro configurable), así que se ejercitan en un único ejercicio.

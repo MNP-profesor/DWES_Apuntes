@@ -111,13 +111,14 @@ La cadena completa es: `.env` → `config/app.php` (que hace `'name' => env('APP
 - Subir `.env` al repositorio. Contiene credenciales; por eso Laravel lo incluye en `.gitignore`.
 :::
 
-::: {.ejercicio}
-**EJ2 · Puesta en marcha del proyecto**
+## Autocomprobación (sin entrega)
 
-1. Instala un proyecto Laravel llamado `agenda` con Composer y arráncalo con `php artisan serve`. Captura la pantalla de bienvenida.
-2. Elabora tu propia tabla describiendo la función de **ocho** directorios/ficheros de la estructura, señalando en cuál trabajarás para modelos, vistas, controladores y rutas.
-3. Cambia en `.env` el valor de `APP_NAME` a `"Agenda DAW"` y compruébalo con una ruta de prueba que imprima `config('app.name')`, como la del ejemplo. Explica en dos líneas por qué no se debe usar `env('APP_NAME')` directamente en esa ruta.
-4. Ejecuta `php artisan route:list` y explica qué información aporta cada columna.
+Antes de pasar al siguiente bloque, verifica tu entorno. **Vas a necesitar dos proyectos**: `agenda` para reproducir los ejemplos de la teoría, y `prestamos` donde harás todos los ejercicios de la unidad. Debes poder marcar todo esto:
 
-*Entrega apto/no apto: proyecto funcionando, tabla completa y justificación correcta de `config()` frente a `env()`.*
-:::
+- [ ] `composer create-project laravel/laravel prestamos` termina sin errores y `php artisan serve` muestra la bienvenida.
+- [ ] Sabes decir, sin mirar la tabla, en qué carpeta viven controladores, vistas y rutas.
+- [ ] Has cambiado `APP_NAME` en `.env` y lo has visto reflejado con una ruta que imprime `config('app.name')`.
+- [ ] `php artisan route:list` te resulta legible: método, URI, nombre, acción.
+- [ ] Sabes explicar por qué `env()` solo se usa dentro de `config/`.
+
+Si algún punto falla, resuélvelo ahora: los ejercicios EJ2 a EJ6 se construyen sobre el proyecto `prestamos` y asumen todo lo anterior.

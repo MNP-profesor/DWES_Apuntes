@@ -1,5 +1,7 @@
 # Sesiones
 
+CE4.a-b.
+
 ## Mecanismos de mantenimiento de información de cliente
 
 HTTP no tiene memoria: cada petición es independiente. Tres familias de mecanismos simulan ese "recordar":
@@ -30,36 +32,26 @@ session_start();
 echo $_SESSION['nombre']; // Ana
 ```
 
-## Sesiones con objetos: un carrito real
+## Sesiones con objetos
 
-Guardar datos sueltos en `$_SESSION` funciona para casos triviales, pero en cuanto el carrito necesita cantidades, quitar artículos o calcular un total, conviene envolverlo en una clase (enlazando con lo visto en el bloque de POO) y guardar **el objeto serializado** en la sesión:
+Guardar datos sueltos en `$_SESSION` funciona para casos triviales, pero en cuanto la lógica crece (varios métodos, validaciones, cálculos) conviene envolverla en una clase (enlazando con lo visto en el bloque de POO) y guardar **el objeto serializado** en la sesión. El patrón es siempre el mismo, lo veas donde lo veas: reconstruir el objeto al principio del script, y volver a guardarlo al final.
 
 ```php
-class Carrito {
-    private array $lineas = []; // ['sku' => ['nombre' => ..., 'precio' => ..., 'cantidad' => ...]]
+class ListaTareas {
+    private array $tareas = []; // [['texto' => ..., 'hecha' => bool], ...]
 
-    public function añadir(string $sku, string $nombre, float $precio, int $cantidad = 1): void {
-        if (isset($this->lineas[$sku])) {
-            $this->lineas[$sku]['cantidad'] += $cantidad;
-        } else {
-            $this->lineas[$sku] = ['nombre' => $nombre, 'precio' => $precio, 'cantidad' => $cantidad];
+    public function agregar(string $texto): void {
+        $this->tareas[] = ['texto' => $texto, 'hecha' => false];
+    }
+
+    public function completar(int $indice): void {
+        if (isset($this->tareas[$indice])) {
+            $this->tareas[$indice]['hecha'] = true;
         }
     }
 
-    public function quitar(string $sku): void {
-        unset($this->lineas[$sku]);
-    }
-
-    public function total(): float {
-        $total = 0;
-        foreach ($this->lineas as $linea) {
-            $total += $linea['precio'] * $linea['cantidad'];
-        }
-        return $total;
-    }
-
-    public function lineas(): array {
-        return $this->lineas;
+    public function pendientes(): array {
+        return array_filter($this->tareas, fn($t) => !$t['hecha']);
     }
 }
 ```
@@ -68,19 +60,19 @@ class Carrito {
 session_start();
 
 // PHP no guarda objetos "vivos" entre peticiones: hay que reconstruirlo cada vez
-$carrito = $_SESSION['carrito'] ?? new Carrito();
+$lista = $_SESSION['lista'] ?? new ListaTareas();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $carrito->añadir($_POST['sku'], $_POST['nombre'], (float) $_POST['precio']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['texto'])) {
+    $lista->agregar($_POST['texto']);
 }
 
-$_SESSION['carrito'] = $carrito; // PHP serializa el objeto automáticamente al guardarlo en $_SESSION
+$_SESSION['lista'] = $lista; // PHP serializa el objeto automáticamente al guardarlo en $_SESSION
 
-echo 'Total: ' . number_format($carrito->total(), 2) . ' €';
+echo 'Pendientes: ' . count($lista->pendientes());
 ```
 
 ::: {.callout-warning title="Errores frecuentes"}
-Si cambias la definición de la clase `Carrito` (por ejemplo, renombras una propiedad) mientras hay sesiones activas con carritos ya guardados, `unserialize()` puede fallar o dejar el objeto en un estado incoherente al recuperarlo. En producción, versiona los cambios de estructura o limpia las sesiones activas tras un despliegue que toque estas clases.
+Si cambias la definición de una clase (por ejemplo, renombras una propiedad) mientras hay sesiones activas con objetos de esa clase ya guardados, `unserialize()` puede fallar o dejar el objeto en un estado incoherente al recuperarlo. En producción, versiona los cambios de estructura o limpia las sesiones activas tras un despliegue que toque estas clases.
 :::
 
 ## Mensajes flash: datos de un solo uso

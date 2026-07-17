@@ -1,5 +1,7 @@
 # Autenticación, redirecciones e inclusiones
 
+CE4.a-d.
+
 ## Mecanismos de autenticación
 
 Autenticar significa comprobar que alguien es quien dice ser. Nunca se guarda una contraseña en texto plano ni cifrada de forma reversible: se aplica una función *hash* de un solo sentido.
@@ -34,47 +36,19 @@ if (password_verify($_POST['password'], $hashGuardado)) { /* ... */ }
 
 ## Protección frente a fuerza bruta
 
-Verificar contraseñas no es suficiente si un atacante puede probar miles de combinaciones seguidas. Un mecanismo básico de limitación de intentos, guardado en sesión:
+Verificar contraseñas no es suficiente si un atacante puede probar miles de combinaciones seguidas: conviene limitar los intentos, guardando un contador en sesión y bloqueando temporalmente tras varios fallos consecutivos.
 
 ```php
 session_start();
 
-function intentosFallidos(): int {
-    return $_SESSION['intentos_login'] ?? 0;
-}
-
-function registrarIntentoFallido(): void {
-    $_SESSION['intentos_login'] = intentosFallidos() + 1;
-    $_SESSION['bloqueado_hasta'] = intentosFallidos() >= 5
-        ? time() + 300 // 5 minutos de bloqueo tras 5 fallos
-        : null;
-}
-
-function loginBloqueado(): bool {
-    return isset($_SESSION['bloqueado_hasta'])
-        && $_SESSION['bloqueado_hasta'] !== null
-        && time() < $_SESSION['bloqueado_hasta'];
-}
-
-function reiniciarIntentos(): void {
-    unset($_SESSION['intentos_login'], $_SESSION['bloqueado_hasta']);
-}
+// Idea básica: cada fallo incrementa un contador en sesión
+$_SESSION['intentos_login'] = ($_SESSION['intentos_login'] ?? 0) + 1;
+echo 'Intentos fallidos hasta ahora: ' . $_SESSION['intentos_login'];
 ```
 
-```php
-if (loginBloqueado()) {
-    $segundosRestantes = $_SESSION['bloqueado_hasta'] - time();
-    exit("Demasiados intentos fallidos. Inténtalo de nuevo en {$segundosRestantes}s.");
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (/* credenciales correctas */ false) {
-        reiniciarIntentos();
-    } else {
-        registrarIntentoFallido();
-    }
-}
-```
+::: {.callout-note title="Concepto clave"}
+Un contador por sí solo no basta: hace falta decidir a partir de qué número de fallos se bloquea, durante cuánto tiempo, y sobre todo, **en qué momento exacto de la petición se comprueba el bloqueo** (antes de mirar la contraseña, no después) para que un intento bloqueado no cuente además como un fallo más. El ejercicio de este capítulo te pide construir ese mecanismo completo.
+:::
 
 ::: {.callout-tip title="Analogía Java"}
 Este contador en `$_SESSION` es una solución mínima pensada para clase. En un sistema real querrás que el bloqueo sobreviva aunque el atacante borre sus cookies (por ejemplo, contando intentos por IP o por cuenta en una base de datos), algo que en Java resolverías con un servicio compartido (caché, base de datos) en lugar de con el estado de sesión de un único cliente.

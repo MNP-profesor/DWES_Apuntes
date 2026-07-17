@@ -1,5 +1,7 @@
 # Cookies
 
+CE4.a-c.
+
 `setcookie()` crea una cookie antes de cualquier salida al navegador. `$_COOKIE` la lee, pero **solo a partir de la siguiente petición** (no en la misma en la que se crea).
 
 ::: {.callout-note title="Concepto clave"}
@@ -70,34 +72,23 @@ setcookie('sesion_pref', 'compacta', [
 Poner `secure: true` en un entorno de desarrollo local sin HTTPS hace que la cookie nunca se guarde, y el fallo es silencioso (no hay ningún error visible). Si una cookie "desaparece" en local, revisa primero este flag.
 :::
 
-## Banner de consentimiento con categorías
+## Cookies condicionadas al consentimiento
 
-Un caso realista y algo más complejo: distintas categorías de cookies (necesarias, analíticas, marketing), donde solo se crean las cookies de una categoría si el usuario la ha aceptado explícitamente.
+Un caso realista: algunas cookies (analíticas, marketing) no deben crearse hasta que el usuario las acepte explícitamente. La idea central es simple, aunque montar el banner completo con varias categorías no lo sea:
 
 ```php
-session_start();
-
-$consentimiento = $_SESSION['consentimiento'] ?? null;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['consentimiento'])) {
-    // $_POST['consentimiento'] llega como array, ej.: ['analiticas', 'marketing']
-    $consentimiento = $_POST['consentimiento'];
-    $_SESSION['consentimiento'] = $consentimiento;
-
-    if (in_array('analiticas', $consentimiento)) {
-        setcookie('analytics_id', bin2hex(random_bytes(8)), time() + 86400 * 365, '/');
-    }
-    if (in_array('marketing', $consentimiento)) {
-        setcookie('marketing_id', bin2hex(random_bytes(8)), time() + 86400 * 90, '/');
-    }
-    // Las cookies "necesarias" (p. ej. la de sesión) no piden consentimiento: son imprescindibles
+// Solo se crea la cookie de analítica si el usuario la ha aceptado
+if (isset($_POST['acepta_analiticas'])) {
+    setcookie('analytics_id', bin2hex(random_bytes(8)), [
+        'expires' => time() + 86400 * 365, 'path' => '/', 'httponly' => true, 'samesite' => 'Lax',
+    ]);
 }
-
-$mostrarBanner = $consentimiento === null;
+// Si no se ha aceptado, la cookie simplemente no se crea: no hay "cookie desactivada",
+// no existe en absoluto hasta que hay consentimiento.
 ```
 
 ::: {.callout-note title="Concepto clave"}
-Las cookies estrictamente necesarias (sesión, carrito) no requieren consentimiento porque el sitio no puede funcionar sin ellas. Las demás categorías (analíticas, marketing) sí, y **no deben crearse hasta que el usuario las acepte explícitamente** — crearlas antes y luego "respetar" el rechazo no cumple.
+Las cookies estrictamente necesarias (sesión, carrito) no requieren consentimiento porque el sitio no puede funcionar sin ellas. Las demás categorías (analíticas, marketing) sí, y **no deben crearse hasta que el usuario las acepte explícitamente** — crearlas antes y luego "respetar" el rechazo no cumple. El ejercicio de este capítulo te pide extender esta idea a un banner con varias categorías independientes.
 :::
 
 ::: {.ejercicio}

@@ -229,13 +229,16 @@ HTML resultante para el primer contacto:
 :::
 
 ::: {.ejercicio}
-**EJ4 · Identidad visual de la agenda**
+**EJ2 · Catálogo de equipos en préstamo**
 
-1. Crea el componente `<x-layout>` con cabecera, menú de navegación (Inicio, Contactos, Acerca de) y pie, y migra a él todas las vistas que ya tienes.
-2. Crea un componente `<x-tarjeta>` que reciba `nombre` y `tlf` como props y úsalo en el listado de contactos.
-3. Utiliza en el listado al menos **tres directivas** de control distintas (`@if`/`@empty`, `@foreach` con `$loop`, `@unless` u otras) de forma justificada.
-4. Demuestra el escapado automático: crea un contacto cuyo nombre sea `<script>alert(1)</script>`, comprueba en el navegador que no se ejecuta y localiza en el código fuente de la página (Ctrl+U) las entidades `&lt;script&gt;`. Adjunta captura.
-5. **Transversal CE5.h**: comenta los componentes indicando la finalidad de cada slot/prop y adjunta evidencia de prueba en dos navegadores.
+En tu proyecto `prestamos`, construye el catálogo de equipos del centro (portátiles, tablets, cámaras, kits de robótica…). Diseño libre: aquí no hay código que copiar, hay que transferir lo visto sobre la agenda a un dominio nuevo.
 
-*Entrega apto/no apto: layout aplicado a todas las vistas, tarjeta funcionando con props, directivas justificadas y demo anti-XSS documentada.*
+1. Crea `EquipoController` con `index` y `show`. Cada equipo tendrá al menos: `nombre`, `categoria` y `disponible` (booleano). El catálogo debe contener **seis o más equipos de al menos tres categorías**, con alguno no disponible. `show` recibe `{id}` restringido a numérico y cubre el caso de equipo inexistente con un mensaje claro.
+2. Define las rutas con nombre (`equipos.index`, `equipos.show`) y enlaza listado y ficha exclusivamente con `route()`.
+3. Crea el componente `<x-layout>` de la aplicación (cabecera, menú: Catálogo, Mi solicitud, Acerca de; pie) y un componente `<x-equipo>` que reciba las props del equipo y muestre de forma visualmente distinta los disponibles y los prestados.
+4. En el listado, usa `$loop` para numerar los equipos y al menos otra directiva de control justificada (por ejemplo, `@empty` para el catálogo vacío o un `@if` que rotule cada categoría).
+5. Demuestra el escapado automático: añade un equipo cuyo nombre sea `<script>alert(1)</script>`, comprueba que no se ejecuta y localiza en el código fuente de la página las entidades `&lt;script&gt;`. Adjunta captura.
+6. **Transversal CE5.h**: PHPDoc en los métodos del controlador, comentarios en los componentes explicando cada prop, y captura de `php artisan route:list`.
+
+*Entrega apto/no apto: catálogo funcionando con rutas con nombre y restricción, `<x-equipo>` distinguiendo estados, caso "equipo inexistente" cubierto, demo anti-XSS y documentación presentes.*
 :::

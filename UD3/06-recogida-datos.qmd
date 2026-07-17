@@ -334,7 +334,7 @@ Para protegernos por completo de esto, en la próxima unidad (UD4) aprenderemos 
 ::: {.ejercicio}
 **EJ11 · Procesador de inscripción con validación**
 
-Crea `procesar_inscripcion.php` que procese el formulario de E3.8. El script debe:
+Crea `procesar_inscripcion.php` que procese el formulario de EJ10. El script debe:
 
 **Recoger** (todos con `??` para evitar avisos):
 ```php
@@ -353,7 +353,7 @@ $condiciones = $_POST['condiciones']      ?? null;
 - `condiciones`: debe valer `"1"`.
 
 **Mostrar:**
-- Sin errores → resumen con los datos saneados con `htmlspecialchars` y el importe de matrícula formateado con `formatearPrecio()` de la librería de E3.7 (45 €).
+- Sin errores → resumen con los datos saneados con `htmlspecialchars`.
 - Con errores → lista `<ul>` con los mensajes.
 
 Resultado si todos los datos son correctos:
@@ -362,7 +362,7 @@ Inscripción registrada
 Nombre: Laura García
 Email: laura@example.com
 Curso: daw2
-Importe de matrícula: 45,00 €
+
 ```
 
 Resultado si email y curso son incorrectos:

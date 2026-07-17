@@ -186,13 +186,4 @@ En Spring las rutas se declaran con anotaciones sobre el método (`@GetMapping("
 - Definir la ruta `/contactos/create` **después** de `/contactos/{id}`: `{id}` captura la palabra `create` y el formulario nunca se muestra. Las rutas fijas van antes que las variables (o se restringe `{id}` con `whereNumber`).
 :::
 
-::: {.ejercicio}
-**EJ3 · Enrutado de la agenda**
-
-1. Crea `ContactoController` con los métodos `index` y `show`. `index` debe pasar a la vista un array de **al menos cinco contactos**; `show` debe recibir `{id}` restringido a numérico y mostrar el contacto correspondiente, o un mensaje claro si no existe.
-2. Define ambas rutas con nombre (`contactos.index`, `contactos.show`) y enlaza el listado con las fichas usando `route()`, nunca URLs escritas a mano.
-3. Añade una ruta `/acerca` resuelta con closure que muestre tus datos de autoría.
-4. **Transversal CE5.h**: documenta cada método del controlador con un bloque PHPDoc (descripción y `@param`/`@return` donde proceda) y adjunta una captura de `php artisan route:list` como evidencia.
-
-*Entrega apto/no apto: rutas con nombre y restricción funcionando, caso "contacto inexistente" cubierto y PHPDoc presente.*
-:::
+El ejercicio de este bloque es el **E5.2** y lo encontrarás al final del bloque siguiente (@sec-ud5-blade): necesita las vistas Blade para poder completarse, así que enrutado, controlador y vistas se ejercitan juntos sobre tu aplicación de préstamos.

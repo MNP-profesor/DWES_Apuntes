@@ -149,7 +149,7 @@ public function show(int $id)
 
 public function store(Request $request)
 {
-    $datos = $request->validate([ /* las mismas reglas de E5.5 */ ]);
+    $datos = $request->validate([ /* las mismas reglas de EJ5 */ ]);
 
     Contacto::create($datos);          // sustituye al guardado en sesión
 

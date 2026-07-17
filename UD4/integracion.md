@@ -44,10 +44,10 @@ Tras comparar con `DIAPOSITIVAS_-_ORIENTACIÓN_A_OBJETOS_EN_PHP.pdf` y `8__Progr
 
 - **`02-constructores-y-encapsulacion.qmd`**: nota de convención de orden dentro de una clase + sección nueva de getters/setters mágicos (`__get`/`__set`).
 - **`03-herencia-namespaces-excepciones.qmd`**: sección nueva de polimorfismo, nombrado explícito de "sobreescritura/override", y aviso de que PHP no tiene sobrecarga de métodos.
-- **`04-poo-avanzada.qmd` (fichero nuevo)**: clases estáticas (`const`, `static`, `self::`), asignación vs. clonado (`clone`), clases abstractas, interfaces, y métodos de reflexión (`instanceof`, `get_class`, `class_exists`/`method_exists`/`property_exists`, `get_class_methods`/`get_class_vars`/`get_object_vars`). Incluye dos ejercicios de autoevaluación (E4.4, E4.5).
+- **`04-poo-avanzada.qmd` (fichero nuevo)**: clases estáticas (`const`, `static`, `self::`), asignación vs. clonado (`clone`), clases abstractas, interfaces, y métodos de reflexión (`instanceof`, `get_class`, `class_exists`/`method_exists`/`property_exists`, `get_class_methods`/`get_class_vars`/`get_object_vars`). Incluye dos ejercicios de autoevaluación (E4.4, EJ5).
 - **Renumeración en cascada**: `04-sesiones.qmd`…`09-depuracion-y-cierre.qmd` pasan a ser `05-sesiones.qmd`…`10-depuracion-y-cierre.qmd`. La numeración de ejercicios (E4.6–E4.5) **no cambia**, es independiente del nombre de fichero.
 - `00-presentacion.qmd`: mapa de contenidos y tabla de evaluación actualizados con la fila de POO avanzada y los dos ejercicios nuevos.
-- `soluciones.md`: añadidas las soluciones de E4.4 y E4.5.
+- `soluciones.md`: añadidas las soluciones de EJ4 y EJ5.
 
 **Aviso importante — descuadre con el material de aula:** este contenido nuevo (estáticas, clonado, abstractas, interfaces, reflexión) **no estaba en el alcance de 10h/5 sesiones acordado para el bloque de POO** en el Word/PPTX/solucionario de clase de UD4. Lo he incorporado aquí porque el libro Quarto puede servir como referencia más completa que las sesiones presenciales, pero si quieres que las horas de clase, el Word o el PPTX reflejen también este contenido, dímelo explícitamente — no he tocado esos documentos.
 
@@ -55,7 +55,7 @@ Tras comparar con `DIAPOSITIVAS_-_ORIENTACIÓN_A_OBJETOS_EN_PHP.pdf` y `8__Progr
 
 Reescritos por completo los capítulos 5-10 (Funcionalidades Web): explicaciones y ejemplos más realistas (carrito como clase, mensajes flash, preferencias combinadas en JSON, banner de consentimiento por categorías, protección de fuerza bruta, front controller con lista blanca, repositorio real sin funciones "mágicas" indocumentadas, rotación de token en «recordarme», mapa de permisos por rol, caso de depuración con varios fallos simultáneos).
 
-Los ejercicios E4.6–E4.15 se han rediseñado: donde antes el "código de partida" ya resolvía el ejercicio, ahora se da un esqueleto sin implementar, una especificación con traza de ejecución esperada, o directamente ningún código (según el caso), obligando a escribir la solución real. `soluciones.md` se ha actualizado en paralelo con las nuevas soluciones completas.
+Los ejercicios EJ6–E4.15 se han rediseñado: donde antes el "código de partida" ya resolvía el ejercicio, ahora se da un esqueleto sin implementar, una especificación con traza de ejecución esperada, o directamente ningún código (según el caso), obligando a escribir la solución real. `soluciones.md` se ha actualizado en paralelo con las nuevas soluciones completas.
 
 **Corrección normativa:** la tabla de RA/CE de `00-presentacion.qmd` ahora incluye un aviso `.callout-important` explicando que el bloque de POO (capítulos 1-4) trabaja **CE5.g** (confirmado: existe y pertenece a RA5, "se han aplicado los principios y patrones de diseño de la POO"), tratado aquí como preparatorio y sin peso en la calificación de esta unidad, que sigue basada solo en RA4. Confírmame si prefieres otro tratamiento (por ejemplo, que UD4 sí puntúe parte de RA5).
 
@@ -64,7 +64,7 @@ Los ejercicios E4.6–E4.15 se han rediseñado: donde antes el "código de parti
 - **CE4.g era una errata tuya, ya corregida a CE4.f** desde el principio en `10-depuracion-y-cierre.qmd` — no ha hecho falta tocar nada.
 - **Notación `CE4.a-c` confirmada como lista** (CE4.a y CE4.c, sin la b intermedia), no como rango. Las etiquetas de CE al inicio de cada capítulo (05-10) ya coincidían con esta lectura, así que no ha habido que corregirlas.
 - **Ejercicio de "mecanismos" (E4.6 original) retirado por completo**, tal como pediste — el contenido comparativo se queda solo como teoría (tabla en `05-sesiones.qmd`). De paso, encontré y limpié un **duplicado real**: ese mismo ejercicio había quedado huérfano en `01-ambito-y-clases.qmd` desde un borrador anterior, con el mismo ID `#exr-UD4-6` que el capítulo de sesiones — un error mío que rompía las referencias cruzadas. Ya está eliminado.
-- **Renumeración completa E4.6–E4.5** (antes había un hueco en el 1 y el bloque de POO llegaba hasta el 13). La numeración de ficheros de capítulo no cambia, solo la de los ejercicios.
+- **Renumeración completa EJ6–E4.5** (antes había un hueco en el 1 y el bloque de POO llegaba hasta el 13). La numeración de ficheros de capítulo no cambia, solo la de los ejercicios.
 - **E4.10 (bloqueo tras intentos fallidos)** pasa de autoevaluación a **entrega obligatoria**, siguiendo tu instrucción de reforzar el bloque de Funcionalidades Web. Ahora hay **10 ejercicios de entrega** (todo Funcionalidades Web) y **2 de autoevaluación** (todo POO avanzado, capítulo 4).
 - **`soluciones.md` reescrito por completo**: los criterios de corrección ya no son una escala de puntos (incoherente con un modelo apto/no apto), sino una lista de comprobación `[imprescindible]`/`[deseable]`. Cada ejercicio incluye además una **Nota docente** con el objetivo pedagógico real y los fallos de alumnado más frecuentes al corregir.
 
@@ -80,9 +80,21 @@ Los capítulos 1-3 (`01-ambito-y-clases.qmd`, `02-constructores-y-encapsulacion.
 
 ## 12. Cambios de esta revisión (numeración de ejercicios por orden de lectura)
 
-Los ejercicios de POO (antes E4.11-E4.15) pasan a ir **primero**, siguiendo el orden real de los capítulos: E4.1-E4.5 son POO (capítulos 1-4, autoevaluación, sin entrega) y E4.6-E4.15 son Funcionalidades Web (capítulos 5-10, con entrega). `soluciones.md` se ha reordenado físicamente (no solo renumerado) para que las soluciones aparezcan en ese mismo orden.
+Los ejercicios de POO (antes EJ11-E4.15) pasan a ir **primero**, siguiendo el orden real de los capítulos: EJ1-E4.5 son POO (capítulos 1-4, autoevaluación, sin entrega) y EJ6-E4.15 son Funcionalidades Web (capítulos 5-10, con entrega). `soluciones.md` se ha reordenado físicamente (no solo renumerado) para que las soluciones aparezcan en ese mismo orden.
 
-## 13. Puntos a revisar tú mismo (no verificables sin Quarto/red)
+## 14. Cambios de esta revisión (la teoría dejaba resueltos varios ejercicios)
+
+Detectaste que el ejercicio del carrito (E4.6) no tenía sentido como "sin resolver", porque la teoría de al lado ya daba la clase `Carrito` completa con los mismos métodos. Al revisar el resto de la unidad con el mismo criterio, encontré el mismo problema en **cuatro ejercicios más**, y los he corregido todos:
+
+- **E4.6 (carrito, cap. 5):** el ejemplo de teoría ahora usa una clase distinta (`ListaTareas`) para enseñar el patrón "reconstruir objeto desde sesión" sin resolver el carrito del ejercicio.
+- **E4.9 (banner de consentimiento, cap. 6):** la teoría ilustraba ya las tres categorías, el guardado en `$_SESSION` y la lógica de mostrar/ocultar banner — ahora solo muestra el principio con una categoría suelta; las tres categorías, "rechazar todo" y "gestionar cookies" quedan para el ejercicio.
+- **E4.10 (bloqueo por intentos fallidos, cap. 7):** la teoría daba ya las cuatro funciones completas (`intentosFallidos`, `registrarIntentoFallido`, `loginBloqueado`, `reiniciarIntentos`) con esos mismos nombres — ahora solo se explica la idea con un contador suelto, sin la lógica de bloqueo.
+- **E4.13 (recordarme con rotación, cap. 9):** la teoría daba ya la clase `TokenRepository` completa, persistencia en fichero incluida — ahora solo se muestra la pieza conceptual (invalidar al consumir) con un array en memoria; la clase persistente en fichero es el ejercicio.
+- **E4.14 (tres roles, cap. 9):** la teoría daba ya `UsuarioNormal`, `Editor` **y** `Administrador` completos — ahora solo se ilustra el patrón con dos roles; añadir el tercero y las tres páginas protegidas es el ejercicio.
+
+En los cinco casos, `soluciones.md` **no ha cambiado**: seguía siendo la respuesta completa correcta, es la teoría la que se ha aligerado para dejar de anticiparla.
+
+## 15. Puntos a revisar tú mismo (no verificables sin Quarto/red)
 
 
 - **Cross-references**: los bloques de ejercicio usan `::: {#exr-UD4-n}`. Si en UD1-UD3 usas `\@exr-UD1-n` en algún sitio para referenciarlos desde otro capítulo, confirma que el patrón de ID coincide exactamente (sensible a mayúsculas/guiones).

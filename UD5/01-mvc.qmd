@@ -172,7 +172,6 @@ $ivaTipo = 0.21;
 1. Copia el fichero y marca con comentarios `// PRESENTACIÓN`, `// NEGOCIO` o `// DATOS` cada zona del código.
 2. Escribe una tabla con **cinco ventajas** de separar capas, ilustrando cada una con un ejemplo de este fichero concreto (p. ej.: "si cambia el IVA hay que editar un fichero con HTML").
 3. Dibuja el diagrama de flujo de la petición `GET /productos` en una arquitectura MVC, nombrando los componentes y qué viaja entre ellos.
-4. Busca información sobre **dos** frameworks MVC de PHP distintos de Laravel y compáralos con él en un párrafo.
 
 *Entrega apto/no apto: se considera apto si la clasificación de capas es correcta, la tabla tiene los cinco ejemplos anclados al fichero y el diagrama refleja los seis pasos del flujo.*
 :::

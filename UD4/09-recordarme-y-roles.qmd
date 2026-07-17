@@ -1,84 +1,25 @@
 # Cookies persistentes y control de acceso por roles
 
+CE4.c-e.
+
 ## Recordarme, con rotación de token
 
 La versión mínima de "recordarme" (un token fijo guardado en cookie) tiene un problema: si alguien roba esa cookie, tiene acceso indefinido. Una versión más robusta **rota el token en cada uso**: cada vez que se usa para reconectar, se genera uno nuevo y se invalida el anterior. Así, si el usuario legítimo y un atacante tienen copias del mismo token y uno de los dos lo usa, el otro deja de servir — una señal detectable de robo.
 
 ```php
-class TokenRepository {
-    private string $rutaFichero;
-
-    public function __construct(string $rutaFichero) {
-        $this->rutaFichero = $rutaFichero;
-        if (!file_exists($rutaFichero)) {
-            file_put_contents($rutaFichero, json_encode([]));
-        }
+// La pieza clave del patrón: "consumir" un token debe invalidarlo antes de devolver el email
+function consumirToken(array &$tokensValidos, string $token): ?string {
+    if (!isset($tokensValidos[$token])) {
+        return null; // token inválido o ya usado: posible robo
     }
-
-    private function cargar(): array {
-        return json_decode(file_get_contents($this->rutaFichero), true) ?? [];
-    }
-
-    private function guardar(array $datos): void {
-        file_put_contents($this->rutaFichero, json_encode($datos));
-    }
-
-    public function crear(string $email): string {
-        $token = bin2hex(random_bytes(32));
-        $datos = $this->cargar();
-        $datos[$token] = $email;
-        $this->guardar($datos);
-        return $token;
-    }
-
-    public function consumir(string $token): ?string {
-        $datos = $this->cargar();
-        if (!isset($datos[$token])) {
-            return null; // token inválido o ya usado: posible robo
-        }
-        $email = $datos[$token];
-        unset($datos[$token]); // se invalida: de un solo uso
-        $this->guardar($datos);
-        return $email;
-    }
-}
-```
-
-```php
-// Al marcar "recordarme" en el login, tras autenticar correctamente:
-$repoTokens = new TokenRepository(__DIR__ . '/datos/tokens.json');
-$token = $repoTokens->crear($usuario->getEmail());
-setcookie('recordarme', $token, [
-    'expires'  => time() + 86400 * 30,
-    'httponly' => true,
-    'secure'   => true,
-    'samesite' => 'Strict',
-]);
-```
-
-```php
-// Al inicio de cualquier página protegida, si no hay sesión activa:
-session_start();
-if (!isset($_SESSION['usuario_id']) && isset($_COOKIE['recordarme'])) {
-    $email = $repoTokens->consumir($_COOKIE['recordarme']);
-    if ($email !== null) {
-        session_regenerate_id(true);
-        $_SESSION['usuario_id'] = $email;
-
-        // Rotación: el token usado ya no vale, se emite uno nuevo para la próxima vez
-        $nuevoToken = $repoTokens->crear($email);
-        setcookie('recordarme', $nuevoToken, [
-            'expires' => time() + 86400 * 30, 'httponly' => true, 'secure' => true, 'samesite' => 'Strict',
-        ]);
-    } else {
-        // El token no existía: podría ser un robo. Por seguridad, borra la cookie.
-        setcookie('recordarme', '', time() - 3600);
-    }
+    $email = $tokensValidos[$token];
+    unset($tokensValidos[$token]); // se invalida: de un solo uso
+    return $email;
 }
 ```
 
 ::: {.callout-note title="Concepto clave"}
-El token de "recordarme" nunca es la contraseña ni un hash de ella: es un valor aleatorio independiente que se puede invalidar en cualquier momento sin afectar a la contraseña real.
+El token de "recordarme" nunca es la contraseña ni un hash de ella: es un valor aleatorio independiente (`random_bytes()`, nunca `rand()`) que se puede invalidar en cualquier momento sin afectar a la contraseña real. El ejercicio de este capítulo te pide construir el repositorio completo (guardarlo en fichero, no en un array de memoria como el ejemplo de arriba) y la rotación: emitir un token nuevo cada vez que uno se consume con éxito.
 :::
 
 ## Control de acceso por roles, con varios niveles
@@ -97,9 +38,9 @@ abstract class Usuario {
 
     public function permisos(): array {
         $mapaPermisos = [
-            'usuario'       => ['ver_perfil'],
-            'editor'        => ['ver_perfil', 'editar_contenido'],
-            'administrador' => ['ver_perfil', 'editar_contenido', 'gestionar_usuarios', 'ver_informes'],
+            'usuario' => ['ver_perfil'],
+            'editor'  => ['ver_perfil', 'editar_contenido'],
+            // Un tercer rol se añadiría aquí, con su propia lista de permisos
         ];
         return $mapaPermisos[$this->rol()] ?? [];
     }
@@ -116,10 +57,6 @@ class UsuarioNormal extends Usuario {
 class Editor extends Usuario {
     public function rol(): string { return 'editor'; }
 }
-
-class Administrador extends Usuario {
-    public function rol(): string { return 'administrador'; }
-}
 ```
 
 ```php
@@ -132,17 +69,17 @@ function requierePermiso(Usuario $usuario, string $permiso): void {
 
 $actual = new Editor('luis@x.com');
 requierePermiso($actual, 'editar_contenido');    // pasa
-requierePermiso($actual, 'gestionar_usuarios');  // 403 Acceso denegado
+requierePermiso($actual, 'gestionar_usuarios');  // 403 Acceso denegado (permiso ni siquiera existe en el mapa)
 ```
 
 ::: {.callout-warning title="Errores frecuentes"}
-Comprobar el rol con `if ($usuario->rol() === 'administrador')` en cada página protegida se vuelve inmanejable en cuanto hay varias combinaciones de permisos por rol (por ejemplo, "editor o administrador pueden hacer X"). Centraliza los permisos en un único mapa, como arriba, y comprueba siempre el **permiso**, no el **rol**, en cada página.
+Comprobar el rol con `if ($usuario->rol() === 'administrador')` en cada página protegida se vuelve inmanejable en cuanto hay varias combinaciones de permisos por rol (por ejemplo, "editor o administrador pueden hacer X"). Centraliza los permisos en un único mapa, como arriba, y comprueba siempre el **permiso**, no el **rol**, en cada página. El ejercicio de este capítulo añade un tercer rol (`Administrador`) y tres páginas protegidas distintas.
 :::
 
 ::: {.ejercicio}
 **EJ13 · «Recordarme» con rotación de token**
 
-Implementa el flujo completo de "recordarme" con rotación de token: crear token al marcar la casilla, consumirlo (invalidándolo) al reconectar automáticamente, y emitir uno nuevo tras cada uso. Comprueba que, si intentas reutilizar un token ya consumido (simula guardarte una copia de la cookie antes de que se rote y vuelve a usarla), el sistema lo rechaza y borra la cookie.
+Implementa el flujo completo de "recordarme" con rotación de token, persistiendo los tokens en un fichero (por ejemplo JSON, como el `UsuarioRepository` del capítulo anterior) en vez del array en memoria usado como ilustración en la teoría: crear token al marcar la casilla, consumirlo (invalidándolo) al reconectar automáticamente, y emitir uno nuevo tras cada uso. Aplica también los flags de seguridad de la cookie vistos en el capítulo de cookies. Comprueba que, si intentas reutilizar un token ya consumido (simula guardarte una copia de la cookie antes de que se rote y vuelve a usarla), el sistema lo rechaza y borra la cookie.
 :::
 
 ::: {.ejercicio}

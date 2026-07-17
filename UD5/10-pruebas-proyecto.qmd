@@ -119,14 +119,14 @@ No es burocracia: tu editor usa estos bloques para autocompletar, y quien herede
 :::
 
 ::: {.ejercicio}
-**EJ9 · Proyecto integrador: la agenda completa**
+**EJ6 · Proyecto integrador: préstamo de equipos**
 
-Entrega final de la unidad. La agenda, completa y funcional:
+Entrega final de la unidad: la aplicación de préstamos completa, integrando EJ2 a EJ5 más lo que falta.
 
-1. **Arquitectura MVC estricta**: controladores delgados, lógica en servicios inyectados, vistas Blade con layout y componentes, rutas con nombre en el 100% de los enlaces.
-2. **Funcionalidad completa**: formulario de alta con validación y mensajes flash, búsqueda, favoritos en sesión con contador global y configuración propia por entornos consumida con `config()`.
-3. **Pruebas**: al menos **cuatro** pruebas automatizadas significativas (dos de respuesta de página y dos de validación) que pasen con `php artisan test`. Adjunta captura del resultado en verde.
-4. **Documentación**: PHPDoc en todas las clases y métodos de `app/`, más un `README.md` con las instrucciones de instalación (`composer install`, `.env`, `key:generate`, `migrate`, `serve`) y un diagrama del flujo MVC de tu aplicación.
+1. **Arquitectura MVC estricta**: controladores delgados, lógica en `DisponibilidadService` (y los servicios que necesites) inyectados, vistas Blade con layout y componentes, rutas con nombre en el 100% de los enlaces.
+2. **Funcionalidad completa**: catálogo con filtro por categoría, solicitud con todas las validaciones de negocio (E5.3 + `dias_max` + fines de semana de EJ5), cesta en sesión con límite configurable y contador global, y **confirmación de la solicitud**: al confirmar la cesta, los equipos pasan a no disponibles y la cesta se vacía con mensaje flash (novedad de este ejercicio: decide tú dónde vive ese cambio de estado y justifícalo).
+3. **Pruebas**: al menos **cinco** pruebas automatizadas que pasen con `php artisan test`: dos de respuesta de página, dos de validación y una del servicio (el cálculo de `fechaLimite()` cruzando un fin de semana). Adjunta captura del resultado en verde.
+4. **Documentación**: PHPDoc en todas las clases y métodos de `app/`, más un `README.md` con las instrucciones de instalación (`composer install`, `.env`, `key:generate`, `serve`) y un diagrama del flujo MVC de tu aplicación.
 5. **Defensa breve**: explicarás en 5 minutos qué capa (o capas) habría que tocar para una modificación que se sorteará en el momento.
 
 *Entrega apto/no apto: los cuatro primeros puntos completos y defensa superada. Este proyecto es la mejor preparación posible para el examen: todo lo que contiene es materia de examen.*
