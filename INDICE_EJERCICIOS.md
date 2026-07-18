@@ -2,7 +2,7 @@
 
 > Generado automáticamente por `scripts/renumera_ejercicios.py` en cada render — **no editar a mano**.
 >
-> Última actualización: 2026-07-17
+> Última actualización: 2026-07-18
 
 ## UD1. Arquitecturas y tecnologías de programación Web en entorno servidor (6 ejercicios)
 
@@ -31,7 +31,7 @@
 | EJ10 | Motor de descuentos | `04-directivas-operadores.qmd` |
 | EJ11 | Sistema de tickets | `05-ambito.qmd` |
 
-## UD3. Estructuras de control en PHP: Condicionales, bucles, funciones y formularios (11 ejercicios)
+## UD3. Estructuras de control en PHP: Condicionales, bucles, funciones y formularios (12 ejercicios)
 
 | Ejercicio | Título | Fichero |
 |:--:|--------|---------|
@@ -46,8 +46,9 @@
 | EJ9 | Ejercicios extras de funciones | `04-funciones.qmd` |
 | EJ10 | Formulario de inscripción | `05-formularios.qmd` |
 | EJ11 | Procesador de inscripción con validación | `06-recogida-datos.qmd` |
+| EJ12 | Tienda online | `06-recogida-datos.qmd` |
 
-## UD4. POO en PHP + Desarrollo de funcionalidades Web: autenticación, sesiones y cookies (15 ejercicios)
+## UD4. POO en PHP + Desarrollo de funcionalidades Web: autenticación, sesiones y cookies (16 ejercicios)
 
 | Ejercicio | Título | Fichero |
 |:--:|--------|---------|
@@ -66,6 +67,7 @@
 | EJ13 | «Recordarme» con rotación de token | `09-recordarme-y-roles.qmd` |
 | EJ14 | Tres roles con mapa de permisos | `09-recordarme-y-roles.qmd` |
 | EJ15 | Depuración de una aplicación con varios fallos | `10-depuracion-y-cierre.qmd` |
+| EJ16 | Mini-aplicación con registro, login y panel protegido | `10-depuracion-y-cierre.qmd` |
 
 ## UD5. Separación de la lógica de negocio: MVC con Laravel (6 ejercicios)
 
@@ -136,4 +138,4 @@
 | EJ10 | Agregaciones sobre municipios | `06-analitica-bigdata.qmd` |
 | EJ11 | Proyecto — cuadro de mando | `06-analitica-bigdata.qmd` |
 
-**Nº Ejercicios totales del módulo: 87**
+**Nº Ejercicios totales del módulo: 89**

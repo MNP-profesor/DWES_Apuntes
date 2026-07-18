@@ -71,14 +71,15 @@ A continuación, se detallan los ejercicios integrados en esta unidad, indicando
 | EJ9 | Ejercicios extras de funciones | No |
 | EJ10 | Formulario de inscripción | No |
 | EJ11 | Procesador de inscripción con validación | No |
-| EJ12 | PENDIENTE | Sí |
+| EJ12 | Tienda online — ejercicio de integración | Sí |
 
 Para obtener el **apto** es necesario:
 
-- El código produce el resultado esperado.
-- La estructura elegida (condicional, bucle, array, función) es adecuada al problema.
-- El código incluye comentarios PHPDoc en cada función y comentarios de línea en la lógica más compleja.
+- El código produce el resultado esperado en los ficheros entregados.
+- La estructura elegida es adecuada al problema.
+- Todas las funciones incluyen PHPDoc completo y el código tiene comentarios en la lógica más compleja.
 
 ::: {.callout-important title="Importante"}
-Los comentarios (**CE3.g**) son obligatorios la entrega: como mínimo un bloque PHPDoc en cada función y comentarios de línea en la lógica más compleja.
+- El EJ12 engloba todos los contenidos de la unidad.
+- Los comentarios (**CE3.g**) son obligatorios en la entrega. Pon los que consideres apropiados.
 :::

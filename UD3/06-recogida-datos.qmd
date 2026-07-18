@@ -53,18 +53,18 @@ A través de `$_FILES['nombre_input']`, tenemos acceso a 5 datos cruciales sobre
 <?php
 // Suponiendo un <input type="file" name="avatar">
 
-$nombreArchivo =$_FILES['avatar']['name'];     // Nombre original (ej: "foto.png")
-$tipoMime      =$_FILES['avatar']['type'];     // Tipo de archivo (ej: "image/png")
-$tamano        =$_FILES['avatar']['size'];     // Tamaño en bytes (ej: 24512)
-$rutaTemporal  =$_FILES['avatar']['tmp_name']; // Ubicación temporal en el servidor
-$error         =$_FILES['avatar']['error'];    // Código de error (0 si todo es correcto)
+$nombreArchivo = $_FILES['avatar']['name'];     // Nombre original (ej: "foto.png")
+$tipoMime      = $_FILES['avatar']['type'];     // Tipo de archivo (ej: "image/png")
+$tamano        = $_FILES['avatar']['size'];     // Tamaño en bytes (ej: 24512)
+$rutaTemporal  = $_FILES['avatar']['tmp_name']; // Ubicación temporal en el servidor
+$error         = $_FILES['avatar']['error'];    // Código de error (0 si todo es correcto)
 
 // Guardar el archivo de forma definitiva en nuestro servidor
 if ($error === UPLOAD_ERR_OK) {
     $directorioDestino = "subidas/" . basename($nombreArchivo);
-    
+
     // Mueve el archivo desde la carpeta temporal a su destino real
-    if (move_uploaded_file($rutaTemporal,$directorioDestino)) {
+    if (move_uploaded_file($rutaTemporal, $directorioDestino)) {
         echo "¡Archivo subido con éxito!";
     } else {
         echo "Error al mover el archivo de espacio temporal.";
@@ -162,8 +162,8 @@ El nombre "Cross-Site" viene de que el navegador de la víctima ejecuta el scrip
 ```php
 <?php
 // Limpiar una cadena de HTML peligroso
-$entrada  = "<script>alert('xss')</script> Hola";
-$limpia   = filter_var($entrada, FILTER_SANITIZE_SPECIAL_CHARS);
+$entrada = "<script>alert('xss')</script> Hola";
+$limpia  = filter_var($entrada, FILTER_SANITIZE_SPECIAL_CHARS);
 echo $limpia; // &#60;script&#62;alert(&#39;xss&#39;)&#60;/script&#62; Hola
 ?>
 ```
@@ -177,18 +177,18 @@ Cuando los filtros por defecto de `filter_var()` no son suficientes para reglas 
 ```php
 <?php
 // Validar un Código Postal español (5 números)
-$cp =$_POST['cp'] ?? '';
+$cp = $_POST['cp'] ?? '';
 $patronCP = '/^[0-9]{5}$/';
 
-if (!preg_match($patronCP,$cp)) {
+if (!preg_match($patronCP, $cp)) {
     echo "El código postal debe tener exactamente 5 números.";
 }
 
 // Validar un teléfono (9 dígitos, empieza por 6, 7, 8 o 9)
-$telefono =$_POST['telefono'] ?? '';
+$telefono = $_POST['telefono'] ?? '';
 $patronTelefono = '/^[6-9][0-9]{8}$/';
 
-if (preg_match($patronTelefono,$telefono)) {
+if (preg_match($patronTelefono, $telefono)) {
     echo "¡Teléfono válido!";
 }
 ?>
@@ -316,7 +316,7 @@ if (empty($resultado['errores'])) {
 
 ## Seguridad: Introducción a la Inyección SQL
 
-La regla de oro de cualquier programador web es: **"Nunca confíes en los datos que introduce un usuario"**. 
+La regla de oro de cualquier programador web es: **"Nunca confíes en los datos que introduce un usuario"**.
 
 Si recoges una variable de un formulario directo y la concatenas a pelo dentro de una consulta a la base de datos, abres una brecha de seguridad crítica conocida como **Inyección SQL**. Un atacante podría escribir sentencias SQL maliciosas dentro de tus cajas de texto para robar datos o borrar tablas de tu sistema.
 
@@ -324,8 +324,8 @@ Si recoges una variable de un formulario directo y la concatenas a pelo dentro d
 <?php
 // CRÍTICO - VULNERABLE A INYECCIÓN SQL
 // Si el usuario escribe en la caja:  admin' OR '1'='1
-$usuario =$_POST['user'];
-$clave   =$_POST['pass'];
+$usuario = $_POST['user'];
+$clave   = $_POST['pass'];
 
 $sql = "SELECT * FROM usuarios WHERE user = '$usuario' AND pass = '$clave'";
 // La consulta se rompería y daría acceso completo sin conocer la contraseña.
@@ -371,12 +371,221 @@ Inscripción registrada
 Nombre: Laura García
 Email: laura@example.com
 Curso: daw2
-
 ```
 
 Resultado si email y curso son incorrectos:
 ```
 El email no tiene un formato válido.
 Debe seleccionar un curso válido.
+```
+:::
+
+---
+
+::: {.ejercicio}
+**EJ12 · Tienda online**
+
+Este ejercicio integra todos los contenidos de la unidad (CE3.a–CE3.g).
+Se compone de tres ficheros que debes construir en orden.
+
+---
+
+### Fichero 1 · `catalogo.php` — Arrays y funciones (CE3.b, CE3.c, CE3.d, CE3.g)
+
+Dado el siguiente catálogo de productos, implementa las funciones indicadas:
+
+```php
+<?php
+$catalogo = [
+    "P001" => ["nombre" => "Camiseta",   "precio" => 15.99, "stock" => 20, "categoria" => "ropa"],
+    "P002" => ["nombre" => "Pantalón",   "precio" => 39.99, "stock" => 0,  "categoria" => "ropa"],
+    "P003" => ["nombre" => "Zapatillas", "precio" => 59.99, "stock" => 5,  "categoria" => "calzado"],
+    "P004" => ["nombre" => "Calcetines", "precio" => 4.99,  "stock" => 50, "categoria" => "ropa"],
+    "P005" => ["nombre" => "Mochila",    "precio" => 29.99, "stock" => 3,  "categoria" => "accesorios"],
+    "P006" => ["nombre" => "Cinturón",   "precio" => 12.99, "stock" => 0,  "categoria" => "accesorios"],
+];
+
+/**
+ * Devuelve solo los productos disponibles (stock > 0).
+ * Usa array_filter. No modifica el catálogo original.
+ * @param array $catalogo
+ * @return array
+ */
+function productosDisponibles(array $catalogo): array {
+    // Tu código aquí
+}
+
+/**
+ * Devuelve los productos de una categoría concreta.
+ * Usa array_filter. No modifica el catálogo original.
+ * @param array  $catalogo
+ * @param string $categoria
+ * @return array
+ */
+function productosPorCategoria(array $catalogo, string $categoria): array {
+    // Tu código aquí
+}
+
+/**
+ * Aplica un porcentaje de descuento al precio de todos los productos.
+ * Usa array_map. Devuelve un nuevo array sin modificar el original.
+ * @param array $catalogo
+ * @param float $porcentaje  Valor entre 0 y 100
+ * @return array
+ */
+function aplicarDescuento(array $catalogo, float $porcentaje): array {
+    // Tu código aquí
+}
+
+/**
+ * Calcula el valor total del inventario (precio × stock de cada producto).
+ * Usa array_reduce.
+ * @param array $catalogo
+ * @return float
+ */
+function valorInventario(array $catalogo): float {
+    // Tu código aquí
+}
+
+/**
+ * Clasifica un producto según su precio.
+ * < 10 €     → "económico"
+ * 10–29.99 € → "estándar"
+ * 30–59.99 € → "premium"
+ * >= 60 €    → "lujo"
+ * @param float $precio
+ * @return string
+ */
+function clasificarPrecio(float $precio): string {
+    // Tu código aquí — usa match(true)
+}
+
+// --- Pruebas ---
+$disponibles = productosDisponibles($catalogo);
+echo "Disponibles: " . count($disponibles) . "\n";
+// Disponibles: 4
+
+$ropa = productosPorCategoria($catalogo, "ropa");
+foreach ($ropa as $ref => $p) {
+    echo "$ref: {$p['nombre']}\n";
+}
+// P001: Camiseta
+// P002: Pantalón
+// P004: Calcetines
+
+$conDescuento = aplicarDescuento($catalogo, 10);
+echo $conDescuento["P003"]["precio"] . "\n";
+// 53.991  (59.99 - 10%)
+
+echo valorInventario($catalogo) . "\n";
+// 1489.6  (suma de precio × stock de todos los productos)
+
+echo clasificarPrecio(15.99) . "\n";  // estándar
+echo clasificarPrecio(59.99) . "\n";  // premium
+echo clasificarPrecio(4.99)  . "\n";  // económico
+?>
+```
+
+---
+
+### Fichero 2 · `pedido.html` — Formulario (CE3.e)
+
+Crea un formulario HTML que envíe un pedido por `POST` a `procesar_pedido.php`
+con los siguientes campos:
+
+| Campo | Control | Restricciones |
+|---|---|---|
+| Nombre del cliente | `text` | Obligatorio |
+| Email | `email` | Obligatorio |
+| Referencia del producto | `select` | Opciones: P001–P006 con su nombre, obligatorio |
+| Cantidad | `number` | Mínimo 1, máximo 10, obligatorio |
+| Código de descuento | `text` | Opcional |
+
+Añade un comentario HTML al inicio explicando por qué se usa `POST`.
+
+---
+
+### Fichero 3 · `procesar_pedido.php` — Recogida y validación (CE3.a, CE3.d, CE3.f, CE3.g)
+
+Procesa el formulario de `pedido.html`. Incluye `catalogo.php` al inicio para
+tener disponibles el array `$catalogo` y todas sus funciones.
+
+```php
+<?php
+require 'catalogo.php';
+
+// 1. RECOGER (con ?? para evitar avisos)
+$nombre    = trim($_POST['nombre']           ?? '');
+$email     = trim($_POST['email']            ?? '');
+$ref       = trim($_POST['ref']              ?? '');
+$cantidad  = $_POST['cantidad']              ?? null;
+$codigoDto = trim($_POST['codigo_descuento'] ?? '');
+
+// 2. VALIDAR
+$errores     = [];
+$refsValidas = array_keys($catalogo);
+
+// nombre: obligatorio, mínimo 2 caracteres
+// Tu código aquí
+
+// email: obligatorio, formato válido con filter_var
+// Tu código aquí
+
+// ref: debe ser una de las referencias del catálogo (usa in_array estricto)
+// Tu código aquí
+
+// cantidad: numérica, entre 1 y 10
+// Tu código aquí
+
+// producto disponible: si ref es válida, comprobar que tiene stock > 0
+// Tu código aquí
+
+// 3. CALCULAR DESCUENTO POR CÓDIGO (CE3.a)
+// Si no hay errores, determinar el descuento con match:
+// "VERANO10" → 10%
+// "BLACK20"  → 20%
+// código vacío → 0% (sin descuento)
+// cualquier otro → error "Código de descuento no válido."
+// Tu código aquí con match
+
+// 4. MOSTRAR RESULTADO
+if (empty($errores)) {
+    $producto    = $catalogo[$ref];
+    $precioFinal = $producto['precio'] * (1 - $descuento / 100);
+    $total       = $precioFinal * (int)$cantidad;
+
+    $nombreSeguro  = htmlspecialchars($nombre,             ENT_QUOTES, 'UTF-8');
+    $emailSeguro   = htmlspecialchars($email,              ENT_QUOTES, 'UTF-8');
+    $productoSeguro = htmlspecialchars($producto['nombre'], ENT_QUOTES, 'UTF-8');
+
+    echo "¡Pedido confirmado!\n";
+    echo "Cliente: $nombreSeguro ($emailSeguro)\n";
+    echo "Producto: $productoSeguro (ref. $ref)\n";
+    echo "Cantidad: $cantidad × " . number_format($precioFinal, 2, ',', '.') . " € = "
+       . number_format($total, 2, ',', '.') . " €\n";
+    if ($descuento > 0) {
+        echo "Descuento aplicado: $descuento%\n";
+    }
+} else {
+    foreach ($errores as $e) {
+        echo "htmlspecialchars($e, ENT_QUOTES, 'UTF-8') . "\n";
+    }
+}
+?>
+```
+
+Resultado esperado con datos correctos (ref. P001, cantidad 3, código VERANO10):
+```
+¡Pedido confirmado!
+Cliente: Laura García (laura@example.com)
+Producto: Camiseta (ref. P001)
+Cantidad: 3 × 14,39 € = 43,17 €
+Descuento aplicado: 10%
+```
+
+Resultado esperado con producto agotado (ref. P002) y código inválido:
+```
+El producto Pantalón no tiene stock disponible.
+Código de descuento no válido.
 ```
 :::

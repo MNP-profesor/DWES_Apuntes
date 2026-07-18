@@ -86,4 +86,4 @@ A continuación, se detallan los ejercicios integrados en esta unidad, indicando
 | EJ13 | «Recordarme» con rotación de token | No |
 | EJ14 | Tres roles con mapa de permisos | No |
 | EJ15 | Depuración de una aplicación con varios fallos | No |
-| EJ16 | PENDIENTE | Sí |
+| EJ16 | Mini-aplicación con registro, login y panel protegido | Sí |
