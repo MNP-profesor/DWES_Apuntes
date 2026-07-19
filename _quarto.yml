@@ -5,7 +5,7 @@ project:
     - python scripts/renumera_ejercicios.py  # RENUMERADOR automático de ejercicios
     - python scripts/aplica_descargas.py
 
-descargas-activas: true # Switch para habilitar o deshabilitar las descargas PDF y EPUB
+descargas-activas: false # Switch para habilitar o deshabilitar las descargas PDF y EPUB
 
 lang: es
 

@@ -8,8 +8,8 @@ Todos los materiales se regeneran automáticamente con cada actualización de lo
 
 | Formato | Descripción | Enlace |
 |---------|-------------|:------:|
-| 📄 PDF | Libro completo en formato de impresión (A4) | [Descargar](download/DWES-2DAW.pdf) |
-| 📚 EPUB | Libro completo en formato libro electrónico | [Descargar](download/DWES-2DAW.epub) |
+| 📄 PDF | Apuntes completos en formato de impresión (A4) | [Descargar](download/DWES-2DAW.pdf) |
+| 📚 EPUB | Apuntes completos en formato libro electrónico | [Descargar](download/DWES-2DAW.epub) |
 
 ## Por unidad didáctica {.unnumbered}
 
@@ -31,7 +31,7 @@ Todos los materiales se regeneran automáticamente con cada actualización de lo
 
 ::: {.content-visible when-format="pdf"}
 
-Esta sección solo tiene sentido en la versión web de los apuntes. Todas las descargas — libro completo y unidades individuales, en formato PDF y EPUB — están siempre disponibles y actualizadas en:
+Esta sección solo aplica en la versión web de los apuntes. Todas las descargas (apuntes completos y unidades individuales, en formato PDF y EPUB) están disponibles en:
 
 <https://mnp-profesor.github.io/DWES_Apuntes/descargas.html>
 
@@ -39,7 +39,7 @@ Esta sección solo tiene sentido en la versión web de los apuntes. Todas las de
 
 ::: {.content-visible when-format="epub"}
 
-Esta sección solo tiene sentido en la versión web de los apuntes. Todas las descargas — libro completo y unidades individuales, en formato PDF y EPUB — están siempre disponibles y actualizadas en:
+Esta sección solo aplica en la versión web de los apuntes. Todas las descargas (apuntes completos y unidades individuales, en formato PDF y EPUB) están disponibles en:
 
 <https://mnp-profesor.github.io/DWES_Apuntes/descargas.html>
 
