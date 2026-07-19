@@ -109,8 +109,6 @@ Debe incluir:
 3. **Una preferencia en cookie**: al menos un dato de usuario (idioma o tema) guardado en cookie, con los flags de seguridad vistos en la unidad.
 4. **Panel protegido**: una página solo accesible con sesión activa, que redirige a login si no la hay.
 5. **Justificación por escrito** (2-3 frases): por qué has usado sesión para una cosa y cookie para otra en tu aplicación concreta — no vale repetir la tabla teórica del capítulo de sesiones, tiene que referirse a tus propias decisiones.
-
-No se pide "recordarme" con rotación de token, control de acceso por roles, ni la parte de depuración documentada (esa ya la trabajaste a fondo en E4.15) — si ya tienes roles o "recordarme" de ejercicios anteriores y quieres incluirlos, cuentan como plus, pero no son obligatorios aquí.
 :::
 
 ## Cierre de la unidad

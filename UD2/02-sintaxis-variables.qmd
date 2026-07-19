@@ -155,8 +155,6 @@ if (isset($_POST['email']) && !empty($_POST['email'])) {
 ::: {.ejercicio}
 **EJ3 · Depurador: caza de errores**
 
-### E2.3 — 
-
 Corrige los cuatro fragmentos siguientes. Cada uno tiene entre 1 y 2 errores. Para cada fragmento, añade un comentario indicando la línea del error y la causa.
 
 **Fragmento A**

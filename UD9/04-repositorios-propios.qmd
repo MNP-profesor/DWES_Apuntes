@@ -181,5 +181,5 @@ $ php artisan importar:municipios
 ::: {.ejercicio}
 **EJ7 · Proyecto — tu repositorio específico**
 
-Diseña la migración y el modelo de un repositorio propio para tu proyecto y aliméntalo con un comando Artisan que extraiga datos reales de la fuente que trabajaste en E9.8 (API u open data en CSV). Aplica al menos **tres transformaciones** de limpieza documentadas con comentarios en el código, garantiza la idempotencia y haz que el comando informe por consola del número de registros procesados.
+Diseña la migración y el modelo de un repositorio propio para tu proyecto y aliméntalo con un comando Artisan que extraiga datos reales de la fuente que trabajaste en EJ5 (API u open data en CSV). Aplica al menos **tres transformaciones** de limpieza documentadas con comentarios en el código, garantiza la idempotencia y haz que el comando informe por consola del número de registros procesados.
 :::

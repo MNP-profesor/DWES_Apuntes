@@ -110,5 +110,5 @@ Partiendo del controlador de la ficha PDF mostrado arriba, añade el código QR 
 ::: {.ejercicio}
 **EJ9 · Proyecto — dos funcionalidades de terceros**
 
-Incorpora a tu proyecto dos funcionalidades completas basadas en librerías: la **exportación a PDF** de un listado de tu repositorio de E9.9 y un **código QR por registro** que enlace a su ficha pública. Justifica por escrito la elección de cada paquete aplicando los cuatro criterios de la tabla, gestiona los errores y documenta los métodos añadidos.
+Incorpora a tu proyecto dos funcionalidades completas basadas en librerías: la **exportación a PDF** de un listado de tu repositorio de EJ7 y un **código QR por registro** que enlace a su ficha pública. Justifica por escrito la elección de cada paquete aplicando los cuatro criterios de la tabla, gestiona los errores y documenta los métodos añadidos.
 :::

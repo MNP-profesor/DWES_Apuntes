@@ -86,27 +86,41 @@ Se resuelven en clase o en casa:
 
 #### Ejercicios de proyecto
 
+Varios ejercicios encadenan sobre una misma aplicación: el buscador de fuentes (EJ5) alimenta tu repositorio propio (EJ7), que a su vez es la base del PDF y el QR (EJ9) y del cuadro de mando final (EJ11). La unidad tiene una **entrega única**: el estado final de ese proyecto. Cada sección deja el punto de partida del siguiente, de modo que un bloqueo en una de ellas no bloquea el resto.
+
 Relacionados con la misma aplicación:
 
 | Ejercicio | Título | ¿Entrega? |
 |:---------:|--------|:---------:|
-| EJ7 | Proyecto — tu repositorio específico | Sí |
-| EJ8 | QR embebido en el PDF | Sí |
-| EJ9 | Proyecto — dos funcionalidades de terceros | Sí |
-| EJ10 | Agregaciones sobre municipios | Sí |
+| EJ7 | Proyecto — tu repositorio específico | No |
+| EJ8 | QR embebido en el PDF | No |
+| EJ9 | Proyecto — dos funcionalidades de terceros | No |
+| EJ10 | Agregaciones sobre municipios | No |
 | EJ11 | Proyecto — cuadro de mando | Sí |
 
 #### Criterios de apto en los ejercicios de proyecto
 
-Un ejercicio de proyecto es **apto** cuando:
+Se entrega **una sola vez**, al cerrar EJ11, el estado final de la aplicación. Como los ejercicios de proyecto encadenan sobre la misma aplicación, esa entrega contiene por construcción el buscador de dos fuentes (EJ5), el repositorio propio con su comando de importación (EJ7), el PDF y el QR (EJ9) y el cuadro de mando (EJ11), junto con el README que incluye la justificación de dependencias de EJ3.
 
-- El código funciona: se ejecuta sin errores y cumple lo pedido en el enunciado.
-- Las fuentes externas se consumen con timeout, control de errores y registro en el log.
-- Las importaciones son idempotentes (reejecutar no duplica).
-- Los métodos añadidos llevan PHPDoc y el proyecto mantiene su README al día.
+La entrega es **apta** cuando cumple esta lista:
 
-Las entregas que no ejecutan no pueden ser aptas; la copia entre entregas supone no apto para todas las partes implicadas.
+- La aplicación ejecuta sin errores (una entrega que no ejecuta no puede ser apta).
+- El buscador consulta las dos fuentes con timeout, gestión de errores independiente por fuente y registro en el log.
+- El comando de importación carga datos reales y, reejecutado, no duplica registros.
+- La exportación a PDF y el código QR por registro funcionan sobre los datos del repositorio propio.
+- El cuadro de mando muestra al menos cuatro KPI correctos y una gráfica alimentada desde el controlador.
+- La memoria breve interpreta los indicadores en términos de negocio.
+- El README recoge las dependencias con su justificación y las instrucciones de importación.
+- Los servicios y comandos añadidos llevan PHPDoc.
+
+La copia entre entregas supone no apto para todas las partes implicadas.
+
+::: {.callout-important title="Normativa · RA-CE"}
+La entrega única está diseñada para que una sola corrección aporte evidencia de todos los criterios de evaluación del RA9: la justificación del README cubre CE9.a y CE9.b; el buscador, CE9.c y CE9.e; la importación, CE9.d; el PDF y el QR, CE9.e y CE9.f; el cuadro de mando y su memoria, CE9.g; y la documentación y las pruebas transversales, CE9.h. La prueba escrita evalúa, además, todos los criterios de forma individual.
+:::
 
 #### La prueba objetiva
 
+El examen combina los contenidos teórico-prácticos sobre un supuesto **distinto** al trabajado en clase: la preparación debe centrarse entendiendo bien la implementación del proyecto de la uidad.
+ 
 Todo lo que aparece en las secciones de esta unidad (Composer y semver, consumo de repositorios, ETL, librerías de terceros, analítica y documentación) es contenido de esta prueba.

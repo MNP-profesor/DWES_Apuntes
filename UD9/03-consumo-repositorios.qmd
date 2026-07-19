@@ -155,5 +155,5 @@ En la UD7 construisteis el servicio; en la UD8 lo consumió el navegador; aquí 
 ::: {.ejercicio}
 **EJ5 · Proyecto — buscador de fuentes heterogéneas**
 
-Amplía tu proyecto con un buscador que consulte **dos fuentes a la vez**: la API pública de E9.3 y tu API de la UD7 (autenticada con Bearer). Unifica los resultados en una estructura común y preséntalos en una vista indicando la procedencia de cada dato. Requisitos: gestión de errores independiente por fuente (si una cae, la otra sigue mostrándose), registro en el log y PHPDoc en el servicio que encapsule las consultas.
+Amplía tu proyecto con un buscador que consulte **dos fuentes a la vez**: la API pública de EJ4 y tu API de la UD7 (autenticada con Bearer). Unifica los resultados en una estructura común y preséntalos en una vista indicando la procedencia de cada dato. Requisitos: gestión de errores independiente por fuente (si una cae, la otra sigue mostrándose), registro en el log y PHPDoc en el servicio que encapsule las consultas.
 :::

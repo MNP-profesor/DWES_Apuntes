@@ -2,7 +2,7 @@
 title: "Probar, depurar y documentar"
 ---
 
-Probar, depurar y documentar no tiene capítulo de teoría extensa: se ejerce dentro de cada ejercicio de proyecto. En el contexto híbrido, eso sí, adquiere matices propios que conviene fijar.
+Probar, depurar y documentar no tiene apartado de teoría extensa: se aplica dentro de cada ejercicio de proyecto. En el contexto híbrido, eso sí, adquiere matices propios que conviene fijar. Presta especial atención a este capítulo: varios puntos de la lista de comprobación de la entrega única (registro en el log, PHPDoc, README, ejecución sin errores) salen directamente de aquí.
 
 ## Probar contra fuentes externas
 

@@ -154,7 +154,7 @@ El fragmento JavaScript se usa tal cual está: lo evaluable en este módulo es l
 ::: {.ejercicio}
 **EJ10 · Agregaciones sobre municipios**
 
-Sobre la tabla de municipios de E9.4, calcula con colecciones: población total, media por provincia (redondeada), las cinco provincias más pobladas y el porcentaje de municipios con menos de 1.000 habitantes. Prepara además la estructura `['labels' => ..., 'data' => ...]` que consumiría una gráfica de barras por provincia.
+Sobre la tabla de municipios de EJ6, calcula con colecciones: población total, media por provincia (redondeada), las cinco provincias más pobladas y el porcentaje de municipios con menos de 1.000 habitantes. Prepara además la estructura `['labels' => ..., 'data' => ...]` que consumiría una gráfica de barras por provincia.
 
 Resultado esperado (con el dataset de ejemplo del aula virtual):
 
@@ -169,5 +169,5 @@ Municipios < 1000 hab.: 42.3 %
 ::: {.ejercicio}
 **EJ11 · Proyecto — cuadro de mando**
 
-Construye la pantalla "Cuadro de mando" de tu proyecto: al menos **cuatro KPI** calculados con colecciones sobre tu repositorio de E9.9, una tabla resumen agrupada y una gráfica alimentada desde el controlador. Acompáñala de media página que **interprete** los indicadores en términos de negocio (¿qué decisión tomaría alguien mirando tu dashboard?) y documenta con PHPDoc el servicio de analítica.
+Construye la pantalla "Cuadro de mando" de tu proyecto: al menos **cuatro KPI** calculados con colecciones sobre tu repositorio de EJ7, una tabla resumen agrupada y una gráfica alimentada desde el controlador. Acompáñala de media página que **interprete** los indicadores en términos de negocio (¿qué decisión tomaría alguien mirando tu dashboard?) y documenta con PHPDoc el servicio de analítica.
 :::
