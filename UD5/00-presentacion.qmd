@@ -57,7 +57,7 @@ Al terminar la unidad serás capaz de:
 
 ### Recursos y materiales
 
-- Servidor local PHP (XAMPP, MAMP o equivalente) o Docker
+- Docker (obligatorio desde esta unidad — ver @sec-ud5-instalacion)
 - [Documentación oficial de PHP](https://www.php.net/manual/es/)
 - Navegador con herramientas de desarrollador (F12)
 - Editor de código (VS Code recomendado) con soporte para Blade

@@ -11,7 +11,7 @@ La solución es una capa intermedia que decide qué se publica, con qué nombre 
 ## Crear y usar un Resource
 
 ```bash
-php artisan make:resource JuegoResource
+docker compose exec web php artisan make:resource JuegoResource
 ```
 
 ```php

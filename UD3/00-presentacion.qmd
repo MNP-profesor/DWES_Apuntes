@@ -43,7 +43,7 @@ En esta unidad aprendemos a dar lógica real a tus páginas: condicionales, bucl
 
 ### Recursos y materiales
 
-- Servidor local PHP (XAMPP, MAMP o equivalente) o Docker
+- Servidor local PHP (XAMPP, PHP embebido o Docker)
 - [Documentación oficial de PHP](https://www.php.net/manual/es/)
 - Navegador con herramientas de desarrollador (F12)
 - Editor de código (VS Code recomendado)

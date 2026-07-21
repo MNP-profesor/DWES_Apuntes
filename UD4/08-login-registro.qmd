@@ -1,5 +1,9 @@
 # Login y registro
 
+::: {.callout-important title="Normativa · RA-CE"}
+**CE4.e.** — Se han escrito aplicaciones que integren mecanismos de autentificación de usuarios.
+:::
+
 Aquí se junta todo lo anterior: clases, sesiones, hashing, excepciones y ahora también un **repositorio** que sustituye a las funciones "mágicas" (`buscarUsuarioPorEmail`, `guardarUsuario`...) por una implementación real y completa, para que no quede nada oculto.
 
 ::: {.callout-note title="Concepto clave"}

@@ -52,8 +52,9 @@ El hilo conductor es la **API de una tienda de videojuegos**. La construiremos, 
 
 ### Recursos y materiales
 
+- Docker (obligatorio desde esta unidad — ver @sec-ud5-instalacion)
+- MySQL/MariaDB (vía el servicio `db` del `docker-compose.yml`, no instalación aparte)
 - PHP 8.2+, Composer y tu proyecto Laravel 12.x de las unidades anteriores (o uno nuevo).
-- MySQL/MariaDB/PostreSQL/AmazonRDS con la base de datos de prácticas.
 - VS Code con las extensiones de PHP y Laravel.
 - [Postman](https://www.postman.com/downloads/) (escritorio o web).
 - Navegador con herramientas de desarrollador (pestaña Red).

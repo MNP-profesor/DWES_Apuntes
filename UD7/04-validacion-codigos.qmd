@@ -22,7 +22,7 @@ El cliente de una API decide qué hacer leyendo **primero el código** y despué
 La validación funciona como en las unidades anteriores, con una diferencia clave: cuando la petición lleva `Accept: application/json`, un fallo de validación **no redirige a ningún formulario**: devuelve un `422` con el detalle campo a campo, sin que escribas nada.
 
 ```bash
-php artisan make:request StoreJuegoRequest
+docker compose exec web php artisan make:request StoreJuegoRequest
 ```
 
 ```php

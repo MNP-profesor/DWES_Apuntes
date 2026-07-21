@@ -1,5 +1,9 @@
 # Depuración y cierre de la unidad
 
+::: {.callout-important title="Normativa · RA-CE"}
+**CE4.f.** — Se han utilizado herramientas y entornos para facilitar la programación, prueba y depuración del código.
+:::
+
 ## Herramientas de depuración
 
 Depurar aplicaciones con estado (sesiones, cookies) tiene una particularidad: el error no siempre es visible en la petición actual, sino en la siguiente.

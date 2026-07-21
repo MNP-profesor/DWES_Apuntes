@@ -11,7 +11,7 @@ Hasta ahora la agenda vive en un array del controlador: se borra en cada petici�
 Una migración es un fichero PHP que describe una tabla. Generamos modelo y migración de una vez:
 
 ```bash
-php artisan make:model Contacto -m
+docker compose exec web php artisan make:model Contacto -m
 ```
 
 ```
@@ -38,7 +38,7 @@ public function up(): void
 Y la ejecutamos:
 
 ```bash
-php artisan migrate
+docker compose exec web php artisan migrate
 ```
 
 ```
@@ -159,7 +159,7 @@ public function store(Request $request)
 **4.** Comprueba: listado, búsqueda, ficha y alta funcionan igual… pero ahora los contactos **sobreviven** al reinicio del servidor.
 
 ```bash
-php artisan serve   # reinicia; los contactos siguen ahí
+docker compose restart web   # reinicia; los contactos siguen ahí
 ```
 
 Esa es la evidencia definitiva de que Modelo, Vista y Controlador están de verdad separados.

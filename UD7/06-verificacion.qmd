@@ -77,7 +77,7 @@ Una verificación de regresión de toda tu API en un clic.
 La verificación también puede vivir dentro del propio proyecto. Las pruebas *feature* levantan la aplicación y lanzan peticiones reales contra ella:
 
 ```bash
-php artisan make:test JuegoApiTest
+docker compose exec web php artisan make:test JuegoApiTest
 ```
 
 ```php
@@ -111,7 +111,7 @@ class JuegoApiTest extends TestCase
 ```
 
 ```bash
-php artisan test --filter=JuegoApiTest
+docker compose exec web php artisan test --filter=JuegoApiTest
 ```
 
 ```text

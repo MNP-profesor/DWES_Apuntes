@@ -1,6 +1,9 @@
 # Cookies
 
-CE4.a-c.
+::: {.callout-important title="Normativa · RA-CE"}
+- **CE4.a.** — Se han identificado los mecanismos disponibles para el mantenimiento de la información que concierne a un cliente web concreto y se han señalado sus ventajas.
+- **CE4.c.** — Se han utilizado mecanismos para almacenar información en el cliente web y para recuperar su contenido.
+:::
 
 `setcookie()` crea una cookie antes de cualquier salida al navegador. `$_COOKIE` la lee, pero **solo a partir de la siguiente petición** (no en la misma en la que se crea).
 

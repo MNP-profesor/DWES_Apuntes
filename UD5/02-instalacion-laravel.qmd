@@ -4,39 +4,105 @@
 Este bloque trabaja **CE5.b** (uso de un framework de separación de capas) y **CE5.e** (parámetros de configuración de la aplicación).
 :::
 
+::: {.callout-important title="Docker obligatorio a partir de aquí"}
+- Desde esta unidad hasta el final del módulo (UD5, UD6, UD7 y UD9), **todo el trabajo se hace con Docker**, no es una alternativa como se permitía en UD1-UD4/UD8. 
+- El motivo es que la instalación nativa de Laravel y MySQL en Windows es un foco de problemas específico de cada máquina — Docker da un entorno idéntico en cualquier equipo, evitando múltiples configuraciones distintas que depurar.
+:::
+
 ## Composer: el gestor de dependencias
 
-Composer descarga las librerías del proyecto (declaradas en `composer.json`) dentro de `vendor/` y genera el **autoloader**: nunca más escribirás `require` para cargar clases.
-
-Comprueba que lo tienes instalado:
-
-```bash
-composer --version
-```
-
-```
-Composer version 2.8.x 2025-xx-xx
-```
+Composer descarga las librerías del proyecto (declaradas en `composer.json`) dentro de `vendor/` y genera el **autoloader**. En otras palabras, nunca más escribirás `require` para cargar clases.
 
 ::: {.callout-tip title="Analogía Java"}
 Composer es el Maven/Gradle de PHP, con una diferencia práctica: las dependencias se instalan **dentro del proyecto** (`vendor/`), no en un repositorio local compartido. Cada proyecto lleva las suyas.
 :::
 
+Con Docker no necesitas instalar Composer en tu equipo en absoluto: usas la imagen oficial de Composer solo para el momento puntual de crear el proyecto, y a partir de ahí `composer install`/`composer require` se ejecutan **dentro del contenedor**.
+
+::: {.callout-note title="Concepto clave"}
+`composer create-project` se usa **una sola vez**, al arrancar una aplicación nueva. A partir de ahí, para añadir funcionalidad a un proyecto que ya existe (como harás en tu proyecto intermodular, o en UD7 y UD9 de este módulo) se usa `composer require` sobre el proyecto
+ya creado, nunca se vuelve a crear el proyecto desde cero.
+:::
+
 ## Crear el proyecto
 
+Todos los ejemplos ejecutables de esta teoría se construyen sobre una **agenda de contactos**, deliberadamente simple para que cada concepto se vea aislado. La aplicación de préstamo de equipos (donde harás tú los ejercicios) es un proyecto **aparte**, que crearás más abajo con la misma plantilla.
+
 ```bash
-composer create-project laravel/laravel agenda
+docker run --rm -v "${PWD}:/app" composer create-project laravel/laravel agenda
 cd agenda
-php artisan serve
+```
+
+## Los dos ficheros que necesita todo proyecto Laravel con Docker
+
+A diferencia de los ejercicios PHP nativos de unidades anteriores, un proyecto Laravel necesita `composer install` **dentro** del contenedor y arranca con `php artisan serve`, no con Apache. Estos dos ficheros, en la raíz del proyecto, son la plantilla que reutilizarás en toda la unidad (y en UD7/UD9) — para la teoría, con `agenda`:
+
+`Dockerfile`:
+```dockerfile
+FROM php:8.2-cli
+RUN docker-php-ext-install pdo_mysql
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+WORKDIR /var/www/html
+```
+
+`docker-compose.yml`:
+```yaml
+name: ud5-teoria-agenda
+
+services:
+  web:
+    build: .
+    working_dir: /var/www/html
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/var/www/html
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_DATABASE=agenda
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+    depends_on:
+      - db
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: agenda
+    ports:
+      - "3306:3306"
+```
+
+::: {.callout-note title="Concepto clave"}
+Para los **ejercicios** de esta unidad (EJ1-EJ6), crea un segundo proyecto aparte con el mismo patrón, cambiando solo el nombre:
+```bash
+docker run --rm -v "${PWD}:/app" composer create-project laravel/laravel prestamos
+cd prestamos
+```
+y en su `docker-compose.yml`: `name: ud5-ej6-prestamo-equipos`, `DB_DATABASE=prestamos` (en los dos sitios donde aparece: `environment` del servicio `web` y del servicio `db`). No mezcles los dos proyectos — la agenda es solo para reproducir los ejemplos de teoría, nunca se entrega.
+:::
+
+Arranca y termina la instalación **dentro** del contenedor:
+
+```bash
+docker compose up -d --build
+docker compose exec web composer install
+docker compose exec web cp .env.example .env
+docker compose exec web php artisan key:generate
+docker compose exec web php artisan migrate
 ```
 
 ```
-  INFO  Server running on [http://127.0.0.1:8000].
-
-  Press Ctrl+C to stop the server
+  INFO  Server running on [http://0.0.0.0:8000].
 ```
 
 Abre `http://localhost:8000`: verás la página de bienvenida de Laravel. Ya tienes una aplicación MVC funcionando.
+
+::: {.callout-warning title="Errores frecuentes"}
+Si al arrancar ves `could not find driver` al usar la base de datos, revisa que el `Dockerfile` tiene la línea `RUN docker-php-ext-install pdo_mysql` y que reconstruiste la imagen con `--build` después de añadirla — la imagen base `php:8.2-cli` no la trae de serie, igual que ya viste con `php:8.2-apache` en UD6.
+:::
 
 ## La estructura de carpetas
 
@@ -57,20 +123,19 @@ Abre `http://localhost:8000`: verás la página de bienvenida de Laravel. Ya tie
 
 ## artisan: la consola de Laravel
 
-`artisan` genera código, inspecciona la aplicación y arranca servicios. Los comandos que más usarás:
+`artisan` genera código, inspecciona la aplicación y arranca servicios. Con Docker, cada comando se ejecuta anteponiendo `docker compose exec web`:
 
 ```bash
-php artisan list            # todos los comandos disponibles
-php artisan serve           # servidor de desarrollo
-php artisan route:list      # radiografía del enrutado
-php artisan make:controller NombreController
-php artisan make:model Nombre
+docker compose exec web php artisan list            # todos los comandos disponibles
+docker compose exec web php artisan route:list      # radiografía del enrutado
+docker compose exec web php artisan make:controller NombreController
+docker compose exec web php artisan make:model Nombre
 ```
 
 Ejemplo real de `route:list` en un proyecto recién creado:
 
 ```bash
-php artisan route:list
+docker compose exec web php artisan route:list
 ```
 
 ```
@@ -107,18 +172,19 @@ La cadena completa es: `.env` → `config/app.php` (que hace `'name' => env('APP
 
 ::: {.callout-warning title="Errores frecuentes"}
 - Llamar a `env('APP_NAME')` desde un controlador o una vista. Funciona… hasta que en producción se cachea la configuración (`php artisan config:cache`) y `env()` empieza a devolver `null` fuera de `config/`. Regla: `env()` **solo** dentro de `config/`; en tu código, **siempre** `config()`.
-- Editar `.env` y no ver el cambio: reinicia `php artisan serve` (y si cacheaste, `php artisan config:clear`).
+- Editar `.env` y no ver el cambio: reinicia el contenedor (`docker compose restart web`) y, si cacheaste, `docker compose exec web php artisan config:clear`.
 - Subir `.env` al repositorio. Contiene credenciales; por eso Laravel lo incluye en `.gitignore`.
+- Poner las credenciales de base de datos directamente en `.env` en vez de en el `docker-compose.yml` (`environment:`) cuando trabajas con Docker: si algún día compartes el proyecto, es fácil olvidar que `.env` también tiene que coincidir con lo que definiste en el compose.
 :::
 
 ## Autocomprobación (sin entrega)
 
 Antes de pasar al siguiente bloque, verifica tu entorno. **Vas a necesitar dos proyectos**: `agenda` para reproducir los ejemplos de la teoría, y `prestamos` donde harás todos los ejercicios de la unidad. Debes poder marcar todos los items de la siguiente checklist:
 
-- [ ] `composer create-project laravel/laravel prestamos` termina sin errores y `php artisan serve` muestra la bienvenida.
+- [ ] `docker compose up -d --build` termina sin errores y `http://localhost:8000` muestra la bienvenida de Laravel.
 - [ ] Sabes decir, sin mirar la tabla, en qué carpeta viven controladores, vistas y rutas.
 - [ ] Has cambiado `APP_NAME` en `.env` y lo has visto reflejado con una ruta que imprime `config('app.name')`.
-- [ ] `php artisan route:list` te resulta legible: método, URI, nombre, acción.
+- [ ] `docker compose exec web php artisan route:list` te resulta legible: método, URI, nombre, acción.
 - [ ] Sabes explicar por qué `env()` solo se usa dentro de `config/`.
 
 ::: {.callout-important title="Importante"}

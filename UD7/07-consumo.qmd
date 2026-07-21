@@ -43,7 +43,7 @@ El ciclo completo contra la API de la tienda: *login* programático, uso del tok
 ```php
 use Illuminate\Support\Facades\Http;
 
-$base = 'http://tienda.test';
+$base = 'http://localhost:8000';
 
 // 1. Obtener el token
 $login = Http::acceptJson()->post("$base/api/login", [

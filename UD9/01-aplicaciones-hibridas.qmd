@@ -3,6 +3,24 @@ title: "Aplicaciones Web híbridas"
 ---
 
 ::: {.callout-note title="Concepto clave"}
+Los ejemplos y ejercicios de esta unidad parten de un proyecto Laravel
+nuevo, distinto de los de UD5 y UD7. Docker sigue siendo obligatorio
+(ver @sec-ud5-instalacion si no recuerdas por qué o cómo se instaló Composer):
+```bash
+docker run --rm -v "${PWD}:/app" composer create-project laravel/laravel hibridas
+cd hibridas
+```
+Copia dentro el mismo `Dockerfile` y `docker-compose.yml` de UD5 (@sec-ud5-instalacion), cambiando el `name:` del proyecto y el nombre de la base de datos a `hibridas`, y arranca igual:
+```bash
+docker compose up -d --build
+docker compose exec web composer install
+docker compose exec web cp .env.example .env
+docker compose exec web php artisan key:generate
+docker compose exec web php artisan migrate
+```
+:::
+
+::: {.callout-note title="Concepto clave"}
 Una **aplicación Web híbrida** combina en una misma solución tres piezas de origen distinto: **código propio** (lo que escribe tu equipo), **código de terceros** (librerías y frameworks) e **información de repositorios heterogéneos** (APIs, portales de datos abiertos, ficheros CSV/JSON, bases de datos). "Heterogéneo" significa que las fuentes no comparten formato ni protocolo: integrarlas es tu trabajo.
 :::
 
@@ -13,7 +31,7 @@ En realidad llevas todo el curso construyendo una aplicación híbrida sin llama
 Supón que el cliente pide "exportar el listado a PDF". Generar un PDF a mano implica implementar el formato binario del estándar: cabeceras, objetos, flujos comprimidos, fuentes… miles de líneas. Con una librería:
 
 ```bash
-composer require barryvdh/laravel-dompdf
+docker compose exec web composer require barryvdh/laravel-dompdf
 ```
 
 ```php
@@ -41,10 +59,14 @@ No solo se reutiliza código. Ejemplos de repositorios de información que puede
 Open Library      https://openlibrary.org/search.json?q=laravel   (libros, JSON, sin clave)
 datos.gob.es      catálogo estatal de datos abiertos (CSV, JSON)
 dades.gva.es      datos abiertos de la Generalitat Valenciana
-Tu API de la UD7  http://api-ud7.test/api/...  (¡también es un repositorio!)
+Tu API de la UD7  http://localhost:8001/api/...  (¡también es un repositorio!)
 ```
 
 Prueba la primera en el navegador: es una petición GET normal que devuelve JSON, exactamente como las respuestas que tu propia API generaba en la UD7.
+
+::: {.callout-warning title="Errores frecuentes"}
+Si vas a consumir la API de UD7 desde este proyecto, **no pueden arrancar los dos con el mismo puerto**: ambos `docker-compose.yml` mapean por defecto `8000:8000`. Cambia el de uno de los dos proyectos (por ejemplo, `"8001:8000"` en el compose de la API de UD7) y arráncalos a la vez con `docker compose up -d` en cada carpeta.
+:::
 
 ## El ecosistema del desarrollo híbrido en PHP
 

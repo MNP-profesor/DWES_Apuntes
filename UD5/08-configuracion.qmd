@@ -105,7 +105,7 @@ Un parámetro bien diseñado tiene **tres niveles**: valor por defecto razonable
 En producción, Laravel compila toda la configuración a un único fichero para acelerar:
 
 ```bash
-php artisan config:cache
+docker compose exec web php artisan config:cache
 ```
 
 ```

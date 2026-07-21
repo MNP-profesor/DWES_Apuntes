@@ -9,7 +9,7 @@ Este bloque trabaja **CE5.h** (probar y documentar el código) y cierra **CE5.f*
 Laravel trae PHPUnit integrado y una capa de pruebas HTTP: puedes **simular peticiones sin navegador** y comprobar la respuesta. Las pruebas viven en `tests/Feature/`.
 
 ```bash
-php artisan make:test AgendaTest
+docker compose exec web php artisan make:test AgendaTest
 ```
 
 ```
@@ -55,7 +55,7 @@ class AgendaTest extends TestCase
 Ejecución:
 
 ```bash
-php artisan test
+docker compose exec web php artisan test
 ```
 
 ```

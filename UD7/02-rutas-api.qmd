@@ -2,13 +2,41 @@
 title: "Rutas API y controladores REST"
 ---
 
-## Preparar el proyecto
+## Crear el proyecto
 
-Desde Laravel 11, las rutas API no vienen activadas por defecto. Un único comando crea `routes/api.php`, lo registra en `bootstrap/app.php` e instala Sanctum (lo usaremos dos capítulos más adelante):
+Este ejercicio parte de un proyecto Laravel nuevo, distinto del de UD5. Docker sigue siendo obligatorio (ver @sec-ud5-instalacion si no recuerdas por qué o cómo se instaló Composer):
 
 ```bash
-php artisan install:api
+docker run --rm -v "${PWD}:/app" composer create-project laravel/laravel tienda-api
+cd tienda-api
 ```
+
+Copia dentro el mismo `Dockerfile` y `docker-compose.yml` de UD5 (@sec-ud5-instalacion), cambiando el `name:` del proyecto y el nombre de la base de datos:
+
+```yaml
+name: ud7-ej9-tienda-api
+# ...
+    environment:
+      - DB_DATABASE=tienda_api
+# ...
+  db:
+    environment:
+      MYSQL_DATABASE: tienda_api
+```
+
+```bash
+docker compose up -d --build
+docker compose exec web composer install
+docker compose exec web cp .env.example .env
+docker compose exec web php artisan key:generate
+docker compose exec web composer require laravel/sanctum
+docker compose exec web php artisan install:api
+docker compose exec web php artisan migrate
+```
+
+## Rutas API
+
+Desde Laravel 11, las rutas API no vienen activadas por defecto — por eso ya ejecutaste `install:api` al crear el proyecto, en el paso anterior. Ese comando crea `routes/api.php`, lo registra en `bootstrap/app.php` e instala Sanctum (lo usaremos dos capítulos más adelante).
 
 Todo lo declarado en `routes/api.php` queda automáticamente bajo el prefijo `/api` y **sin sesiones ni cookies**: coherente con el principio *stateless* de REST.
 
@@ -17,7 +45,7 @@ Todo lo declarado en `routes/api.php` queda automáticamente bajo el prefijo `/a
 Nuestro recurso es el juego de la tienda:
 
 ```bash
-php artisan make:model Juego -m
+docker compose exec web php artisan make:model Juego -m
 ```
 
 ```php
@@ -59,7 +87,7 @@ public function run(): void
 ```
 
 ```bash
-php artisan migrate --seed
+docker compose exec web php artisan migrate --seed
 ```
 
 ```text
@@ -71,7 +99,7 @@ INFO  Seeding database.
 ## Cinco rutas en una línea: `apiResource`
 
 ```bash
-php artisan make:controller Api/JuegoController --api --model=Juego
+docker compose exec web php artisan make:controller Api/JuegoController --api --model=Juego
 ```
 
 La opción `--api` genera el controlador **sin** los métodos `create` y `edit`: no hay formularios HTML que mostrar, el cliente construye sus propias pantallas.
@@ -86,7 +114,7 @@ Route::apiResource('juegos', JuegoController::class);
 Comprueba lo que acabas de registrar:
 
 ```bash
-php artisan route:list --path=api/juegos
+docker compose exec web php artisan route:list --path=api/juegos
 ```
 
 ```text
@@ -122,7 +150,7 @@ class JuegoController extends Controller
 }
 ```
 
-`GET http://tienda.test/api/juegos` responde:
+`GET http://localhost:8000/api/juegos` responde:
 
 ```json
 [

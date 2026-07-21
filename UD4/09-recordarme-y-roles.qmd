@@ -1,6 +1,9 @@
 # Cookies persistentes y control de acceso por roles
 
-CE4.c-e.
+::: {.callout-important title="Normativa · RA-CE"}
+- **CE4.c.** — Se han utilizado mecanismos para almacenar información en el cliente web y para recuperar su contenido.
+- **CE4.e.** — Se han escrito aplicaciones que integren mecanismos de autentificación de usuarios.
+:::
 
 ## Recordarme, con rotación de token
 

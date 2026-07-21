@@ -1,6 +1,9 @@
 # Sesiones
 
-CE4.a-b.
+::: {.callout-important title="Normativa · RA-CE"}
+- **CE4.a.** — Se han identificado los mecanismos disponibles para el mantenimiento de la información que concierne a un cliente web concreto y se han señalado sus ventajas.
+- **CE4.b.** — Se han utilizado mecanismos para mantener el estado de las aplicaciones web.
+:::
 
 ## Mecanismos de mantenimiento de información de cliente
 

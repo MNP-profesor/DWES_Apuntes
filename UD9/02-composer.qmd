@@ -30,9 +30,9 @@ Composer se ha usado como herramienta desde que instalasteis Laravel. Ahora pasa
 Los tres comandos del día a día:
 
 ```bash
-composer require league/csv     # añade la dependencia y la instala
-composer install                # instala EXACTAMENTE lo que dice composer.lock
-composer update                 # recalcula versiones dentro de las restricciones y reescribe el lock
+docker compose exec web composer require league/csv     # añade la dependencia y la instala
+docker compose exec web composer install                # instala EXACTAMENTE lo que dice composer.lock
+docker compose exec web composer update                 # recalcula versiones dentro de las restricciones y reescribe el lock
 ```
 
 ::: {.callout-warning title="Errores frecuentes"}
@@ -52,7 +52,7 @@ Las versiones siguen el esquema `MAYOR.MENOR.PARCHE` (por ejemplo, `7.9.2`). Las
 Comprueba lo que Composer resolvería sin instalar nada:
 
 ```bash
-composer why-not guzzlehttp/guzzle 8.0
+docker compose exec web composer why-not guzzlehttp/guzzle 8.0
 ```
 
 ```text
@@ -77,7 +77,7 @@ Montémoslo desde cero, sin Laravel:
 
 ```bash
 mkdir psr4-demo && cd psr4-demo
-composer init --no-interaction --name=demo/psr4
+docker run --rm -v "${PWD}:/app" -w /app composer init --no-interaction --name=demo/psr4
 ```
 
 Añade a `composer.json` la sección de autoload:
@@ -109,7 +109,7 @@ class Saludo
 Regenera el cargador y consume la clase:
 
 ```bash
-composer dump-autoload
+docker run --rm -v "${PWD}:/app" -w /app composer dump-autoload
 ```
 
 ```php

@@ -72,7 +72,7 @@ php artisan importar:libros {tema}    # repositorio propio desde Open Library
 Por último, la trazabilidad de terceros: `composer.lock` versionado en Git y un ojo en los avisos de seguridad de tus dependencias (`composer audit` los lista).
 
 ```bash
-composer audit
+docker compose exec web composer audit
 ```
 
 ```text

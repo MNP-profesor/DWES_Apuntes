@@ -3,7 +3,7 @@
 Libro Quarto con los apuntes del módulo **Desarrollo Web en Entorno Servidor**.
 Web pública con descargas en PDF y EPUB, regeneradas automáticamente en cada actualización.
 
-**Autor:** Manel Navarro Pérez · Licencia CC BY-NC-SA 4.0
+**Autor:** Manel Navarro Pérez - Licencia CC BY-NC-SA 4.0
 
 ---
 
@@ -98,6 +98,7 @@ dwes-apuntes/
 ├── index.qmd              # presentación del módulo
 ├── descargas.qmd          # página de descargas PDF/EPUB
 ├── UD1/ … UD9/            # una carpeta por unidad (.qmd)
+├── INDICE_EJERCICIOS.md   # Recopilación de ejercicios del módulo
 ├── theme/                 # tema Midnight (SCSS web, LaTeX PDF, portada)
 ├── scripts/build-unit-pdfs.sh   # PDF independiente por unidad
 └── .github/workflows/publish.yml # publicación automática

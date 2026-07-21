@@ -13,7 +13,7 @@ Una ruta asocia **método HTTP + URL** con el código que la atiende. Se definen
 ```php
 use Illuminate\Support\Facades\Route;
 
-Route::get('/hola', fn () => 'Hola, 2º DAW');
+Route::get('/hola', fn () => 'Hola Manel');
 
 Route::get('/fecha', fn () => date('d/m/Y'));
 
@@ -22,7 +22,7 @@ Route::get('/suma', fn () => 2 + 2);
 
 | URL visitada | Respuesta en el navegador |
 |---|---|
-| `/hola` | `Hola, 2º DAW` |
+| `/hola` | `Hola Manel` |
 | `/fecha` | `12/07/2026` (la fecha del día) |
 | `/suma` | `4` |
 
@@ -81,7 +81,7 @@ Si mañana la URL cambia a `/agenda/contactos/{id}`, se cambia **una** línea en
 Las closures valen para probar; una aplicación real agrupa las acciones de cada recurso en un **controlador**:
 
 ```bash
-php artisan make:controller ContactoController
+docker compose exec web php artisan make:controller ContactoController
 ```
 
 ```
@@ -144,7 +144,7 @@ Dos detalles del código anterior:
 Comprobación con `route:list`:
 
 ```bash
-php artisan route:list --except-vendor
+docker compose exec web php artisan route:list --except-vendor
 ```
 
 ```
@@ -157,7 +157,7 @@ php artisan route:list --except-vendor
 Para un recurso completo, Laravel genera de una vez las siete acciones convencionales:
 
 ```bash
-php artisan make:controller ProductoController --resource
+docker compose exec web php artisan make:controller ProductoController --resource
 ```
 
 ```php

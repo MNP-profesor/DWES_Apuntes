@@ -7,7 +7,7 @@ El tercer pilar es incorporar **funcionalidades completas** mediante librerías 
 ## PDF con dompdf
 
 ```bash
-composer require barryvdh/laravel-dompdf
+docker compose exec web composer require barryvdh/laravel-dompdf
 ```
 
 La librería renderiza una **vista Blade normal** a PDF: todo lo que sabes de plantillas se reutiliza tal cual.
@@ -50,7 +50,7 @@ Piensa en lo que acaba de pasar: tu funcionalidad ("fichas imprimibles") se apoy
 ## Códigos QR con endroid/qr-code
 
 ```bash
-composer require endroid/qr-code
+docker compose exec web composer require endroid/qr-code
 ```
 
 ```php

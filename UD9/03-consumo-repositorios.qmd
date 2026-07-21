@@ -5,7 +5,7 @@ title: "Consumir repositorios existentes"
 El primer pilar de una aplicación híbrida es **recuperar y procesar información ya existente**. En la UD8 el navegador consumía APIs con `fetch`; aquí el consumo se hace **desde el servidor**, lo que permite ocultar claves, cachear, combinar fuentes antes de responder y almacenar lo recuperado. La herramienta estándar es **Guzzle**:
 
 ```bash
-composer require guzzlehttp/guzzle
+docker compose exec web composer require guzzlehttp/guzzle
 ```
 
 ## La primera petición
@@ -132,7 +132,7 @@ Crea un controlador con una acción que consulte Open Library (u otra API públi
 Cuando el repositorio exige autenticación, el token viaja en la cabecera `Authorization`. Así consume otra aplicación la API que construisteis con Sanctum:
 
 ```php
-$r = $cliente->get('http://api-ud7.test/api/productos', [
+$r = $cliente->get('http://localhost:8001/api/productos', [
     'headers' => [
         'Authorization' => 'Bearer ' . config('services.ud7.token'),
         'Accept'        => 'application/json',
@@ -143,7 +143,7 @@ $r = $cliente->get('http://api-ud7.test/api/productos', [
 El token se guarda en configuración (`config/services.php` leyendo de `.env`), nunca en el código. Comprueba primero con tu cliente HTTP (Postman/Thunder Client) que el token es válido:
 
 ```text
-GET http://api-ud7.test/api/productos
+GET http://localhost:8001/api/productos
 Authorization: Bearer 3|kD8s...
 
 200 OK

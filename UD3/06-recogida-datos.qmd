@@ -390,7 +390,7 @@ Se compone de tres ficheros que debes construir en orden.
 
 ---
 
-### Fichero 1 · `catalogo.php` — Arrays y funciones (CE3.b, CE3.c, CE3.d, CE3.g)
+#### Fichero 1 · `catalogo.php` — Arrays y funciones (CE3.b, CE3.c, CE3.d, CE3.g)
 
 Dado el siguiente catálogo de productos, implementa las funciones indicadas:
 
@@ -488,7 +488,7 @@ echo clasificarPrecio(4.99)  . "\n";  // económico
 
 ---
 
-### Fichero 2 · `pedido.html` — Formulario (CE3.e)
+#### Fichero 2 · `pedido.html` — Formulario (CE3.e)
 
 Crea un formulario HTML que envíe un pedido por `POST` a `procesar_pedido.php`
 con los siguientes campos:
@@ -505,7 +505,7 @@ Añade un comentario HTML al inicio explicando por qué se usa `POST`.
 
 ---
 
-### Fichero 3 · `procesar_pedido.php` — Recogida y validación (CE3.a, CE3.d, CE3.f, CE3.g)
+#### Fichero 3 · `procesar_pedido.php` — Recogida y validación (CE3.a, CE3.d, CE3.f, CE3.g)
 
 Procesa el formulario de `pedido.html`. Incluye `catalogo.php` al inicio para
 tener disponibles el array `$catalogo` y todas sus funciones.

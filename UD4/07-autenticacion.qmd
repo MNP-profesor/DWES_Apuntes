@@ -1,6 +1,9 @@
 # Autenticación, redirecciones e inclusiones
 
-CE4.a-d.
+::: {.callout-important title="Normativa · RA-CE"}
+- **CE4.a.** — Se han identificado los mecanismos disponibles para el mantenimiento de la información que concierne a un cliente web concreto y se han señalado sus ventajas.
+- **CE4.d.** — Se han identificado y caracterizado los mecanismos disponibles para la autentificación de usuarios.
+:::
 
 ## Mecanismos de autenticación
 

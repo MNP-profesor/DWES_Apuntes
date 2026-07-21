@@ -54,7 +54,7 @@ Libro::updateOrCreate(
 La forma idiomática de empaquetar un ETL en Laravel es un comando de consola:
 
 ```bash
-php artisan make:command ImportarLibros
+docker compose exec web php artisan make:command ImportarLibros
 ```
 
 ```php
@@ -102,7 +102,7 @@ class ImportarLibros extends Command
 La prueba decisiva es ejecutarlo **dos veces**:
 
 ```bash
-php artisan importar:libros php
+docker compose exec web php artisan importar:libros php
 ```
 
 ```text
@@ -110,8 +110,8 @@ php artisan importar:libros php
 ```
 
 ```bash
-php artisan importar:libros php
-php artisan tinker --execute="echo App\Models\Libro::count();"
+docker compose exec web php artisan importar:libros php
+docker compose exec web php artisan tinker --execute="echo App\Models\Libro::count();"
 ```
 
 ```text
@@ -130,7 +130,7 @@ Usar `create()` en lugar de `updateOrCreate()` duplica todo el repositorio en ca
 Los portales de datos abiertos suelen publicar CSV. `league/csv` lee en *streaming* (procesa ficheros enormes sin cargarlos enteros en memoria):
 
 ```bash
-composer require league/csv
+docker compose exec web composer require league/csv
 ```
 
 ```php

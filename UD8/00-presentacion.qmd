@@ -57,9 +57,8 @@ La unidad se organiza en seis bloques que progresan desde el análisis conceptua
 
 ### Recursos y materiales
 
-- XAMPP (Apache + PHP 8.2 o superior) operativo, el mismo entorno empleado desde la UD2.
-- MySQL/MariaDB/PostreSQL/AmazonRDS con la base de datos de prácticas.
-- Proyecto Laravel de la UD7 con la API REST y Sanctum funcionando en local (requisito imprescindible a partir del bloque 3).
+- Servidor local PHP para el frontend de este ejercicio (XAMPP, PHP embebido o Docker).
+- Proyecto Laravel de la UD7 con la API REST y Sanctum funcionando en local vía Docker (requisito imprescindible a partir del bloque 3).
 - Editor Visual Studio Code con las extensiones ya instaladas en unidades anteriores (PHP Intelephense, Live Server).
 - Navegador con herramientas de desarrollo (las pestañas Consola, Red y Elementos serán de uso constante).
 - Postman o Thunder Client para inspeccionar las respuestas de los endpoints antes de consumirlos.
