@@ -1,4 +1,4 @@
-# Eloquent y migraciones (contenido instrumental) {#sec-ud5-eloquent}
+# Eloquent y migraciones (herramienta de apoyo) {#sec-ud5-eloquent}
 
 ::: {.callout-important title="Normativa · RA-CE"}
 Este bloque es **contenido procedimental de apoyo, sin CE propio ni ejercicio evaluable**: el acceso a datos corresponde al RA6 y se estudia a fondo en la UD6 con PDO. Aquí se introduce lo mínimo de Eloquent —el ORM de Laravel, construido internamente sobre PDO— para que el Modelo de MVC sea real y para preparar la UD7.

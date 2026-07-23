@@ -49,7 +49,7 @@ Al terminar la unidad serás capaz de:
 | 3 | Rutas y controladores | CE5.b-c |
 | 4 | Vistas con Blade | CE5.c |
 | 5 | Formularios dinámicos: CSRF, validación y errores | CE5.d |
-| 6 | Eloquent y migraciones (contenido instrumental) | CE5.f |
+| 6 | Eloquent y migraciones (herramienta de apoyo) | CE5.f |
 | 7 | Sesiones y mantenimiento de estado | CE5.f |
 | 8 | Configuración de la aplicación por entornos | CE5.e |
 | 9 | POO aplicada: servicios e inyección de dependencias | CE5.g |

@@ -8,10 +8,10 @@ title: "UD8. Generación dinámica de páginas Web"
 
 Esta unidad cierra el ciclo técnico del módulo integrando las dos mitades del desarrollo web: el código que se ejecuta en el servidor y el que se ejecuta en el navegador. Hasta ahora, todas las aplicaciones construidas siguen el ciclo clásico de petición-respuesta: el navegador solicita una página, el servidor la genera completa y el navegador la sustituye por entero. En esta unidad se aprende a romper ese ciclo cuando conviene, generando páginas que, una vez cargadas, obtienen información remota del servidor y modifican su propio contenido y estructura sin recargarse.
 
-El enfoque tecnológico es continuista con el resto del módulo: PHP nativo como generador de las páginas, JavaScript instrumental (`fetch` y manipulación básica del DOM) como capa de interacción, y como fuente de datos remota tanto endpoints PHP propios como la API REST desarrollada en la unidad anterior con Laravel y Sanctum. De este modo, la API construida en la UD7 deja de ser un artefacto aislado que se prueba con Postman y pasa a alimentar una interfaz web real.
+El enfoque tecnológico es continuista con el resto del módulo: PHP nativo como generador de las páginas, JavaScript básico, limitado a lo imprescindible (`fetch` y manipulación básica del DOM) como capa de interacción, y como fuente de datos remota tanto endpoints PHP propios como la API REST desarrollada en la unidad anterior con Laravel y Sanctum. De este modo, la API construida en la UD7 deja de ser un artefacto aislado que se prueba con Postman y pasa a alimentar una interfaz web real.
 
 ::: {.callout-note title="Concepto clave"}
-El JavaScript empleado en esta unidad tiene carácter instrumental y se limita a lo imprescindible: peticiones `fetch`, tratamiento de JSON y manipulación básica del DOM. El estudio en profundidad del lenguaje JavaScript y sus frameworks corresponde al módulo DWEC, con el que esta unidad se coordina. Aquí el foco permanece en el servidor: qué genera, qué expone y cómo se combina con el cliente.
+El JavaScript empleado en esta unidad se limita a lo imprescindible: peticiones `fetch`, tratamiento de JSON y manipulación básica del DOM. El estudio en profundidad del lenguaje JavaScript y sus frameworks corresponde al módulo DWEC, con el que esta unidad se coordina. Aquí el foco permanece en el servidor: qué genera, qué expone y cómo se combina con el cliente.
 :::
 
 ### Objetivos

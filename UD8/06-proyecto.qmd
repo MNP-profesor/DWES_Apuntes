@@ -27,7 +27,7 @@ El bloque final no introduce técnicas nuevas: exige **aplicarlas juntas**. El p
 ::: {.ejercicio}
 **EJ12 · Proyecto integrador: "Mi cartelera conectada"** — CE8.d, CE8.e, CE8.f, CE8.g
 
-Construye una aplicación web híbrida completa, en PHP nativo más JavaScript instrumental, conectada a tu API de la UD7, que cumpla los cuatro requisitos siguientes:
+Construye una aplicación web híbrida completa, en PHP nativo más JavaScript básico, conectada a tu API de la UD7, que cumpla los cuatro requisitos siguientes:
 
 **R1 — Obtención remota (CE8.d).** La página principal, generada con PHP, carga mediante `fetch` el listado del recurso principal de tu API con autenticación Sanctum, con tratamiento diferenciado de los errores 401 y de red.
 

@@ -23,7 +23,7 @@ Route::get('/suma', fn () => 2 + 2);
 | URL visitada | Respuesta en el navegador |
 |---|---|
 | `/hola` | `Hola Manel` |
-| `/fecha` | `12/07/2026` (la fecha del día) |
+| `/fecha` | `23/07/2026` (la fecha del día) |
 | `/suma` | `4` |
 
 ### Con parámetros
@@ -54,9 +54,10 @@ Route::get('/contactos/{id}', fn (int $id) => "Ficha del contacto $id")
 | `/contactos/3` | `Ficha del contacto 3` |
 | `/contactos/abc` | error 404 — la ruta ni siquiera se ejecuta |
 
-Sin `whereNumber`, `/contactos/abc` entraría en tu código con `"abc"` como id y el error aparecería más tarde y más feo. Restringir en la ruta corta el problema en la puerta.
 
 ### Con nombre (la buena práctica que exigiremos siempre)
+
+ **Restringir en la ruta corta el problema en la "puerta"**. Sin `whereNumber`, `/contactos/abc` entraría en tu código (dentro de tu lógica de negocio) con `"abc"` como id y sería más difícil de rastrear.
 
 ```php
 Route::get('/contactos/{id}', /* ... */)
@@ -64,7 +65,7 @@ Route::get('/contactos/{id}', /* ... */)
      ->name('contactos.show');
 ```
 
-A partir de ahora, cualquier vista genera la URL con `route()` en lugar de escribirla a mano:
+A partir de ahora, cualquier enlace a esta ruta se genera con `route()` en lugar de escribir la URL a mano. Lo verás en las vistas Blade del próximo capítulo, pero `route()` no depende de Blade: es una función de Laravel disponible en cualquier parte de tu código PHP.
 
 ```php
 route('contactos.show', 3)
@@ -139,6 +140,7 @@ Route::get('/contactos/{id}', [ContactoController::class, 'show'])
 Dos detalles del código anterior:
 
 - `view('contactos.index', [...])` busca `resources/views/contactos/index.blade.php` (el punto es el separador de carpetas) y le pasa los datos como variables: en la vista existirá `$contactos`.
+
 - El parámetro `{id}` de la ruta llega como argumento `$id` del método. Laravel los casa por nombre.
 
 Comprobación con `route:list`:
@@ -152,16 +154,24 @@ docker compose exec web php artisan route:list --except-vendor
   GET|HEAD  contactos/{id} ...... contactos.show › ContactoController@show
 ```
 
+::: {.callout-tip title="Filtrado aplicado"}
+`--except-vendor` omite las rutas que registran paquetes de terceros instalados vía Composer, es decir, filtra por el código que has escrito tú.
+:::
+
+::: {.callout-note title="Concepto clave"}
+Si visitas `/contactos` ahora mismo desde el navegador, verás un error `View [contactos.index] not found`. Esto es normal, ya que las vistas Blade se crean en el siguiente capítulo.
+:::
+
 ## Resource controllers: las siete acciones de un CRUD
 
-Para un recurso completo, Laravel genera de una vez las siete acciones convencionales:
+Para un recurso completo, con el siguiente comando **Laravel genera la estructura vacía** de las siete acciones de un CRUD:
 
 ```bash
-docker compose exec web php artisan make:controller ProductoController --resource
+docker compose exec web php artisan make:controller ContactoController --resource
 ```
 
 ```php
-Route::resource('productos', ProductoController::class);
+Route::resource('contactos', ContactoController::class);
 ```
 
 | Método | URI | Acción | Para qué |
@@ -174,11 +184,7 @@ Route::resource('productos', ProductoController::class);
 | PUT/PATCH | `/productos/{id}` | `update` | Guardar la edición |
 | DELETE | `/productos/{id}` | `destroy` | Borrar |
 
-Esta convención es universal en Laravel y será la base de la API REST de la UD7.
-
-::: {.callout-tip title="Analogía Java"}
-En Spring las rutas se declaran con anotaciones sobre el método (`@GetMapping("/contactos/{id}")` + `@PathVariable`). En Laravel viven **centralizadas en un fichero de rutas**: para saber todas las URLs de la aplicación no hay que rastrear anotaciones por el proyecto, basta abrir `web.php` o ejecutar `route:list`.
-:::
+**Esta convención es universal en Laravel y será la base de la API REST de la UD7.**
 
 ::: {.callout-warning title="Errores frecuentes"}
 - Escribir URLs a mano en las vistas (`/contactos/3`) en lugar de `route('contactos.show', 3)`.

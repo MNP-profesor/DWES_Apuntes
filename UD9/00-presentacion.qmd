@@ -55,7 +55,7 @@ Los ejercicios de proyecto encadenan sobre una misma aplicación: la fuente que 
 
 - Docker (obligatorio desde esta unidad — ver @sec-ud5-instalacion)
 - MySQL/MariaDB (vía el servicio `db` del `docker-compose.yml`, no instalación aparte)
-- PHP 8.2+, Composer y tu proyecto Laravel 12.x de las unidades anteriores (o uno nuevo).
+- PHP 8.2+, Composer y tu proyecto Laravel 13.x de las unidades anteriores (o uno nuevo).
 - MySQL/MariaDB/PostreSQL/AmazonRDS con la base de datos de prácticas.
 - Visual Studio Code con las extensiones de PHP y Laravel ya instaladas.
 - Navegador con herramientas de desarrollador.

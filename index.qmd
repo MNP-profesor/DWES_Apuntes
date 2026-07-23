@@ -9,7 +9,7 @@ Bienvenido/a a los apuntes del módulo **Desarrollo Web en Entorno Servidor** (D
 | **Duración** | 200 horas (6 h/semana) |
 | **Equivalencia** | 12 créditos ECTS |
 | **Lenguaje principal** | PHP 8.2+ |
-| **Framework** | Laravel 12.x |
+| **Framework** | Laravel 13.x |
 | **Acceso a datos** | PDO |
 
 : Ficha del módulo {tbl-colwidths="[30,70]"}

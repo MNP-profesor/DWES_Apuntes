@@ -30,7 +30,7 @@ En esta unidad das el salto a la Programación Orientada a Objetos en PHP y la u
 | CE4.e | Se han escrito aplicaciones que integren mecanismos de autentificación de usuarios. |
 | CE4.f | Se han utilizado herramientas y entornos para facilitar la programación, prueba y depuración del código. |
 
-El bloque de POO (capítulos 1-4) no tiene un CE propio: es la base instrumental sin la que no se puede escribir con garantías el código de CE4.e.
+El bloque de POO (capítulos 1-4) no tiene un CE propio: es la base necesaria sin la que no se puede escribir con garantías el código de CE4.e.
 
 ### Contenidos
 
