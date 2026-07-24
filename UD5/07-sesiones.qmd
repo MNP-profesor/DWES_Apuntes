@@ -4,7 +4,7 @@
 Este bloque trabaja **CE5.f**: aplicaciones web con mantenimiento de estado y separación de la lógica de negocio.
 :::
 
-HTTP no recuerda nada entre peticiones. En la UD4 mantuviste estado a mano con `session_start()` y `$_SESSION`; Laravel eleva el nivel: la sesión ya está abierta en cada petición y se accede con una interfaz única.
+HTTP no recuerda nada entre peticiones. En la UD4 mantuviste el estado a mano con `session_start()` y `$_SESSION`; con Laravel es muy distinto, ya que la sesión ya está abierta en cada petición y se accede con una interfaz única.
 
 ## La API de sesión, con ejemplos
 
@@ -46,9 +46,9 @@ El estado vive **en el servidor**; el navegador solo transporta la cookie de ses
 
 ## Ejemplo completo: favoritos en la agenda
 
-Caso de uso real: marcar contactos como favoritos, con la marca persistiendo entre peticiones **en sesión** (no en base de datos: es una preferencia del visitante, no un dato del contacto).
+Vamos a marcar contactos como favoritos, logrando que los marcados persistan durante las peticiones **en sesión** *(no en base de datos: es una preferencia del visitante, no un dato del contacto)*.
 
-**Rutas:**
+Añadimos las **Rutas** nuevas:
 
 ```php
 Route::post('/favoritos/{id}', [ContactoController::class, 'toggleFavorito'])
@@ -61,7 +61,7 @@ Route::post('/favoritos-vaciar', [ContactoController::class, 'vaciarFavoritos'])
      ->name('favoritos.vaciar');
 ```
 
-**Controlador:**
+Añadimos al **Controlador** las funciones necesarias:
 
 ```php
 /**
@@ -104,29 +104,71 @@ public function vaciarFavoritos(Request $request)
 }
 ```
 
-**Botón en el listado** (dentro del `@foreach`):
+Añadir **botón en el listado** (dentro del `@foreach`):
 
 ```php
+{{-- resources/views/contactos/index.blade.php --}}
+...
 <form method="POST" action="{{ route('favoritos.toggle', $c->id) }}">
     @csrf
     <button type="submit">
         {{ in_array($c->id, session('favoritos', [])) ? '★ Quitar' : '☆ Favorito' }}
     </button>
 </form>
+...
 ```
 
-**Contador global en el layout** (visible en toda la aplicación):
+Dentro del **`<nav>` del layout** añadimos el **contador global** (que será visible en toda la aplicación):
 
 ```php
+{{-- resources/views/components/layout.blade.php --}}
+...
 <nav>
-    <a href="{{ route('contactos.index') }}">Contactos</a> ·
+    <a href="{{ route('contactos.index') }}">Contactos</a> |
+    <a href="{{ route('acerca') }}">Acerca de</a> |
+
+    <!-- Nuevo: Contador global de favoritos -->
     <a href="{{ route('favoritos.index') }}">
         Favoritos ({{ count(session('favoritos', [])) }})
     </a>
 </nav>
+...
 ```
 
-Secuencia de uso y lo que se ve:
+Creamos **la vista utilizada en el listado**:
+
+```php
+{{-- resources/views/contactos/favoritos.blade.php --}}
+<x-layout titulo="Favoritos">
+    <h1>Favoritos ({{ count($contactos) }})</h1>
+
+    @if ($contactos->isEmpty())
+        <p>No tienes contactos favoritos todavía.</p>
+    @else
+        <form method="POST" action="{{ route('favoritos.vaciar') }}">
+            @csrf
+            <button type="submit">Vaciar favoritos</button>
+        </form>
+
+        @foreach ($contactos as $c)
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                <x-tarjeta :id="$c->id" :nombre="$c->nombre" :tlf="$c->tlf" />
+
+                <form method="POST" action="{{ route('favoritos.toggle', $c->id) }}">
+                    @csrf
+                    <button type="submit">★ Quitar</button>
+                </form>
+            </div>
+        @endforeach
+    @endif
+
+    <p><a href="{{ route('contactos.index') }}">← Volver al listado</a></p>
+</x-layout>
+```
+
+Fíjate en `$contactos->isEmpty()` en vez de `empty($contactos)`: `favoritos()` devuelve una `Collection` de Eloquent, no un array plano, así que el método correcto para comprobar si está vacía es el de la propia colección.
+
+### Comprobaciones
 
 | Acción | Resultado en pantalla |
 |---|---|

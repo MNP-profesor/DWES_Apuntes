@@ -4,11 +4,11 @@
 Este bloque trabaja **CE5.e**: identificar y aplicar los parámetros de configuración de la aplicación web.
 :::
 
-Tu agenda va a ejecutarse en tres sitios: tu portátil, el servidor de pruebas del centro y (algún día) producción. El código es **idéntico** en los tres; lo que cambia es la configuración.
+Imagina que tu agenda va a ejecutarse en tres sitios: tu portátil, el servidor de pruebas del centro y (en algún momento) producción. El código es **idéntico** en los tres; lo que cambia es la configuración.
 
 ## La cadena completa: `.env` → `config/` → `config()`
 
-Ya la usaste en @sec-ud5-instalacion; ahora la explotamos entera.
+Ya la usaste en @sec-ud5-instalacion; ahora la utilizamos completa.
 
 ```bash
 # .env — desarrollo               # .env — producción
@@ -17,7 +17,7 @@ APP_DEBUG=true                    APP_DEBUG=false
 SESSION_DRIVER=file               SESSION_DRIVER=database
 ```
 
-Mismo proyecto, comportamiento distinto según la máquina. Nada de esto requiere tocar código.
+Siendo un **mismo proyecto** → **comportamiento distinto según la máquina**. Nada de esto requiere tocar código.
 
 ## `APP_DEBUG`: el parámetro crítico
 
@@ -60,25 +60,61 @@ return [
     'favoritos'  => env('AGENDA_FAVORITOS', true),
 ];
 ```
+En el `.env` añade:
 
 ```bash
 # .env
 AGENDA_POR_PAGINA=5
-AGENDA_CENTRO="IES del Grau"
+AGENDA_CENTRO="IES Enric Valor"
 AGENDA_FAVORITOS=true
 ```
 
 Y se consume desde cualquier punto de la aplicación con `config('agenda.clave')`:
 
-```php
-// En el controlador: paginación del listado
-$contactos = Contacto::orderBy('nombre')
-    ->paginate(config('agenda.por_pagina'));
-```
+Vamos a modificar el controlador `ContactoController.php` para añadir la paginación:
 
 ```php
-{{-- En el layout: pie y menú condicional --}}
-<footer>{{ config('agenda.centro') }} · 2º DAW</footer>
+public function index(Request $request)
+{
+    $q = $request->query('q', '');
+
+    $contactos = Contacto::when($q !== '', fn ($query) =>
+            $query->where('nombre', 'like', "%$q%"))
+        ->orderBy('nombre')
+        //->get(); // Muestra todo -> Se comenta
+        ->paginate(config('agenda.por_pagina')); // Paginación -> NEW!
+    
+    return view('contactos.index', compact('contactos', 'q'));
+}
+```
+
+::: {.callout-note title="Información"}
+`paginate()` no pinta ningún control de navegación por sí solo. Hay que añadirlo en la vista, al final del listado:
+:::
+
+```php
+{{-- resources/views/contactos/index.blade.php, después del @foreach --}}
+{{ $contactos->links() }}
+```
+
+Y como `$contactos` ya no es un array sino un paginador, la comprobación de "está vacío" cambia de:
+
+```php
+@if empty($contactos) ...
+```
+a
+```php
+@if ($contactos->isEmpty()) ...
+```
+
+Luego, en el **layout** realizamos los otros dos cambios:
+
+- Modificar el `footer` del layout para añadir el parámetro del centro.
+- Condicionar el enlace de favoritos para que aparezca solo si el parámetro es `AGENDA_FAVORITOS=true`.
+
+```php
+{{-- resources/views/components/layout.blade.php --}}
+<footer>2º DAW | DWES | {{ config('agenda.centro') }}</footer>
 
 @if (config('agenda.favoritos'))
     <a href="{{ route('favoritos.index') }}">
@@ -97,7 +133,25 @@ Efecto de cada cambio en `.env` (tras reiniciar el servidor):
 | *(quitar la línea)* | Se aplican los valores por defecto del fichero `config/` |
 
 ::: {.callout-note title="Concepto clave"}
-Un parámetro bien diseñado tiene **tres niveles**: valor por defecto razonable en `config/` (el proyecto funciona recién clonado), valor por máquina en `.env`, y lectura única en el código con `config()`. Si te encuentras un número mágico repetido por el código (elementos por página, nombre del centro…), probablemente debería ser configuración.
+Un parámetro bien diseñado tiene **tres niveles**, cada uno con un papel distinto:
+
+- **Nivel 1 — valor por defecto, en `config/agenda.php`:**
+```php
+'por_pagina' => env('AGENDA_POR_PAGINA', 10),
+```
+Es la red de seguridad: si el proyecto se clona y el `.env` todavía no tiene esta variable, la aplicación sigue funcionando con 10, en vez de romperse.
+
+- **Nivel 2 — valor real, en `.env`:**
+```
+AGENDA_POR_PAGINA=5
+```
+Aquí decides el valor de verdad para tu máquina o entorno concreto. Como `.env` no se sube a Git, cada entorno puede tener el suyo sin pisarse.
+
+- **Nivel 3 — lectura, en el código, con `config()`:**
+```php
+->paginate(config('agenda.por_pagina'));
+```
+Nunca se escribe el valor directamente en el controlador ni en la vista — siempre se pregunta a través de `config()`, así que un cambio en `.env` se aplica automáticamente en todos los puntos del código que lo consultan.
 :::
 
 ## Configuración en producción: la caché
