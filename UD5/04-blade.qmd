@@ -344,13 +344,13 @@ En tu proyecto `prestamos`, construye el catálogo de equipos del centro (portá
 
 2. Define las rutas con nombre (`equipos.index`, `equipos.show`) y enlaza listado y ficha exclusivamente con `route()`.
 
-3. Crea el componente `<x-layout>` de la aplicación (cabecera, menú: Catálogo, Mi solicitud, Acerca de; pie) y un componente `<x-equipo>` que reciba las props del equipo y muestre de forma visualmente distinta los disponibles y los prestados.
+3. Crea el componente `<x-layout>` de la aplicación (cabecera, menú: Catálogo, Mi solicitud, Acerca de; y pie). Además, un componente `<x-equipo>` que reciba las `props` del equipo y muestre de forma visualmente distinta los disponibles y los prestados.
 
-4. En el listado, usa `$loop` para numerar los equipos y al menos otra directiva de control justificada (por ejemplo, `@empty` para el catálogo vacío o un `@if` que rotule cada categoría).
+4. En el listado, usa `$loop` para numerar los equipos y al menos otra directiva de control justificada (por ejemplo, `@empty` para el catálogo vacío o un `@if` que imprima cada categoría).
 
 5. Demuestra el escapado automático: añade un equipo cuyo nombre sea `<script>alert(1)</script>`, comprueba que no se ejecuta y localiza en el código fuente de la página las entidades `&lt;script&gt;`. Adjunta captura.
 
-6. PHPDoc en los métodos del controlador, comentarios en los componentes explicando cada prop, y captura de `php artisan route:list`.
+6. Utiliza PHPDoc en los métodos del controlador `EquipoController` para incluir comentarios en los componentes explicando cada prop. Adjunta captura de `php artisan route:list`.
 
 ::: {.callout-note title="Información"}
 El ejercicio estará correcto si funciona el catálogo con rutas con nombre y restricción, `<x-equipo>` distinguiendo estados, caso "equipo inexistente" cubierto, demo anti-XSS y documentación presentes.*

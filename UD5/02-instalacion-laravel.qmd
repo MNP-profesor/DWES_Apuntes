@@ -116,7 +116,18 @@ services:
       - "3306:3306"
     # Expone MySQL también en tu máquina (puerto estándar 3306), por si
     # quieres conectarte con un cliente externo (DBeaver, MySQL Workbench...)
-    # además de desde el propio contenedor 'web'.      
+    # además de desde el propio contenedor 'web'.  
+
+    volumes:
+      - agenda_db_data:/var/lib/mysql
+      # Volumen NOMBRADO, no anónimo: sin esta línea, MySQL crea uno
+      # anónimo por su cuenta que no siempre se reutiliza entre
+      # 'docker compose down'/'up' — es fácil perder los datos sin
+      # querer. Nombrarlo aquí lo hace estable y localizable con
+      # 'docker volume ls'.
+
+volumes:
+  agenda_db_data:        
 ```
 
 ::: {.callout-note title="Concepto clave"}
@@ -125,7 +136,7 @@ Para los **ejercicios** de esta unidad (EJ1-EJ6), crea un segundo proyecto apart
 docker run --rm -v "${PWD}:/app" composer create-project laravel/laravel prestamos
 cd prestamos
 ```
-y en su `docker-compose.yml`: `name: ud5-ej6-prestamo-equipos`, `DB_DATABASE=prestamos` (en los dos sitios donde aparece: `environment` del servicio `web` y del servicio `db`). No mezcles los dos proyectos — la agenda es solo para reproducir los ejemplos de teoría, nunca se entrega.
+y en su `docker-compose.yml`: `name: ud5-ej6-prestamo-equipos`, `DB_DATABASE=prestamos` (en los dos sitios donde aparece: `environment` del servicio `web` y del servicio `db`), y en el volumen nombrado: `prestamos_db_data` en vez de `agenda_db_data` (tanto en `volumes:` de `db` como en el bloque final `volumes:` del fichero). No mezcles los dos proyectos — la agenda es solo para reproducir los ejemplos de teoría, nunca se entrega.
 :::
 
 Arranca y termina la instalación **dentro** del contenedor:

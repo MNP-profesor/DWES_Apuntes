@@ -120,12 +120,19 @@ Desde ese momento `.env` **deja de leerse** en cada petición: si cambias algo, 
 Los profesores preparan su solicitud añadiendo equipos a una cesta ("Mi solicitud") antes de confirmarla. La cesta vive **en sesión**, y sus límites son **configuración del centro**.
 
 1. Implementa la cesta en sesión: desde el catálogo, cada equipo disponible puede añadirse o quitarse de "Mi solicitud" (POST con `@csrf`). Un equipo no disponible no debe poder añadirse.
-2. Crea la página `GET /solicitud` con la vista de la cesta, un contador visible en el menú del layout en toda la aplicación y un botón "Vaciar solicitud" con confirmación por mensaje flash.
+
+2. Crea la página `GET /solicitud` con la vista de la cesta, un contador visible en el menú del layout en toda la aplicación y un botón "Vaciar solicitud" con confirmación por mensaje flash. **El nombre del controlador es decisión tuya**, aunque `SolicitudController` es la opción natural, pero cualquier nombre coherente es válido; lo usarás también en EJ5.
+
 3. Crea `config/prestamos.php` con al menos tres parámetros alimentados desde `.env` y con valores por defecto: `max_equipos` (equipos máximos por solicitud), `dias_max` (duración máxima del préstamo) y `departamento` (nombre para el pie del layout).
+
 4. Conecta configuración y estado: si la cesta ya tiene `config('prestamos.max_equipos')` equipos, el intento de añadir otro debe rechazarse con un mensaje flash de error. Integra también `dias_max` en la validación de la fecha de EJ3 (la fecha de devolución no puede superar hoy + `dias_max`).
-5. Redacta un breve informe (5–10 líneas): qué viaja en la cookie del navegador, dónde reside la cesta, y por qué el límite de equipos es configuración y no una constante en el código.
+
+5. En la propia entrega, responde a estas preguntas:
+a) ¿Qué viaja en la cookie del navegador?
+b) ¿Dónde reside la cesta?
+c) ¿Por qué el límite de equipos es configuración y no una constante en el código?
 
 ::: {.callout-note title="Información"}
-El ejercicio estará correcto con la implementación de la cesta completa (añadir, quitar, listar, vaciar) respetando disponibilidad y límite configurable, contador global correcto, `dias_max` integrado en la validación e informe entregado.
+El ejercicio estará correcto con la implementación de la cesta completa (añadir, quitar, listar, vaciar) respetando disponibilidad y límite configurable, contador global correcto, `dias_max` integrado en la validación y preguntas del punto 5 bien respondidas.
 :::
 :::

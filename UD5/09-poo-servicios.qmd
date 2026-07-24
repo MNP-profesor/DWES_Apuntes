@@ -136,12 +136,16 @@ Tu aplicación necesita reglas que ningún ejemplo de la teoría resuelve. Disé
 
 1. Crea `app/Services/DisponibilidadService.php` con, al menos, estos tres métodos (las firmas son orientativas; decide tú las estructuras de datos):
    - `puedeAnadirse(int $equipoId, array $cesta): bool` — el equipo está disponible, no está ya en la cesta y no se supera `config('prestamos.max_equipos')`.
-   - `fechaLimite(): string` — fecha máxima de devolución: hoy + `config('prestamos.dias_max')` días **contando solo lunes a viernes** (los fines de semana no consumen días de préstamo). Este cálculo es el corazón del ejercicio: piénsalo antes de programarlo.
-   - `validaDevolucion(string $fecha): bool` — la fecha propuesta es futura y no supera `fechaLimite()`.
-2. Refactoriza los controladores de EJ3 y EJ4 para que **toda** esa lógica pase por el servicio inyectado (nada de `new`, y ningún cálculo de fechas ni comprobación de límites en el controlador).
-3. Justifica por escrito qué principio mejora cada extracción y qué patrón interviene en cada pieza (MVC, inyección de dependencias, responsabilidad única).
-4. Demuestra la sustituibilidad: crea `DisponibilidadConFestivosService`, que además descuente los festivos definidos en `config('prestamos.festivos')` (array de fechas), y actívala con un binding en el contenedor **sin tocar ningún controlador**. Documenta el antes/después de `fechaLimite()` con un festivo dentro del plazo.
 
+   - `fechaLimite(): string` — fecha máxima de devolución: hoy + `config('prestamos.dias_max')` días **contando solo lunes a viernes** (los fines de semana no consumen días de préstamo). Este cálculo es el corazón del ejercicio: piénsalo antes de programarlo.
+
+   - `validaDevolucion(string $fecha): bool` — la fecha propuesta es futura y no supera `fechaLimite()`.
+
+2. Refactoriza los controladores de EJ3 y EJ4 para que **toda** esa lógica pase por el servicio inyectado (nada de `new`, y ningún cálculo de fechas ni comprobación de límites en el controlador).
+
+3. Justifica por escrito qué principio mejora cada extracción y qué patrón interviene en cada pieza (MVC, inyección de dependencias, responsabilidad única).
+
+4. Demuestra la sustituibilidad: crea `DisponibilidadConFestivosService`, que además descuente los festivos definidos en `config('prestamos.festivos')` (array de fechas), y actívala con un binding en el contenedor **sin tocar ningún controlador**. Documenta el antes/después de `fechaLimite()` con un festivo dentro del plazo.
 
 ::: {.callout-note title="Información"}
 El ejercicio estará correcto si los tres métodos están correctos (incluido el salto de fines de semana, verificado con un caso que cruce un fin de semana), controladores sin lógica y binding alternativo demostrado.

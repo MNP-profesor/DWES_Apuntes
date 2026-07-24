@@ -1,14 +1,14 @@
 # Eloquent y migraciones (herramienta de apoyo) {#sec-ud5-eloquent}
 
 ::: {.callout-important title="Normativa · RA-CE"}
-Este bloque es **contenido procedimental de apoyo, sin CE propio ni ejercicio evaluable**: el acceso a datos corresponde al RA6 y se estudia a fondo en la UD6 con PDO. Aquí se introduce lo mínimo de Eloquent —el ORM de Laravel, construido internamente sobre PDO— para que el Modelo de MVC sea real y para preparar la UD7.
+Este bloque es **contenido procedimental de apoyo, sin CE propio ni ejercicio evaluable**: el acceso a datos corresponde al RA6 y se estudia a fondo en la UD6 con PDO. Aquí se introduce lo mínimo de Eloquent (el ORM de Laravel, construido internamente sobre PDO) para que el Modelo de MVC sea real y para preparar la UD7.
 :::
 
-Hasta ahora la agenda vive en un array del controlador: se borra en cada petición. Toca darle un **Modelo** de verdad.
+Hasta ahora la agenda vive en un array del controlador: se borra en cada petición. Vamos a implementarla en un **Modelo** de verdad.
 
 ## Migraciones: el esquema como código
 
-Una migración es un fichero PHP que describe una tabla. Generamos modelo y migración de una vez:
+Una migración es un fichero PHP que describe una tabla. Con el siguiente comando generamos modelo y migración de una vez:
 
 ```bash
 docker compose exec web php artisan make:model Contacto -m
@@ -16,10 +16,10 @@ docker compose exec web php artisan make:model Contacto -m
 
 ```
    INFO  Model [app/Models/Contacto.php] created successfully.
-   INFO  Migration [database/migrations/2026_07_12_101530_create_contactos_table.php] created successfully.
+   INFO  Migration [database/migrations/2026_07_24_092724_create_contactos_table.php] created successfully.
 ```
 
-Editamos la migración para definir las columnas:
+1. Editamos la migración creada para definir las columnas.
 
 ```php
 // database/migrations/xxxx_create_contactos_table.php
@@ -35,7 +35,7 @@ public function up(): void
 }
 ```
 
-Y la ejecutamos:
+2. Ejecutamos la migración.
 
 ```bash
 docker compose exec web php artisan migrate
@@ -43,11 +43,10 @@ docker compose exec web php artisan migrate
 
 ```
    INFO  Running migrations.
-
-  2026_07_12_101530_create_contactos_table ................ 12.34ms DONE
+  2026_07_24_092724_create_contactos_table .................. 168.51ms DONE
 ```
 
-La tabla `contactos` ya existe, con `id`, las tres columnas y `created_at`/`updated_at` (eso son los `timestamps()`). El esquema queda **versionado junto al código**: cualquier compañero reproduce tu base de datos con un solo comando.
+Laravel recorre `database/migrations/`, detecta qué migraciones no se han ejecutado todavía (lo controla con una tabla propia, `migrations`) y las aplica en orden — por eso el nombre de cada fichero empieza por una fecha. `DONE` confirma que la tabla `contactos` ya existe, con las columnas que definiste más dos que añade `timestamps()`: `created_at` y `updated_at`, que Eloquent rellena solo al crear o modificar un registro.
 
 ::: {.callout-note title="Concepto clave"}
 Proyecto recién clonado → base de datos lista en dos comandos: `php artisan migrate` crea todas las tablas pendientes. Nunca más un "pásame el .sql".
@@ -55,7 +54,7 @@ Proyecto recién clonado → base de datos lista en dos comandos: `php artisan m
 
 ## Eloquent: cada modelo es una tabla, cada objeto una fila
 
-El modelo generado necesita una línea para permitir el alta masiva con `create()`:
+El modelo `Contacto` generado necesita una línea para permitir el alta masiva con `create()`:
 
 ```php
 <?php // app/Models/Contacto.php
@@ -71,7 +70,15 @@ class Contacto extends Model
 }
 ```
 
-Con eso, el CRUD completo. Pruébalo en la consola interactiva `php artisan tinker`:
+### Consultas desde la consola interactiva `php artisan tinker`
+
+Ejecuta el siguiente comando (`exit` para salir):
+
+```bash
+docker compose exec web php artisan tinker
+```
+
+Introduce:
 
 ```php
 use App\Models\Contacto;
@@ -80,6 +87,7 @@ Contacto::create(['nombre' => 'Aitana', 'tlf' => '600111222']);
 Contacto::create(['nombre' => 'Marc',   'tlf' => '600333444']);
 
 Contacto::count();
+Contacto::all();
 ```
 
 ```
@@ -103,15 +111,68 @@ Las operaciones equivalen a SQL que Eloquent escribe por ti:
 
 ```php
 $contactos = Contacto::orderBy('nombre')->get(); // SELECT * FROM contactos ORDER BY nombre
-$c = Contacto::findOrFail($id);                  // SELECT ... WHERE id = ? (404 si no existe)
+$c = Contacto::findOrFail($id);                  // SELECT ... WHERE id = ? (404 si no existe, en un controlador)
 Contacto::create($datos);                        // INSERT INTO contactos ...
 $c->delete();                                    // DELETE FROM contactos WHERE id = ?
 ```
 
+Si queremos que aparezca toda la información:
+
+```php
+Contacto::all();
+```
+```
+= Illuminate\Database\Eloquent\Collection {#8140
+    all: [
+      App\Models\Contacto {#8138
+        id: 1,
+        nombre: "Aitana",
+        tlf: "600111222",
+        email: null,
+        created_at: "2026-07-24 09:43:39",
+        updated_at: "2026-07-24 09:43:39",
+      },
+      App\Models\Contacto {#8137
+        id: 2,
+        nombre: "Marc",
+        tlf: "600333444",
+        email: null,
+        created_at: "2026-07-24 09:43:39",
+        updated_at: "2026-07-24 09:43:39",
+      },
+    ],
+  }
+```
+
+### Comprobación consultando directamente la base de datos `MySQL`
+
+Entramos en una sesión de MySQL interactiva dentro del contenedor:
+
+```bash
+docker compose exec db mysql -uroot -proot agenda
+```
+
+Ejecutamos cualquier consulta:
+
+```sql
+SELECT * FROM contactos;
+```
+```
++----+--------+-----------+-------+---------------------+---------------------+
+| id | nombre | tlf       | email | created_at          | updated_at          |
++----+--------+-----------+-------+---------------------+---------------------+
+|  1 | Aitana | 600111222 | NULL  | 2026-07-24 09:43:39 | 2026-07-24 09:43:39 |
+|  2 | Marc   | 600333444 | NULL  | 2026-07-24 09:43:39 | 2026-07-24 09:43:39 |
++----+--------+-----------+-------+---------------------+---------------------+
+2 rows in set (0.00 sec)
+```
+
 ::: {.callout-warning title="Errores frecuentes"}
 - `create()` lanza `MassAssignmentException`: falta el `$fillable` en el modelo. Es una protección, no un capricho: evita que un atacante inyecte campos que no estaban en tu formulario.
+
 - Nombre de tabla: Eloquent asume el plural del modelo (`Contacto` → `contactos`). Si tu tabla se llama distinto, decláralo con `protected $table = 'mi_tabla';`.
-- Ejecutar `migrate` sin base de datos configurada en `.env`. Con SQLite basta `DB_CONNECTION=sqlite` y crear el fichero `database/database.sqlite`.
+
+- Ejecutar `migrate` con el contenedor `db` todavía no disponible, o con credenciales que no coincidan con las del `docker-compose.yml` (`DB_HOST=db`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`). Si `migrate` falla con un error de conexión, comprueba primero `docker compose ps` (puede que `db` no haya terminado de arrancar todavía).
 :::
 
 ## Práctica guiada (no evaluable): la agenda con Modelo real
@@ -129,6 +190,14 @@ public function index(Request $request)
 {
     $q = $request->query('q', '');
 
+    // Código anterior
+    /*$contactos = collect($this->contactos)
+        ->when($q !== '', fn ($col) =>
+            $col->filter(fn ($c) =>
+                str_contains(mb_strtolower($c['nombre']), mb_strtolower($q))))
+        ->all();*/
+
+    // Modificación a realizar
     $contactos = Contacto::when($q !== '', fn ($query) =>
             $query->where('nombre', 'like', "%$q%"))
         ->orderBy('nombre')
@@ -139,27 +208,76 @@ public function index(Request $request)
 
 public function show(int $id)
 {
+    // Código anterior
+    //$contacto = $this->contactos[$id] ?? null;
+    //return view('contactos.show', ['contacto' => $contacto, 'id' => $id]);
+
+    // Modificación a realizar
     $contacto = Contacto::find($id);   // null si no existe
-    return view('contactos.show', compact('contacto', 'id'));
+    return view('contactos.show', compact('contacto', 'id'));    
 }
 
 public function store(Request $request)
 {
-    $datos = $request->validate([ /* las mismas reglas de EJ5 */ ]);
+    $datos = $request->validate([ /* las mismas reglas de 'Paso 3: el controlador que valida' */ ]);
 
-    Contacto::create($datos);          // sustituye al guardado en sesión
+    // Guardado en sesión (código anterior)
+    /*$agenda = session('agenda', []);
+    $agenda[] = $datos;
+    session(['agenda' => $agenda]);*/
+
+    // Guardado en sesión (modificación a realizar)
+    Contacto::create($datos);        
 
     return redirect()->route('contactos.index')
                      ->with('exito', 'Contacto creado correctamente');
 }
 ```
 
-3. Ajuste mínimo en las vistas: donde antes accedías como array (`$c['nombre']`), ahora es un objeto (`$c->nombre` y `$c->id`).
+3. Realiza los ajustes necesarios en las vistas: Por ejemplo, cuando antes accedías como array (`$c['nombre']`), ahora es un objeto (`$c->nombre`). Idem para el `tlf` y el `id`.
 
-**4.** Comprueba: listado, búsqueda, ficha y alta funcionan igual… pero ahora los contactos **sobreviven** al reinicio del servidor.
+4. Comprueba que el listado, búsqueda, tarjeta (ficha) y alta siguen funcionando igual. Verifica ahora que los contactos **persisten** al reinicio del servidor. Esa es la evidencia definitiva de que Modelo, Vista y Controlador están de verdad separados.
 
 ```bash
 docker compose restart web   # reinicia; los contactos siguen ahí
 ```
 
-Esa es la evidencia definitiva de que Modelo, Vista y Controlador están de verdad separados.
+::: {.callout-warning title="Posibles problemas"}
+- Las variables de entorno que ve el contenedor no son las correctas. Para asegurarte, ejecuta el siguiente comando y compáralas con las de tu `docker-compose.yml`:
+
+```bash
+docker compose exec web env | grep DB_
+```
+
+Si no coinciden, para el contenedor y vuelve a arrancarlo (los cambios en `environment:` del compose no se aplican a un contenedor que ya está en marcha):
+
+```bash
+docker compose down
+docker compose up -d
+```
+
+- Revisa el fichero `.env` para asegurar que `DB_CONNECTION` es `mysql`. Si tras modificarlo el problema persiste, limpia la caché de configuración:
+
+```bash
+docker compose exec web php artisan config:clear
+```
+
+Si `config:clear` no basta, borra la caché a mano:
+
+```bash
+docker compose exec web rm bootstrap/cache/config.php
+```
+
+Si sigue sin funcionar, vuelve a modificar el `.env` para descomentar y establecer explícitamente estas variables:
+
+```bash
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=agenda
+DB_USERNAME=root
+DB_PASSWORD=root
+```
+
+- Si el problema **reaparece** tras reiniciar el equipo o tras varios `docker compose down`/`up`, comprueba que `db` tiene un volumen **nombrado**, no anónimo, en el `docker-compose.yml` (ver la nota de la sección anterior sobre `agenda_db_data`). Sin volumen nombrado, los datos no sobreviven de forma fiable entre reinicios.
+:::

@@ -43,19 +43,29 @@ Dos rutas, dos eventos: **mostrar** el formulario (GET) y **procesarlo** (POST).
 
 Tres piezas nuevas:
 
-- `@csrf` genera un campo oculto con un token único de tu sesión. HTML resultante:
+- `@csrf` genera un campo oculto con un token único de tu sesión. El HTML resultante sería el siguiente:
 
   ```html
   <input type="hidden" name="_token" value="8fKz3...token largo...pQ2w">
   ```
 
 - `old('nombre')` repuebla el campo con lo que el usuario escribió si la validación falla.
+
 - `@error('nombre')` muestra el mensaje de error de ese campo, si lo hay.
 
 ## Paso 3: el controlador que valida
 
 ```php
+// app/Http/Controllers/ContactoController.php
 use Illuminate\Http\Request;
+
+/**
+ * Muestra el formulario de alta.
+ */
+public function create()
+{
+    return view('contactos.create');
+}
 
 /**
  * Valida y registra un contacto nuevo.
@@ -157,17 +167,42 @@ $request->validate([
 
 Este circuito (POST → redirección → GET) es el patrón **Post/Redirect/Get**: como después del POST hay una redirección, pulsar F5 en el listado no reenvía el formulario. Compruébalo: tras crear un contacto, refresca; el navegador no pregunta "¿reenviar datos?".
 
-## Un segundo formulario: búsqueda (GET)
+## Un segundo formulario: BÚSQUEDA (GET)
+
+### Modificar la vista `index.blade.php`
 
 Los formularios también responden al evento *buscar*. Este va por GET porque no modifica nada:
 
 ```php
-{{-- en el listado --}}
+{{-- resources/views/contactos/index.blade.php, justo arriba del listado --}}
 <form method="GET" action="{{ route('contactos.index') }}">
     <input type="text" name="q" value="{{ $q }}" placeholder="Buscar por nombre">
     <button type="submit">Buscar</button>
 </form>
 ```
+
+Aprovecha para añadir también el enlace al alta, ya que las rutas y el controlador de "Paso 1-3" ya están listos:
+
+```php
+<p><a href="{{ route('contactos.create') }}">+ Nuevo contacto</a></p>
+```
+
+### Modificar la función `index` del `ContactoController`.
+
+**Versión inicial:**
+
+```php
+public function index()
+{
+    return view('contactos.index', ['contactos' => $this->contactos]);
+}
+```
+
+**Versión modificada, a tener en cuenta que:**
+
+1. Ahora recibe Request $request como parámetro (antes no tenía ninguno).
+
+2. Ahora hace `compact('contactos', 'q')` en vez de `['contactos' => $this->contactos]`. Así la vista recibe también `$q` (necesaria para el `value="{{ $q }}`" del formulario, que mantiene escrito lo buscado tras enviar).
 
 ```php
 public function index(Request $request)
@@ -203,16 +238,21 @@ El término buscado se conserva en el campo gracias a `value="{{ $q }}"`. Un for
 
 Añade a tu aplicación el formulario de **solicitud de préstamo** de un equipo. Las reglas son de negocio real, no de manual: tendrás que combinar reglas de validación que no aparecen juntas en los ejemplos.
 
-1. Ciclo completo: formulario (`GET /prestamos/create`), procesado (`POST /prestamos`) y redirección al catálogo con mensaje flash de éxito visible en el layout.
+1. Ciclo completo: formulario (`GET /prestamos/create`), procesado (`POST /prestamos`) y redirección al catálogo con mensaje flash de éxito visible en el layout. **El nombre del controlador es decisión tuya**, aunque `PrestamoController` es la opción natural dado el prefijo de ruta, pero cualquier nombre coherente es válido.
+
 2. Campos y reglas mínimas:
    - `equipo_id`: obligatorio y perteneciente a la lista de ids del catálogo (regla `in:`).
    - `email`: obligatorio y **corporativo del centro** (termina en el dominio del instituto; expresión regular).
    - `fecha_devolucion`: obligatoria, con formato de fecha y **posterior a hoy**.
    - `motivo`: opcional, pero si se envía, entre 10 y 200 caracteres.
+
 3. Personaliza al menos **tres mensajes** de error en castellano, incluido el del email corporativo.
+
 4. Añade al catálogo un filtro por categoría mediante un formulario **GET** con un `<select>`, que conserve la categoría elegida tras enviar. Justifica en un comentario por qué este formulario no lleva `@csrf`.
+
 5. Demuestra la protección CSRF en el formulario de solicitud: elimina `@csrf`, envía y documenta con captura el error 419, explicando qué ataque previene.
-6. **Transversal CE5.h**: tabla de casos de prueba con al menos **seis filas** (entrada → resultado esperado → resultado obtenido) que cubra todas las reglas, incluida una fecha en pasado y un email de dominio ajeno.
+
+6. Tabla de casos de prueba con al menos **seis filas** y las columnas: "Entrada", "Resultado esperado" y "Resultado obtenido". La tabla debe cubrir todas las reglas, incluida una fecha en pasado y un email de dominio no corporativo.
 
 ::: {.callout-note title="Información"}
 El ejercicio estará correcto si las cuatro reglas están operativas, filtro GET funcional y justificado, los tres escenarios (éxito, error, 419) con capturas y la tabla completa.*
